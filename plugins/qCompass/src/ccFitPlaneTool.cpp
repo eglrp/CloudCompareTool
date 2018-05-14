@@ -55,7 +55,7 @@ void ccFitPlaneTool::toolDisactivated()
 }
 
 //called when a point in a point cloud gets picked while this tool is active
-void ccFitPlaneTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P)
+void ccFitPlaneTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	//get or generate octree
 	ccOctree::Shared oct = cloud->getOctree();

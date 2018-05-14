@@ -1,0 +1,2 @@
+/usr/bin/ar qc libQCC_GL_LIBd.a  CMakeFiles/QCC_GL_LIB.dir/ccGLUtils.cpp.o CMakeFiles/QCC_GL_LIB.dir/ccGuiParameters.cpp.o CMakeFiles/QCC_GL_LIB.dir/ccGLWindow.cpp.o CMakeFiles/QCC_GL_LIB.dir/ccRenderingTools.cpp.o CMakeFiles/QCC_GL_LIB.dir/QCC_GL_LIB_automoc.cpp.o
+/usr/bin/ranlib libQCC_GL_LIBd.a

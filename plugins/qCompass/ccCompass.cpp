@@ -33,6 +33,9 @@
 #include "ccThicknessTool.h"
 #include "ccTopologyTool.h"
 #include "ccTraceTool.h"
+#include "dpxTraceLineTool.h"//折线工具
+#include "dpxCylinderTool.h"//圆柱工具
+
 
 //initialize default static pars
 bool ccCompass::drawName = false;
@@ -51,11 +54,13 @@ ccCompass::ccCompass(QObject* parent) :
 	//initialize all tools
 	m_fitPlaneTool = new ccFitPlaneTool();
 	m_traceTool = new ccTraceTool();
+	m_traceLineTool = new dpxTraceLineTool();//新拓展折现工具
 	m_lineationTool = new ccLineationTool();
 	m_thicknessTool = new ccThicknessTool();
 	m_topologyTool = new ccTopologyTool();
 	m_noteTool = new ccNoteTool();
-	m_pinchNodeTool = new ccPinchNodeTool();
+	m_pinchNodeTool = new ccPinchNodeTool();//折线工具
+	m_dpxCylinderTool = new dpxCylinderTool();//圆柱工具
 }
 
 //deconstructor
@@ -64,11 +69,13 @@ ccCompass::~ccCompass()
 	//delete all tools
 	delete m_fitPlaneTool;
 	delete m_traceTool;
+	delete m_traceLineTool;
 	delete m_lineationTool;
 	delete m_thicknessTool;
 	delete m_topologyTool;
 	delete m_noteTool;
 	delete m_pinchNodeTool;
+	delete m_dpxCylinderTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -155,7 +162,7 @@ void ccCompass::onNewSelection(const ccHObject::Container& selectedEntities)
 					}
 
 					//done!
-					return; 
+					return;
 				}
 			}
 
@@ -195,12 +202,14 @@ void ccCompass::doAction()
 
 	//initialize tools (essentially give them a copy of m_app)
 	m_traceTool->initializeTool(m_app);
+	m_traceLineTool->initializeTool(m_app);
 	m_fitPlaneTool->initializeTool(m_app);
 	m_lineationTool->initializeTool(m_app);
 	m_thicknessTool->initializeTool(m_app);
 	m_topologyTool->initializeTool(m_app);
 	m_noteTool->initializeTool(m_app);
 	m_pinchNodeTool->initializeTool(m_app);
+	m_dpxCylinderTool->initializeTool(m_app);
 
 	//check valid window
 	if (!m_app->getActiveGLWindow())
@@ -231,6 +240,8 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->pairModeButton, SIGNAL(clicked()), this, SLOT(setLineation()));
 		ccCompassDlg::connect(m_dlg->planeModeButton, SIGNAL(clicked()), this, SLOT(setPlane()));
 		ccCompassDlg::connect(m_dlg->traceModeButton, SIGNAL(clicked()), this, SLOT(setTrace()));
+		ccCompassDlg::connect(m_dlg->PolyLineButton, SIGNAL(clicked()), this, SLOT(setTraceLine()));
+		ccCompassDlg::connect(m_dlg->CylinderButton, SIGNAL(clicked()), this, SLOT(setCylinderTool()));
 
 		//extra tools
 		ccCompassDlg::connect(m_dlg->m_pinchTool, SIGNAL(triggered()), this, SLOT(addPinchNode()));
@@ -299,7 +310,7 @@ void ccCompass::doAction()
 		}
 
 		//remove them from the orignal parent
-		original->detatchAllChildren(); 
+		original->detatchAllChildren();
 
 		//add new parent to scene graph
 		original->getParent()->addChild(replacement);
@@ -434,7 +445,7 @@ void ccCompass::tryLoading(ccHObject* obj, std::vector<int>* originals, std::vec
 	}
 }
 
-//Begin measuring 
+//Begin measuring
 bool ccCompass::startMeasuring()
 {
 	//check valid gl window
@@ -460,7 +471,7 @@ bool ccCompass::startMeasuring()
 	{
 		m_activeTool->toolActivated();
 	}
-	
+
 	return true;
 }
 
@@ -530,6 +541,11 @@ bool ccCompass::startPicking()
 		return false;
 	}
 
+	m_app->getActiveGLWindow()->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
+										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
+										|	ccGLWindow::INTERACT_CTRL_PAN
+										|	ccGLWindow::INTERACT_SIG_MOUSE_MOVED);
+
 	m_picking = true;
 	return true;
 }
@@ -549,7 +565,6 @@ void  ccCompass::stopPicking()
 //Get the place/object that new measurements or interpretation should be stored
 ccHObject* ccCompass::getInsertPoint()
 {
-
 	//check if there is an active GeoObject or we are in mapMode
 	if (ccCompass::mapMode || m_geoObject)
 	{
@@ -651,17 +666,17 @@ void ccCompass::pointPicked(ccHObject* entity, unsigned itemIdx, int x, int y, c
 
 	//find relevant node to add data to
 	ccHObject* parentNode = getInsertPoint();
-	
+
 	if (parentNode == nullptr) //could not get insert point for some reason
 	{
 		return; //bail
 	}
 
 	//ensure what we are writing too is visible (avoids confusion if it is turned off...)
-	parentNode->setEnabled(true); 
+	parentNode->setEnabled(true);
 
 	//call generic "point-picked" function of active tool
-	m_activeTool->pointPicked(parentNode, itemIdx, entity, P);
+	m_activeTool->pointPicked(parentNode, itemIdx, entity, P,x,y);
 
 	//have we picked a point cloud?
 	if (entity->isKindOf(CC_TYPES::POINT_CLOUD))
@@ -676,7 +691,7 @@ void ccCompass::pointPicked(ccHObject* entity, unsigned itemIdx, int x, int y, c
 		}
 
 		//pass picked point, cloud & insert point to relevant tool
-		m_activeTool->pointPicked(parentNode, itemIdx, cloud, P);
+		m_activeTool->pointPicked(parentNode, itemIdx, cloud, P,x,y);
 	}
 
 	//redraw
@@ -691,12 +706,38 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 	ccCompass::fitPlanes = m_dlg->planeFitMode();
 	ccTrace::COST_MODE = ccCompass::costMode;
 
+	QMouseEvent* mouseEvent = static_cast<QMouseEvent *>(event);
+	if(mouseEvent==nullptr)
+		return false;
+
+	const int x = mouseEvent->x();
+	const int y = mouseEvent->y();
+	Qt::MouseButtons button= mouseEvent->buttons();
+
 	if (event->type() == QEvent::MouseButtonDblClick)
 	{
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent *>(event);
 		if (mouseEvent->buttons() == Qt::RightButton)
 		{
 			stopMeasuring();
+			return true;
+		}
+	}//补充了鼠标移动事件
+	else if (event->type() == QEvent::MouseMove)
+	{
+		if(m_activeTool==nullptr)
+			return false;
+
+		m_activeTool->onMouseMove(x,y,button);
+		return true;
+	}
+	else if (event->type() == QEvent::MouseButtonPress)
+	{
+		if(m_activeTool==nullptr)
+			return false;
+
+		if (mouseEvent->buttons() == Qt::RightButton)
+		{
+			m_activeTool->onMouseRightClick(x,y);
 			return true;
 		}
 	}
@@ -763,13 +804,14 @@ void ccCompass::cleanupBeforeToolChange()
 		m_hiddenObjects.clear();
 		m_app->getActiveGLWindow()->redraw(false, false);
 	}
-	
+
 
 	//uncheck/disable gui components (the relevant ones will be activated later)
 	if (m_dlg)
 	{
 		m_dlg->pairModeButton->setChecked(false);
 		m_dlg->planeModeButton->setChecked(false);
+		m_dlg->PolyLineButton->setChecked(false);
 		m_dlg->traceModeButton->setChecked(false);
 		m_dlg->pickModeButton->setChecked(false);
 		m_dlg->extraModeButton->setChecked(false);
@@ -839,6 +881,42 @@ void ccCompass::setTrace()
 	m_app->getActiveGLWindow()->redraw(true, false);
 }
 
+//activate trace mode
+void ccCompass::setTraceLine()
+{
+	//cleanup
+	cleanupBeforeToolChange();
+
+	//activate trace tool
+	m_activeTool = m_traceLineTool;
+	m_activeTool->toolActivated();
+
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_traceLineTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+
+void ccCompass::setCylinderTool()
+{
+//cleanup
+	cleanupBeforeToolChange();
+
+	//activate trace tool
+	m_activeTool = m_dpxCylinderTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxCylinderTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
 //activate the paint tool
 void ccCompass::setPick()
 {
@@ -872,7 +950,7 @@ void ccCompass::addPinchNode()
 	m_app->getActiveGLWindow()->redraw(true, false);
 }
 //activates the thickness tool
-void ccCompass::setThickness() 
+void ccCompass::setThickness()
 {
 	cleanupBeforeToolChange();
 
@@ -987,13 +1065,13 @@ void ccCompass::mergeGeoObjects()
 		interior->transferChildren(*d_interior, true);
 		upper->transferChildren(*d_upper, true);
 		lower->transferChildren(*d_lower, true);
-		
+
 		//delete un-needed objects
 		objs[i]->removeChild(interior);
 		objs[i]->removeChild(upper);
 		objs[i]->removeChild(lower);
 		objs[i]->getParent()->removeChild(objs[i]);
-		
+
 		//delete
 		m_app->removeFromDB(objs[i]);
 		m_app->removeFromDB(upper);
@@ -1040,7 +1118,7 @@ void ccCompass::fitPlaneToGeoObject()
 
 				for (unsigned p = 0; p < t->size(); p++)
 				{
-					points->addPoint(*t->getPoint(p)); //add point to 
+					points->addPoint(*t->getPoint(p)); //add point to
 				}
 			}
 		}
@@ -1065,7 +1143,7 @@ void ccCompass::fitPlaneToGeoObject()
 	}
 
 	//rinse and repeat for lower (assuming normal GeoObject; skip this step for single-surface object)
-	if (!ccGeoObject::isSingleSurfaceGeoObject(obj)) 
+	if (!ccGeoObject::isSingleSurfaceGeoObject(obj))
 	{
 		points->clear();
 		ccHObject* lower = obj->getRegion(ccGeoObject::LOWER_BOUNDARY);
@@ -1106,7 +1184,7 @@ void ccCompass::fitPlaneToGeoObject()
 		}
 	}
 	//clean up point cloud
-	delete(points); 
+	delete(points);
 
 }
 
@@ -1156,7 +1234,7 @@ void ccCompass::recalculateFitPlanes()
 
 			if (c.size() == 0 && radius == -1)
 			{
-				
+
 				//gather points and calculate new fit-plane
 				ccPointCloud* points = new ccPointCloud(); //create point cloud for storing points
 				double rms; //float for storing rms values
@@ -1170,7 +1248,7 @@ void ccCompass::recalculateFitPlanes()
 							points->reserve(points->size() + t->size()); //make space
 							for (unsigned p = 0; p < t->size(); p++)
 							{
-								points->addPoint(*t->getPoint(p)); //add point to 
+								points->addPoint(*t->getPoint(p)); //add point to
 							}
 						}
 					}
@@ -1205,7 +1283,7 @@ void ccCompass::recalculateFitPlanes()
 				//recalculate the fit plane
 				ccTrace* t = static_cast<ccTrace*>(child);
 				ccFitPlane* p = t->fitPlane();
-				
+
 				if (p)
 				{
 					//... do some jiggery pokery
@@ -1283,10 +1361,10 @@ void ccCompass::convertToPointCloud()
 	for (ccGeoObject* o : objs)
 	{
 		//get regions
-		ccHObject* regions[3] = { o->getRegion(ccGeoObject::INTERIOR), 
-								  o->getRegion(ccGeoObject::LOWER_BOUNDARY), 
+		ccHObject* regions[3] = { o->getRegion(ccGeoObject::INTERIOR),
+								  o->getRegion(ccGeoObject::LOWER_BOUNDARY),
 								  o->getRegion(ccGeoObject::UPPER_BOUNDARY)};
-		
+
 		//make point cloud
 		ccPointCloud* points = new ccPointCloud("ConvertedLines"); //create point cloud for storing points
 		int sfid = points->addScalarField(new ccScalarField("Region")); //add scalar field containing region info
@@ -1301,11 +1379,11 @@ void ccCompass::convertToPointCloud()
 		for (int i = 0; i < nRegions; i++)
 		{
 			ccHObject* region = regions[i];
-			
+
 			//get polylines/traces
 			ccHObject::Container poly;
 			region->filterChildren(poly, true, CC_TYPES::POLY_LINE);
-			
+
 			for (ccHObject::Container::const_iterator it = poly.begin(); it != poly.end(); it++)
 			{
 				ccPolyline* t = static_cast<ccPolyline*>(*it);
@@ -1319,7 +1397,7 @@ void ccCompass::convertToPointCloud()
 			}
 		}
 
-		//save 
+		//save
 		if (points->size() > 0)
 		{
 			sf->computeMinAndMax();
@@ -1447,7 +1525,7 @@ void ccCompass::distributeSelection()
 			m_app->dispToConsole(QString::asprintf("[Compass] Warning: No GeoObject could be found that matches %s.",obj->getName().toLatin1().data()), ccMainAppInterface::WRN_CONSOLE_MESSAGE);
 		}
 	}
-	
+
 	m_app->updateUI();
 	m_app->redrawAll();
 }
@@ -1752,7 +1830,7 @@ void ccCompass::exportToSVG()
 		QTextStream svg_stream(&svg_file);
 
 		int width = abs(m_app->getActiveGLWindow()->glWidth()*zoom); //glWidth and glHeight are negative on some machines??
-		int height = abs(m_app->getActiveGLWindow()->glHeight()*zoom); 
+		int height = abs(m_app->getActiveGLWindow()->glHeight()*zoom);
 
 		//write svg header
 		svg_stream << QString::asprintf("<svg width=\"%d\" height=\"%d\">", width, height) << endl;
@@ -1766,7 +1844,7 @@ void ccCompass::exportToSVG()
 		//TODO: write scale bar
 
 		//write end tag for svg file
-		svg_stream << "</svg>" << endl; 
+		svg_stream << "</svg>" << endl;
 
 		//close file
 		svg_stream.flush();
@@ -1823,7 +1901,7 @@ int ccCompass::writeTracesSVG(ccHObject* object, QTextStream* out, int height, f
 			//project 3D point into 2D
 			CCVector3d coords2D;
 			params.project(P, coords2D);
-			
+
 			//write point
 			*out << QString::asprintf("%.3f,%.3f ", coords2D.x*zoom, height - (coords2D.y*zoom)); //n.b. we need to flip y-axis
 
@@ -2068,10 +2146,10 @@ int ccCompass::writeTraces(ccHObject* object, QTextStream* out, QString parentNa
 				//get points
 				p->getPoint(i - 1, start);
 				p->getPoint(i, end);
-				
+
 				//calculate segment cost
 				cost = p->getSegmentCost(p->getPointGlobalIndex(i - 1), p->getPointGlobalIndex(i));
-				
+
 				//write data
 				//n.b. csv columns are name,trace_id,seg_id,start_x,start_y,start_z,end_x,end_y,end_z, cost, cost_mode
 				*out << name << ","; //name
@@ -2331,7 +2409,7 @@ int ccCompass::writeObjectXML(ccHObject* object, QXmlStreamWriter* out)
 				//get ids (vertex # in polyline) for waypoints
 				for (int w = 0; w < trace->waypoint_count(); w++)
 				{
-					
+
 					//get id of waypoint in cloud
 					int globalID = trace->getWaypoint(w);
 

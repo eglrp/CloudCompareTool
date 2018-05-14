@@ -37,6 +37,8 @@ class ccThicknessTool;
 class ccTool;
 class ccTopologyTool;
 class ccTraceTool;
+class dpxTraceLineTool;
+class dpxCylinderTool;
 
 class ccCompass : public QObject, public ccStdPluginInterface, public ccPickingListener
 {
@@ -71,7 +73,7 @@ protected slots:
 
 	//stop picking mode
 	bool stopMeasuring();
-	
+
 	//inherited from ccPickingListener
 	virtual void onItemPicked(const ccPickingListener::PickedItem& pi) override;
 
@@ -96,6 +98,11 @@ protected slots:
 	void setLineation(); //activates the lineation tool
 	void setPlane(); //activates the plane tool
 	void setTrace(); //activates the trace tool
+
+	//激活线采集工具
+	void setTraceLine();
+	//圆柱工具
+	void setCylinderTool();
 
 	//extra tools
 	void addPinchNode(); //activates the pinch node tool
@@ -136,7 +143,7 @@ protected:
 
 	//event to get mouse-move updates & trigger repaint of overlay circle
 	virtual bool eventFilter(QObject* obj, QEvent* event) override;
-	
+
 	//used to get the place/object that new measurements or interpretation should be stored
 	ccHObject* getInsertPoint();
 
@@ -169,11 +176,13 @@ protected:
 	ccTool* m_activeTool = nullptr;
 	ccFitPlaneTool* m_fitPlaneTool;
 	ccTraceTool* m_traceTool;
+	dpxTraceLineTool * m_traceLineTool;
 	ccLineationTool* m_lineationTool;
 	ccThicknessTool* m_thicknessTool;
 	ccTopologyTool* m_topologyTool;
 	ccNoteTool* m_noteTool;
 	ccPinchNodeTool* m_pinchNodeTool;
+	dpxCylinderTool* m_dpxCylinderTool;
 
 	//currently selected/active geoObject
 	ccGeoObject* m_geoObject = nullptr; //the GeoObject currently being written to
@@ -181,13 +190,13 @@ protected:
 	std::vector<int> m_hiddenObjects; //used to hide objects (for picking)
 
 	//used to 'guess' the name of new GeoObjects
-	QString m_lastGeoObjectName = "GeoObject"; 
+	QString m_lastGeoObjectName = "GeoObject";
 
 	//used while exporting data
 	int writePlanes(ccHObject* object, QTextStream* out, QString parentName = QString());
 	int writeTraces(ccHObject* object, QTextStream* out, QString parentName = QString());
 	int writeLineations(ccHObject* object, QTextStream* out, QString parentName = QString(), bool thickness=false); //if thickness is true this will write "thickness lineations" rather than orientation lineations
-	
+
 	int writeTracesSVG(ccHObject* object, QTextStream* out, int height, float zoom);
 
 	int writeToXML(QString filename); //exports Compass interpretation tree to xml

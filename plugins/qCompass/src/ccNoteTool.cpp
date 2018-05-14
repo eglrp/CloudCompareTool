@@ -28,7 +28,7 @@ ccNoteTool::~ccNoteTool()
 
 
 //called when a point in a point cloud gets picked while this tool is active
-void ccNoteTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P)
+void ccNoteTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	//get note text
 	QString note = QInputDialog::getText(m_app->getMainWindow(), "Note", "Contents:", QLineEdit::Normal, "Write note here.");
@@ -83,7 +83,7 @@ void ccNoteTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCl
 
 //called when the tool is set to active (for initialization)
 void ccNoteTool::toolActivated()
-{ 
+{
 	//donothing
 }
 

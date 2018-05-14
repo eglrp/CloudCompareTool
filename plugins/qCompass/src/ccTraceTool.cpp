@@ -46,7 +46,7 @@ void ccTraceTool::toolDisactivated()
 
 
 //called when a point in a point cloud gets picked while this tool is active
-void ccTraceTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P)
+void ccTraceTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	//try and fetch the trace object (returns null if the id is invalid)
 	ccTrace* t = dynamic_cast<ccTrace*>(m_app->dbRootObject()->find(m_trace_id));
@@ -140,7 +140,7 @@ void ccTraceTool::cancel()
 	if (t)
 	{
 		t->setActive(false); //disactivate trace
-		
+
 		if (!m_preExisting) //delete new traces (i.e. that were "picked-up" by changing the selection)
 		{
 			m_app->removeFromDB(t); //delete trace object
@@ -155,7 +155,7 @@ void ccTraceTool::onNewSelection(const ccHObject::Container& selectedEntities)
 	if (selectedEntities.size() > 0) //non-empty selection
 	{
 		//selection is the already active trace?
-		if (selectedEntities[0]->getUniqueID() == m_trace_id) 
+		if (selectedEntities[0]->getUniqueID() == m_trace_id)
 		{
 			return; //we're already on it
 		}
@@ -182,11 +182,11 @@ void ccTraceTool::finishCurrentTrace()
 		//check for shift key modifier (flips the fitPlane modifier)
 		bool fitPlane = ccCompass::fitPlanes;
 		bool shift = QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier); //shift is pressed
-		if (shift) 
+		if (shift)
 		{
 			fitPlane = !fitPlane;
 			m_parentPlaneDeleted = false; //probably want different outcome to before
-			m_childPlaneDeleted = false; 
+			m_childPlaneDeleted = false;
 			m_changed = true;
 		}
 
@@ -203,7 +203,7 @@ void ccTraceTool::finishCurrentTrace()
 
 				//figure out where to store the fit plane
 				bool child = ccCompass::mapMode; //in map mode, plane is stored as a child; in compass mode, plane is stored as parent
-				
+
 				if (m_childPlaneDeleted) //existing planes over-rule
 				{
 					child = true;

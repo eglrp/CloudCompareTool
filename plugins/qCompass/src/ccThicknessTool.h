@@ -45,10 +45,10 @@ public:
 	virtual void onNewSelection(const ccHObject::Container& selectedEntities) override;
 
 	//called when a point in a point cloud gets picked while this tool is active
-	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccHObject* pickedObject, const CCVector3& P) override;
+	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccHObject* pickedObject, const CCVector3& P,int x=0,int y =0) override;
 
 	//called when a point in a point cloud gets picked while this tool is active
-	void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P) override;
+	void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y =0) override;
 
 	//called when "Return" or "Space" is pressed, or the "Accept Button" is clicked
 	void accept() override; //do nothing

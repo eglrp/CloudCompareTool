@@ -35,7 +35,7 @@ void ccLineationTool::toolDisactivated()
 }
 
 //called when a point in a point cloud gets picked while this tool is active
-void ccLineationTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P)
+void ccLineationTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	//try retrieve active lineation (will fail if there isn't one)
 	ccLineation* l = dynamic_cast<ccLineation*>(m_app->dbRootObject()->find(m_lineation_id));
@@ -54,7 +54,7 @@ void ccLineationTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		//add to DB Tree
 		insertPoint->addChild(l);
 		m_app->addToDB(l, false, false, false, false);
-	} 
+	}
 
 	//add point
 	int index = l->addPointIndex(itemIdx);

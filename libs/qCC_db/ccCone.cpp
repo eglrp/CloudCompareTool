@@ -75,20 +75,20 @@ bool ccCone::buildUp()
 	if (!singlePointBottom)
 		vertCount += steps;
 	if (!singlePointTop)
-		vertCount += steps;
+		vertCount += steps; //6
 	//normals
-	unsigned faceNormCounts = steps+2;
+	unsigned faceNormCounts = steps+2;//default 26
 	//vertices
-	unsigned facesCount = steps;
+	unsigned facesCount = steps; //6
 	if (!singlePointBottom)
-		facesCount += steps;
+		facesCount += steps; //12
 	if (!singlePointTop)
-		facesCount += steps;
+		facesCount += steps;//18
 	if (!singlePointBottom && !singlePointTop)
-		facesCount += steps;
+		facesCount += steps;//24
 
 	//allocate (& clear) structures
-	if (!init(vertCount,false,facesCount,faceNormCounts))
+	if (!init(vertCount,false,facesCount,faceNormCounts))  //6 f 24 26
 	{
 		ccLog::Error("[ccCone::buildUp] Not enough memory");
 		return false;
@@ -111,7 +111,7 @@ bool ccCone::buildUp()
 		nIndex = ccNormalVectors::GetNormIndex(CCVector3(0,0,1).u);
 		m_triNormals->addElement(nIndex);
 	}
-	
+
 	//then, angular sweep for top and/or bottom surfaces
 	{
 		PointCoordinateType angle_rad_step = static_cast<PointCoordinateType>(2.0*M_PI)/static_cast<PointCoordinateType>(steps);
@@ -154,7 +154,7 @@ bool ccCone::buildUp()
 			}
 		}
 	}
-	
+
 	//mesh faces
 	{
 		assert(m_triVertIndexes);
@@ -225,7 +225,7 @@ void ccCone::setHeight(PointCoordinateType height)
 
 	assert(height > 0);
 	m_height = height;
-	
+
 	buildUp();
 	applyTransformationToVertices();
 }
@@ -237,7 +237,7 @@ void ccCone::setBottomRadius(PointCoordinateType radius)
 
 	assert(radius > 0);
 	m_bottomRadius = radius;
-	
+
 	buildUp();
 	applyTransformationToVertices();
 }
@@ -249,7 +249,7 @@ void ccCone::setTopRadius(PointCoordinateType radius)
 
 	assert(radius > 0);
 	m_topRadius = radius;
-	
+
 	buildUp();
 	applyTransformationToVertices();
 }

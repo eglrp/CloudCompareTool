@@ -24,7 +24,7 @@
 #include <ccGLWindow.h>
 
 /*
-Template class that defining the basic functionality of qCompass "tools". 
+Template class that defining the basic functionality of qCompass "tools".
 */
 class ccTool
 {
@@ -33,11 +33,12 @@ public:
 	virtual ~ccTool()
 	{
 	}
-	
+
 	void initializeTool(ccMainAppInterface* app)
 	{
 		m_app = app; //store copy of app
 		m_window = m_app->getActiveGLWindow();
+
 	}
 
 	//called when the tool is set to active (for initialization)
@@ -47,13 +48,19 @@ public:
 	virtual void toolDisactivated() { }
 
 	//called when a point in a point cloud gets picked while this tool is active
-	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccHObject* pickedObject, const CCVector3& P) { }
+	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccHObject* pickedObject, const CCVector3& P,int x=0,int y=0) { }
 
 	//called when a point in a point cloud gets picked while this tool is active
-	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P) { }
+	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y=0) { }
 
 	//called when the selection is changed while this tool is active
 	virtual void onNewSelection(const ccHObject::Container& selectedEntities) { }
+
+	//by duans
+	virtual void onMouseMove(int x, int y, Qt::MouseButtons buttons) { }
+
+	//by duans
+	virtual void onMouseRightClick(int x,int y) { }
 
 	//called when "Return" or "Space" is pressed, or the "Accept Button" is clicked
 	virtual void accept() { }
@@ -68,7 +75,7 @@ public:
 	virtual void undo()	{ }
 
 protected:
-	
+
 	ccTool() :
 		m_app( nullptr )
 	  , m_window( nullptr )

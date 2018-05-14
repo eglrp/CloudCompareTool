@@ -39,12 +39,12 @@ ccPluginInterfaceList ccPluginManager::m_pluginList;
 static void	sWarnIfNoMetaData( QPluginLoader *loader, const QString &fileName )
 {
 	QJsonObject	metaObject = loader->metaData();
-	
+
 	if ( metaObject.isEmpty() || metaObject["MetaData"].toObject().isEmpty() )
 	{
-		ccLog::Warning( QStringLiteral( "\t%1 does not supply meta data in the Q_PLUGIN_METADATA - it will need to be updated (see one of the example plugins)" ).arg( fileName ) );				
+		ccLog::Warning( QStringLiteral( "\t%1 does not supply meta data in the Q_PLUGIN_METADATA - it will need to be updated (see one of the example plugins)" ).arg( fileName ) );
 	}
-}	
+}
 
 
 ccPluginManager::ccPluginManager( QObject *parent ) :
@@ -108,7 +108,7 @@ void ccPluginManager::loadPlugins()
 			case CC_IO_FILTER_PLUGIN: //I/O filter
 			{
 				ccIOFilterPluginInterface* ioPlugin = static_cast<ccIOFilterPluginInterface*>(plugin);
-				
+
 				for ( FileIOFilter::Shared filter : ioPlugin->getFilters() )
 				{
 					if (filter)
@@ -130,7 +130,6 @@ void ccPluginManager::loadPlugins()
 QStringList ccPluginManager::pluginPaths()
 {
 	QString appPath = QCoreApplication::applicationDirPath();
-
 	QStringList pluginPaths;
 
 #if defined(Q_OS_MAC)
@@ -165,8 +164,38 @@ QStringList ccPluginManager::pluginPaths()
 	}
 	else
 	{
+		////读文本
+		QFile file("../../config/PluginPath.xml");
+		if(file.exists())
+		{
+			int i = 0;
+		}
+
+		ccLog::Print(file.fileName());
+
+		if (!file.open(QIODevice::ReadOnly|QIODevice::Text))
+		{
+			ccLog::Print("no set Plugin Path to Plugin.xml");
+			return pluginPaths;
+		}
+		QString strValue = file.readAll();
+		pluginPaths = strValue.split("\n", QString::SkipEmptyParts);
+		file.close();
+
+		for(int i = 0;i< pluginPaths.size();i++)
+		{
+			QDir binDir(pluginPaths.at(i));
+			if( binDir.exists())
+			{
+				int j = 0;
+			}
+
+			ccLog::Print(pluginPaths.at(i));
+		}
+
 		// Choose a reasonable default to look in
-        pluginPaths << "/usr/lib/cloudcompare/plugins" << "/usr/local/lib/cloudcompare/plugins";
+        //pluginPaths << "/usr/lib/cloudcompare/plugins" << "/usr/local/lib/cloudcompare/plugins"
+        //pluginPaths << "/home/ds/3rdPart/CloudCompareTool/BuildV2/plugins/qCompass";
 	}
 #else
 #error Need to specify the plugin path for this OS.
@@ -197,7 +226,7 @@ ccPluginInterfaceList &ccPluginManager::pluginList()
 		qWarning() << "Plugin list is empty - did you call loadPlugins()?";
 	}
 #endif
-	
+
 	return m_pluginList;
 }
 
@@ -214,50 +243,52 @@ void ccPluginManager::loadFromPathsAndAddToList()
 #error Need to specify the dynamic library extension for this OS.
 #endif
 	};
-	
+
 	// Map the plugin file name to its loader so we can unload it if necessary.
 	//	This lets us override plugins by path.
 	QMap<QString, QPluginLoader *> fileNameToLoaderMap;
-	
+
 	for ( const QString &path : pluginPaths() )
 	{
 		ccLog::Print( tr( "[Plugin] Searching: %1" ).arg( path ) );
-		
+
 		QDir pluginsDir( path );
 
 		pluginsDir.setNameFilters( nameFilters );
 
 		const QStringList	fileNames = pluginsDir.entryList();
 
+		ccLog::Warning(QString::number(fileNames.size()));
+
 		for ( const QString &fileName : fileNames )
 		{
 			const QString pluginPath = pluginsDir.absoluteFilePath( fileName );
-			
+
 			QPluginLoader *loader = new QPluginLoader( pluginPath );
-			
+
 			sWarnIfNoMetaData( loader, fileName );
-			
+
 			QObject *plugin = loader->instance();
 
 			if ( plugin == nullptr )
 			{
 				ccLog::Warning( tr( "\t%1 does not seem to be a valid plugin\t(%2)" ).arg( fileName, loader->errorString() ) );
-				
+
 				delete loader;
-				
+
 				continue;
 			}
-			
+
 			ccPluginInterface *ccPlugin = dynamic_cast<ccPluginInterface*>(plugin);
 
 			if ( ccPlugin == nullptr )
-			{				
+			{
 				ccLog::Warning( tr( "\t%1 does not seem to be a valid plugin or it is not supported by this version" ).arg( fileName ) );
 
 				loader->unload();
-				
+
 				delete loader;
-				
+
 				continue;
 			}
 
@@ -266,27 +297,27 @@ void ccPluginManager::loadFromPathsAndAddToList()
 				ccLog::Error( tr( "\tPlugin %1 has a blank name" ).arg( fileName ) );
 
 				loader->unload();
-				
+
 				delete loader;
 
 				continue;
 			}
-			
+
 			QPluginLoader *previousLoader = fileNameToLoaderMap.value( fileName );
-			
+
 			// If we have already loaded a plugin with this file name, unload it and replace the interface in the plugin list
 			if ( previousLoader != nullptr )
 			{
 				ccPluginInterface *pluginInterface = dynamic_cast<ccPluginInterface *>( previousLoader->instance() );
-				
+
 				// maintain the order of the plugin list
 				const int index = m_pluginList.indexOf( pluginInterface );
 				m_pluginList.replace( index, ccPlugin );
-				
+
 				previousLoader->unload();
-				
+
 				delete previousLoader;
-								
+
 				ccLog::Warning( tr( "\t%1 overridden" ).arg( fileName ) );
 			}
 			else
@@ -295,11 +326,11 @@ void ccPluginManager::loadFromPathsAndAddToList()
 			}
 
 			fileNameToLoaderMap[fileName] = loader;
-			
+
 			ccLog::Print( tr( "\tPlugin found: %1 (%2)" ).arg( ccPlugin->getName(), fileName ) );
 		}
 	}
-	
+
 	for ( QPluginLoader *loader : fileNameToLoaderMap.values() )
 	{
 		delete loader;

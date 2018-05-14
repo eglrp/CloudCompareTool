@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>575</width>
+    <width>587</width>
     <height>33</height>
    </rect>
   </property>
@@ -48,7 +48,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/qCompass.png</normaloff>:/CC/images/qCompass.png</iconset>
      </property>
      <property name="checkable">
@@ -74,7 +74,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/mapIcon.png</normaloff>:/CC/images/mapIcon.png</iconset>
      </property>
      <property name="checkable">
@@ -114,7 +114,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/dbGBLSensorSymbol.png</normaloff>:/CC/images/dbGBLSensorSymbol.png</iconset>
      </property>
      <property name="checkable">
@@ -122,6 +122,64 @@
      </property>
      <property name="checked">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="PolyLineButton">
+     <property name="toolTip">
+      <string>Plane Tool: Measure surface orientations</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../qCC/icones.qrc">
+       <normaloff>:/CC/images/ccTracePolyline.png</normaloff>:/CC/images/ccTracePolyline.png</iconset>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="CylinderButton">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Cylinder&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../qCC/icones.qrc">
+       <normaloff>:/CC/images/primCylinder.gif</normaloff>:/CC/images/primCylinder.gif</iconset>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -134,7 +192,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/ccSamplePoints.png</normaloff>:/CC/images/ccSamplePoints.png</iconset>
      </property>
      <property name="checkable">
@@ -163,7 +221,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/orthoSections.png</normaloff>:/CC/images/orthoSections.png</iconset>
      </property>
      <property name="checkable">
@@ -186,7 +244,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/smallPointDistance.png</normaloff>:/CC/images/smallPointDistance.png</iconset>
      </property>
      <property name="checkable">
@@ -206,7 +264,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/ccAddConstSF.png</normaloff>:/CC/images/ccAddConstSF.png</iconset>
      </property>
      <property name="checkable">
@@ -236,7 +294,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/ccGear.png</normaloff>:/CC/images/ccGear.png</iconset>
      </property>
      <property name="checkable">
@@ -262,7 +320,7 @@
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/smallRevert.png</normaloff>:/CC/images/smallRevert.png</iconset>
      </property>
      <property name="shortcut">
@@ -282,7 +340,7 @@
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/ccSave.png</normaloff>:/CC/images/ccSave.png</iconset>
      </property>
     </widget>
@@ -296,7 +354,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/ccConsole.png</normaloff>:/CC/images/ccConsole.png</iconset>
      </property>
     </widget>
@@ -310,7 +368,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/smallValidate.png</normaloff>:/CC/images/smallValidate.png</iconset>
      </property>
      <property name="shortcut">
@@ -327,7 +385,7 @@
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../../qCC/icones.qrc">
+      <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/smallCancel.png</normaloff>:/CC/images/smallCancel.png</iconset>
      </property>
      <property name="shortcut">
@@ -338,7 +396,8 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../qCC/icones.qrc"/>
+  <include location="../ccCompass.qrc"/>
+  <include location="../../../qCC/icones.qrc"/>
  </resources>
  <connections/>
 </ui>

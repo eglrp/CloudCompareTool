@@ -38,7 +38,7 @@ public:
 	void toolDisactivated() override;
 
 	//called when a point in a point cloud gets picked while this tool is active
-	void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P) override;
+	void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y =0) override;
 
 	//called when a new selection is made
 	void onNewSelection(const ccHObject::Container& selectedEntities) override;
@@ -59,7 +59,7 @@ protected:
 	//finishes and finalises the trace currently being digitised to
 	void finishCurrentTrace();
 	bool pickupTrace(ccHObject* obj); //if obj is a ccTrace, it becomes the active trace. Returns true if succesfull
-	
+
 	//properties of the active trace
 	int m_trace_id = -1; //active trace id (stored rather than a pointer to avoid dead pointers after users delete objects in the DB_Tree)
 	bool m_preExisting = false; //set to true when a trace is picked up from a selection (so we don't delete it on cancel).

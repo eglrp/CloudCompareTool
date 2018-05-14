@@ -28,7 +28,7 @@ ccPinchNodeTool::~ccPinchNodeTool()
 
 
 //called when a point in a point cloud gets picked while this tool is active
-void ccPinchNodeTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P)
+void ccPinchNodeTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	//get insert-point if there is an active GeoObject
 	ccGeoObject* geoObj = ccGeoObject::getGeoObjectParent(insertPoint);
@@ -57,7 +57,7 @@ void ccPinchNodeTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 
 //called when the tool is set to active (for initialization)
 void ccPinchNodeTool::toolActivated()
-{ 
+{
 	//donothing
 }
 

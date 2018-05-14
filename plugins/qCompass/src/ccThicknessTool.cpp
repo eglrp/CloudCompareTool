@@ -78,7 +78,7 @@ void ccThicknessTool::onNewSelection(const ccHObject::Container& selectedEntitie
 }
 
 //called when a point in a point cloud gets picked while this tool is active
-void ccThicknessTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccHObject* pickedObject, const CCVector3& P)
+void ccThicknessTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccHObject* pickedObject, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	if (pickedObject->isA(CC_TYPES::PLANE)) //we want to be able to pick planes
 	{
@@ -91,7 +91,7 @@ void ccThicknessTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccHO
 }
 
 //called when a point in a point cloud gets picked while this tool is active
-void ccThicknessTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P)
+void ccThicknessTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	//no plane, no deal
 	if (!m_referencePlane)
@@ -151,7 +151,7 @@ void ccThicknessTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 			delete m_startPoint;
 			m_startPoint = nullptr;
 		}
-	} 
+	}
 }
 
 ccHObject* ccThicknessTool::getInsertInterior(ccHObject* insertPoint)
@@ -207,8 +207,8 @@ ccHObject* ccThicknessTool::buildGraphic(CCVector3 endPoint, float thickness)
 }
 
 //called when the tool is set to active (for initialization)
-void ccThicknessTool::toolActivated() 
-{ 
+void ccThicknessTool::toolActivated()
+{
 	//hide all visible point clouds
 	recurseChildren(m_app->dbRootObject(), true, false);
 
