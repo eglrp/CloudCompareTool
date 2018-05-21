@@ -13,10 +13,13 @@ class dpxAlgorithmFun
 public:
 	//点到线的距离3D
 	static double DistanceOfPointToLine(CCVector3 a, CCVector3 b, CCVector3 s);
-		//把向量转为单位向量
+
+	//3D 点S投影到线AB上的点
+	static CCVector3 PointProjectionToLine(const CCVector3& PtA, const CCVector3& PtB,const CCVector3& PtS);
+	//把向量转为单位向量
 	static CCVector3 NormalVec(CCVector3 vec3);
 	//向量的模
-	static double Normalize(CCVector3 v);
+	static double NormalizeValue(CCVector3 v);
 	//向量的旋转角度
 	static double rotationAngle(CCVector3 befor, CCVector3 after);
 	//向量的旋转轴
@@ -30,4 +33,12 @@ public:
 	static double* rotateMatrix(CCVector3 vbefor,CCVector3 vafter);
 };
 
+class dpxSystemFun
+{
+public:
+	static QString GetRootDir();
+	static QString GetQccImageDir();
+
+
+};
 #endif

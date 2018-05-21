@@ -39,6 +39,9 @@ class ccTopologyTool;
 class ccTraceTool;
 class dpxTraceLineTool;
 class dpxCylinderTool;
+class dpxPlaneTool;
+class dpxSphereTool;
+
 
 class ccCompass : public QObject, public ccStdPluginInterface, public ccPickingListener
 {
@@ -99,10 +102,11 @@ protected slots:
 	void setPlane(); //activates the plane tool
 	void setTrace(); //activates the trace tool
 
-	//激活线采集工具
-	void setTraceLine();
-	//圆柱工具
-	void setCylinderTool();
+	//new tool by duans
+	void setTraceLine();//折线采集功能
+	void setCylinderTool();//圆柱工具
+	void setPlaneTool();//平面采集工具
+	void setSphereTool();//球采集工具
 
 	//extra tools
 	void addPinchNode(); //activates the pinch node tool
@@ -183,6 +187,8 @@ protected:
 	ccNoteTool* m_noteTool;
 	ccPinchNodeTool* m_pinchNodeTool;
 	dpxCylinderTool* m_dpxCylinderTool;
+	dpxPlaneTool* m_dpxPlaneTool;
+	dpxSphereTool* m_dpxSphereTool;
 
 	//currently selected/active geoObject
 	ccGeoObject* m_geoObject = nullptr; //the GeoObject currently being written to

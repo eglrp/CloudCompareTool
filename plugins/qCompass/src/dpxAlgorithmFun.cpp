@@ -13,6 +13,30 @@ double dpxAlgorithmFun::DistanceOfPointToLine(CCVector3 a, CCVector3 b, CCVector
     return as * sin_A;
 }
 
+
+//点S投影到A B直线上的点P
+CCVector3 dpxAlgorithmFun::PointProjectionToLine(const CCVector3& PtA, const CCVector3& PtB,const CCVector3& PtS)
+{
+	// A-B A-C
+	CCVector3  AB(PtB.x-PtA.x,PtB.y-PtA.y,PtB.z-PtA.z);
+	CCVector3  AS(PtS.x-PtA.x,PtS.y-PtA.y,PtS.z-PtA.z);
+
+	double Dot = AB[0] * AS[0] + AB[1] * AS[1] + AB[2] * AS[2];
+	double Before = sqrt(AB[0] * AB[0] + AB[1] * AB[1] + AB[2] *AB[2]);
+	double After = sqrt(AS[0] * AS[0] + AS[1] * AS[1] + AS[2] * AS[2]);
+	double cosAngle = Dot/Before/After;
+
+	double AS_M = dpxAlgorithmFun::NormalizeValue(AS);
+	double AB_M = dpxAlgorithmFun::NormalizeValue(AB);
+	double dRadio = AS_M*cosAngle/AB_M;
+
+	//P
+	CCVector3 ptP(AB[0]*dRadio+PtA.x,AB[1]*dRadio+PtA.y,AB[2]*dRadio+PtA.z);
+
+	return ptP;
+}
+
+
 //求取旋转向量
 CCVector3 dpxAlgorithmFun::rotationAxis(CCVector3 befor, CCVector3 after)
 {
@@ -34,7 +58,7 @@ double dpxAlgorithmFun::rotationAngle(CCVector3 befor, CCVector3 after)
 }
 
 //求向量的模
-double dpxAlgorithmFun::Normalize(CCVector3 v)
+double dpxAlgorithmFun::NormalizeValue(CCVector3 v)
 {
     return sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] );
 }
@@ -42,7 +66,7 @@ double dpxAlgorithmFun::Normalize(CCVector3 v)
 CCVector3 dpxAlgorithmFun::NormalVec(CCVector3 vec3)
 {
 	CCVector3 vResult;
-	double length = Normalize(vec3);
+	double length = NormalizeValue(vec3);
 	// check length of axis vector
 	if (length < 0.0000001)
 		return vResult;
@@ -72,14 +96,11 @@ double* dpxAlgorithmFun::translateMatrix(double dX,double dY,double dZ)
 double* dpxAlgorithmFun::rotateMatrix(const CCVector3& a_axis,const double& dAngleRad)
 {
 	double *rotatinMatrix= (double *) malloc(16*sizeof(double));
-//	// compute length of axis vector
-	double length = Normalize(a_axis);
 
 	// normalize axis vector
-	double f = 1.0 / length;
-	double x = f * a_axis[0];
-	double y = f * a_axis[1];
-	double z = f * a_axis[2];
+	double x = a_axis[0];
+	double y = a_axis[1];
+	double z = a_axis[2];
 
 	// compute rotation matrix
 	double c = ::cos(dAngleRad);

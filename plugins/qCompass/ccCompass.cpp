@@ -35,7 +35,8 @@
 #include "ccTraceTool.h"
 #include "dpxTraceLineTool.h"//折线工具
 #include "dpxCylinderTool.h"//圆柱工具
-
+#include "dpxPlaneTool.h"//平面工具
+#include "dpxSphereTool.h"//球采集工具
 
 //initialize default static pars
 bool ccCompass::drawName = false;
@@ -61,6 +62,8 @@ ccCompass::ccCompass(QObject* parent) :
 	m_noteTool = new ccNoteTool();
 	m_pinchNodeTool = new ccPinchNodeTool();//折线工具
 	m_dpxCylinderTool = new dpxCylinderTool();//圆柱工具
+	m_dpxPlaneTool = new dpxPlaneTool();
+	m_dpxSphereTool = new dpxSphereTool();//球采集工具
 }
 
 //deconstructor
@@ -76,6 +79,8 @@ ccCompass::~ccCompass()
 	delete m_noteTool;
 	delete m_pinchNodeTool;
 	delete m_dpxCylinderTool;
+	delete m_dpxPlaneTool;
+	delete m_dpxSphereTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -210,6 +215,8 @@ void ccCompass::doAction()
 	m_noteTool->initializeTool(m_app);
 	m_pinchNodeTool->initializeTool(m_app);
 	m_dpxCylinderTool->initializeTool(m_app);
+	m_dpxPlaneTool->initializeTool(m_app);
+	m_dpxSphereTool->initializeTool(m_app);
 
 	//check valid window
 	if (!m_app->getActiveGLWindow())
@@ -242,6 +249,9 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->traceModeButton, SIGNAL(clicked()), this, SLOT(setTrace()));
 		ccCompassDlg::connect(m_dlg->PolyLineButton, SIGNAL(clicked()), this, SLOT(setTraceLine()));
 		ccCompassDlg::connect(m_dlg->CylinderButton, SIGNAL(clicked()), this, SLOT(setCylinderTool()));
+		ccCompassDlg::connect(m_dlg->planeToolButton, SIGNAL(clicked()), this, SLOT(setPlaneTool()));
+		ccCompassDlg::connect(m_dlg->sphereToolButton, SIGNAL(clicked()), this, SLOT(setSphereTool()));
+
 
 		//extra tools
 		ccCompassDlg::connect(m_dlg->m_pinchTool, SIGNAL(triggered()), this, SLOT(addPinchNode()));
@@ -914,6 +924,40 @@ void ccCompass::setCylinderTool()
 	//update GUI
 	m_dlg->traceModeButton->setChecked(true);
 	m_dlg->undoButton->setEnabled( m_dpxCylinderTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+
+void ccCompass::setPlaneTool()
+{
+	//cleanup
+	cleanupBeforeToolChange();
+
+	//activate trace tool
+	m_activeTool = m_dpxPlaneTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxPlaneTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+
+void ccCompass::setSphereTool()
+{
+	//cleanup
+	cleanupBeforeToolChange();
+
+	//activate trace tool
+	m_activeTool = m_dpxSphereTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxSphereTool->canUndo() );
 	m_dlg->acceptButton->setEnabled(true);
 	m_app->getActiveGLWindow()->redraw(true, false);
 }
