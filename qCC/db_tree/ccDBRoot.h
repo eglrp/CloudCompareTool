@@ -22,6 +22,7 @@
 #include <QAbstractItemModel>
 #include <QPoint>
 #include <QTreeView>
+#include <QTextStream>
 
 //qCC_db
 #include <ccHObject.h>
@@ -221,7 +222,9 @@ protected slots:
 	void editLabelScalarValue();
 
 	//duans
-	void editAttribute();
+	void editAttribute();//编辑属性
+	void ExportLights();//输出灯
+	void ExportLightPole();//输出灯杆
 
 signals:
 	void selectionChanged();
@@ -253,9 +256,13 @@ protected:
                                      QString name = QString(),
                                      bool nameIsRegex = false);
 
-    //迭代设置属性
+    //迭代设置属性 by duans
 	void setAttr_Recursion(ccHObject* pObj,
 							const QMap<QString,QVariant>& VariantMap);
+	//输出路灯杆 by duans
+	void ExportLightPole_Recursion(ccHObject* pObj);
+	//输出路灯，四边形 by duans
+	void ExportLight_Recursion(ccHObject* pObj);
 
 	//! Associated DB root
 	ccHObject* m_treeRoot;
@@ -314,7 +321,10 @@ protected:
 
 	//! Context menu action: 编辑属性菜单 duans
 	QAction* m_attributeEdit;
+	QAction* m_ExportLights;
+	QAction* m_ExportLightsPole;
 
+	QTextStream m_TextStream;
 	//! Last context menu pos
 	QPoint m_contextMenuPos;
 

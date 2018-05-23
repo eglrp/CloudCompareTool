@@ -31,6 +31,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QDir>
+#include <QFileDialog>
 
 
 //qCC_db
@@ -137,6 +138,8 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 
 	//duans
 	m_attributeEdit = new QAction("Edit Attribute", this);
+	m_ExportLights = new QAction("Export Lights", this);
+	m_ExportLightsPole = new QAction("Export LightsPole", this);
 
 	m_contextMenuPos = QPoint(-1,-1);
 
@@ -164,6 +167,10 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	connect(m_editLabelScalarValue,				SIGNAL(triggered()),								this, SLOT(editLabelScalarValue()));
 	//duans
 	connect(m_attributeEdit,					SIGNAL(triggered()),								this, SLOT(editAttribute()));
+	connect(m_ExportLights,						SIGNAL(triggered()),								this, SLOT(ExportLights()));
+	connect(m_ExportLightsPole,					SIGNAL(triggered()),								this, SLOT(ExportLightPole()));
+
+
 
 	//other DB tree signals/slots connection
 	connect(m_dbTreeWidget->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(changeSelection(const QItemSelection&, const QItemSelection&)));
@@ -2194,7 +2201,10 @@ void ccDBRoot::showContextMenu(const QPoint& menuPos)
 				menu.addAction(m_editLabelScalarValue);
 			}
 
+			//by duans
 			menu.addAction(m_attributeEdit);
+			menu.addAction(m_ExportLights);
+			menu.addAction(m_ExportLightsPole);
 
 			menu.addSeparator();
 		}
@@ -2310,20 +2320,6 @@ void ccDBRoot::editAttribute()
 		return;
 
 	setAttr_Recursion(obj,mapAttriValue);
-
-//	if(bObjDir)
-//	{
-//		for(int i=0;i<obj->getChildrenNumber();i++)
-//		{
-//			ccHObject* pChildObj = obj->getChild(i);
-//		}
-//	}
-//	else if(bPolyLines)
-//	{
-//		ccPolyline* lines = ccHObjectCaster::ToPolyline(obj);
-//		if (!lines)
-//			return;
-//	}
 }
 
 //设置属性
@@ -2343,11 +2339,142 @@ void ccDBRoot::setAttr_Recursion(ccHObject* pObj,const QMap<QString, QVariant>& 
 			setAttr_Recursion(pChildObj,VariantMap);
 		}
 	}
-//	else(nSize == 0)
-//		pObj->setMetaData(VariantMap, true);
 }
 
+//输出灯杆
+void ccDBRoot::ExportLightPole()
+{
+	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
+	QModelIndexList selectedIndexes = qism->selectedIndexes();
+	int selCount = selectedIndexes.size();
+	if (selCount == 0)
+		return;
 
+	QString strFileName=QFileDialog::getSaveFileName(MainWindow::TheInstance(), "select the location to be saved"/*, exportDir, "*.xodr"*/);
+    if(strFileName.isEmpty())
+        return;
+
+	QFile file(strFileName);
+    if (!file.open(QFile::WriteOnly | QFile::Text))
+    {
+		QMessageBox::warning(MainWindow::TheInstance(),"waring","Error: cannot creat file");
+			return ;
+    }
+
+	m_TextStream.setDevice(&file);
+  // QString strHead = "      X1"+"      Y1"+"      Z1"+"      X2"+"      Y2"+"      Z2"+"      Radius";
+   m_TextStream<< "    X1"<< "      Y1"<<"      Z1"<<"      X2"<< "      Y2"<< "      Z2"<< "      Radius"<< "\n";
+
+   ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
+
+   //迭代输出
+	ExportLightPole_Recursion(pObj);
+
+   file.close();
+}
+
+//设置属性
+void ccDBRoot::ExportLightPole_Recursion(ccHObject* pObj)
+{
+	if(pObj == nullptr || !pObj)
+		return;
+
+	ccPolyline* pLine = pObj && pObj->isA(CC_TYPES::POLY_LINE) ? static_cast<ccPolyline*>(pObj) : 0;
+	if(pLine!=0 && pLine != nullptr)
+	{
+		if(pLine->hasMetaData("Radius"))
+		{
+			QString strRadius = pObj->getMetaData("Radius").toString();
+			const CCVector3* pFirst = pLine->getPoint(0);
+			const CCVector3* pSecond = pLine->getPoint(1);
+			m_TextStream << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<"  "
+						<<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y) <<"  "<<QString::number(pSecond->z) <<"  "
+						<<strRadius<< "\n";
+		}
+	}
+
+	int nSize = pObj->getChildrenNumber();
+	if(nSize>0)
+	{
+		for(int i=0;i<nSize;i++)
+		{
+			ccHObject* pChildObj = pObj->getChild(i);
+			ExportLightPole_Recursion(pChildObj);
+		}
+	}
+}
+
+//输出灯杆
+void ccDBRoot::ExportLights()
+{
+	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
+	QModelIndexList selectedIndexes = qism->selectedIndexes();
+	int selCount = selectedIndexes.size();
+	if (selCount == 0)
+		return;
+
+	QString strFileName=QFileDialog::getSaveFileName(MainWindow::TheInstance(), "select the location to be saved");
+    if(strFileName.isEmpty())
+        return;
+
+	QFile file(strFileName);
+    if (!file.open(QFile::WriteOnly | QFile::Text))
+    {
+		QMessageBox::warning(MainWindow::TheInstance(),"waring","Error: cannot creat file");
+		return ;
+    }
+
+   m_TextStream.setDevice(&file);
+   m_TextStream<<"    X1"<<"       Y1"<<"       Z1"<<"       X2"<<"       Y2"<<"       Z2"<<"       X3" <<"       Y3"<<"       Z3"
+				<<"       X4"<<"       Y4"<<"       Z4"<<"  NomelX" << "  NomelY" << "  NomelZ"<<"\n";
+	//<<" NomelX" << " NomelY" << " NomelZ"
+   ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
+
+	//迭代输出
+	ExportLight_Recursion(pObj);
+
+   file.close();
+}
+
+//设置属性
+void ccDBRoot::ExportLight_Recursion(ccHObject* pObj)
+{
+	if(pObj == nullptr || !pObj)
+		return;
+
+	ccPolyline* pLine = pObj && pObj->isA(CC_TYPES::POLY_LINE) ? static_cast<ccPolyline*>(pObj) : 0;
+	while(pLine!=0 && pLine != nullptr)
+	{
+		if(pLine->segmentCount()!=3)
+			break;
+
+		if(!pLine->hasMetaData("Normal"))
+			break;
+
+		QString strNormal = pLine->getMetaData("Normal").toString();
+
+		const CCVector3* pFirst = pLine->getPoint(0);
+		const CCVector3* pSecond = pLine->getPoint(1);
+		const CCVector3* pThird = pLine->getPoint(2);
+		const CCVector3* pFour = pLine->getPoint(3);
+
+		m_TextStream << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<"  "
+					<<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y) <<"  "<<QString::number(pSecond->z) <<"  "
+					<<QString::number(pThird->x) <<"  "<<QString::number(pThird->y) <<"  "<<QString::number(pThird->z) <<"  "
+					<<QString::number(pFour->x) <<"  "<<QString::number(pFour->y) <<"  "<<QString::number(pFour->z) <<"  "
+					<< strNormal << "\n";
+		break;
+	}
+	int nSize = pObj->getChildrenNumber();
+	if(nSize>0)
+	{
+		for(int i=0;i<nSize;i++)
+		{
+			ccHObject* pChildObj = pObj->getChild(i);
+			ExportLight_Recursion(pChildObj);
+		}
+	}
+}
 
 
 

@@ -236,20 +236,9 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		CCVector3 vbefore(0,0,1);
 		CCVector3 vafter(pB.x-pA.x, pB.y-pA.y, pB.z-pA.z);
 		ccGLMatrix transM = ccGLMatrix::FromToRotation(vbefore,dpxAlgorithmFun::NormalVec(vafter));
+
 		CCVector3 vecTrans((pA.x+pB.x)/2,(pA.y+pB.y)/2,(pA.z+pB.z)/2);
 		transM.setTranslation(vecTrans);
-		//转换后的误差统计
-		CCVector3 TopResult = transM * CCVector3(0,0,dHeight/2);
-		ccLog::Warning("X offset:"+QString::number(TopResult.x-pB.x));
-		ccLog::Warning("Y offset:"+QString::number(TopResult.y-pB.y));
-		ccLog::Warning("Z offset:"+QString::number(TopResult.z-pB.z));
-
-		CCVector3 BottomResult = transM * CCVector3(0,0,-dHeight/2);
-		ccLog::Warning("X offset:"+QString::number(BottomResult.x-pA.x));
-		ccLog::Warning("Y offset:"+QString::number(BottomResult.y-pA.y));
-		ccLog::Warning("Z offset:"+QString::number(BottomResult.z-pA.z));
-///////////////////////////////////////////////
-
 
 		QDateTime current_time =QDateTime::currentDateTime();
 		QString sCurrentTime =current_time.toString("hh:mm:ss");
