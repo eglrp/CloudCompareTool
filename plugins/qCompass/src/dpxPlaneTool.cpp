@@ -201,13 +201,20 @@ void dpxPlaneTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPoint
 			pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
 			pPlane->setDisplay(m_app->getActiveGLWindow());
 			QImage* pImage = new QImage(":/CC/plugin/qCompass/images/RedGreen.png");
+<<<<<<< HEAD
+=======
+			//QImage* pImage = new QImage("/home/ds/3rdPart/CloudCompareTool/qCC/images/RedGreen.png");
+>>>>>>> 6e2bb27058cc3b930f7571bff0e8ffec5ff5da5c
 			if(pImage)
 			{
 				pPlane->setAsTexture(*pImage);
 			}
+<<<<<<< HEAD
 			CCVector3 vNormal = pPlane->getNormal();
 			QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
 			Modefypoly3D->setMetaData("Normal",strNormal);
+=======
+>>>>>>> 6e2bb27058cc3b930f7571bff0e8ffec5ff5da5c
 			m_pPickRoot->addChild(pPlane);
 		}
 
