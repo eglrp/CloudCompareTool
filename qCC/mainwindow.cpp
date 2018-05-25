@@ -10396,3 +10396,8 @@ void MainWindow::doActionEditPlane()
 	peDlg->initWithPlane(plane);
 	peDlg->show();
 }
+
+ ccDBRoot* MainWindow::GetDBRoot()
+ {
+	return m_ccRoot;
+ }

@@ -16,6 +16,9 @@ public:
 
 	//3D 点S投影到线AB上的点
 	static CCVector3 PointProjectionToLine(const CCVector3& PtA, const CCVector3& PtB,const CCVector3& PtS);
+
+	//查询点query是否在直径segStart，segEnd圆内部
+	static bool inCircle(const CCVector3* segStart, const CCVector3* segEnd, const CCVector3* query);
 	//把向量转为单位向量
 	static CCVector3 NormalVec(CCVector3 vec3);
 	//向量的模

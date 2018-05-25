@@ -170,6 +170,7 @@ public:
 	//! Updates the 'Properties' view
 	void updatePropertiesView();
 
+	ccDBRoot* GetDBRoot();
 private slots:
 
 	//! Creates a new 3D GL sub-window

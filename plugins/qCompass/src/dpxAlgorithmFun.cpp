@@ -96,6 +96,20 @@ double* dpxAlgorithmFun::translateMatrix(double dX,double dY,double dZ)
 	return rotatinMatrix;
 }
 
+//圆柱直径向量，判断点是否在圆内部
+bool dpxAlgorithmFun::inCircle(const CCVector3* segStart, const CCVector3* segEnd, const CCVector3* query)
+{
+	//calculate vector Query->Start and Query->End
+	CCVector3 QS(segStart->x - query->x, segStart->y - query->y, segStart->z - query->z);
+	CCVector3 QE(segEnd->x - query->x, segEnd->y - query->y, segEnd->z - query->z);
+
+	//is angle between these vectors obtuce (i.e. QS dot QE) < 0)? If so we are inside a circle between start&end, otherwise we are not
+	QS.normalize();
+	QE.normalize();
+
+	return QS.dot(QE) < 0;
+}
+
 //旋转矩阵
 //double* dpxCylinderTool::rotateMatrix(const CCVector3& a_axis,const double& dAngleRad,double dX ,double dY,double dZ)
 double* dpxAlgorithmFun::rotateMatrix(const CCVector3& a_axis,const double& dAngleRad)

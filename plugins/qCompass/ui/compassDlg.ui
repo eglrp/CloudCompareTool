@@ -155,6 +155,35 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="LineEditButton">
+     <property name="toolTip">
+      <string>Plane Tool: Measure surface orientations</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../qCC/icones.qrc">
+       <normaloff>:/CC/images/dbPolylineSymbol.png</normaloff>:/CC/images/dbPolylineSymbol.png</iconset>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="CylinderButton">
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Cylinder&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
