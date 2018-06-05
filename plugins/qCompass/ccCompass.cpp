@@ -37,6 +37,7 @@
 #include "dpxCylinderTool.h"//圆柱工具
 #include "dpxPlaneTool.h"//平面工具
 #include "dpxSphereTool.h"//球采集工具
+#include "dpxNodeEditTool.h"//节点编辑工具
 
 //initialize default static pars
 bool ccCompass::drawName = false;
@@ -64,6 +65,7 @@ ccCompass::ccCompass(QObject* parent) :
 	m_dpxCylinderTool = new dpxCylinderTool();//圆柱工具
 	m_dpxPlaneTool = new dpxPlaneTool();
 	m_dpxSphereTool = new dpxSphereTool();//球采集工具
+	m_dpxNodeEditTool = new dpxNodeEditTool();
 }
 
 //deconstructor
@@ -81,6 +83,7 @@ ccCompass::~ccCompass()
 	delete m_dpxCylinderTool;
 	delete m_dpxPlaneTool;
 	delete m_dpxSphereTool;
+	delete m_dpxNodeEditTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -217,6 +220,7 @@ void ccCompass::doAction()
 	m_dpxCylinderTool->initializeTool(m_app);
 	m_dpxPlaneTool->initializeTool(m_app);
 	m_dpxSphereTool->initializeTool(m_app);
+	m_dpxNodeEditTool->initializeTool(m_app);
 
 	//check valid window
 	if (!m_app->getActiveGLWindow())
@@ -251,6 +255,7 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->CylinderButton, SIGNAL(clicked()), this, SLOT(setCylinderTool()));
 		ccCompassDlg::connect(m_dlg->planeToolButton, SIGNAL(clicked()), this, SLOT(setPlaneTool()));
 		ccCompassDlg::connect(m_dlg->sphereToolButton, SIGNAL(clicked()), this, SLOT(setSphereTool()));
+		ccCompassDlg::connect(m_dlg->NodeEditButton, SIGNAL(clicked()), this, SLOT(setNodeEditTool()));
 
 
 		//extra tools
@@ -551,10 +556,10 @@ bool ccCompass::startPicking()
 		return false;
 	}
 
-	m_app->getActiveGLWindow()->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
-										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
-										|	ccGLWindow::INTERACT_CTRL_PAN
-										|	ccGLWindow::INTERACT_SIG_MOUSE_MOVED);
+//	m_app->getActiveGLWindow()->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
+//										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
+//										|	ccGLWindow::INTERACT_CTRL_PAN
+//										|	ccGLWindow::INTERACT_SIG_MOUSE_MOVED);
 
 	m_picking = true;
 	return true;
@@ -920,12 +925,12 @@ void ccCompass::setCylinderTool()
 	m_activeTool = m_dpxCylinderTool;
 	m_activeTool->toolActivated();
 	//trigger selection changed
-	onNewSelection(m_app->getSelectedEntities());
+	//onNewSelection(m_app->getSelectedEntities());
 	//update GUI
 	m_dlg->traceModeButton->setChecked(true);
-	m_dlg->undoButton->setEnabled( m_dpxCylinderTool->canUndo() );
-	m_dlg->acceptButton->setEnabled(true);
-	m_app->getActiveGLWindow()->redraw(true, false);
+	//m_dlg->undoButton->setEnabled( m_dpxCylinderTool->canUndo() );
+	//m_dlg->acceptButton->setEnabled(true);
+	//m_app->getActiveGLWindow()->redraw(true, false);
 }
 
 void ccCompass::setPlaneTool()
@@ -958,6 +963,22 @@ void ccCompass::setSphereTool()
 	//update GUI
 	m_dlg->traceModeButton->setChecked(true);
 	m_dlg->undoButton->setEnabled( m_dpxSphereTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+
+void ccCompass::setNodeEditTool()
+{
+	//cleanup
+	cleanupBeforeToolChange();
+	//activate trace tool
+	m_activeTool = m_dpxNodeEditTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxNodeEditTool->canUndo() );
 	m_dlg->acceptButton->setEnabled(true);
 	m_app->getActiveGLWindow()->redraw(true, false);
 }

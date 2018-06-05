@@ -84,7 +84,7 @@ bool ccSphere::buildUp()
 			N0.x = sin_theta;
 			N0.y = 0;
 			N0.z = cos_theta;
-		
+
 			for (unsigned i=0; i<steps; ++i)
 			{
 				PointCoordinateType phi = static_cast<PointCoordinateType>(2*i) * angle_rad_step;
@@ -121,7 +121,7 @@ bool ccSphere::buildUp()
 		//slices
 		for (unsigned j=1; j+1<steps; ++j)
 		{
-			unsigned shift = 2+(j-1)*steps;		
+			unsigned shift = 2+(j-1)*steps;
 			for (unsigned i=0; i<steps; ++i)
 			{
 				unsigned A = shift+i;
@@ -158,9 +158,14 @@ void ccSphere::setRadius(PointCoordinateType radius)
 
 	assert(radius > 0);
 	m_radius = radius;
-	
+
 	buildUp();
 	applyTransformationToVertices();
+}
+
+void setRadiusAndTransMatrix(PointCoordinateType radius,const ccGLMatrix* transMat/*=0*/,unsigned precision/*=12*/)
+{
+
 }
 
 bool ccSphere::toFile_MeOnly(QFile& out) const
@@ -196,7 +201,7 @@ void ccSphere::drawNameIn3D(CC_DRAW_CONTEXT& context)
 	ccBBox bBox = getOwnBB();
 	if (!bBox.isValid())
 		return;
-	
+
 	ccGLMatrix trans;
 	getAbsoluteGLTransformation(trans);
 

@@ -38,7 +38,6 @@ public:
 	{
 		m_app = app; //store copy of app
 		m_window = m_app->getActiveGLWindow();
-
 	}
 
 	//called when the tool is set to active (for initialization)

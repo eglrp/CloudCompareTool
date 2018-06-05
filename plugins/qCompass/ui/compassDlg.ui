@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
+    <width>689</width>
     <height>33</height>
    </rect>
   </property>
@@ -155,7 +155,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="LineEditButton">
+    <widget class="QPushButton" name="NodeEditButton">
      <property name="toolTip">
       <string>Plane Tool: Measure surface orientations</string>
      </property>

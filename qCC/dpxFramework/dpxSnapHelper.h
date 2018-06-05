@@ -4,23 +4,36 @@
 
 //by duans  全局的单例
 #include <QString>
+#include <QObject>
 
+# include "CCTypes.h"
 #include "../../libs/qCC_db/ccHObject.h"
 # include "mainwindow.h"
 #include "ccGLWindow.h"
+#include "ccPolyline.h"
+#include "ccPointCloud.h"
+#include "RayAndBox.h"
+
 // 鼠标捕捉的实现
-class dpxSnapHelper
+class dpxSnapHelper : public QObject
 {
 public:
 	static dpxSnapHelper* Instance();
 public:
 	//清空所有选择的对象
 	void ClearShowObject();
+
+	//bOnlyOne代表是否清除其它临时显示项
+	void AddTempShowObject(ccHObject* pTempShowObj,bool bOnlyOne = true);
 	//查找所有类型的要素
 	bool FindAllObjs(ccHObject::Container& vecHObjs,CC_CLASS_ENUM filter=CC_TYPES::POLY_LINE);
 
-	bool ProjectAllObjs(ccHObject::Container& vecHObjs);
-	bool ProjectLinesTo2D(ccHObject::Container& vecHLines);
+	//bool ProjectAllObjs(ccHObject::Container& vecHObjs);
+
+	bool ProjectLinesTo2D(ccHObject::Container& vec3DLines,ccHObject::Container& vec2DLines);
+
+	//
+	bool isBoxIntersectWithRay(ccBBox box,Ray<float> ray);
 
 private:
 	static dpxSnapHelper* m_instance;

@@ -60,6 +60,7 @@ public:
 	**/
 	void setRadius(PointCoordinateType radius);
 
+	void setRadiusAndTransMatrix(PointCoordinateType radius,const ccGLMatrix* transMat=0,unsigned precision = 12);
 protected:
 
 	//inherited from ccGenericPrimitive

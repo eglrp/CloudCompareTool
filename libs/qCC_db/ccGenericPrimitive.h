@@ -85,10 +85,12 @@ public:
 	//inherited methods (ccHObject)
 	virtual const ccGLMatrix& getGLTransformationHistory() const override;
 
+		//! Inherited from ccGenericMesh
+	virtual void applyGLTransformation(const ccGLMatrix& trans) override;
 protected:
 
 	//! Inherited from ccGenericMesh
-	virtual void applyGLTransformation(const ccGLMatrix& trans) override;
+	//virtual void applyGLTransformation(const ccGLMatrix& trans) override;
 
 	//inherited from ccMesh
 	virtual bool toFile_MeOnly(QFile& out) const override;

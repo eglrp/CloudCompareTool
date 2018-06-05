@@ -193,7 +193,7 @@ MainWindow::MainWindow()
 
 	//duans
 	//setWindowTitle(QStringLiteral("CloudCompare v") + ccCommon::GetCCVersion(false));
-	setWindowTitle(QStringLiteral("Horizon hobot Cloud Tools"));
+	setWindowTitle(QStringLiteral("Horizon hobot Cloud Tools 1.0"));
 
 	m_pluginUIManager = new ccPluginUIManager( this, this );
 
