@@ -98,7 +98,7 @@ public:
 
 		//options / modifiers
 		INTERACT_TRANSFORM_ENTITIES = 64,
-		
+
 		//signals
 		INTERACT_SIG_RB_CLICKED  = 128,      //right button clicked
 		INTERACT_SIG_LB_CLICKED  = 256,      //left button clicked
@@ -299,7 +299,7 @@ public:
 		automatically disable this mode.
 	**/
 	void setBubbleViewMode(bool state);
-	
+
 	//! Returns whether bubble-view mode is enabled or no
 	inline bool bubbleViewModeEnabled() const { return m_bubbleViewModeEnabled; }
 
@@ -330,7 +330,7 @@ public:
 		(see setPerspectiveState).
 	**/
 	virtual const ccGLMatrixd& getBaseViewMat();
-	
+
 	//! Sets the base view matrix
 	/** Warning: 'base view' marix is either:
 		- the rotation around the object in object-centered mode
@@ -381,7 +381,7 @@ public:
 	/** \param size point size (between MIN_POINT_SIZE_F and MAX_POINT_SIZE_F)
 	**/
 	virtual void setPointSize(float size, bool silent = false);
-	
+
 	//! Minimum line width
 	static const float MIN_LINE_WIDTH_F;
 	//! Maximum line width
@@ -578,7 +578,7 @@ public: //stereo mode
 
 		//! Whether stereo-mode is 'analgyph' or real stereo mode
 		inline bool isAnaglyph() const { return glassType <= 4; }
-		
+
 		bool autoFocal;
 		double focalDist;
 		double eyeSepFactor;
@@ -593,7 +593,7 @@ public: //stereo mode
 
 	//! Returns whether the stereo display mode is enabled or not
 	inline bool stereoModeIsEnabled() const { return m_stereoModeEnabled; }
-	
+
 	//! Returns the current stereo mode parameters
 	inline const StereoParams& getStereoParams() const { return m_stereoParams; }
 
@@ -893,6 +893,7 @@ protected: //other methods
 	**/
 	void setFontPointSize(int pixelSize);
 
+public:
 	//events handling
 	void mousePressEvent(QMouseEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;
@@ -901,6 +902,7 @@ protected: //other methods
 	void wheelEvent(QWheelEvent* event) override;
 	bool event(QEvent* evt) override;
 
+protected:
 	bool initialize();
 	GLuint defaultQtFBO() const;
 
@@ -933,7 +935,7 @@ protected: //other methods
 			, cameraToBBCenterDist(0.0)
 			, bbHalfDiag(0.0)
 		{}
-		
+
 		double zNear;
 		double zFar;
 		double cameraToBBCenterDist;
@@ -942,8 +944,8 @@ protected: //other methods
 
 	//! Computes the projection matrix
 	ccGLMatrixd computeProjectionMatrix(	const CCVector3d& cameraCenter,
-											bool withGLfeatures, 
-											ProjectionMetrics* metrics = nullptr, 
+											bool withGLfeatures,
+											ProjectionMetrics* metrics = nullptr,
 											double* eyeOffset = nullptr) const;
 	void updateModelViewMatrix();
 	void updateProjectionMatrix();
@@ -1006,7 +1008,7 @@ protected: //other methods
 								int pickedItemIndex,
 								const CCVector3* nearestPoint = nullptr,
 								const std::unordered_set<int>* selectedIDs = nullptr);
-	
+
 	//! Updates currently active items list (m_activeItems)
 	/** The items must be currently displayed in this context
 		AND at least one of them must be under the mouse cursor.
@@ -1192,7 +1194,7 @@ protected: //members
 			, position(LOWER_LEFT_MESSAGE)
 			, type(CUSTOM_MESSAGE)
 		{}
-		
+
 		//! Message
 		QString message;
 		//! Message end time (sec)
@@ -1215,7 +1217,7 @@ protected: //members
 	float m_sunLightPos[4];
 	//! Whether sun light is enabled or not
 	bool m_sunLightEnabled;
-	
+
 	//! Custom light position
 	/** Relative to object.
 	**/
@@ -1241,7 +1243,7 @@ protected: //members
 		Role role;
 		QRect area;
 	};
-	
+
 	//! Currently displayed clickable items
 	std::vector<ClickableItem> m_clickableItems;
 
@@ -1295,7 +1297,7 @@ protected: //members
 	//! Rectangular picking polyline
 	ccPolyline* m_rectPickingPoly;
 
-	//! Overridden display parameter 
+	//! Overridden display parameter
 	ccGui::ParamStruct m_overridenDisplayParameters;
 
 	//! Whether display parameters are overidden for this window
@@ -1346,7 +1348,7 @@ protected: //members
 
 	//! Wether exclusive full screen is enabled or not
 	bool m_exclusiveFullscreen;
-	
+
 	//! Former geometry (for exclusive full-screen display)
 	QByteArray m_formerGeometry;
 

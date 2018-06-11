@@ -13,6 +13,19 @@
 /*
 Tool used to digitise traces
 */
+
+struct dpxNearestLine
+{
+	ccPolyline* m_pLine;
+	double m_dDistance;
+	double m_dSegRatio;
+	int m_nSegNum;
+	CCVector3 m_nearestPt;
+
+	//默认构造
+	dpxNearestLine(){m_pLine=nullptr; m_dDistance=DBL_MAX;}
+};
+
 class dpxEditTool :	public ccTool
 {
 public:

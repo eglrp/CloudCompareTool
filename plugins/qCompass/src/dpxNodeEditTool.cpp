@@ -68,21 +68,22 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 	}
 
 	if (buttons != Qt::NoButton)
-	{
-		//按着鼠标左右键进行拖动
-		m_associatedWin->redraw(true, false);
 		return;
-	}
 
 	//获取Camea
 	ccGLCameraParameters camera;
 	m_associatedWin->getGLCameraParameters(camera);
 	double maxRadius = pickWidth_pix * camera.pixelSize / 2;
+	ccLog::Warning(QString::number(maxRadius));
 
+	//鼠标点垂直与屏幕的射线
 	CCVector3 rayAxis, rayOrigin;
 	if(!getCurrentRay(camera,x,y,rayAxis,rayOrigin))
 		return;
+	//建立射线
+	Ray<PointCoordinateType> ray(rayAxis, rayOrigin);
 
+	//搜索边区域
 	CCVector3 margin(0, 0, 0);
 	double maxFOV_rad = 0;
 	if (camera.perspective)
@@ -97,8 +98,8 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 	}
 
 	m_associatedWin->removeFromOwnDB(m_pSphere);
-	//建立射线
-	Ray<PointCoordinateType> ray(rayAxis, rayOrigin);
+
+	dpxNearestLine nearestInfo;
 	//鼠标的移动事件
 	ccHObject::Container vecHObjs;
 	dpxSnapHelper::Instance()->FindAllObjs(vecHObjs);//默认找到所有的线
@@ -118,10 +119,18 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 		int nSegNum;
 		CCVector3 nearestPt;
 		dpxAlgorithmFun::DistanceLineToRay(pLine,rayAxis,rayOrigin,dDistance,nSegNum,dSegRatio,nearestPt);
+		if(dDistance < nearestInfo.m_dDistance)
+		{
+			nearestInfo.m_pLine = pLine;
+			nearestInfo.m_dDistance = dDistance;
+			nearestInfo.m_dSegRatio = dSegRatio;
+			nearestInfo.m_nSegNum = nSegNum;
+			nearestInfo.m_nearestPt = nearestPt;
+		}
+	}
 		//一个移动的小球
-
 		ccGLMatrix transM ;
-		CCVector3 vecTrans(nearestPt.x,nearestPt.y,nearestPt.z);
+		CCVector3 vecTrans(nearestInfo.m_nearestPt.x,nearestInfo.m_nearestPt.y,nearestInfo.m_nearestPt.z);
 		transM.setTranslation(vecTrans);
 
 //-----------------------以下方法可行-------------------------------//
@@ -134,8 +143,8 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 		m_pSphere->setEnabled(true);
 		m_associatedWin->addToOwnDB(m_pSphere);
 
+
 		//dpxSnapHelper::Instance()->AddTempShowObject(m_pSphere);
-		//m_associatedWin->addToOwnDB(m_pSphere);
 ///////////////////////////////////////////////////////////////////////////
 //		ccGLMatrix oldMatrix = m_pSphere->getTransformation();
 //		ccGLMatrix inverseMatrix = oldMatrix.inverse();
@@ -144,9 +153,6 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 //		m_pSphere->applyGLTransformation(transM);
 //		m_pSphere->setRadius(maxRadius);
 //		m_associatedWin->addToOwnDB(m_pSphere);
-
-		break;
-	}
 
 	m_associatedWin->redraw(true, true); //只刷新2D
 }

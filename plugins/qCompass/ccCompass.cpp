@@ -556,11 +556,6 @@ bool ccCompass::startPicking()
 		return false;
 	}
 
-//	m_app->getActiveGLWindow()->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
-//										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
-//										|	ccGLWindow::INTERACT_CTRL_PAN
-//										|	ccGLWindow::INTERACT_SIG_MOUSE_MOVED);
-
 	m_picking = true;
 	return true;
 }
@@ -725,11 +720,17 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 	if(mouseEvent==nullptr)
 		return false;
 
+	//duans
+	bool bPushShiftKey = false;
+	if (QApplication::keyboardModifiers() == Qt::ShiftModifier)
+		bPushShiftKey = true;
+
+	//void ccGLWindow::mouseDoubleClickEvent(QMouseEvent *event)
 	const int x = mouseEvent->x();
 	const int y = mouseEvent->y();
 	Qt::MouseButtons button= mouseEvent->buttons();
 
-	if (event->type() == QEvent::MouseButtonDblClick)
+	if (event->type() == QEvent::MouseButtonDblClick) //屏蔽掉显示窗口的双击事件
 	{
 		if (mouseEvent->buttons() == Qt::RightButton)
 		{
@@ -739,14 +740,26 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 	}//补充了鼠标移动事件
 	else if (event->type() == QEvent::MouseMove)
 	{
+		//采集时摁着Ctrl键能实现视图漫游
+		if(bPushShiftKey)
+		{
+			m_app->getActiveGLWindow()->mouseMoveEvent(mouseEvent);
+		}
+
 		if(m_activeTool==nullptr)
 			return false;
 
 		m_activeTool->onMouseMove(x,y,button);
+
 		return true;
 	}
 	else if (event->type() == QEvent::MouseButtonPress)
 	{
+		//采集时摁着Ctrl键能实现视图漫游
+		if(bPushShiftKey)
+		{
+			m_app->getActiveGLWindow()->mousePressEvent(mouseEvent);
+		}
 		if(m_activeTool==nullptr)
 			return false;
 
@@ -757,6 +770,7 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 		}
 	}
 	return false;
+
 }
 
 //exit this tool
