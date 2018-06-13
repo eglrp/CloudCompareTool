@@ -47,7 +47,7 @@ class ccCone;//圆锥
 class ccPlane;//平面
 class ccDish;//盘
 class ccExtru;
-class ccTorus;//圆环
+class ccTorus;//圆环面
 class ccShiftedObject;
 class ccPlanarEntityInterface;
 

@@ -25,18 +25,17 @@ public:
 
 	//bOnlyOne代表是否清除其它临时显示项
 	void AddTempShowObject(ccHObject* pTempShowObj,bool bOnlyOne = true);
-	//查找所有类型的要素
+
+	//查找所有类型的要素（默认查找线）
 	bool FindAllObjs(ccHObject::Container& vecHObjs,CC_CLASS_ENUM filter=CC_TYPES::POLY_LINE);
 
-	//bool ProjectAllObjs(ccHObject::Container& vecHObjs);
-
+	//线的节点投影到屏幕上
 	bool ProjectLinesTo2D(ccHObject::Container& vec3DLines,ccHObject::Container& vec2DLines);
 
-	//
+	//box是否与射线相交
 	bool isBoxIntersectWithRay(ccBBox box,Ray<float> ray);
 
 private:
-	static dpxSnapHelper* m_instance;
 	//当前激活的ccGLWindow
 	ccGLWindow* m_pCurActiveWindow;
 	//捕捉的效果图形存储在根几何上

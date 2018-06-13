@@ -46,6 +46,7 @@ protected:
 	ccGLWindow* m_associatedWin;
 
 	ccSphere* m_pSphere;
+	ccHObject* m_pSelectShowRoot;
 };
 
 #endif

@@ -4,9 +4,9 @@
 
 dpxSnapHelper* dpxSnapHelper::Instance()
 {
-	//在此处初始化
-	dpxSnapHelper* instance = new dpxSnapHelper();
-	return instance;
+
+	static dpxSnapHelper instance;
+	return &instance;
 }
 
 dpxSnapHelper::dpxSnapHelper()
@@ -19,8 +19,6 @@ dpxSnapHelper::dpxSnapHelper()
 	}
 	m_pCurActiveWindow = pMainWindow->getActiveGLWindow();
 	m_pShowRootObject = new ccHObject("RootShow");
-	m_pShowRootObject->setEnabled(true);
-
 	m_pCurActiveWindow->addToOwnDB(m_pShowRootObject);
 }
 
@@ -30,25 +28,19 @@ void dpxSnapHelper::ClearShowObject()
 		return;
 
 	m_pShowRootObject->removeAllChildren();
-	m_pCurActiveWindow->removeFromOwnDB(m_pShowRootObject);
 }
 
 void dpxSnapHelper::AddTempShowObject(ccHObject* pTempShowObj,bool bOnlyOne /*= true*/)
 {
-	if(m_pShowRootObject==nullptr || m_pShowRootObject==0)
-		return;
-
 	if(bOnlyOne)
 	{
 		m_pShowRootObject->removeAllChildren();
-		m_pCurActiveWindow->removeFromOwnDB(m_pShowRootObject);
-		int nSize = m_pShowRootObject->getChildrenNumber();
-		ccLog::Warning("after remove "+ QString::number(nSize));
-		m_pCurActiveWindow->redraw(false,false);
 	}
 
+	pTempShowObj->setDisplay(m_pCurActiveWindow);
+	pTempShowObj->setEnabled(true);
+	pTempShowObj->setVisible(true);
 	m_pShowRootObject->addChild(pTempShowObj);
-	m_pCurActiveWindow->addToOwnDB(m_pShowRootObject);
 }
 
 //获取树状图里所有的线
