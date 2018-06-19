@@ -13,6 +13,9 @@ if (INSTALL_QCOMPASS_PLUGIN)
 	#include the whole CC directory (easier)
 	include_directories( ${CloudCompare_SOURCE_DIR} )
 	
+	#DPX_MAP_LIB_SOURCE_DIR
+	include_directories( ${DPX_MAP_LIB_SOURCE_DIR} ) #by duans
+
 	#we need ccOverlay classes
 	file( GLOB CC_PLUGIN_CUSTOM_HEADER_LIST ${CloudCompare_SOURCE_DIR}/ccOverlayDialog*.h )
 	file( GLOB CC_PLUGIN_CUSTOM_SOURCE_LIST ${CloudCompare_SOURCE_DIR}/ccOverlayDialog*.cpp )
