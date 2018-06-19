@@ -131,6 +131,7 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	m_toggleSelectedEntitiesSF = new QAction("Toggle SF", this);
 	m_toggleSelectedEntities3DName = new QAction("Toggle 3D name", this);
 	m_addEmptyGroup = new QAction("Add empty group", this);
+	m_AddnewMap = new QAction("Add new Map", this);
 	m_alignCameraWithEntity = new QAction("Align camera", this);
 	m_alignCameraWithEntityReverse = new QAction("Align camera (reverse)", this);
 	m_enableBubbleViewMode = new QAction("Bubble-view", this);
@@ -161,6 +162,7 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	connect(m_toggleSelectedEntitiesSF,			SIGNAL(triggered()),								this, SLOT(toggleSelectedEntitiesSF()));
 	connect(m_toggleSelectedEntities3DName,		SIGNAL(triggered()),								this, SLOT(toggleSelectedEntities3DName()));
 	connect(m_addEmptyGroup,					SIGNAL(triggered()),								this, SLOT(addEmptyGroup()));
+	connect(m_AddnewMap,						SIGNAL(triggered()),								this, SLOT(addNewMap()));
 	connect(m_alignCameraWithEntity,			SIGNAL(triggered()),								this, SLOT(alignCameraWithEntityDirect()));
 	connect(m_alignCameraWithEntityReverse,		SIGNAL(triggered()),								this, SLOT(alignCameraWithEntityIndirect()));
 	connect(m_enableBubbleViewMode,				SIGNAL(triggered()),								this, SLOT(enableBubbleViewMode()));
@@ -1981,6 +1983,29 @@ void ccDBRoot::addEmptyGroup()
 	addElement(newGroup);
 }
 
+void ccDBRoot::addNewMap()
+{
+	vector<QString> vecLryNames;
+	vecLryNames.push_back("road");
+	vecLryNames.push_back("lane");
+	vecLryNames.push_back("light");
+    dpxMap* pMap = dpxMapManager::createMap("test",vecLryNames);
+    addMapData(pMap);
+}
+
+void  ccDBRoot::addMapData(dpxMap* pMap)
+{
+	if(pMap==nullptr)
+		return ;
+	LayerVec vecLrys = pMap->GetAllLayers();
+	for(int i = 0;i<vecLrys.size();i++)
+	{
+		dpxLayer* pLyr = vecLrys[i];
+		ccHObject* pRootData = pLyr->getRootData();
+		addElement(pRootData);
+	}
+}
+
 void ccDBRoot::enableBubbleViewMode()
 {
 	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
@@ -2216,6 +2241,7 @@ void ccDBRoot::showContextMenu(const QPoint& menuPos)
 	{
 		menu.addSeparator();
 		menu.addAction(m_addEmptyGroup);
+		menu.addAction(m_AddnewMap);
 	}
 
 	menu.exec(m_dbTreeWidget->mapToGlobal(menuPos));
@@ -2262,22 +2288,6 @@ void ccDBRoot::editAttribute()
 	{
 		bPolyLines = true;
 	}
-//	else if(nGeotype ==  CC_TYPES::FACET) //面
-//	{
-//		//ccFacet
-//	}
-//	else if(nGeotype == CC_TYPES::PLANE) //平面
-//	{
-//		//ccPlane
-//	}
-//	else if(nGeotype == CC_TYPES::SPHERE)//球
-//	{
-//		//ccSphere
-//	}
-//	else if(nGeotype == CC_TYPES::BOX)//盒子
-//	{
-//		ccBox* pBox = obj && obj->isA(CC_TYPES::BOX) ? static_cast<ccBox*>(obj) : 0;
-//	}
 	else
 	{
 	}

@@ -1,0 +1,7 @@
+    <map id="1" name="" time="">
+        <link>
+            <predecessor elementType="road" elementId="205" contactPoint="end"/>
+            <successor elementType="road" elementId="196" contactPoint="end"/>
+        </link>
+        <type s="0.0e+00" type="town"/>
+    </map>

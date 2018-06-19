@@ -46,7 +46,7 @@ if (OPTION_GL_QUAD_BUFFER_SUPPORT)
 	set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS CC_GL_WINDOW_USE_QWINDOW )
 endif()
 if( WIN32 )
-    set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS CC_USE_AS_DLL QCC_DB_USE_AS_DLL QCC_IO_USE_AS_DLL )
+    set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS CC_USE_AS_DLL QCC_DB_USE_AS_DLL QCC_IO_USE_AS_DLL DPX_MAP_USE_AS_DLL)
 endif()
 
 # Plugins need the QT_NO_DEBUG preprocessor in release!
@@ -57,7 +57,7 @@ if( WIN32 )
 		#Anytime we use COMPILE_DEFINITIONS_XXX we must define this policy!
 		#(and setting it outside of the function/file doesn't seem to work...)
 		cmake_policy(SET CMP0043 OLD)
-	
+
 		set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS_RELEASE QT_NO_DEBUG)
 	endif()
 endif()

@@ -81,6 +81,9 @@ include( cmake/CMakeInclude.cmake )
 
 add_subdirectory( CC )
 
+# by duan
+add_subdirectory( dpxMap )
+
 # Add external libraries
 include( cmake/CMakeExternalLibs.cmake )
 

@@ -18,6 +18,7 @@
 #ifndef CC_DB_ROOT_HEADER
 #define CC_DB_ROOT_HEADER
 
+
 //Qt
 #include <QAbstractItemModel>
 #include <QPoint>
@@ -26,6 +27,10 @@
 
 //qCC_db
 #include <ccHObject.h>
+
+//by duans
+#include "dpxMap.h"
+#include "dpxMapManager.h"
 
 //System
 #include <unordered_set>
@@ -182,6 +187,8 @@ public slots:
 	**/
 	void selectEntities(const ccHObject::Container& entities, bool incremental = false);
 
+
+	void  addMapData(dpxMap* pMap);
 protected:
 
 	//! Entity property that can be toggled
@@ -216,6 +223,7 @@ protected slots:
 	inline void toggleSelectedEntities3DName()      { toggleSelectedEntitiesProperty(TG_3D_NAME); }
 
 	void addEmptyGroup();
+	void addNewMap();
 	void alignCameraWithEntityDirect() { alignCameraWithEntity(false); }
 	void alignCameraWithEntityIndirect() { alignCameraWithEntity(true); }
 	void enableBubbleViewMode();
@@ -310,6 +318,9 @@ protected:
 	QAction* m_toggleSelectedEntities3DName;
 	//! Context menu action: add empty group
 	QAction* m_addEmptyGroup;
+
+	//添加新地图
+	QAction* m_AddnewMap;
 	//! Context menu action: use 3-points labels or planes to orient camera
 	QAction* m_alignCameraWithEntity;
 	//! Context menu action: reverse of m_alignCameraWithEntity

@@ -1,4 +1,3 @@
-
 set(header_list
    ${header_list}
    ${CMAKE_CURRENT_SOURCE_DIR}/ccDBRoot.h
