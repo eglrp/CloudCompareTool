@@ -1094,6 +1094,7 @@ protected:
 	**/
 	GLfloat getGLDepth(int x, int y, bool extendToNeighbors = false);
 
+public://by duans
 	//! Returns the approximate 3D position of the clicked pixel
 	bool getClick3DPos(int x, int y, CCVector3d& P3D);
 

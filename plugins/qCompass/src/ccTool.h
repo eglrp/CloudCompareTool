@@ -61,6 +61,13 @@ public:
 	//by duans
 	virtual void onMouseRightClick(int x,int y) { }
 
+	//by duans
+	virtual void onMouseLeftClick(int x,int y) { }
+
+	//by duans
+	virtual void onMouseReleaseEvent(int x,int y) { }
+
+	virtual void onLeftDoubleClick(int x,int y) {}
 	//called when "Return" or "Space" is pressed, or the "Accept Button" is clicked
 	virtual void accept() { }
 

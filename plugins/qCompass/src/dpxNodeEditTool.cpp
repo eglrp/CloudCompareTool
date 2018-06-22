@@ -9,10 +9,26 @@
 #include "dpxNodeEditTool.h"
 #include "ccBBox.h"
 
-
 #include "../../qCC/dpxFramework/dpxSnapHelper.h"
+
+
 dpxNodeEditTool::dpxNodeEditTool()
 {
+	m_polyTipVertices = new ccPointCloud("Tip vertices");
+	m_polyTipVertices->reserve(3);
+	m_polyTipVertices->addPoint(CCVector3(0, 0, 0));
+	m_polyTipVertices->addPoint(CCVector3(1, 1, 1));
+	m_polyTipVertices->addPoint(CCVector3(2, 2, 2));
+	m_polyTipVertices->setEnabled(false);
+
+	m_polyTip = new ccPolyline(m_polyTipVertices);
+	m_polyTip->setForeground(true);
+	m_polyTip->setTempColor(ccColor::green);
+	m_polyTip->set2DMode(true);
+	m_polyTip->reserve(3);
+	m_polyTip->addPointIndex(0, 3);
+	m_polyTip->setWidth(1); //'1' is equivalent to the default line size
+	m_polyTip->addChild(m_polyTipVertices);
 }
 
 dpxNodeEditTool::~dpxNodeEditTool()
@@ -22,11 +38,8 @@ dpxNodeEditTool::~dpxNodeEditTool()
 //called when the tool is set to active (for initialization)
 void dpxNodeEditTool::toolActivated()
 {
-	m_associatedWin = m_window;
-	m_associatedWin->setCursor(Qt::CrossCursor);
-
-	//移动的球
-	m_pSphere = new ccSphere("new");
+	m_window->setCursor(Qt::CrossCursor);
+	m_window->addToOwnDB(m_polyTip);
 	dpxSnapHelper::Instance()->ClearShowObject();
 }
 
@@ -36,139 +49,271 @@ void dpxNodeEditTool::toolDisactivated()
 	dpxSnapHelper::Instance()->ClearShowObject();
 }
 
-	//右键事件
+//右键事件
 void dpxNodeEditTool::onMouseRightClick(int x,int y)
 {
+	//在合适的位置添加节点
+}
+
+//右键事件
+void dpxNodeEditTool::onLeftDoubleClick(int x,int y)
+{
+	//获取最近的线与点
+	dpxNearestLine nearestInfo;
+	bool bFind = getNearestLineInfo(x,y,nearestInfo);
+	if(!bFind)
+		return;
+	//结点判断
+	ccPolyline* pLine = nearestInfo.m_pLine;
+	double dDistance = nearestInfo.m_dDistance;
+	double dSegRatio = nearestInfo.m_dSegRatio;
+	int nSegNum = nearestInfo.m_nSegNum;
+	CCVector3 nearPt = nearestInfo.m_nearestPt;
+
+	if(pLine==nullptr)
+		return;
+
+	ccPolyline* pTargetLine = nullptr;
+	int nTargrtSegNum = -1;
+
+	double dDis=0;
+	int nSize = pLine->size();
+	if(0<=nSegNum&&nSegNum<nSize-1)
+	{
+		if(dSegRatio>0.5)
+		{
+		    const CCVector3* pV = pLine->getPoint(nSegNum+1);
+			double dx = pV->x - nearPt.x;
+			double dy = pV->y - nearPt.y;
+			double dz = pV->z - nearPt.z;
+			dDis = sqrt( dx * dx + dy * dy + dz * dz );
+			if(dDis<SNAP_TOL_VALUE)
+			{
+				pTargetLine = pLine;
+				nTargrtSegNum = nSegNum+1;
+			}
+		}
+		else
+		{
+			const CCVector3* pV = pLine->getPoint(nSegNum);
+			double dx = pV->x - nearPt.x;
+			double dy = pV->y - nearPt.y;
+			double dz = pV->z - nearPt.z;
+			dDis = sqrt( dx * dx + dy * dy + dz * dz );
+			if(dDis < SNAP_TOL_VALUE)
+			{
+				pTargetLine = pLine;
+				nTargrtSegNum = nSegNum;
+			}
+		}
+	}
+
+	if(pTargetLine!=nullptr && 0<=nTargrtSegNum && nTargrtSegNum<nSize)
+	{
+		pLine->removePointGlobalIndex(nTargrtSegNum);
+		m_window->redraw(false, true);
+	}
+}
+
+
+//左键事件  是否选中线节点，若选中则记录
+void dpxNodeEditTool::onMouseLeftClick(int x,int y)
+{
+	m_VNodeInfo.clear();
+	//获取最近的线与点
+	dpxNearestLine nearestInfo;
+	bool bFind = getNearestLineInfo(x,y,nearestInfo);
+	if(!bFind)
+		return;
+	//结点判断
+	ccPolyline* pLine = nearestInfo.m_pLine;
+	double dDistance = nearestInfo.m_dDistance;
+	double dSegRatio = nearestInfo.m_dSegRatio;
+	int nSegNum = nearestInfo.m_nSegNum;
+	CCVector3 nearPt = nearestInfo.m_nearestPt;
+
+	if(pLine==nullptr)
+		return;
+
+	double dDis=0;
+	int nSize = pLine->size();
+	if(0<=nSegNum&&nSegNum<nSize-1)
+	{
+		if(dSegRatio>0.5)
+		{
+		    const CCVector3* pV = pLine->getPoint(nSegNum+1);
+			double dx = pV->x - nearPt.x;
+			double dy = pV->y - nearPt.y;
+			double dz = pV->z - nearPt.z;
+			dDis = sqrt( dx * dx + dy * dy + dz * dz );
+			if(dDis<SNAP_TOL_VALUE)
+			{
+				m_VNodeInfo.m_pLine = pLine;
+				m_VNodeInfo.m_nNodeIndex = nSegNum+1;
+				ccLog::Warning(QString::number(nSegNum+1));
+			}
+		}
+		else
+		{
+			const CCVector3* pV = pLine->getPoint(nSegNum);
+			double dx = pV->x - nearPt.x;
+			double dy = pV->y - nearPt.y;
+			double dz = pV->z - nearPt.z;
+			dDis = sqrt( dx * dx + dy * dy + dz * dz );
+			if(dDis < SNAP_TOL_VALUE)
+			{
+				m_VNodeInfo.m_pLine = pLine;
+				m_VNodeInfo.m_nNodeIndex = nSegNum;
+				ccLog::Warning(QString::number(nSegNum));
+			}
+		}
+	}
+}
+
+void dpxNodeEditTool::onMouseReleaseEvent(int x,int y)
+{
+	if(m_window==nullptr)
+		return;
+
+	ccPolyline* pLine = m_VNodeInfo.m_pLine;
+	int nIndex = m_VNodeInfo.m_nNodeIndex;
+	if(pLine==nullptr)
+		return;
+
+	if(nIndex>=pLine->size())
+		return;
+	if(!m_bMoveNode)//是否是拖拽节点模式
+		return;
+	//快速获取方式VS点击方式？？
+	CCVector3d P3D;
+	if(!m_window->getClick3DPos(x,y,P3D))
+		return;
+
+	CCVector3* modefyPt = const_cast<CCVector3*>(pLine->getPointPersistentPtr(nIndex));
+	*modefyPt = CCVector3(static_cast<PointCoordinateType>(P3D.x),
+						  static_cast<PointCoordinateType>(P3D.y),
+						  static_cast<PointCoordinateType>(P3D.z));
+
+	m_bMoveNode = false;
+	m_window->redraw(false, true);
 }
 
 void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 {
-	int pickWidth_pix = 1;//默认值
-
-	if (!m_associatedWin)
+	if (buttons == Qt::LeftButton)
 	{
-		assert(false);
-		return;
-	}
-
-	if (buttons != Qt::NoButton)
-		return;
-
-	//获取Camea
-	ccGLCameraParameters camera;
-	m_associatedWin->getGLCameraParameters(camera);
-	double maxRadius = pickWidth_pix * camera.pixelSize / 2;
-	ccLog::Warning(QString::number(maxRadius));
-
-	//鼠标点垂直与屏幕的射线
-	CCVector3 rayAxis, rayOrigin;
-	if(!getCurrentRay(camera,x,y,rayAxis,rayOrigin))
-		return;
-	//建立射线
-	Ray<PointCoordinateType> ray(rayAxis, rayOrigin);
-
-	//搜索边区域
-	CCVector3 margin(0, 0, 0);
-	double maxFOV_rad = 0;
-	if (camera.perspective)
-	{
-		maxFOV_rad = 0.002 * pickWidth_pix; //empirical conversion from pixels to FOV angle (in radians)
-	}
-	else
-	{
-		maxRadius = pickWidth_pix * camera.pixelSize / 2;
-		ccLog::Warning(QString::number(maxRadius));
-		margin = CCVector3(1, 1, 1) * static_cast<PointCoordinateType>(maxRadius);
-	}
-
-	//清空原有效果图形
-	dpxSnapHelper::Instance()->ClearShowObject();
-
-	dpxNearestLine nearestInfo;
-	bool bFindNearestLine = false;
-	//鼠标的移动事件
-	ccHObject::Container vecHObjs;
-	dpxSnapHelper::Instance()->FindAllObjs(vecHObjs);//默认找到所有的线
-	for(int i =0;i<vecHObjs.size();i++)
-	{
-		ccBBox box = vecHObjs[i]->getOwnBB();
-		//vecHObjs[i]->setTempColor(ccColor::green);
-		if (!AABB<PointCoordinateType>(box.minCorner()-margin,box.maxCorner() + margin).intersects(ray))
-			continue;
-
-		bFindNearestLine = true;
-		ccPolyline* pLine = ccHObjectCaster::ToPolyline(vecHObjs[i]);
-		if(pLine==nullptr)
-			continue;
-
-		double dDistance,dSegRatio;
-		int nSegNum;
-		CCVector3 nearestPt;
-		dpxAlgorithmFun::DistanceLineToRay(pLine,rayAxis,rayOrigin,dDistance,nSegNum,dSegRatio,nearestPt);
-		if(dDistance < nearestInfo.m_dDistance)
+		//节点拖动
+		ccPolyline* pLine = m_VNodeInfo.m_pLine;
+		int nIndex = m_VNodeInfo.m_nNodeIndex;
+        if(pLine==nullptr)
+			return;
+		ccLog::Warning(QString::number(nIndex));
+		if(nIndex<0|| nIndex>pLine->size())
 		{
-			nearestInfo.m_pLine = pLine;
-			nearestInfo.m_dDistance = dDistance;
-			nearestInfo.m_dSegRatio = dSegRatio;
-			nearestInfo.m_nSegNum = nSegNum;
-			nearestInfo.m_nearestPt = nearestPt;
+			ccLog::Warning("error");
+			return;
 		}
-	}
+		ccGLCameraParameters camera;
+		m_window->getGLCameraParameters(camera);
 
-	if(!bFindNearestLine)
+		const CCVector3* pFirst = pLine->getPoint(nIndex-1);
+		const CCVector3* pLast = pLine->getPoint(nIndex+1);
+
+		CCVector3d First2D,Last2D;
+		camera.project(*pFirst, First2D);
+		camera.project(*pLast, Last2D);
+
+		CCVector3* firstPt = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(0));
+		*firstPt = CCVector3(static_cast<PointCoordinateType>(First2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)
+							static_cast<PointCoordinateType>(First2D.y - camera.viewport[3] / 2),
+							0);
+
+		CCVector3* middlePt = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(1));
+		QPointF pos2D = m_window->toCenteredGLCoordinates(x, y);
+		CCVector3 P2D(	static_cast<PointCoordinateType>(pos2D.x()),
+						static_cast<PointCoordinateType>(pos2D.y()),
+						0);
+		*middlePt = P2D;
+
+		CCVector3* LastPt = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(2));
+		*LastPt = CCVector3(static_cast<PointCoordinateType>(Last2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)
+							static_cast<PointCoordinateType>(Last2D.y - camera.viewport[3] / 2),
+							0);
+		m_polyTip->setEnabled(true);
+		m_bMoveNode = true;
+		m_window->redraw(false, false); //只刷新2D
+	}
+	else //显示捕捉效果
 	{
-		m_associatedWin->redraw(false, false); //只刷新2D
-		return;
+		m_polyTip->setEnabled(false);
+		//获取Camea
+		ccGLCameraParameters camera;
+		m_window->getGLCameraParameters(camera);
+		double maxRadius =  camera.pixelSize / 2;
+
+		//清空捕捉效果
+		dpxSnapHelper::Instance()->ClearShowObject();
+		//获取最近的线与点
+		dpxNearestLine nearestInfo;
+		bool bFind = getNearestLineInfo(x, y,nearestInfo);
+		if(!bFind)
+		{
+			m_window->redraw(false, false); //只刷新2D
+			return;
+		}
+		else //添加显示效果
+		{
+			ccPolyline* pNearestLine = nearestInfo.m_pLine;
+			int nSize = pNearestLine->size();
+			for(int i=0;i<nSize;i++)
+			{
+				const CCVector3* pPoint = pNearestLine->getPoint(i);
+				//一个移动的小球
+				ccGLMatrix transM ;
+				CCVector3 vecTrans(pPoint->x,pPoint->y,pPoint->z);
+				transM.setTranslation(vecTrans);
+
+				//-----------------------以下方法可行-------------------------------//
+				ccSphere* pSphere = new ccSphere(0.1,&transM,"Sphere",4);
+				pSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
+				pSphere->setDisplay(m_window);
+				pSphere->setTempColor(ccColor::red);
+				pSphere->setVisible(true);
+				pSphere->setEnabled(true);
+				dpxSnapHelper::Instance()->AddTempShowObject(pSphere,false);
+			}
+			//一个移动的小球，鼠标最近的线
+			ccGLMatrix transM;
+			CCVector3 vecTrans(nearestInfo.m_nearestPt.x,nearestInfo.m_nearestPt.y,nearestInfo.m_nearestPt.z);
+			transM.setTranslation(vecTrans);
+
+			ccSphere* pMoveSphere = new ccSphere(maxRadius,&transM,"nearestPt",6);
+			pMoveSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
+			pMoveSphere->setDisplay(m_window);
+			pMoveSphere->setTempColor(ccColor::red);
+			pMoveSphere->setVisible(true);
+			pMoveSphere->setEnabled(true);
+			//dpxSnapHelper::Instance()->AddTempShowObject(pMoveSphere,false);
+
+			m_window->redraw(false, false); //只刷新2D
+		}//捕捉效果
 	}
 
-	ccPolyline* pNearestLine = nearestInfo.m_pLine;
-	int nSize = pNearestLine->size();
-	for(int i=0;i<nSize;i++)
-	{
-		const CCVector3* pPoint = pNearestLine->getPoint(i);
-			//一个移动的小球
-		ccGLMatrix transM ;
-		CCVector3 vecTrans(pPoint->x,pPoint->y,pPoint->z);
-		transM.setTranslation(vecTrans);
-
-		//-----------------------以下方法可行-------------------------------//
-		ccSphere* pSphere = new ccSphere(0.1,&transM,"Sphere",4);
-		pSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
-		pSphere->setDisplay(m_associatedWin);
-		pSphere->setTempColor(ccColor::red);
-		pSphere->setVisible(true);
-		pSphere->setEnabled(true);
-		dpxSnapHelper::Instance()->AddTempShowObject(pSphere,false);
-	}
-	//一个移动的小球，鼠标最近的线
-	ccGLMatrix transM ;
-	CCVector3 vecTrans(nearestInfo.m_nearestPt.x,nearestInfo.m_nearestPt.y,nearestInfo.m_nearestPt.z);
-	transM.setTranslation(vecTrans);
-
-	m_pSphere = new ccSphere(maxRadius,&transM,"nearestPt",12);
-	m_pSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
-	m_pSphere->setDisplay(m_associatedWin);
-	m_pSphere->setTempColor(ccColor::red);
-	m_pSphere->setVisible(true);
-	m_pSphere->setEnabled(true);
-	dpxSnapHelper::Instance()->AddTempShowObject(m_pSphere,false);
-
-	m_associatedWin->redraw(false, false); //只刷新2D
 }
 
-//called when a point in a point cloud gets picked while this tool is active
-//pointPicked(pi.entity, pi.itemIndex, pi.clickPoint.x(), pi.clickPoint.y(), pi.P3D); //map straight to pointPicked function
 void dpxNodeEditTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
-	if (!m_associatedWin)
+	if (!m_window)
 	{
 		assert(false);
 		return;
 	}
+
+	ccLog::Warning("Picked99999999999999");
 	if (!insertPoint)
 		return;
 
-	m_associatedWin->redraw(false, false);
+	m_window->redraw(false, false);
 }
 
 

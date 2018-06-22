@@ -89,12 +89,6 @@ void dpxTraceLineTool::toolActivated()
 	//duans
 	m_associatedWin->addToOwnDB(m_pPickLinesRoot);
 
-
-//	if (m_pickingHub)
-//	{
-//		m_pickingHub->removeListener(this);
-//	}
-	//m_associatedWin->setPickingMode(ccGLWindow::NO_PICKING);
 	m_associatedWin->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
 										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
 										|	ccGLWindow::INTERACT_CTRL_PAN
@@ -102,9 +96,6 @@ void dpxTraceLineTool::toolActivated()
 	m_associatedWin->setCursor(Qt::PointingHandCursor);
 
 	restart(true);
-	//resetLine(); //to reset the GUI
-
-	//return ccOverlayDialog::start();
 }
 
 void dpxTraceLineTool::toolDisactivated()
@@ -338,7 +329,6 @@ void dpxTraceLineTool::updatePolyLineTip(int x, int y, Qt::MouseButtons buttons)
 		*firstP = CCVector3(static_cast<PointCoordinateType>(A2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)
 							static_cast<PointCoordinateType>(A2D.y - camera.viewport[3] / 2),
 							0);
-
 	}
 
 	m_polyTip->setEnabled(true);

@@ -8,7 +8,11 @@
 //qCC_db
 
 #include "ccTool.h"
-//#include "ccTrace.h"
+#include "RayAndBox.h"
+#include "../../qCC/dpxFramework/dpxSnapHelper.h"
+#include "dpxAlgorithmFun.h"
+
+#define SNAP_TOL_VALUE  0.01
 
 /*
 Tool used to digitise traces
@@ -21,7 +25,6 @@ struct dpxNearestLine
 	double m_dSegRatio;
 	int m_nSegNum;
 	CCVector3 m_nearestPt;
-
 	//默认构造
 	dpxNearestLine(){m_pLine=nullptr; m_dDistance=DBL_MAX;}
 };
@@ -39,6 +42,8 @@ public:
 	//rayAxis:垂直于屏幕的射线方向向量
 	//rayOrigin:射线的起点，世界坐标系
 	bool getCurrentRay(ccGLCameraParameters camera,int x,int y,CCVector3& rayAxis,CCVector3& rayOrigin);
+
+	bool getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo);
 };
 
 #endif

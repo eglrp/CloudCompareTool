@@ -709,12 +709,16 @@ void ccCompass::pointPicked(ccHObject* entity, unsigned itemIdx, int x, int y, c
 	m_app->getActiveGLWindow()->redraw();
 }
 
+//by duans 事件在此绑定非常重要
 bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 {
 	//update cost mode (just in case it has changed) & fit plane params
 	ccCompass::costMode = m_dlg->getCostMode();
 	ccCompass::fitPlanes = m_dlg->planeFitMode();
 	ccTrace::COST_MODE = ccCompass::costMode;
+
+	if(m_activeTool==nullptr)
+		return false;
 
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent *>(event);
 	if(mouseEvent==nullptr)
@@ -737,6 +741,11 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 			stopMeasuring();
 			return true;
 		}
+		else if (mouseEvent->buttons() == Qt::LeftButton)
+		{
+			m_activeTool->onLeftDoubleClick(x,y);
+			return true;
+		}
 	}//补充了鼠标移动事件
 	else if (event->type() == QEvent::MouseMove)
 	{
@@ -746,31 +755,42 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 			m_app->getActiveGLWindow()->mouseMoveEvent(mouseEvent);
 		}
 
-		if(m_activeTool==nullptr)
-			return false;
-
 		m_activeTool->onMouseMove(x,y,button);
-
 		return true;
 	}
 	else if (event->type() == QEvent::MouseButtonPress)
 	{
-		//采集时摁着Ctrl键能实现视图漫游
-		if(bPushShiftKey)
-		{
-			m_app->getActiveGLWindow()->mousePressEvent(mouseEvent);
-		}
-		if(m_activeTool==nullptr)
-			return false;
-
 		if (mouseEvent->buttons() == Qt::RightButton)
 		{
-			m_activeTool->onMouseRightClick(x,y);
+			//采集时摁着Shift键能实现视图漫游
+			if(bPushShiftKey)
+			{
+				m_app->getActiveGLWindow()->mousePressEvent(mouseEvent);
+			}
+			else//不摁Shift是处理工具事件
+			{
+				m_activeTool->onMouseRightClick(x,y);
+			}
+			return true;
+		}
+		else if(mouseEvent->buttons() == Qt::LeftButton)
+		{
+			m_activeTool->onMouseLeftClick(x,y);
+			m_app->getActiveGLWindow()->mousePressEvent(mouseEvent);
 			return true;
 		}
 	}
-	return false;
+	else if (event->type() == QEvent::MouseButtonRelease)
+	{
+		//采集时摁着Shift键能实现视图漫游
+		if(bPushShiftKey)
+		{
+			m_app->getActiveGLWindow()->mouseReleaseEvent(mouseEvent);
+		}
 
+		m_activeTool->onMouseReleaseEvent(x,y);
+	}
+	return false;
 }
 
 //exit this tool
