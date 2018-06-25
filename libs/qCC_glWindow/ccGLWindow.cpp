@@ -24,7 +24,6 @@
 #include <ccClipBox.h>
 #include <ccColorRampShader.h>
 #include <ccHObjectCaster.h>
-#include <ccPointCloud.h>
 #include <ccPolyline.h>
 #include <ccSphere.h> //for the pivot symbol
 #include <ccSubMesh.h>
@@ -4375,6 +4374,7 @@ void ccGLWindow::doPicking()
 	}
 }
 
+
 void ccGLWindow::wheelEvent(QWheelEvent* event)
 {
 	bool doRedraw = false;
@@ -6983,7 +6983,6 @@ bool ccGLWindow::getClick3DPos(int x, int y, CCVector3d& P3D)
 	GLfloat glDepth = getGLDepth(x, y);
 	if (glDepth == 1.0f)
 	{
-		ccLog::Warning("depth=1");
 		return false;
 	}
 
@@ -6996,4 +6995,107 @@ void ccGLWindow::lockRotationAxis(bool state, const CCVector3d& axis)
 	m_rotationAxisLocked = state;
 	m_lockedRotationAxis = axis;
 	m_lockedRotationAxis.normalize();
+}
+
+//by duans  根据屏幕点获取捕捉点
+bool ccGLWindow::pickNearestPt(int nMouseX,int nMouseY,ccGenericPointCloud*& pTargetCloud,int& nPtIndex,CCVector3& vTargetPoint)
+{
+	//点采集
+	PICKING_MODE pickingMode = POINT_PICKING;
+	PickingParameters params(pickingMode, nMouseX, nMouseY, m_pickRadius, m_pickRadius);
+
+	if (m_globalDBRoot==nullptr|| m_winDBRoot==nullptr)
+		return false;
+
+	//correction for HD screens
+	const int retinaScale = devicePixelRatio();
+	params.centerX *= retinaScale;
+	params.centerY *= retinaScale;
+
+	CCVector2d clickedPos(params.centerX, m_glViewport.height() - 1 - params.centerY);
+
+	pTargetCloud = nullptr;
+	nPtIndex = -1;
+	double nearestElementSquareDist = -1.0;
+
+	static const unsigned MIN_POINTS_FOR_OCTREE_COMPUTATION = 128;
+
+	bool autoComputeOctree = false;
+	bool firstCloudWithoutOctree = true;
+
+	ccGLCameraParameters camera;
+	getGLCameraParameters(camera);
+
+	try
+	{
+		ccHObject::Container toProcess;
+		if (m_globalDBRoot)
+			toProcess.push_back(m_globalDBRoot);
+		if (m_winDBRoot)
+			toProcess.push_back(m_winDBRoot);
+
+		while (!toProcess.empty())
+		{
+			//get next item
+			ccHObject* ent = toProcess.back();
+			toProcess.pop_back();
+
+			if (!ent->isEnabled())
+				continue;
+
+			bool ignoreSubmeshes = false;
+
+			//we look for point cloud displayed in this window
+			if (ent->isDisplayedIn(this))
+			{
+				if (ent->isKindOf(CC_TYPES::POINT_CLOUD))
+				{
+
+					ccGenericPointCloud* cloud = static_cast<ccGenericPointCloud*>(ent);
+
+					//if (firstCloudWithoutOctree && !cloud->getOctree() && cloud->size() > MIN_POINTS_FOR_OCTREE_COMPUTATION) //no need to use the octree for a few points!
+					{
+						autoComputeOctree = true;
+						firstCloudWithoutOctree = false;
+
+						int nearestPointIndex = -1;
+						double nearestSquareDist = 0.0;
+
+						if (cloud->pointPicking(clickedPos,
+							camera,
+							nearestPointIndex,
+							nearestSquareDist,
+							params.pickWidth,
+							params.pickHeight,
+							autoComputeOctree && cloud->size() > MIN_POINTS_FOR_OCTREE_COMPUTATION))
+						{
+							if (nPtIndex < 0 || (nearestPointIndex >= 0 && nearestSquareDist < nearestElementSquareDist))
+							{
+								nearestElementSquareDist = nearestSquareDist;
+								nPtIndex = nearestPointIndex;
+								vTargetPoint = *(cloud->getPoint(nearestPointIndex));
+								pTargetCloud = cloud;
+								ccLog::Warning("Find new Pick");
+							}
+						}
+					}
+				}
+			}
+
+			//add children
+			for (unsigned i = 0; i < ent->getChildrenNumber(); ++i)
+			{
+				toProcess.push_back(ent->getChild(i));
+			}
+		}
+
+	}
+	catch (const std::bad_alloc&)
+	{
+		//not enough memory
+		ccLog::Warning("[Picking][CPU] Not enough memory!");
+		return false;
+	}
+
+	return (pTargetCloud != nullptr);
 }

@@ -42,6 +42,7 @@
 #include <list>
 #include <unordered_set>
 
+#include <ccPointCloud.h>
 class QOpenGLDebugMessage;
 
 class ccBBox;
@@ -1097,6 +1098,9 @@ protected:
 public://by duans
 	//! Returns the approximate 3D position of the clicked pixel
 	bool getClick3DPos(int x, int y, CCVector3d& P3D);
+
+	//by duans  根据屏幕点获取捕捉点
+	bool pickNearestPt(int nMouseX,int nMouseY,ccGenericPointCloud*& pTargetCloud,int& nPtIndex,CCVector3& vTargetPoint);
 
 protected: //members
 

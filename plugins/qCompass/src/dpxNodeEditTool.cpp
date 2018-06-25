@@ -9,9 +9,11 @@
 #include "dpxNodeEditTool.h"
 #include "ccBBox.h"
 
+#include "GenericIndexedCloudPersist.h"
+
 #include "../../qCC/dpxFramework/dpxSnapHelper.h"
 
-
+using namespace CCLib;
 dpxNodeEditTool::dpxNodeEditTool()
 {
 	m_polyTipVertices = new ccPointCloud("Tip vertices");
@@ -47,12 +49,50 @@ void dpxNodeEditTool::toolDisactivated()
 {
 	//移除所有的对象
 	dpxSnapHelper::Instance()->ClearShowObject();
+	m_window->removeFromOwnDB(m_polyTip);
 }
 
 //右键事件
 void dpxNodeEditTool::onMouseRightClick(int x,int y)
 {
-	//在合适的位置添加节点
+	if(m_window==nullptr)
+		return;
+	//在合适的位置添加节点 //必须是选中的线才能加节点
+	dpxNearestLine nearestInfo;
+	bool bFind = getNearestLineInfo(x,y,nearestInfo);
+	if(bFind==false)
+		return;
+
+	ccGenericPointCloud* pTargetCloud = nullptr;
+	int nPloudPtIndex=-1;
+	CCVector3 newPickPt;
+	if(!m_window->pickNearestPt(x,y,pTargetCloud,nPloudPtIndex,newPickPt))
+	{
+		ccLog::Warning("鼠标右键加点无法找到捕捉点");
+		return;
+	}
+
+	//add Point  Index:nsegNum+1 Pt:newPickPt
+	int nsegNum = nearestInfo.m_nSegNum;
+	ccPolyline* pLine = nearestInfo.m_pLine;
+
+	GenericIndexedCloudPersist* ploudPersist = const_cast<GenericIndexedCloudPersist*>(pLine->getAssociatedCloud());
+	ChunkedPointCloud* pChunkedPointCloud = dynamic_cast<ChunkedPointCloud*>(ploudPersist);
+	if(pChunkedPointCloud==nullptr)
+		return;
+	//先加点到线的尾部，类似正常采集，再类似与冒泡法替换到插入的位置
+	int nNewSize = pChunkedPointCloud->size() + 1;
+	pChunkedPointCloud->reserve(nNewSize);
+	pLine->reserve(nNewSize);
+
+	pChunkedPointCloud->addPoint(newPickPt);
+	pLine->addPointIndex(nNewSize-1);
+
+	//类似与冒泡法 替换到插入的位置
+	for(int i=nNewSize-1;i>nsegNum+1;i--)
+		pLine->swap(i,i-1);
+
+	m_window->redraw(false, false);
 }
 
 //右键事件
@@ -111,6 +151,7 @@ void dpxNodeEditTool::onLeftDoubleClick(int x,int y)
 	if(pTargetLine!=nullptr && 0<=nTargrtSegNum && nTargrtSegNum<nSize)
 	{
 		pLine->removePointGlobalIndex(nTargrtSegNum);
+		pLine->invalidateBoundingBox();
 		m_window->redraw(false, true);
 	}
 }
@@ -185,16 +226,21 @@ void dpxNodeEditTool::onMouseReleaseEvent(int x,int y)
 	if(!m_bMoveNode)//是否是拖拽节点模式
 		return;
 	//快速获取方式VS点击方式？？
-	CCVector3d P3D;
-	if(!m_window->getClick3DPos(x,y,P3D))
+
+	ccGenericPointCloud* pTargetCloud = nullptr;
+	int nPloudPtIndex=-1;
+	CCVector3 newPickPt;
+	if(!m_window->pickNearestPt(x,y,pTargetCloud,nPloudPtIndex,newPickPt))
+	{
+		ccLog::Warning("释放鼠标无法捕捉点");
 		return;
+	}
 
 	CCVector3* modefyPt = const_cast<CCVector3*>(pLine->getPointPersistentPtr(nIndex));
-	*modefyPt = CCVector3(static_cast<PointCoordinateType>(P3D.x),
-						  static_cast<PointCoordinateType>(P3D.y),
-						  static_cast<PointCoordinateType>(P3D.z));
+	*modefyPt = newPickPt;
 
 	m_bMoveNode = false;
+	pLine->invalidateBoundingBox();
 	m_window->redraw(false, true);
 }
 
