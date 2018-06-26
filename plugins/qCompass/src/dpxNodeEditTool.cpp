@@ -31,6 +31,9 @@ dpxNodeEditTool::dpxNodeEditTool()
 	m_polyTip->addPointIndex(0, 3);
 	m_polyTip->setWidth(1); //'1' is equivalent to the default line size
 	m_polyTip->addChild(m_polyTipVertices);
+
+	//捕捉到节点
+	m_VNodeInfo.clear();
 }
 
 dpxNodeEditTool::~dpxNodeEditTool()
@@ -75,6 +78,8 @@ void dpxNodeEditTool::onMouseRightClick(int x,int y)
 	//add Point  Index:nsegNum+1 Pt:newPickPt
 	int nsegNum = nearestInfo.m_nSegNum;
 	ccPolyline* pLine = nearestInfo.m_pLine;
+	if(nsegNum<0||nsegNum>pLine->size()-2)
+		return;
 
 	GenericIndexedCloudPersist* ploudPersist = const_cast<GenericIndexedCloudPersist*>(pLine->getAssociatedCloud());
 	ChunkedPointCloud* pChunkedPointCloud = dynamic_cast<ChunkedPointCloud*>(ploudPersist);
@@ -100,57 +105,24 @@ void dpxNodeEditTool::onLeftDoubleClick(int x,int y)
 {
 	//获取最近的线与点
 	dpxNearestLine nearestInfo;
-	bool bFind = getNearestLineInfo(x,y,nearestInfo);
+	bool bFind = getNearestLineInfo(x,y,nearestInfo,true);
 	if(!bFind)
 		return;
 	//结点判断
 	ccPolyline* pLine = nearestInfo.m_pLine;
 	double dDistance = nearestInfo.m_dDistance;
-	double dSegRatio = nearestInfo.m_dSegRatio;
 	int nSegNum = nearestInfo.m_nSegNum;
-	CCVector3 nearPt = nearestInfo.m_nearestPt;
 
 	if(pLine==nullptr)
 		return;
 
-	ccPolyline* pTargetLine = nullptr;
-	int nTargrtSegNum = -1;
+	if(dDistance>=SNAP_TOL_VALUE)
+		return;
 
-	double dDis=0;
 	int nSize = pLine->size();
-	if(0<=nSegNum&&nSegNum<nSize-1)
+	if(0<=nSegNum && nSegNum<nSize && nSize>=2)
 	{
-		if(dSegRatio>0.5)
-		{
-		    const CCVector3* pV = pLine->getPoint(nSegNum+1);
-			double dx = pV->x - nearPt.x;
-			double dy = pV->y - nearPt.y;
-			double dz = pV->z - nearPt.z;
-			dDis = sqrt( dx * dx + dy * dy + dz * dz );
-			if(dDis<SNAP_TOL_VALUE)
-			{
-				pTargetLine = pLine;
-				nTargrtSegNum = nSegNum+1;
-			}
-		}
-		else
-		{
-			const CCVector3* pV = pLine->getPoint(nSegNum);
-			double dx = pV->x - nearPt.x;
-			double dy = pV->y - nearPt.y;
-			double dz = pV->z - nearPt.z;
-			dDis = sqrt( dx * dx + dy * dy + dz * dz );
-			if(dDis < SNAP_TOL_VALUE)
-			{
-				pTargetLine = pLine;
-				nTargrtSegNum = nSegNum;
-			}
-		}
-	}
-
-	if(pTargetLine!=nullptr && 0<=nTargrtSegNum && nTargrtSegNum<nSize)
-	{
-		pLine->removePointGlobalIndex(nTargrtSegNum);
+		pLine->removePointGlobalIndex(nSegNum);
 		pLine->invalidateBoundingBox();
 		m_window->redraw(false, true);
 	}
@@ -163,8 +135,11 @@ void dpxNodeEditTool::onMouseLeftClick(int x,int y)
 	m_VNodeInfo.clear();
 	//获取最近的线与点
 	dpxNearestLine nearestInfo;
-	bool bFind = getNearestLineInfo(x,y,nearestInfo);
+	bool bFind = getNearestLineInfo(x,y,nearestInfo,true);
 	if(!bFind)
+		return;
+
+	if(nearestInfo.m_pLine==nullptr)
 		return;
 	//结点判断
 	ccPolyline* pLine = nearestInfo.m_pLine;
@@ -173,41 +148,15 @@ void dpxNodeEditTool::onMouseLeftClick(int x,int y)
 	int nSegNum = nearestInfo.m_nSegNum;
 	CCVector3 nearPt = nearestInfo.m_nearestPt;
 
-	if(pLine==nullptr)
-		return;
-
-	double dDis=0;
-	int nSize = pLine->size();
-	if(0<=nSegNum&&nSegNum<nSize-1)
+	if(dDistance<SNAP_TOL_VALUE)
 	{
-		if(dSegRatio>0.5)
-		{
-		    const CCVector3* pV = pLine->getPoint(nSegNum+1);
-			double dx = pV->x - nearPt.x;
-			double dy = pV->y - nearPt.y;
-			double dz = pV->z - nearPt.z;
-			dDis = sqrt( dx * dx + dy * dy + dz * dz );
-			if(dDis<SNAP_TOL_VALUE)
-			{
-				m_VNodeInfo.m_pLine = pLine;
-				m_VNodeInfo.m_nNodeIndex = nSegNum+1;
-				ccLog::Warning(QString::number(nSegNum+1));
-			}
-		}
-		else
-		{
-			const CCVector3* pV = pLine->getPoint(nSegNum);
-			double dx = pV->x - nearPt.x;
-			double dy = pV->y - nearPt.y;
-			double dz = pV->z - nearPt.z;
-			dDis = sqrt( dx * dx + dy * dy + dz * dz );
-			if(dDis < SNAP_TOL_VALUE)
-			{
-				m_VNodeInfo.m_pLine = pLine;
-				m_VNodeInfo.m_nNodeIndex = nSegNum;
-				ccLog::Warning(QString::number(nSegNum));
-			}
-		}
+		m_VNodeInfo.m_pLine = pLine;
+		m_VNodeInfo.m_nNodeIndex = nSegNum;
+		ccLog::Warning(QString::number(nSegNum));
+	}
+	else
+	{
+		ccLog::Warning("hehhhh"+QString::number(dDistance));
 	}
 }
 
@@ -216,16 +165,16 @@ void dpxNodeEditTool::onMouseReleaseEvent(int x,int y)
 	if(m_window==nullptr)
 		return;
 
-	ccPolyline* pLine = m_VNodeInfo.m_pLine;
-	int nIndex = m_VNodeInfo.m_nNodeIndex;
-	if(pLine==nullptr)
+	if(m_VNodeInfo.m_pLine==nullptr || m_VNodeInfo.m_nNodeIndex==-1)
 		return;
 
-	if(nIndex>=pLine->size())
+	ccPolyline* pLine = m_VNodeInfo.m_pLine;
+	int nIndex = m_VNodeInfo.m_nNodeIndex;
+
+	if(  nIndex>pLine->size()-1)
 		return;
 	if(!m_bMoveNode)//是否是拖拽节点模式
 		return;
-	//快速获取方式VS点击方式？？
 
 	ccGenericPointCloud* pTargetCloud = nullptr;
 	int nPloudPtIndex=-1;
@@ -241,6 +190,7 @@ void dpxNodeEditTool::onMouseReleaseEvent(int x,int y)
 
 	m_bMoveNode = false;
 	pLine->invalidateBoundingBox();
+	m_polyTip->setEnabled(false);
 	m_window->redraw(false, true);
 }
 
@@ -254,20 +204,37 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
         if(pLine==nullptr)
 			return;
 		ccLog::Warning(QString::number(nIndex));
-		if(nIndex<0|| nIndex>pLine->size())
+		if(nIndex<0|| nIndex>pLine->size()-1)
 		{
-			ccLog::Warning("error");
+			ccLog::Warning("error node index");
 			return;
 		}
 		ccGLCameraParameters camera;
 		m_window->getGLCameraParameters(camera);
 
-		const CCVector3* pFirst = pLine->getPoint(nIndex-1);
-		const CCVector3* pLast = pLine->getPoint(nIndex+1);
-
 		CCVector3d First2D,Last2D;
-		camera.project(*pFirst, First2D);
-		camera.project(*pLast, Last2D);
+
+		if(nIndex==0 )//拖动首节点效果
+		{
+			const CCVector3* pFirst = pLine->getPoint(nIndex+1);
+			const CCVector3* pLast = pLine->getPoint(nIndex+1);
+			camera.project(*pFirst, First2D);
+			camera.project(*pLast, Last2D);
+		}
+		else if (nIndex==pLine->size()-1) //拖动尾节点效果
+		{
+			const CCVector3* pFirst = pLine->getPoint(nIndex-1);
+			const CCVector3* pLast = pLine->getPoint(nIndex-1);
+			camera.project(*pFirst, First2D);
+			camera.project(*pLast, Last2D);
+		}
+		else //中间节点
+		{
+			const CCVector3* pFirst = pLine->getPoint(nIndex-1);
+			const CCVector3* pLast = pLine->getPoint(nIndex+1);
+			camera.project(*pFirst, First2D);
+			camera.project(*pLast, Last2D);
+		}
 
 		CCVector3* firstPt = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(0));
 		*firstPt = CCVector3(static_cast<PointCoordinateType>(First2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)

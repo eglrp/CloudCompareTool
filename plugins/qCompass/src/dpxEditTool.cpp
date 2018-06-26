@@ -45,10 +45,10 @@ bool dpxEditTool::getCurrentRay(ccGLCameraParameters camera,int x,int y,CCVector
 	return true;
 }
 
-bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo)
+bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo,bool bNodeSnap/*=false*/)
 {
 	int pickWidth_pix = 1;//默认值
-	if (!m_window)
+	if (m_window==nullptr)
 	{
 		assert(false);
 		return false;
@@ -60,39 +60,51 @@ bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo)
 	//鼠标点垂直与屏幕的射线
 	CCVector3 rayAxis, rayOrigin;
 	if(!getCurrentRay(camera,x,y,rayAxis,rayOrigin))
-		return m_window;
+		return false;
 	//建立射线
 	Ray<PointCoordinateType> ray(rayAxis, rayOrigin);
 
 	//搜索边区域
-	CCVector3 margin(0, 0, 0);
+	CCVector3 margin(maxRadius, maxRadius, maxRadius);
 	bool bFindNearestLine = false;
 	//鼠标的移动事件
 	ccHObject::Container vecHObjs;
 	dpxSnapHelper::Instance()->FindAllObjs(vecHObjs);//默认找到所有的线
 	for(int i =0;i<vecHObjs.size();i++)
 	{
-		ccBBox box = vecHObjs[i]->getOwnBB();
+		ccHObject* pObj =  vecHObjs[i];
+		if(pObj==nullptr)
+			continue;
+		ccBBox box = pObj->getOwnBB();
 		//vecHObjs[i]->setTempColor(ccColor::green);
 		if (!AABB<PointCoordinateType>(box.minCorner()-margin,box.maxCorner() + margin).intersects(ray))
 			continue;
 
 		bFindNearestLine = true;
-		ccPolyline* pLine = ccHObjectCaster::ToPolyline(vecHObjs[i]);
+		ccPolyline* pLine = ccHObjectCaster::ToPolyline(pObj);
 		if(pLine==nullptr)
 			continue;
 
 		double dDistance,dSegRatio;
 		int nSegNum;
 		CCVector3 nearestPt;
-		dpxAlgorithmFun::DistanceLineToRay(pLine,rayAxis,rayOrigin,dDistance,nSegNum,dSegRatio,nearestPt);
+		if(!bNodeSnap)//最近点
+		{
+			dpxAlgorithmFun::DistanceLineToRay(pLine,rayAxis,rayOrigin,dDistance,nSegNum,dSegRatio,nearestPt);
+		}
+		else //找节点
+		{
+			dpxAlgorithmFun::DistanceLineNodeToRay(pLine,rayAxis,rayOrigin,dDistance,nSegNum,dSegRatio,nearestPt);
+		}
+
 		if(dDistance < nearestInfo.m_dDistance)
 		{
 			nearestInfo.m_pLine = pLine;
 			nearestInfo.m_dDistance = dDistance;
-			nearestInfo.m_dSegRatio = dSegRatio;
 			nearestInfo.m_nSegNum = nSegNum;
+			nearestInfo.m_dSegRatio = dSegRatio;
 			nearestInfo.m_nearestPt = nearestPt;
+			ccLog::Warning("find Node");
 		}
 	}
 

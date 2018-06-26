@@ -19,10 +19,11 @@ public:
 	//3D 点S投影到线AB上的点
 	static CCVector3 PointProjectionToLine(const CCVector3& PtA, const CCVector3& PtB,const CCVector3& PtS);
 
-
+	//线到射线的距离
 	static void DistanceLineToRay(ccPolyline* pLine,CCVector3 rayAxis,CCVector3 rayOrigin,double& dDistance,int& nSegNum,double& dSegRatio,CCVector3& nearestPt);
 	static void DistanceSegmentToRay(CCVector3 ptA,CCVector3 ptB,CCVector3 rayAxis,CCVector3 rayOrigin,double& dDistance,double& dSegRatio,CCVector3& nearestPt);
-
+	//求线距离射线最近的节点
+	static void DistanceLineNodeToRay(ccPolyline* pLine,CCVector3 rayAxis,CCVector3 rayOrigin,double& dDistance,int& nSegNum,double& dSegRatio,CCVector3& nearestPt);
 	//线段到线段的距离
 	static void DistanceSegToSeg(CCVector3 ptA, CCVector3 ptB,CCVector3 ptC, CCVector3 ptD,
 								 double& dDistance,double& dRatioAB,double& dRatioCD,bool bToRay=false);

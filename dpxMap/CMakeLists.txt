@@ -4,24 +4,29 @@ cmake_minimum_required(VERSION 3.0)
 include_directories( ${CC_CORE_LIB_SOURCE_DIR}/include )#依赖CC_CORE_LIB
 include_directories( ${QCC_DB_LIB_SOURCE_DIR} )#依赖QCC_DB_LIB
 
-if( MSVC )
-	include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/msvc )
-endif()
+include ( ../cmake/CMakePolicies.cmake )
+include ( ../cmake/CMakeSetCompilerOptions.cmake )
+include( ../cmake/CMakeExternalLibs.cmake )
 
 project( DPX_MAP_LIB  VERSION 1.0 )
 
 file( GLOB header_list *.h)
 file( GLOB source_list *.cpp)
 
-add_library( ${PROJECT_NAME} SHARED ${header_list} ${source_list} )
+file( GLOB ui_list ui_templates/*.ui )
+file( GLOB qrc_list ../qCC/*.qrc )
+file( GLOB rc_list ../qCC/*.rc )
+
+qt5_wrap_ui( generated_ui_list ${ui_list} )
+add_library( ${PROJECT_NAME} SHARED ${header_list} ${source_list} ${generated_ui_list} )
 
 #添加依赖库
-target_link_libraries( ${PROJECT_NAME} CC_CORE_LIB ) #依赖CC_CORE_LIB
-target_link_libraries( ${PROJECT_NAME} QCC_DB_LIB ) #依赖QCC_DB_LIB
+target_link_libraries( ${PROJECT_NAME} CC_CORE_LIB )
+target_link_libraries( ${PROJECT_NAME} QCC_DB_LIB )
 
 
 # Qt
-qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL)
+qt5_use_modules(${PROJECT_NAME} Core Gui Widgets )
 
 # Add custom preprocessor definitions
 if (WIN32)

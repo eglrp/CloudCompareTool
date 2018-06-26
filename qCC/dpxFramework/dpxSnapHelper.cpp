@@ -4,7 +4,6 @@
 
 dpxSnapHelper* dpxSnapHelper::Instance()
 {
-
 	static dpxSnapHelper instance;
 	return &instance;
 }
@@ -12,14 +11,17 @@ dpxSnapHelper* dpxSnapHelper::Instance()
 dpxSnapHelper::dpxSnapHelper()
 {
 	MainWindow* pMainWindow = MainWindow::TheInstance();
-	if(pMainWindow==nullptr|| pMainWindow==0)
+	if(pMainWindow==nullptr || pMainWindow==0)
 	{
 		ccLog::Warning("no current Main Window");
 		return;
 	}
 	m_pCurActiveWindow = pMainWindow->getActiveGLWindow();
-	m_pShowRootObject = new ccHObject("RootShow");
-	m_pCurActiveWindow->addToOwnDB(m_pShowRootObject);
+	if(m_pCurActiveWindow!=nullptr)
+	{
+		m_pShowRootObject = new ccHObject("RootShow");
+		m_pCurActiveWindow->addToOwnDB(m_pShowRootObject);
+	}
 }
 
 void dpxSnapHelper::ClearShowObject()
@@ -32,6 +34,8 @@ void dpxSnapHelper::ClearShowObject()
 
 void dpxSnapHelper::AddTempShowObject(ccHObject* pTempShowObj,bool bOnlyOne /*= true*/)
 {
+	if(pTempShowObj==nullptr || m_pShowRootObject==nullptr)
+		return;
 	if(bOnlyOne)
 	{
 		m_pShowRootObject->removeAllChildren();

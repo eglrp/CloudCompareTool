@@ -1,6 +1,7 @@
 //by duans
 
 #include "dpxAlgorithmFun.h"
+#include "RayAndBox.h"
 
 //#define DBL_MAX 1.7976931348623158e+30 /* max value */
 //const double DBL_MAX = 1.7976931348623158e+308;
@@ -341,6 +342,32 @@ void dpxAlgorithmFun::DistanceLineToRay(ccPolyline* pLine,CCVector3 rayAxis,CCVe
 	}
 }
 
+void dpxAlgorithmFun::DistanceLineNodeToRay(ccPolyline* pLine,CCVector3 rayAxis,CCVector3 rayOrigin,double& dDistance,int& nSegNum,double& dSegRatio,CCVector3& nearestPt)
+{
+	if(pLine==nullptr)
+		return;
+	//建立射线
+	Ray<PointCoordinateType> ray(rayAxis, rayOrigin);
+
+	dDistance = DBL_MAX;//定义最大的double数值
+	int nPtSize = pLine->size();
+	for(int i =0;i < nPtSize;i++)
+	{
+		CCVector3 ptA = *(pLine->getPoint(i));
+
+		double dDis,dRatioAB,dtempRatioCD;
+		CCVector3 tempPt;
+		dDis = sqrt(ray.radialSquareDistance(ptA));
+		if(dDis<dDistance)
+		{
+			dDistance = dDis;
+			nSegNum = i;
+			dSegRatio = 1;
+			nearestPt = ptA;
+			ccLog::Warning("bian li dian ");
+		}
+	}
+}
 
 
 

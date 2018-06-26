@@ -89,10 +89,6 @@ void dpxTraceLineTool::toolActivated()
 	//duans
 	m_associatedWin->addToOwnDB(m_pPickLinesRoot);
 
-	m_associatedWin->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
-										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
-										|	ccGLWindow::INTERACT_CTRL_PAN
-										|	ccGLWindow::INTERACT_SIG_MOUSE_MOVED);
 	m_associatedWin->setCursor(Qt::PointingHandCursor);
 
 	restart(true);
@@ -105,9 +101,61 @@ void dpxTraceLineTool::toolDisactivated()
 
 void dpxTraceLineTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 {
-	//ccLog::Warning(QString::number(x));
-	int i = 0;
-	updatePolyLineTip(x,y,buttons);
+	if (!m_associatedWin)
+	{
+		assert(false);
+		return;
+	}
+
+	if (buttons != Qt::NoButton)
+	{
+		//nothing to do (just hide the tip)
+		if (m_polyTip->isEnabled())
+		{
+			m_polyTip->setEnabled(false);
+			m_associatedWin->redraw(true, false);
+		}
+		return;
+	}
+
+	if (!m_poly3DVertices || m_poly3DVertices->size() == 0)
+		return;
+
+	if (m_done)
+	{
+		return;
+	}
+
+	assert(m_polyTip && m_polyTipVertices && m_polyTipVertices->size() == 2);
+
+	//we replace the last point by the new one
+	{
+		QPointF pos2D = m_associatedWin->toCenteredGLCoordinates(x, y);
+		CCVector3 P2D(	static_cast<PointCoordinateType>(pos2D.x()),
+						static_cast<PointCoordinateType>(pos2D.y()),
+						0);
+
+		CCVector3* lastP = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(1));
+		*lastP = P2D;
+	}
+
+	{
+		const CCVector3* P3D = m_poly3DVertices->getPoint(m_poly3DVertices->size() - 1);
+
+		ccGLCameraParameters camera;
+		m_associatedWin->getGLCameraParameters(camera);
+
+		CCVector3d A2D;
+		camera.project(*P3D, A2D);
+
+		CCVector3* firstP = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(0));
+		*firstP = CCVector3(static_cast<PointCoordinateType>(A2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)
+							static_cast<PointCoordinateType>(A2D.y - camera.viewport[3] / 2),
+							0);
+	}
+
+	m_polyTip->setEnabled(true);
+	m_associatedWin->redraw(true, false);
 }
 
 void dpxTraceLineTool::onMouseRightClick(int x,int y)
@@ -148,6 +196,8 @@ void dpxTraceLineTool::onMouseRightClick(int x,int y)
 
 		resetLine(); //to update the GUI
 	}
+
+	m_polyTip->setEnabled(false);
 }
 
 //called when a point in a point cloud gets picked while this tool is active
@@ -273,67 +323,7 @@ void dpxTraceLineTool::exportLine()
 //arguments for compatibility with ccGlWindow::rightButtonClicked signal
 void dpxTraceLineTool::updatePolyLineTip(int x, int y, Qt::MouseButtons buttons)
 {
-	if (!m_associatedWin)
-	{
-		assert(false);
-		return;
-	}
 
-	if (buttons != Qt::NoButton)
-	{
-		//nothing to do (just hide the tip)
-		if (m_polyTip->isEnabled())
-		{
-			m_polyTip->setEnabled(false);
-			m_associatedWin->redraw(true, false);
-		}
-		return;
-	}
-
-	if (!m_poly3DVertices || m_poly3DVertices->size() == 0)
-	{
-		//there should be at least one point already picked!
-		return;
-	}
-
-	if (m_done)
-	{
-		return;
-	}
-
-	assert(m_polyTip && m_polyTipVertices && m_polyTipVertices->size() == 2);
-
-	//we replace the last point by the new one
-	{
-		QPointF pos2D = m_associatedWin->toCenteredGLCoordinates(x, y);
-		CCVector3 P2D(	static_cast<PointCoordinateType>(pos2D.x()),
-						static_cast<PointCoordinateType>(pos2D.y()),
-						0);
-
-		CCVector3* lastP = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(1));
-		*lastP = P2D;
-	}
-
-	//just in case (e.g. if the view has been rotated or zoomed)
-	//we also update the first vertex position!
-	{
-		const CCVector3* P3D = m_poly3DVertices->getPoint(m_poly3DVertices->size() - 1);
-
-		ccGLCameraParameters camera;
-		m_associatedWin->getGLCameraParameters(camera);
-
-		CCVector3d A2D;
-		camera.project(*P3D, A2D);
-
-		CCVector3* firstP = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(0));
-		*firstP = CCVector3(static_cast<PointCoordinateType>(A2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)
-							static_cast<PointCoordinateType>(A2D.y - camera.viewport[3] / 2),
-							0);
-	}
-
-	m_polyTip->setEnabled(true);
-
-	m_associatedWin->redraw(true, false);
 }
 
 void dpxTraceLineTool::restart(bool reset)

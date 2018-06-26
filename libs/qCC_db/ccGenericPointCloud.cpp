@@ -185,7 +185,7 @@ void ccGenericPointCloud::setOctree(ccOctree::Shared octree, bool autoAddChild/*
 ccOctree::Shared ccGenericPointCloud::computeOctree(CCLib::GenericProgressCallback* progressCb, bool autoAddChild/*=true*/)
 {
 	deleteOctree();
-	
+
 	ccOctree::Shared octree = ccOctree::Shared(new ccOctree(this));
 	if (octree->build(progressCb) > 0)
 	{
@@ -255,7 +255,7 @@ ccBBox ccGenericPointCloud::getOwnBB(bool withGLFeatures/*=false*/)
 		getBoundingBox(box.minCorner(), box.maxCorner());
 		box.setValidity(true);
 	}
-	
+
 	return box;
 }
 
@@ -266,7 +266,7 @@ bool ccGenericPointCloud::toFile_MeOnly(QFile& out) const
 
 	//'global shift & scale' (dataVersion>=39)
 	saveShiftInfoToFile(out);
-	
+
 	//'visibility' array (dataVersion>=20)
 	bool hasVisibilityArray = isVisibilityTableInstantiated();
 	if (out.write((const char*)&hasVisibilityArray,sizeof(bool)) < 0)
@@ -387,6 +387,10 @@ bool ccGenericPointCloud::pointPicking(	const CCVector2d& clickPos,
 		{
 			//we can now use the octree to do faster point picking
 #ifdef QT_DEBUG
+
+//by duans
+			if(0)
+			{
 			CCLib::ScalarField* sf = 0;
 			if (getClassID() == CC_TYPES::POINT_CLOUD)
 			{
@@ -404,17 +408,22 @@ bool ccGenericPointCloud::pointPicking(	const CCVector2d& clickPos,
 					sf = pc->getScalarField(sfIdx);
 				}
 			}
+			}
+
 #endif
 			ccOctree::PointDescriptor point;
 			if (octree->pointPicking(clickPos, camera, point, pickWidth))
 			{
 #ifdef QT_DEBUG
-				if (sf)
-				{
-					sf->computeMinAndMax();
-					if (getDisplay())
-						getDisplay()->redraw();
-				}
+
+//by duans
+//				if (sf)
+//				{
+//					sf->computeMinAndMax();
+//					if (getDisplay())
+//						getDisplay()->redraw();
+//				}
+
 #endif
 				if (point.point)
 				{

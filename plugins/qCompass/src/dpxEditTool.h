@@ -12,7 +12,7 @@
 #include "../../qCC/dpxFramework/dpxSnapHelper.h"
 #include "dpxAlgorithmFun.h"
 
-#define SNAP_TOL_VALUE  0.01
+#define SNAP_TOL_VALUE  0.1
 
 /*
 Tool used to digitise traces
@@ -43,7 +43,7 @@ public:
 	//rayOrigin:射线的起点，世界坐标系
 	bool getCurrentRay(ccGLCameraParameters camera,int x,int y,CCVector3& rayAxis,CCVector3& rayOrigin);
 
-	bool getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo);
+	bool getNearestLineInfo(int x,int y,dpxNearestLine& nearestInfo,bool bNodeSnap=false);
 };
 
 #endif
