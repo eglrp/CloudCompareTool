@@ -6,6 +6,8 @@ dpxMap::dpxMap(QString strMapName,QString strMapID)
 	  m_strMapID(strMapID)
 {
 	m_vecLrys.clear();
+	m_MapRootData = new ccHObject(strMapName);
+	m_MapRootData->setMetaData("dpxType","Map");
 }
 
 dpxMap::dpxMap(QString strMapName)
@@ -13,10 +15,17 @@ dpxMap::dpxMap(QString strMapName)
 {
 	m_strMapID = QUuid::createUuid().toString();
 	m_vecLrys.clear();
+	m_MapRootData = new ccHObject(strMapName);
+	m_MapRootData->setMetaData("dpxType","Map");
 }
 
 dpxMap::~dpxMap()
 {
+}
+
+ccHObject* dpxMap::getRootData()
+{
+	return m_MapRootData;
 }
 
 void dpxMap::setMapId(const QString& strId)
@@ -48,21 +57,45 @@ int  dpxMap::GetLayerCount()
 {
 	return m_vecLrys.size();
 }
-void dpxMap::AddLayer(dpxLayer* pLayer)
+bool dpxMap::AddLayer(dpxLayer* pLayer)
 {
-	m_vecLrys.push_back(pLayer);
-}
+	if(pLayer==nullptr)
+        return false;
 
-void dpxMap::RemoveLayer(dpxLayer* pLayer)
-{
+	ccHObject* pLyrData = pLayer->getRootData();
+	if(pLyrData==nullptr)
+		return false;
+
+	if(!m_MapRootData->isAncestorOf(pLyrData))
+	{
+		if(!m_MapRootData->addChild(pLyrData))//几何添加成功的话，加上图层信息
+			return false;
+	}
+
 	LayerVec::iterator itor = find(m_vecLrys.begin(),m_vecLrys.end(),pLayer); //查找3
-    if (itor == m_vecLrys.end()) //没找到
-		return;
-	m_vecLrys.erase(itor);
+	if (itor != m_vecLrys.end()) //没找到
+		m_vecLrys.push_back(pLayer);
+
+	return true;
 }
 
-void dpxMap::RemoveAllLayers()
+bool dpxMap::RemoveLayer(dpxLayer* pLayer)
+{
+	if(pLayer==nullptr || pLayer->getRootData()==nullptr)
+		return false;
+	LayerVec::iterator itor = find(m_vecLrys.begin(),m_vecLrys.end(),pLayer); //查找3
+    if (itor != m_vecLrys.end()) //没找到
+		return false;
+
+	m_MapRootData->removeChild(pLayer->getRootData());
+	m_vecLrys.erase(itor);
+	return true;
+}
+
+bool dpxMap::RemoveAllLayers()
 {
 	LayerVec vecLrys;
 	m_vecLrys.swap(vecLrys);
+ 	m_MapRootData->removeAllChildren();
+ 	return true;
 }

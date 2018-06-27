@@ -515,6 +515,19 @@ QVariant ccDBRoot::data(const QModelIndex &index, int role) const
 		return QVariant();
 	}
 
+	if(item->hasMetaData("dpxType"))
+	{
+		QString strValue = item->getMetaData("dpxType").toString();
+		if(strValue.compare("Map",Qt::CaseInsensitive)==0)
+		{
+			return QIcon(QStringLiteral(":/CC/images/dbMeshSymbol.png"));
+		}
+		else if(strValue.compare("Layer",Qt::CaseInsensitive)==0)
+		{
+			return QIcon(QStringLiteral(":/CC/images/dbPolylineSymbol.png"));
+		}
+	}
+
 	switch (role)
 	{
 	case Qt::DisplayRole:
@@ -1989,7 +2002,7 @@ void ccDBRoot::addNewMap()
 	vecLryNames.push_back("road");
 	vecLryNames.push_back("lane");
 	vecLryNames.push_back("light");
-    dpxMap* pMap = dpxMapManager::createMap("test",vecLryNames);
+    dpxMap* pMap = dpxMapManager::createMap("HDMap",vecLryNames);
     addMapData(pMap);
 }
 
@@ -1997,13 +2010,8 @@ void  ccDBRoot::addMapData(dpxMap* pMap)
 {
 	if(pMap==nullptr)
 		return ;
-	LayerVec vecLrys = pMap->GetAllLayers();
-	for(int i = 0;i<vecLrys.size();i++)
-	{
-		dpxLayer* pLyr = vecLrys[i];
-		ccHObject* pRootData = pLyr->getRootData();
-		addElement(pRootData);
-	}
+	ccHObject* pRootMapData = pMap->getRootData();
+	addElement(pRootMapData);
 }
 
 void ccDBRoot::enableBubbleViewMode()

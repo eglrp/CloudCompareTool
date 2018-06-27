@@ -80,21 +80,26 @@ void dpxNodeEditTool::onMouseRightClick(int x,int y)
 	ccPolyline* pLine = nearestInfo.m_pLine;
 	if(nsegNum<0||nsegNum>pLine->size()-2)
 		return;
+	ccLog::Warning("segNum  " + QString::number(nsegNum));
+	ccLog::Warning("nCount  " + QString::number(pLine->size()));
 
 	GenericIndexedCloudPersist* ploudPersist = const_cast<GenericIndexedCloudPersist*>(pLine->getAssociatedCloud());
 	ChunkedPointCloud* pChunkedPointCloud = dynamic_cast<ChunkedPointCloud*>(ploudPersist);
 	if(pChunkedPointCloud==nullptr)
 		return;
 	//先加点到线的尾部，类似正常采集，再类似与冒泡法替换到插入的位置
-	int nNewSize = pChunkedPointCloud->size() + 1;
-	pChunkedPointCloud->reserve(nNewSize);
-	pLine->reserve(nNewSize);
+	if (   !pChunkedPointCloud->reserve(pChunkedPointCloud->size() + 1)
+		|| !pLine->reserve(pChunkedPointCloud->size() + 1))
+	{
+		ccLog::Error("Not enough memory");
+		return;
+	}
 
 	pChunkedPointCloud->addPoint(newPickPt);
-	pLine->addPointIndex(nNewSize-1);
+	pLine->addPointIndex(pChunkedPointCloud->size()-1);
 
 	//类似与冒泡法 替换到插入的位置
-	for(int i=nNewSize-1;i>nsegNum+1;i--)
+	for(int i=pLine->size()-1;i>nsegNum+1;i--)
 		pLine->swap(i,i-1);
 
 	m_window->redraw(false, false);
@@ -120,9 +125,9 @@ void dpxNodeEditTool::onLeftDoubleClick(int x,int y)
 		return;
 
 	int nSize = pLine->size();
-	if(0<=nSegNum && nSegNum<nSize && nSize>=2)
+	if(0<=nSegNum && nSegNum<nSize && nSize>1)
 	{
-		pLine->removePointGlobalIndex(nSegNum);
+		pLine->removePoint(nSegNum);
 		pLine->invalidateBoundingBox();
 		m_window->redraw(false, true);
 	}

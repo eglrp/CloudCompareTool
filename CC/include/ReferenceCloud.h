@@ -132,6 +132,9 @@ public:
 	**/
 	inline virtual void removeCurrentPointGlobalIndex() { removePointGlobalIndex(m_globalIterator); }
 
+	//移除点 by duans
+	virtual void removePoint(unsigned localIndex);
+
 	//! Removes a given element
 	/** WARNING: this method change the structure size!
 	**/
@@ -152,7 +155,7 @@ public:
 		- no verification for duplicates!
 	**/
 	bool add(const ReferenceCloud& cloud);
-	
+
 	//! Invalidates the bounding-box
 	inline void invalidateBoundingBox() { m_validBB = false; }
 

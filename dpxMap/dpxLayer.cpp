@@ -5,6 +5,7 @@ dpxLayer::dpxLayer(QString sName,QString sLyrID)
 	//构造时产生QUuid
 	m_strLryID = sLyrID;//QUuid::createUuid().toString();
 	m_lyrRootData = new ccHObject(sName);
+	m_lyrRootData->setMetaData("dpxType","Layer");
 }
 
 dpxLayer::dpxLayer(QString sName)
@@ -12,6 +13,7 @@ dpxLayer::dpxLayer(QString sName)
 	//构造时产生QUuid
 	m_strLryID = QUuid::createUuid().toString();
 	m_lyrRootData = new ccHObject(sName);
+	m_lyrRootData->setMetaData("dpxType","Layer");
 }
 
 dpxLayer::~dpxLayer()

@@ -158,7 +158,7 @@ bool ReferenceCloud::addPointIndex(unsigned firstIndex, unsigned lastIndex)
 
 	if (size()<pos+range && !m_theIndexes->resize(pos+range))
 		return false;
-	
+
 	for (unsigned i=0; i<range; ++i,++firstIndex)
 		m_theIndexes->setValue(pos++,firstIndex);
 
@@ -188,6 +188,19 @@ void ReferenceCloud::forEach(genericPointAction action)
 		if (d!=d2)
 			m_theAssociatedCloud->setPointScalarValue(index,d2);
 	}
+}
+
+//by duans
+void ReferenceCloud::removePoint(unsigned localIndex)
+{
+	unsigned nSize = size();//总共点数
+	if(localIndex<0 || localIndex>nSize-1)
+		return;
+
+	for (unsigned i=localIndex; i<nSize-1; ++i)
+		m_theIndexes->setValue(i,m_theIndexes->getValue(i+1));
+
+	m_theIndexes->resize(nSize-1);
 }
 
 void ReferenceCloud::removePointGlobalIndex(unsigned localIndex)

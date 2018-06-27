@@ -17,6 +17,7 @@ public:
 	dpxMap(QString strMapName);
 	virtual ~dpxMap();
 public:
+	virtual  ccHObject* getRootData();
 	void setMapId(const QString& strId);
 	const QString& getMapId() const;
 	void setMapName(const QString& strMapName);
@@ -24,9 +25,9 @@ public:
 
 	LayerVec GetAllLayers();
 	int  GetLayerCount();
-	void AddLayer(dpxLayer* pLayer);
-	void RemoveLayer(dpxLayer* pLayer);//
-	void RemoveAllLayers();//
+	bool AddLayer(dpxLayer* pLayer);
+	bool RemoveLayer(dpxLayer* pLayer);//
+	bool RemoveAllLayers();//
 
 protected:
 	dpxMap(){}
@@ -34,6 +35,7 @@ protected:
 	LayerVec m_vecLrys;
 	QString m_strMapName;//图层名称
 	QString m_strMapID;
+	ccHObject* m_MapRootData;//图层数据的跟结点
 };
 
 #endif
