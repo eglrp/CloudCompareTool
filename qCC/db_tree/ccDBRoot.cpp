@@ -515,19 +515,6 @@ QVariant ccDBRoot::data(const QModelIndex &index, int role) const
 		return QVariant();
 	}
 
-	if(item->hasMetaData("dpxType"))
-	{
-		QString strValue = item->getMetaData("dpxType").toString();
-		if(strValue.compare("Map",Qt::CaseInsensitive)==0)
-		{
-			return QIcon(QStringLiteral(":/CC/images/dbMeshSymbol.png"));
-		}
-		else if(strValue.compare("Layer",Qt::CaseInsensitive)==0)
-		{
-			return QIcon(QStringLiteral(":/CC/images/dbPolylineSymbol.png"));
-		}
-	}
-
 	switch (role)
 	{
 	case Qt::DisplayRole:
@@ -562,15 +549,33 @@ QVariant ccDBRoot::data(const QModelIndex &index, int role) const
 		switch (item->getClassID())
 		{
 		case CC_TYPES::HIERARCHY_OBJECT:
+
+		//by duans
+		if(item->hasMetaData(DPX_TYPE_NAME)) //图层地图容器的图标设置
+		{
+			dpxObjectType eType = dpxObjectType(item->getMetaData(DPX_TYPE_NAME).toInt()) ;
+			if(eType==eOT_Map)
+			{
+				return QIcon(QStringLiteral(":/CC/images/Map.png"));
+			}
+			else if(eType==eOT_Layer)
+			{
+				return QIcon(QStringLiteral(":/CC/images/Layer.png"));
+			}
+		}
+		else
+		{
 			if (locked)
-				return QIcon(QStringLiteral(":/CC/images/dbHObjectSymbolLocked.png"));
-			else
-				return QIcon(QStringLiteral(":/CC/images/dbHObjectSymbol.png"));
-		case CC_TYPES::POINT_CLOUD:
-			if (locked)
-				return QIcon(QStringLiteral(":/CC/images/dbCloudSymbolLocked.png"));
-			else
-				return QIcon(QStringLiteral(":/CC/images/dbCloudSymbol.png"));
+					return QIcon(QStringLiteral(":/CC/images/dbHObjectSymbolLocked.png"));
+				else
+					return QIcon(QStringLiteral(":/CC/images/dbHObjectSymbol.png"));
+			case CC_TYPES::POINT_CLOUD:
+				if (locked)
+					return QIcon(QStringLiteral(":/CC/images/dbCloudSymbolLocked.png"));
+				else
+					return QIcon(QStringLiteral(":/CC/images/dbCloudSymbol.png"));
+		}
+
 			//all primitives
 		case CC_TYPES::PLANE:
 		case CC_TYPES::SPHERE:

@@ -7,7 +7,8 @@ dpxMap::dpxMap(QString strMapName,QString strMapID)
 {
 	m_vecLrys.clear();
 	m_MapRootData = new ccHObject(strMapName);
-	m_MapRootData->setMetaData("dpxType","Map");
+
+	SetType(eOT_Map);
 }
 
 dpxMap::dpxMap(QString strMapName)
@@ -16,7 +17,8 @@ dpxMap::dpxMap(QString strMapName)
 	m_strMapID = QUuid::createUuid().toString();
 	m_vecLrys.clear();
 	m_MapRootData = new ccHObject(strMapName);
-	m_MapRootData->setMetaData("dpxType","Map");
+
+	SetType(eOT_Map);
 }
 
 dpxMap::~dpxMap()
@@ -26,6 +28,19 @@ dpxMap::~dpxMap()
 ccHObject* dpxMap::getRootData()
 {
 	return m_MapRootData;
+}
+
+void dpxMap::SetType(dpxObjectType eType)
+{
+	m_MapRootData->setMetaData(DPX_TYPE_NAME,eType);//自动转换成数字
+}
+
+dpxObjectType dpxMap::GetType()
+{
+	if(!m_MapRootData->hasMetaData(DPX_TYPE_NAME))
+		return dpxObjectType::eOT_Unknown;
+
+	return dpxObjectType(m_MapRootData->getMetaData(DPX_TYPE_NAME).toInt());//自动转换成数字
 }
 
 void dpxMap::setMapId(const QString& strId)

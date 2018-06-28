@@ -5,7 +5,8 @@ dpxLayer::dpxLayer(QString sName,QString sLyrID)
 	//构造时产生QUuid
 	m_strLryID = sLyrID;//QUuid::createUuid().toString();
 	m_lyrRootData = new ccHObject(sName);
-	m_lyrRootData->setMetaData("dpxType","Layer");
+
+	SetType(eOT_Layer);
 }
 
 dpxLayer::dpxLayer(QString sName)
@@ -13,11 +14,25 @@ dpxLayer::dpxLayer(QString sName)
 	//构造时产生QUuid
 	m_strLryID = QUuid::createUuid().toString();
 	m_lyrRootData = new ccHObject(sName);
-	m_lyrRootData->setMetaData("dpxType","Layer");
+
+	SetType(eOT_Layer);
 }
 
 dpxLayer::~dpxLayer()
 {
+}
+
+void dpxLayer::SetType(dpxObjectType eType)
+{
+	m_lyrRootData->setMetaData(DPX_TYPE_NAME,eType);//自动转换成数字
+}
+
+dpxObjectType dpxLayer::GetType()
+{
+	if(!m_lyrRootData->hasMetaData(DPX_TYPE_NAME))
+		return dpxObjectType::eOT_Unknown;
+
+	return dpxObjectType(m_lyrRootData->getMetaData(DPX_TYPE_NAME).toInt());//自动转换成数字
 }
 
 QString dpxLayer::getLayerName()

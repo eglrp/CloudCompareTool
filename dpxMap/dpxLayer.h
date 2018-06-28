@@ -11,14 +11,21 @@
 * dpxLayer
 */
 
-enum DPX_MAP_API dpxLayerType
+#define  DPX_TYPE_NAME  "dpxType" //key 存储类型的字符串
+
+enum DPX_MAP_API dpxObjectType
 {
-	eLT_Unknown,	//未知
-	eLT_Point,		//点
-	eLT_Line,		//线
-	eLT_Polygon,	//面
-	eLT_Label,		//文字
-	eLT_solid		//立体
+	eOT_Unknown,	//未知
+
+	//容器结构
+	eOT_Map,		//地图
+	eOT_Layer,		//图层
+
+	//具体类型
+	eOT_Road,		//道路
+	eOT_Lane,		//小路
+	eOT_Light		//路灯
+	//补充..
 };
 
 typedef std::vector<ccHObject*> HObjectVec;
@@ -30,6 +37,9 @@ public:
 	virtual ~dpxLayer();
 
  public:
+
+	virtual void SetType(dpxObjectType eType);
+	virtual dpxObjectType GetType();
 	//图层名称
 	virtual QString getLayerName();
 	virtual void setLayerName(QString sName);

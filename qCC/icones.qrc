@@ -144,6 +144,9 @@
     <file>images/photo-camera.svg</file>
     <file>images/search.svg</file>
     <file>images/RedGreen.png</file>
+    <file>images/Layer.png</file>
+    <file>images/Map.png</file>
+    <file>images/Road.png</file>
   </qresource>
   <qresource prefix="/CC/Icons">
     <file>images/icon/cc_viewer_icon_16.png</file>
