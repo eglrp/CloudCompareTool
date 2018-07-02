@@ -28,8 +28,8 @@
 #include <ccHObject.h>
 
 //by duans
-#include "dpxMap.h"
-#include "dpxMapManager.h"
+#include <dpxMap.h>
+#include <dpxMapManager.h>
 
 //System
 #include <unordered_set>

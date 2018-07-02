@@ -113,46 +113,46 @@ bool dpxAlgorithmFun::inCircle(const CCVector3* segStart, const CCVector3* segEn
 	return QS.dot(QE) < 0;
 }
 
-//旋转矩阵
-//double* dpxCylinderTool::rotateMatrix(const CCVector3& a_axis,const double& dAngleRad,double dX ,double dY,double dZ)
-double* dpxAlgorithmFun::rotateMatrix(const CCVector3& a_axis,const double& dAngleRad)
-{
-	double *rotatinMatrix= (double *) malloc(16*sizeof(double));
-
-	// normalize axis vector
-	double x = a_axis[0];
-	double y = a_axis[1];
-	double z = a_axis[2];
-
-	// compute rotation matrix
-	double c = ::cos(dAngleRad);
-	double s = ::sin(dAngleRad);
-	double v = 1-c;
-
-//	m(0,0) = x*x*v+c;     m(0,1) = x*y*v-z*s;  m(0,2) = x*z*v+y*s;
-//	m(1,0) = x*y*v+z*s;   m(1,1) = y*y*v+c;    m(1,2) = y*z*v-x*s;
-//	m(2,0) = x*z*v-y*s;   m(2,1) = y*z*v+x*s;  m(2,2) = z*z*v+c;
-	rotatinMatrix[0] = x*x*v+c; 	rotatinMatrix[1] = x*y*v-z*s; 	rotatinMatrix[2] = x*z*v+y*s; 	rotatinMatrix[3] = 0;
-	rotatinMatrix[4] = x*y*v+z*s; 	rotatinMatrix[5] = y*y*v+c; 	rotatinMatrix[6] = y*z*v-x*s;	rotatinMatrix[7] = 0;
-	rotatinMatrix[8] = x*z*v-y*s; 	rotatinMatrix[9] = y*z*v+x*s; 	rotatinMatrix[10] = z*z*v+c;	rotatinMatrix[11] = 0;
-	rotatinMatrix[12] = 0; 			rotatinMatrix[13] = 0; 			rotatinMatrix[14] = 0;			rotatinMatrix[15] = 1;
-
-	return rotatinMatrix;
-}
-
-//整合过程
-double* dpxAlgorithmFun::rotateMatrix(CCVector3 vbefor,CCVector3 vafter)
-{
-	vbefor= NormalVec(vbefor);
-	vafter = NormalVec(vafter);
-	//旋转角度
-	double dAngel = rotationAngle(vbefor,vafter);
-	//旋转轴
-	CCVector3 rotaAxis = rotationAxis(vbefor,vafter);
-	//旋转矩阵参数
-	double* rotat = rotateMatrix(rotaAxis,dAngel);
-	return rotat;
-}
+////旋转矩阵
+////double* dpxCylinderTool::rotateMatrix(const CCVector3& a_axis,const double& dAngleRad,double dX ,double dY,double dZ)
+//double* dpxAlgorithmFun::rotateMatrix(const CCVector3& a_axis,const double& dAngleRad)
+//{
+//	double *rotatinMatrix= (double *) malloc(16*sizeof(double));
+//
+//	// normalize axis vector
+//	double x = a_axis[0];
+//	double y = a_axis[1];
+//	double z = a_axis[2];
+//
+//	// compute rotation matrix
+//	double c = ::cos(dAngleRad);
+//	double s = ::sin(dAngleRad);
+//	double v = 1-c;
+//
+////	m(0,0) = x*x*v+c;     m(0,1) = x*y*v-z*s;  m(0,2) = x*z*v+y*s;
+////	m(1,0) = x*y*v+z*s;   m(1,1) = y*y*v+c;    m(1,2) = y*z*v-x*s;
+////	m(2,0) = x*z*v-y*s;   m(2,1) = y*z*v+x*s;  m(2,2) = z*z*v+c;
+//	rotatinMatrix[0] = x*x*v+c; 	rotatinMatrix[1] = x*y*v-z*s; 	rotatinMatrix[2] = x*z*v+y*s; 	rotatinMatrix[3] = 0;
+//	rotatinMatrix[4] = x*y*v+z*s; 	rotatinMatrix[5] = y*y*v+c; 	rotatinMatrix[6] = y*z*v-x*s;	rotatinMatrix[7] = 0;
+//	rotatinMatrix[8] = x*z*v-y*s; 	rotatinMatrix[9] = y*z*v+x*s; 	rotatinMatrix[10] = z*z*v+c;	rotatinMatrix[11] = 0;
+//	rotatinMatrix[12] = 0; 			rotatinMatrix[13] = 0; 			rotatinMatrix[14] = 0;			rotatinMatrix[15] = 1;
+//
+//	return rotatinMatrix;
+//}
+//
+////整合过程
+//double* dpxAlgorithmFun::rotateMatrix(CCVector3 vbefor,CCVector3 vafter)
+//{
+//	vbefor= NormalVec(vbefor);
+//	vafter = NormalVec(vafter);
+//	//旋转角度
+//	double dAngel = rotationAngle(vbefor,vafter);
+//	//旋转轴
+//	CCVector3 rotaAxis = rotationAxis(vbefor,vafter);
+//	//旋转矩阵参数
+//	double* rotat = rotateMatrix(rotaAxis,dAngel);
+//	return rotat;
+//}
 
 bool dpxAlgorithmFun::IsEqual(double d1,double d2)
 {

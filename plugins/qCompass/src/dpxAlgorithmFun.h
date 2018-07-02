@@ -50,8 +50,8 @@ public:
 	static double* translateMatrix(double dX,double dY,double dZ);
 
 	//根据旋转轴、旋转角度求旋转矩阵(返回指针用完free)
-	static double* rotateMatrix(const CCVector3& a_axis,const double& dAngleRad);
-	static double* rotateMatrix(CCVector3 vbefor,CCVector3 vafter);
+//	static double* rotateMatrix(const CCVector3& a_axis,const double& dAngleRad);
+//	static double* rotateMatrix(CCVector3 vbefor,CCVector3 vafter);
 };
 
 class dpxSystemFun
@@ -59,7 +59,5 @@ class dpxSystemFun
 public:
 	static QString GetRootDir();
 	static QString GetQccImageDir();
-
-
 };
 #endif

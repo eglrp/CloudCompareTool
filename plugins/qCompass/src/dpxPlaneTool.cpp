@@ -67,12 +67,6 @@ void dpxPlaneTool::toolActivated()
 
 	//duans
 	m_associatedWin->addToOwnDB(m_pPickRoot);
-
-	//m_associatedWin->setPickingMode(ccGLWindow::NO_PICKING);
-	m_associatedWin->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
-										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
-										|	ccGLWindow::INTERACT_CTRL_PAN
-										|	ccGLWindow::INTERACT_SIG_MOUSE_MOVED);
 	m_associatedWin->setCursor(Qt::CrossCursor);
 
 	restart(true);

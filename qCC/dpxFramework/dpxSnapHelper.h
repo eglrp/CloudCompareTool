@@ -7,8 +7,8 @@
 #include <QObject>
 
 # include "CCTypes.h"
-#include "../../libs/qCC_db/ccHObject.h"
-# include "mainwindow.h"
+#include "ccHObject.h"
+#include "mainwindow.h"
 #include "ccGLWindow.h"
 #include "ccPolyline.h"
 #include "ccPointCloud.h"

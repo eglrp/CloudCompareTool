@@ -73,13 +73,8 @@ public:
 	//
 	void exportLine();
 
-	//void handlePickedItem(ccHObject*, unsigned, int, int, const CCVector3&);
-	//void addPointToPolyline(int x, int y);
-	void updatePolyLineTip(int x, int y, Qt::MouseButtons buttons);
-
-
 	//inherited from ccOverlayDialog
-	void resetLine() { restart(true); }
+	void resetLine();
 	void restart(bool reset);
 
 	//! Oversamples the active 3D polyline

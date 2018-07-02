@@ -96,7 +96,29 @@ void dpxTraceLineTool::toolActivated()
 
 void dpxTraceLineTool::toolDisactivated()
 {
-	accept(); //accept any changes
+	//finish trace
+	if (m_associatedWin)
+		m_associatedWin->removeFromOwnDB(m_pPickLinesRoot);
+
+	if (m_app->getMainWindow())
+		m_app->addToDB(m_pPickLinesRoot);
+
+	m_associatedWin->removeFromOwnDB(m_polyTip);
+	if (m_poly3D)
+	{
+		delete m_poly3D;
+		m_poly3D = 0;
+		m_segmentParams.clear();
+		m_poly3DVertices = 0;
+	}
+
+	m_associatedWin->redraw(false, false);
+	m_done = false;
+}
+
+void  dpxTraceLineTool::resetLine()
+{
+  restart(true);
 }
 
 void dpxTraceLineTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
@@ -318,12 +340,6 @@ void dpxTraceLineTool::undo()
 
 void dpxTraceLineTool::exportLine()
 {
-}
-
-//arguments for compatibility with ccGlWindow::rightButtonClicked signal
-void dpxTraceLineTool::updatePolyLineTip(int x, int y, Qt::MouseButtons buttons)
-{
-
 }
 
 void dpxTraceLineTool::restart(bool reset)

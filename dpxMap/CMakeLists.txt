@@ -1,14 +1,18 @@
 cmake_minimum_required(VERSION 3.0)
 
+project( DPX_MAP_LIB  VERSION 1.0 )
+
 #添加头文件
 include_directories( ${CC_CORE_LIB_SOURCE_DIR}/include )#依赖CC_CORE_LIB
 include_directories( ${QCC_DB_LIB_SOURCE_DIR} )#依赖QCC_DB_LIB
+include_directories( ${QCC_GL_LIB_SOURCE_DIR} )#依赖QCC_DB_LIB
+#include_directories( ${CloudComparePlugins_SOURCE_DIR} )#依赖CloudComparePlugins_SOURCE_DIR
 
 include ( ../cmake/CMakePolicies.cmake )
 include ( ../cmake/CMakeSetCompilerOptions.cmake )
 include( ../cmake/CMakeExternalLibs.cmake )
 
-project( DPX_MAP_LIB  VERSION 1.0 )
+set(CloudCompare_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../qCC)
 
 file( GLOB header_list *.h)
 file( GLOB source_list *.cpp)
