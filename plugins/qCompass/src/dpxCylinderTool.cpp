@@ -71,11 +71,6 @@ void dpxCylinderTool::toolActivated()
 	//duans
 	m_associatedWin->addToOwnDB(m_pPickRoot);
 
-	//m_associatedWin->setPickingMode(ccGLWindow::NO_PICKING);
-	m_associatedWin->setInteractionMode(	ccGLWindow::TRANSFORM_CAMERA()
-										|	ccGLWindow::INTERACT_SIG_RB_CLICKED
-										|	ccGLWindow::INTERACT_CTRL_PAN
-										|	ccGLWindow::INTERACT_SIG_MOUSE_MOVED);
 	m_associatedWin->setCursor(Qt::CrossCursor);
 
 	restart(true);
@@ -85,8 +80,6 @@ void dpxCylinderTool::toolDisactivated()
 {
 	accept(); //accept any changes
 	m_associatedWin->removeFromOwnDB(m_polyTip);
-	//m_associatedWin->removeFromOwnDB(m_pPickRoot);
-	//m_associatedWin->removeFromOwnDB(m_pPickRoot);
 }
 
 void dpxCylinderTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
@@ -205,31 +198,6 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		double dHeight = sqrt(pow((pA.x-pB.x),2.0) + pow((pA.y-pB.y),2.0) + pow((pA.z-pB.z),2.0));
 		ccLog::Warning("dRadius:"+QString::number(dRadius));
 		ccLog::Warning("dHeight:"+QString::number(dHeight));
-
-//		//my func
-//		CCVector3 vbefore(0,0,1);
-//		CCVector3 vafter(pB.x-pA.x, pB.y-pA.y, pB.z-pA.z);
-//
-//		double* rotat = dpxAlgorithmFun::rotateMatrix(vbefore,vafter);
-//		//平移矩阵参数
-//		double* trans = dpxAlgorithmFun::translateMatrix((pA.x+pB.x)/2,(pA.y+pB.y)/2,(pA.z+pB.z)/2);
-//		//旋转矩阵
-//		ccGLMatrix rotatMatrx(rotat);
-//		//平移矩阵
-//		ccGLMatrix transMatrx(trans);
-//		//平移加旋转变换
-//		ccGLMatrix transM = transMatrx * rotatMatrx;
-//
-//		//转换后的误差统计
-//		CCVector3 TopResult = transM * CCVector3(0,0,dHeight/2);
-//		ccLog::Warning("X offset:"+QString::number(TopResult.x-pB.x));
-//		ccLog::Warning("Y offset:"+QString::number(TopResult.y-pB.y));
-//		ccLog::Warning("Z offset:"+QString::number(TopResult.z-pB.z));
-//
-//		CCVector3 BottomResult = transM * CCVector3(0,0,-dHeight/2);
-//		ccLog::Warning("X offset:"+QString::number(BottomResult.x-pA.x));
-//		ccLog::Warning("Y offset:"+QString::number(BottomResult.y-pA.y));
-//		ccLog::Warning("Z offset:"+QString::number(BottomResult.z-pA.z));
 
 		//CC system Func
 ///////////////////////////////////////////////
@@ -359,7 +327,6 @@ void dpxCylinderTool::updatePolyLineTip(int x, int y, Qt::MouseButtons buttons)
 		*firstP = CCVector3(static_cast<PointCoordinateType>(A2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)
 							static_cast<PointCoordinateType>(A2D.y - camera.viewport[3] / 2),
 							0);
-
 	}
 
 	m_polyTip->setEnabled(true);
@@ -383,9 +350,6 @@ void dpxCylinderTool::restart(bool reset)
 				m_polyTip->setEnabled(false);
 			}
 
-			//delete m_poly3D;
-			//m_segmentParams.clear();
-			//delete m_poly3DVertices;
 			m_poly3D = 0;
 			m_poly3DVertices = 0;
 		}
@@ -398,7 +362,6 @@ void dpxCylinderTool::restart(bool reset)
 			}
 		}
 	}
-
 
 	if (m_associatedWin)
 	{

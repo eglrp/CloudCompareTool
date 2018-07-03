@@ -11,18 +11,19 @@
 #include <QImage>
 
 
-#include "ccTool.h"
+#include "dpxNodeEditTool.h"
 #include "ccTrace.h"
 
 class ccPointCloud;
 class ccGLWindow;
 class ccPickingHub;
-
+#define DPX_RELATED_UID  "relatedUID"
+#define DPX_NORMAL  "Normal"
 /*
 Tool used to digitise traces
 */
 class dpxPlaneTool :
-	public ccTool
+	public dpxNodeEditTool
 {
 public:
 	dpxPlaneTool();
@@ -36,11 +37,17 @@ public:
 
 	//called when a point in a point cloud gets picked while this tool is active
 	void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y=0) override;
-	//鼠标移动事件
-	void onMouseMove(int x, int y, Qt::MouseButtons buttons) override;
 
+	//鼠标左键事件
+	virtual void onMouseLeftClick(int x,int y);
+
+	virtual void onMouseMove(int x, int y, Qt::MouseButtons buttons);
+
+	virtual void onMouseReleaseEvent(int x,int y);
 	//右键事件
-	void onMouseRightClick(int x,int y) override;
+	virtual void onMouseRightClick(int x,int y){ }
+
+	virtual void onLeftDoubleClick(int x,int y){ }
 
 	//called when a new selection is made
 	void onNewSelection(const ccHObject::Container& selectedEntities) override;
@@ -60,22 +67,7 @@ public:
 	//
 	void exportLine();
 
-	//void handlePickedItem(ccHObject*, unsigned, int, int, const CCVector3&);
-	//void addPointToPolyline(int x, int y);
-	void updatePolyLineTip(int x, int y, Qt::MouseButtons buttons);
-
-
-	//inherited from ccOverlayDialog
-	void resetLine() { restart(true); }
-	void restart(bool reset);
-
 protected:
-	//finishes and finalises the trace currently being digitised to
-
-	//! 2D polyline (for the currently edited part)
-	ccPolyline* m_polyTip;
-	//! 2D polyline vertices
-	ccPointCloud* m_polyTipVertices;
 
 	//! 3D polyline
 	ccPolyline* m_poly3D;
@@ -85,7 +77,7 @@ protected:
 	//by duans 采集的线都挂在该节点上，使得所有线放一个节点上
 	ccHObject* m_pPickRoot;
 
-	ccGLWindow* m_associatedWin;
+	int m_nToolState;//tool state:pick  edit
 };
 
 #endif

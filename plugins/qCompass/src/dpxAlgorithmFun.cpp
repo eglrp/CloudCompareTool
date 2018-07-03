@@ -364,7 +364,7 @@ void dpxAlgorithmFun::DistanceLineNodeToRay(ccPolyline* pLine,CCVector3 rayAxis,
 			nSegNum = i;
 			dSegRatio = 1;
 			nearestPt = ptA;
-			ccLog::Warning("bian li dian ");
+			//ccLog::Warning("bian li dian ");
 		}
 	}
 }

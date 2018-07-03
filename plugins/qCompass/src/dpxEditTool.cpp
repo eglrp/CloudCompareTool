@@ -104,7 +104,6 @@ bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo,bo
 			nearestInfo.m_nSegNum = nSegNum;
 			nearestInfo.m_dSegRatio = dSegRatio;
 			nearestInfo.m_nearestPt = nearestPt;
-			ccLog::Warning("find Node");
 		}
 	}
 

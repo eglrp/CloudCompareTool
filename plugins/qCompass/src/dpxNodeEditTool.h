@@ -57,6 +57,8 @@ protected:
 
 	NodeInfo m_VNodeInfo;
 	bool m_bMoveNode;
+
+	int m_nToolState;//0:采集 1:编辑状态
 };
 
 #endif

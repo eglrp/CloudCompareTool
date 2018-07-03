@@ -59,7 +59,7 @@ bool dpxSnapHelper::FindAllObjs(ccHObject::Container& vecHObjs,CC_CLASS_ENUM fil
 		return false;
 
 	vecHObjs.clear();
-	pHRoot->filterChildren(vecHObjs,true,CC_TYPES::POLY_LINE);
+	pHRoot->filterChildren(vecHObjs,true,filter);
 
 	return !vecHObjs.empty();
 }

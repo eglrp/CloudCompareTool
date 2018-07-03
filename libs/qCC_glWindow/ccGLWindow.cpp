@@ -7075,7 +7075,7 @@ bool ccGLWindow::pickNearestPt(int nMouseX,int nMouseY,ccGenericPointCloud*& pTa
 								nPtIndex = nearestPointIndex;
 								vTargetPoint = *(cloud->getPoint(nearestPointIndex));
 								pTargetCloud = cloud;
-								ccLog::Warning("Find new Pick");
+								//ccLog::Warning("Find new Pick");
 							}
 						}
 					}

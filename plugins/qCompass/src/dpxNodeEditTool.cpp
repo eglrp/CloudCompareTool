@@ -32,6 +32,7 @@ dpxNodeEditTool::dpxNodeEditTool()
 	m_polyTip->setWidth(1); //'1' is equivalent to the default line size
 	m_polyTip->addChild(m_polyTipVertices);
 
+	m_nToolState =1;//编辑状态
 	//捕捉到节点
 	m_VNodeInfo.clear();
 }
@@ -45,6 +46,7 @@ void dpxNodeEditTool::toolActivated()
 {
 	m_window->setCursor(Qt::CrossCursor);
 	m_window->addToOwnDB(m_polyTip);
+	m_window->setUnclosable(true);
 	dpxSnapHelper::Instance()->ClearShowObject();
 }
 
@@ -132,7 +134,6 @@ void dpxNodeEditTool::onLeftDoubleClick(int x,int y)
 		m_window->redraw(false, true);
 	}
 }
-
 
 //左键事件  是否选中线节点，若选中则记录
 void dpxNodeEditTool::onMouseLeftClick(int x,int y)
@@ -300,38 +301,29 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 				pSphere->setEnabled(true);
 				dpxSnapHelper::Instance()->AddTempShowObject(pSphere,false);
 			}
-			//一个移动的小球，鼠标最近的线
-			ccGLMatrix transM;
-			CCVector3 vecTrans(nearestInfo.m_nearestPt.x,nearestInfo.m_nearestPt.y,nearestInfo.m_nearestPt.z);
-			transM.setTranslation(vecTrans);
+			//一个移动的小球，在最近的线的点
+			if(0)
+			{
+				ccGLMatrix transM;
+				CCVector3 vecTrans(nearestInfo.m_nearestPt.x,nearestInfo.m_nearestPt.y,nearestInfo.m_nearestPt.z);
+				transM.setTranslation(vecTrans);
 
-			ccSphere* pMoveSphere = new ccSphere(maxRadius,&transM,"nearestPt",6);
-			pMoveSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
-			pMoveSphere->setDisplay(m_window);
-			pMoveSphere->setTempColor(ccColor::red);
-			pMoveSphere->setVisible(true);
-			pMoveSphere->setEnabled(true);
-			//dpxSnapHelper::Instance()->AddTempShowObject(pMoveSphere,false);
-
+				ccSphere* pMoveSphere = new ccSphere(maxRadius,&transM,"nearestPt",6);
+				pMoveSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
+				pMoveSphere->setDisplay(m_window);
+				pMoveSphere->setTempColor(ccColor::red);
+				pMoveSphere->setVisible(true);
+				pMoveSphere->setEnabled(true);
+				dpxSnapHelper::Instance()->AddTempShowObject(pMoveSphere,false);
+			}
 			m_window->redraw(false, false); //只刷新2D
 		}//捕捉效果
 	}
-
 }
 
 void dpxNodeEditTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
-	if (!m_window)
-	{
-		assert(false);
-		return;
-	}
-
-	ccLog::Warning("Picked99999999999999");
-	if (!insertPoint)
-		return;
-
-	m_window->redraw(false, false);
+	return;
 }
 
 
