@@ -42,7 +42,7 @@ class dpxCylinderTool;
 class dpxPlaneTool;
 class dpxSphereTool;
 class dpxNodeEditTool;
-
+class dpxSelectTool;
 
 class ccCompass : public QObject, public ccStdPluginInterface, public ccPickingListener
 {
@@ -108,7 +108,8 @@ protected slots:
 	void setCylinderTool();//圆柱工具
 	void setPlaneTool();//平面采集工具
 	void setSphereTool();//球采集工具
-	void setNodeEditTool();
+	void setNodeEditTool();//节点编辑工具
+	void setSelectTool();//选择工具
 
 	//extra tools
 	void addPinchNode(); //activates the pinch node tool
@@ -192,7 +193,7 @@ protected:
 	dpxPlaneTool* m_dpxPlaneTool;
 	dpxSphereTool* m_dpxSphereTool;
 	dpxNodeEditTool* m_dpxNodeEditTool;//节点编辑工具
-	//NodeEditButton
+	dpxSelectTool* m_dpxSelectTool;
 
 	//currently selected/active geoObject
 	ccGeoObject* m_geoObject = nullptr; //the GeoObject currently being written to

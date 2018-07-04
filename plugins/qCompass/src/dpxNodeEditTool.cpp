@@ -82,8 +82,6 @@ void dpxNodeEditTool::onMouseRightClick(int x,int y)
 	ccPolyline* pLine = nearestInfo.m_pLine;
 	if(nsegNum<0||nsegNum>pLine->size()-2)
 		return;
-	ccLog::Warning("segNum  " + QString::number(nsegNum));
-	ccLog::Warning("nCount  " + QString::number(pLine->size()));
 
 	GenericIndexedCloudPersist* ploudPersist = const_cast<GenericIndexedCloudPersist*>(pLine->getAssociatedCloud());
 	ChunkedPointCloud* pChunkedPointCloud = dynamic_cast<ChunkedPointCloud*>(ploudPersist);
@@ -311,7 +309,7 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 				ccSphere* pMoveSphere = new ccSphere(maxRadius,&transM,"nearestPt",6);
 				pMoveSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
 				pMoveSphere->setDisplay(m_window);
-				pMoveSphere->setTempColor(ccColor::red);
+				pMoveSphere->setTempColor(ccColor::lightGrey);
 				pMoveSphere->setVisible(true);
 				pMoveSphere->setEnabled(true);
 				dpxSnapHelper::Instance()->AddTempShowObject(pMoveSphere,false);

@@ -38,6 +38,7 @@
 #include "dpxPlaneTool.h"//平面工具
 #include "dpxSphereTool.h"//球采集工具
 #include "dpxNodeEditTool.h"//节点编辑工具
+#include "dpxSelectTool.h"
 
 //initialize default static pars
 bool ccCompass::drawName = false;
@@ -63,9 +64,10 @@ ccCompass::ccCompass(QObject* parent) :
 	m_noteTool = new ccNoteTool();
 	m_pinchNodeTool = new ccPinchNodeTool();//折线工具
 	m_dpxCylinderTool = new dpxCylinderTool();//圆柱工具
-	m_dpxPlaneTool = new dpxPlaneTool();
+	m_dpxPlaneTool = new dpxPlaneTool();	//矩形工具
 	m_dpxSphereTool = new dpxSphereTool();//球采集工具
-	m_dpxNodeEditTool = new dpxNodeEditTool();
+	m_dpxNodeEditTool = new dpxNodeEditTool();//节点编辑工具
+	m_dpxSelectTool = new dpxSelectTool();
 }
 
 //deconstructor
@@ -84,6 +86,7 @@ ccCompass::~ccCompass()
 	delete m_dpxPlaneTool;
 	delete m_dpxSphereTool;
 	delete m_dpxNodeEditTool;
+	delete m_dpxSelectTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -221,6 +224,7 @@ void ccCompass::doAction()
 	m_dpxPlaneTool->initializeTool(m_app);
 	m_dpxSphereTool->initializeTool(m_app);
 	m_dpxNodeEditTool->initializeTool(m_app);
+	m_dpxSelectTool->initializeTool(m_app);
 
 	//check valid window
 	if (!m_app->getActiveGLWindow())
@@ -256,6 +260,7 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->planeToolButton, SIGNAL(clicked()), this, SLOT(setPlaneTool()));
 		ccCompassDlg::connect(m_dlg->sphereToolButton, SIGNAL(clicked()), this, SLOT(setSphereTool()));
 		ccCompassDlg::connect(m_dlg->NodeEditButton, SIGNAL(clicked()), this, SLOT(setNodeEditTool()));
+		ccCompassDlg::connect(m_dlg->SelectButton, SIGNAL(clicked()), this, SLOT(setSelectTool()));
 
 
 		//extra tools
@@ -1016,6 +1021,23 @@ void ccCompass::setNodeEditTool()
 	m_dlg->acceptButton->setEnabled(true);
 	m_app->getActiveGLWindow()->redraw(true, false);
 }
+
+void ccCompass::setSelectTool()
+{
+	//cleanup
+	cleanupBeforeToolChange();
+	//activate trace tool
+	m_activeTool = m_dpxSelectTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxSelectTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+
 //activate the paint tool
 void ccCompass::setPick()
 {

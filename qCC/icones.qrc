@@ -147,6 +147,7 @@
     <file>images/Layer.png</file>
     <file>images/Map.png</file>
     <file>images/Road.png</file>
+    <file>images/select.png</file>
   </qresource>
   <qresource prefix="/CC/Icons">
     <file>images/icon/cc_viewer_icon_16.png</file>
