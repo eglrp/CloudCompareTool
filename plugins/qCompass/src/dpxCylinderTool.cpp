@@ -13,29 +13,9 @@
 
 
 dpxCylinderTool::dpxCylinderTool()
-	: ccTool(),m_polyTip(0)
-	, m_polyTipVertices(0)
-	, m_poly3D(0)
-	, m_poly3DVertices(0)
-	, m_done(false)
+	: dpxPickAndEditTool()
 {
-	m_polyTipVertices = new ccPointCloud("Tip vertices");
-	m_polyTipVertices->reserve(2);
-	m_polyTipVertices->addPoint(CCVector3(0, 0, 0));
-	m_polyTipVertices->addPoint(CCVector3(1, 1, 1));
-	m_polyTipVertices->setEnabled(false);
-
-	m_polyTip = new ccPolyline(m_polyTipVertices);
-	m_polyTip->setForeground(true);
-	m_polyTip->setTempColor(ccColor::green);
-	m_polyTip->set2DMode(true);
-	m_polyTip->reserve(2);
-	m_polyTip->addPointIndex(0, 2);
-	m_polyTip->setWidth(1); //'1' is equivalent to the default line size
-	m_polyTip->addChild(m_polyTipVertices);
-
 	m_pPickRoot = new ccHObject("Cylinder");
-	//validButton->setEnabled(false);
 }
 
 
@@ -48,98 +28,27 @@ dpxCylinderTool::~dpxCylinderTool()
 		delete m_poly3D;
 }
 
-//called when the tool is set to active (for initialization)
-void dpxCylinderTool::toolActivated()
-{
-	m_associatedWin =m_window;
-
-	assert(m_polyTip);
-	assert(!m_poly3D);
-
-	QDateTime current_time =QDateTime::currentDateTime();
-	QString sCurrentTime =current_time.toString("hh:mm:ss");
-	//m_pPickRoot = new ccHObject("Cylinder_"+sCurrentTime);
-	if (!m_associatedWin)
-	{
-		ccLog::Warning("[Trace Polyline Tool] No associated window!");
-		return ;
-	}
-
-	m_associatedWin->setUnclosable(true);
-	m_associatedWin->addToOwnDB(m_polyTip);
-
-	//duans
-	m_associatedWin->addToOwnDB(m_pPickRoot);
-
-	m_associatedWin->setCursor(Qt::CrossCursor);
-
-	restart(true);
-}
-
-void dpxCylinderTool::toolDisactivated()
-{
-	accept(); //accept any changes
-	m_associatedWin->removeFromOwnDB(m_polyTip);
-}
-
-void dpxCylinderTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
-{
-	//ccLog::Warning(QString::number(x));
-	int i = 0;
-	updatePolyLineTip(x,y,buttons);
-}
-
-void dpxCylinderTool::onMouseRightClick(int x,int y)
-{
-	if (!m_poly3D || (QApplication::keyboardModifiers() & Qt::ControlModifier)) //CTRL + right click = panning
-	{
-		return;
-	}
-
-	unsigned vertCount = m_poly3D->size();
-	if (vertCount < 2)
-	{
-		//discard this polyline
-		resetLine();
-	}
-	else
-	{
-		m_poly3D->enableTempColor(false);
-		m_poly3D->setDisplay(m_associatedWin); //just in case
-
-		m_poly3D = 0;
-		m_poly3DVertices = 0;
-
-		resetLine(); //to update the GUI
-	}
-}
-
-//called when a point in a point cloud gets picked while this tool is active
-//pointPicked(pi.entity, pi.itemIndex, pi.clickPoint.x(), pi.clickPoint.y(), pi.P3D); //map straight to pointPicked function
 void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
-	if (!m_associatedWin)
+	if(m_nToolState)//编辑状体
+		return;
+	if (!m_window)
 	{
 		assert(false);
 		return;
 	}
-	if (!insertPoint)
-		return;
-
 	//if the 3D polyline doesn't exist yet, we create it
 	if (!m_poly3D || !m_poly3DVertices)
 	{
 		m_poly3DVertices = new ccPointCloud();
 		m_poly3DVertices->setEnabled(false);
-		m_poly3DVertices->setDisplay(m_associatedWin);
+		m_poly3DVertices->setDisplay(m_window);
 
 		m_poly3D = new ccPolyline(m_poly3DVertices);
 		m_poly3D->setTempColor(ccColor::green);
 		m_poly3D->set2DMode(false);
 		m_poly3D->addChild(m_poly3DVertices);
 		m_poly3D->setWidth(1);
-
-		//insertPoint->addChild(m_poly3D);
 		m_pPickRoot->addChild(m_poly3D);
 	}
 
@@ -155,13 +64,9 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		}
 
 		m_poly3DVertices->addPoint(P);
-		//m_firstPt = P;
-		ccLog::Warning("P1 X:"+QString::number(P.x)+" Y:"+QString::number(P.y)+" Z:"+QString::number(P.z));
-		m_poly3D->addPointIndex(m_poly3DVertices->size() - 1);
-
-		//we replace the first point of the tip by this new point
+		m_poly3D->addPointIndex(m_poly3DVertices->size()-1);
 		{
-			QPointF pos2D = m_associatedWin->toCenteredGLCoordinates(x, y);
+			QPointF pos2D = m_window->toCenteredGLCoordinates(x, y);
 			CCVector3 P2D(	static_cast<PointCoordinateType>(pos2D.x()),
 							static_cast<PointCoordinateType>(pos2D.y()),
 							0);
@@ -182,25 +87,29 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		}
 
 		m_poly3DVertices->addPoint(P);
-		//m_secondPt = P;
-		ccLog::Warning("P2 X:"+QString::number(P.x)+" Y:"+QString::number(P.y)+" Z:"+QString::number(P.z));
 		m_poly3D->addPointIndex(m_poly3DVertices->size() - 1);
-
 		m_polyTip->setEnabled(false);
 	}
 	else if(nSize ==2)//构造圆柱
 	{
+		//try to add one more point
+		if (!m_poly3DVertices->reserve(m_poly3DVertices->size() + 1)
+			||!m_poly3D->reserve(m_poly3DVertices->size() + 1))
+		{
+			ccLog::Error("Not enough memory");
+			return;
+		}
+		m_poly3DVertices->addPoint(P);
+		m_poly3D->addPointIndex(m_poly3DVertices->size() - 1);
+
 		CCVector3 pA = *(m_poly3D->getPoint(0));
 		CCVector3 pB = *(m_poly3D->getPoint(1));
 
-		ccLog::Warning("P3 X:"+QString::number(P.x)+" Y:"+QString::number(P.y)+" Z:"+QString::number(P.z));
 		double dRadius = dpxAlgorithmFun::DistanceOfPointToLine(pA,pB,P);
 		double dHeight = sqrt(pow((pA.x-pB.x),2.0) + pow((pA.y-pB.y),2.0) + pow((pA.z-pB.z),2.0));
-		ccLog::Warning("dRadius:"+QString::number(dRadius));
-		ccLog::Warning("dHeight:"+QString::number(dHeight));
 
 		//CC system Func
-///////////////////////////////////////////////
+		QString strRelateID = QUuid::createUuid().toString();
 		CCVector3 vbefore(0,0,1);
 		CCVector3 vafter(pB.x-pA.x, pB.y-pA.y, pB.z-pA.z);
 		ccGLMatrix transM = ccGLMatrix::FromToRotation(vbefore,dpxAlgorithmFun::NormalVec(vafter));
@@ -211,161 +120,106 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		QDateTime current_time =QDateTime::currentDateTime();
 		QString sCurrentTime =current_time.toString("hh:mm:ss");
 		m_poly3D->setName("Line_"+sCurrentTime);
+		m_poly3D->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
 		m_poly3D->setMetaData("Radius",QString::number(dRadius));
 
 		ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
-		//ccCone * pCone = new ccCone(dRadius,dRadius,dHeight,0,0,&transM,"Cylinder"+sCurrentTime,24);
+		pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
 		m_pPickRoot->addChild(pCylinder);
 
-		//关闭采集
-		onMouseRightClick(0,0);
-	}
-
-	m_associatedWin->redraw(false, false);
-}
-
-//called when "Return" or "Space" is pressed, or the "Accept Button" is clicked or the tool is disactivated
-void dpxCylinderTool::accept()
-{
-	//finish trace
-	if (m_associatedWin && m_pPickRoot)
-	{
-		m_associatedWin->removeFromOwnDB(m_pPickRoot);
-	}
-	if (m_app->getMainWindow() && m_pPickRoot)
-	{
+		m_window->removeFromOwnDB(m_pPickRoot);
 		m_app->addToDB(m_pPickRoot);
+		m_polyTip->setEnabled(false);
+		m_poly3D = 0;
+		m_poly3DVertices = 0;
+		m_nToolState=1;//采集状态结束，默认编辑状态
 	}
+
+	m_window->redraw(false, false);
+}
+
+void dpxCylinderTool::onMouseReleaseEvent(int x,int y)
+{
+	if(m_window==nullptr)
+		return;
+
+	if(m_VNodeInfo.m_pLine==nullptr || m_VNodeInfo.m_nNodeIndex==-1)
+		return;
+
+	ccPolyline* pLine = m_VNodeInfo.m_pLine;
+	int nIndex = m_VNodeInfo.m_nNodeIndex;
+
+	if( nIndex>pLine->size()-1)
+		return;
+	if(!m_bMoveNode)//是否是拖拽节点模式
+		return;
+
+	ccGenericPointCloud* pTargetCloud = nullptr;
+	int nPloudPtIndex=-1;
+	CCVector3 newPickPt;
+	if(!m_window->pickNearestPt(x,y,pTargetCloud,nPloudPtIndex,newPickPt))
+	{
+		ccLog::Warning("释放鼠标无法捕捉点");
+		return;
+	}
+
+	if(!pLine->hasMetaData(DPX_CYLINEDER_RELATED_UID))
+		return;
+
+	//删除旧的
+	QString strUID = pLine->getMetaData(DPX_CYLINEDER_RELATED_UID).toString();
+	ccHObject::Container vecHObjs;
+	dpxSnapHelper::Instance()->FindAllObjs(vecHObjs,CC_TYPES::CYLINDER);//旧的删除
+	for(int i =0;i<vecHObjs.size();i++)
+	{
+		ccLog::Warning("遍历PLANE"+QString::number(i));
+		ccCylinder* pCylinder = ccHObjectCaster::ToCylinder(vecHObjs[i]);
+		if(pCylinder==nullptr)
+			continue;
+		if(!pCylinder->hasMetaData(DPX_CYLINEDER_RELATED_UID))
+			continue;
+		QString sUID = pCylinder->getMetaData(DPX_CYLINEDER_RELATED_UID).toString();
+		if(sUID.compare(strUID,Qt::CaseInsensitive)==0)
+		{
+			m_pPickRoot->removeChild(pCylinder);
+		}
+	}
+
+	CCVector3* Pt0 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(0));
+	CCVector3* Pt1 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(1));
+	CCVector3* Pt2 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(2));
+
+	if(nIndex==0)
+		*Pt0 =newPickPt;
+	else if(nIndex==1)
+		*Pt1 =newPickPt;
+	else if(nIndex==2)
+		*Pt2 =newPickPt;
 	else
-	{
-		assert(false);
-	}
-
-	resetLine(); //to update the GUI
-}
-
-//called when the "Escape" is pressed, or the "Cancel" button is clicked
-void dpxCylinderTool::cancel()
-{
-}
-
-void dpxCylinderTool::onNewSelection(const ccHObject::Container& selectedEntities)
-{
-}
-
-//if this returns true, the undo button is enabled in the gui
-bool dpxCylinderTool::canUndo()
-{
-	return true; //yes - we can undo!
-}
-
-//called when the undo button is clicked
-void dpxCylinderTool::undo()
-{
-}
-
-void dpxCylinderTool::exportLine()
-{
-}
-
-//arguments for compatibility with ccGlWindow::rightButtonClicked signal
-void dpxCylinderTool::updatePolyLineTip(int x, int y, Qt::MouseButtons buttons)
-{
-	if (!m_associatedWin)
-	{
-		assert(false);
 		return;
-	}
 
-	if (buttons != Qt::NoButton)
-	{
-		//nothing to do (just hide the tip)
-		if (m_polyTip->isEnabled())
-		{
-			m_polyTip->setEnabled(false);
-			m_associatedWin->redraw(true, false);
-		}
-		return;
-	}
+	double dRadius = dpxAlgorithmFun::DistanceOfPointToLine(*Pt0,*Pt1,*Pt2);
+	double dHeight = sqrt(pow((Pt0->x-Pt1->x),2.0) + pow((Pt0->y-Pt1->y),2.0) + pow((Pt0->z-Pt1->z),2.0));
+	QDateTime current_time =QDateTime::currentDateTime();
+	QString sCurrentTime =current_time.toString("hh:mm:ss");
+	pLine->setName("Line_"+sCurrentTime);
+	pLine->setMetaData("Radius",QString::number(dRadius));
 
-	if (!m_poly3DVertices || m_poly3DVertices->size() == 0 || m_poly3DVertices->size() >1)
-	{
-		//there should be at least one point already picked!
-		return;
-	}
+	CCVector3 vbefore(0,0,1);
+	CCVector3 vafter(Pt1->x-Pt0->x, Pt1->y-Pt0->y, Pt1->z-Pt0->z);
+	ccGLMatrix transM = ccGLMatrix::FromToRotation(vbefore,dpxAlgorithmFun::NormalVec(vafter));
 
-	if (m_done)
-	{
-		return;
-	}
+	CCVector3 vecTrans((Pt0->x+Pt1->x)/2,(Pt0->y+Pt1->y)/2,(Pt0->z+Pt1->z)/2);
+	transM.setTranslation(vecTrans);
 
-	assert(m_polyTip && m_polyTipVertices && m_polyTipVertices->size() == 2);
+	ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
+	pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strUID);//关联的ID
+	m_pPickRoot->addChild(pCylinder);
+	m_window->removeFromOwnDB(m_pPickRoot);
+	m_app->addToDB(m_pPickRoot);
 
-	//we replace the last point by the new one
-	{
-		QPointF pos2D = m_associatedWin->toCenteredGLCoordinates(x, y);
-		CCVector3 P2D(	static_cast<PointCoordinateType>(pos2D.x()),
-						static_cast<PointCoordinateType>(pos2D.y()),
-						0);
-
-		CCVector3* lastP = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(1));
-		*lastP = P2D;
-	}
-
-	//just in case (e.g. if the view has been rotated or zoomed)
-	//we also update the first vertex position!
-	{
-		const CCVector3* P3D = m_poly3DVertices->getPoint(m_poly3DVertices->size() - 1);
-
-		ccGLCameraParameters camera;
-		m_associatedWin->getGLCameraParameters(camera);
-
-		CCVector3d A2D;
-		camera.project(*P3D, A2D);
-
-		CCVector3* firstP = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(0));
-		*firstP = CCVector3(static_cast<PointCoordinateType>(A2D.x - camera.viewport[2] / 2), //we convert A2D to centered coordinates (no need to apply high DPI scale or anything!)
-							static_cast<PointCoordinateType>(A2D.y - camera.viewport[3] / 2),
-							0);
-	}
-
-	m_polyTip->setEnabled(true);
-	m_associatedWin->redraw(true, false);
-}
-
-void dpxCylinderTool::restart(bool reset)
-{
-	if (m_poly3D)
-	{
-		if (reset)
-		{
-			if (m_associatedWin)
-			{
-				//discard this polyline
-				m_associatedWin->removeFromOwnDB(m_poly3D);
-			}
-			if (m_polyTip)
-			{
-				//hide the tip
-				m_polyTip->setEnabled(false);
-			}
-
-			m_poly3D = 0;
-			m_poly3DVertices = 0;
-		}
-		else
-		{
-			if (m_polyTip)
-			{
-				//show the tip
-				m_polyTip->setEnabled(true);
-			}
-		}
-	}
-
-	if (m_associatedWin)
-	{
-		m_associatedWin->redraw(false, false);
-	}
-	m_done = false;
+	m_bMoveNode = false;
+	pLine->invalidateBoundingBox();
+	m_polyTip->setEnabled(false);
+	m_window->redraw(false, true);
 }
