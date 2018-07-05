@@ -21,16 +21,23 @@ public:
 	//清空所有选择的对象
 	bool IsEmpty();
 
+	bool isInSelectSet(ccHObject* pHObject);
 	//清空所有选择的对象
 	void ClearSelection();
-
 	//bOnlyOne代表是否清除其它临时显示项
 	void AddObject2Selection(ccHObject* pHObject,bool bOnlyOne = true);
 	void RemoveSelection(ccHObject* pHObject);
 
 	void redrawSelectionSet();
+protected:
+	void rebackColor();
 private:
 	vector<ccHObject*> m_vecSeltHObjs;
+
+	//显示的节点
+	ccHObject* m_pShowSelectObject;
+	//当前激活的ccGLWindow
+	ccGLWindow* m_pCurActiveWindow;
 //私有构造
 private:
 	dpxSelectionManager();

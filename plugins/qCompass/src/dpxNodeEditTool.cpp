@@ -158,10 +158,6 @@ void dpxNodeEditTool::onMouseLeftClick(int x,int y)
 		m_VNodeInfo.m_nNodeIndex = nSegNum;
 		ccLog::Warning(QString::number(nSegNum));
 	}
-	else
-	{
-		ccLog::Warning("hehhhh"+QString::number(dDistance));
-	}
 }
 
 void dpxNodeEditTool::onMouseReleaseEvent(int x,int y)
@@ -291,10 +287,10 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 				transM.setTranslation(vecTrans);
 
 				//-----------------------以下方法可行-------------------------------//
-				ccSphere* pSphere = new ccSphere(0.1,&transM,"Sphere",4);
+				ccSphere* pSphere = new ccSphere(0.12,&transM,"Sphere",4);
 				pSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
 				pSphere->setDisplay(m_window);
-				pSphere->setTempColor(ccColor::red);
+				pSphere->setTempColor(ccColor::magenta); //orange
 				pSphere->setVisible(true);
 				pSphere->setEnabled(true);
 				dpxSnapHelper::Instance()->AddTempShowObject(pSphere,false);
@@ -309,7 +305,7 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 				ccSphere* pMoveSphere = new ccSphere(maxRadius,&transM,"nearestPt",6);
 				pMoveSphere->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
 				pMoveSphere->setDisplay(m_window);
-				pMoveSphere->setTempColor(ccColor::lightGrey);
+				pMoveSphere->setTempColor(ccColor::magenta);
 				pMoveSphere->setVisible(true);
 				pMoveSphere->setEnabled(true);
 				dpxSnapHelper::Instance()->AddTempShowObject(pMoveSphere,false);
