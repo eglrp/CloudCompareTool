@@ -29,7 +29,7 @@ void dpxSelectTool::onMouseReleaseEvent(int x,int y)
 	ccPolyline* pLine = m_VNodeInfo.m_pLine;
 	int nIndex = m_VNodeInfo.m_nNodeIndex;
 
-	if(  nIndex>pLine->size()-1)
+	if(nIndex>pLine->size()-1)
 		return;
 	if(!m_bMoveNode)//是否是拖拽节点模式
 		return;
@@ -78,7 +78,7 @@ void dpxSelectTool::onMouseLeftClick(int x,int y)
 
 	//获取最近的线与点
 	dpxNearestLine nearestInfo1;
-	if(getNearestLineInfo(x,y,nearestInfo1))//临近线加入选择集
+	if(getNearestLineInfo(x,y,nearestInfo1))//获取临近线
 	{
 		bool bHasInselect = dpxSelectionManager::Instance()->isInSelectSet(nearestInfo1.m_pLine);
         if(bHasInselect && !bPushCtrlKey)
@@ -100,7 +100,7 @@ void dpxSelectTool::onMouseLeftClick(int x,int y)
 
 	//获取最近的线与点
 	dpxNearestLine nearestInfo;
-	bool bFind = getNearestLineInfo(x,y,nearestInfo,true);
+	bool bFind = getNearestLineInfo(x,y,nearestInfo,true);//获取节点
 	if(!bFind)
 		return;
 

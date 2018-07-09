@@ -3,6 +3,7 @@
 #ifndef _DPX_GEO_ENGINE_H__
 #define _DPX_GEO_ENGINE_H__
 #pragma once
+
 #include "dpxMap_IO.h"
 #include "dpxMap.h"
 #include <QObject>
@@ -18,6 +19,12 @@ public:
 public:
 	void SetMap(dpxMap* pMap) {m_pMap = pMap;}
 	dpxMap* GetMap() { return m_pMap;}
+
+	//HDmap特定图层的获取
+	dpxLayer* getRoadLyr();
+	dpxLayer* getLightLyr();
+	dpxLayer* getIndicatorLry();
+	dpxLayer* getOtherLry();
 
 public slots:
     void slotMapChanged();
@@ -42,6 +49,7 @@ signals:
 	void sigFeatureAttributeChanged(const QString& strLayerID, int nFeatureID);
 
 protected:
+	dpxLayer* getLyrFormType(dpxObjectType eType);
 //私有构造
 private:
 	dpxGeoEngine();

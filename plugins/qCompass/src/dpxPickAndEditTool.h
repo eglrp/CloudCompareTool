@@ -11,7 +11,7 @@
 #include <QImage>
 
 #include "dpxNodeEditTool.h"
-
+#include "dpxGeoEngine.h"
 class ccPointCloud;
 class ccGLWindow;
 class ccPickingHub;

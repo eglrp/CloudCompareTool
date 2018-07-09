@@ -17,12 +17,15 @@ public:
 	virtual ~dpxMapManager();
 public:
 	//创建地图
-	static dpxMap* createMap(QString strMapName,std::vector<QString> vecLryNames);
-	static bool createMapDoc(QString strMapName,std::vector<QString> vecLryNames);
+	dpxMap* createMap(QString strMapName,std::vector<QString> vecLryNames);
+	bool createMapDoc(QString strMapName,std::vector<QString> vecLryNames);
+
+	//定制HDMap图层
+	dpxMap* createHDMap(); //创建HDMap
 	//地图自动保存文档
-	static bool saveMapDoc(dpxMap* pMap,QString strFile);
+	bool saveMapDoc(dpxMap* pMap,QString strFile);
 	//加载地图
-	static dpxMap* LoadMapDoc(QString strMapFile);
+	dpxMap* LoadMapDoc(QString strMapFile);
 };
 
 #endif

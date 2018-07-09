@@ -88,7 +88,7 @@ bool dpxMap::AddLayer(dpxLayer* pLayer)
 	}
 
 	LayerVec::iterator itor = find(m_vecLrys.begin(),m_vecLrys.end(),pLayer); //查找3
-	if (itor != m_vecLrys.end()) //没找到
+	if (itor == m_vecLrys.end()) //没找到
 		m_vecLrys.push_back(pLayer);
 
 	return true;

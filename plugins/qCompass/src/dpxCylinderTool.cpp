@@ -28,6 +28,17 @@ dpxCylinderTool::~dpxCylinderTool()
 		delete m_poly3D;
 }
 
+//called when the tool is set to active (for initialization)
+void dpxCylinderTool::toolActivated()
+{
+	dpxLayer* pLightLyr = dpxGeoEngine::Instance()->getLightLyr();
+	if(pLightLyr!=nullptr && pLightLyr->getRootData()!=nullptr)
+		m_pPickRoot = pLightLyr->getRootData();
+
+	dpxPickAndEditTool::toolActivated();
+}
+
+
 void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
 	if(m_nToolState)//编辑状体

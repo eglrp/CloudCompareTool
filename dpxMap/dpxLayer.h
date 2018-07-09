@@ -4,15 +4,13 @@
 #define _DPX_LAYER_H_
 #pragma once
 
-#include "dpxMap_IO.h"
+//#include "dpxMap_IO.h"
+#include "dpxMapDefine.h"
 #include "ccHObject.h"
 #include <QUuid>
 /*
 * dpxLayer
 */
-
-#define  DPX_TYPE_NAME  "dpxType" //key 存储类型的字符串
-
 enum DPX_MAP_API dpxObjectType
 {
 	eOT_Unknown,	//未知
@@ -24,7 +22,9 @@ enum DPX_MAP_API dpxObjectType
 	//具体类型
 	eOT_Road,		//道路
 	eOT_Lane,		//小路
-	eOT_Light		//路灯
+	eOT_Light,		//路灯
+	eOT_Indicator,  //指示牌
+	eOT_Other   	//其它
 	//补充..
 };
 

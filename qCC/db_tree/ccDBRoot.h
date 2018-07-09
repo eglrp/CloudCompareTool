@@ -222,7 +222,7 @@ protected slots:
 	inline void toggleSelectedEntities3DName()      { toggleSelectedEntitiesProperty(TG_3D_NAME); }
 
 	void addEmptyGroup();
-	void addNewMap();
+	void addHDMap();
 	void alignCameraWithEntityDirect() { alignCameraWithEntity(false); }
 	void alignCameraWithEntityIndirect() { alignCameraWithEntity(true); }
 	void enableBubbleViewMode();

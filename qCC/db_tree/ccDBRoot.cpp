@@ -51,7 +51,7 @@
 
 //CClib
 #include <CCMiscTools.h>
-
+#include <dpxGeoEngine.h>
 //local
 #include "ccPropertiesTreeDelegate.h"
 #include "../mainwindow.h"
@@ -131,7 +131,7 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	m_toggleSelectedEntitiesSF = new QAction("Toggle SF", this);
 	m_toggleSelectedEntities3DName = new QAction("Toggle 3D name", this);
 	m_addEmptyGroup = new QAction("Add empty group", this);
-	m_AddnewMap = new QAction("Add new Map", this);
+	m_AddnewMap = new QAction("Add HD Map", this);
 	m_alignCameraWithEntity = new QAction("Align camera", this);
 	m_alignCameraWithEntityReverse = new QAction("Align camera (reverse)", this);
 	m_enableBubbleViewMode = new QAction("Bubble-view", this);
@@ -162,7 +162,7 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	connect(m_toggleSelectedEntitiesSF,			SIGNAL(triggered()),								this, SLOT(toggleSelectedEntitiesSF()));
 	connect(m_toggleSelectedEntities3DName,		SIGNAL(triggered()),								this, SLOT(toggleSelectedEntities3DName()));
 	connect(m_addEmptyGroup,					SIGNAL(triggered()),								this, SLOT(addEmptyGroup()));
-	connect(m_AddnewMap,						SIGNAL(triggered()),								this, SLOT(addNewMap()));
+	connect(m_AddnewMap,						SIGNAL(triggered()),								this, SLOT(addHDMap()));
 	connect(m_alignCameraWithEntity,			SIGNAL(triggered()),								this, SLOT(alignCameraWithEntityDirect()));
 	connect(m_alignCameraWithEntityReverse,		SIGNAL(triggered()),								this, SLOT(alignCameraWithEntityIndirect()));
 	connect(m_enableBubbleViewMode,				SIGNAL(triggered()),								this, SLOT(enableBubbleViewMode()));
@@ -429,6 +429,10 @@ void ccDBRoot::deleteSelectedEntities()
 			ccLog::Warning(QString("Object '%1' can't be deleted this way (locked)").arg(obj->getName()));
 			continue;
 		}
+
+		//HDMap图层不能被右键删除 by duans
+		if(obj->hasMetaData(DPX_TYPE_NAME))
+			continue;
 
 		//we don't consider objects that are 'descendent' of others in the selection
 		bool isDescendent = false;
@@ -2001,14 +2005,19 @@ void ccDBRoot::addEmptyGroup()
 	addElement(newGroup);
 }
 
-void ccDBRoot::addNewMap()
+//by duans
+void ccDBRoot::addHDMap()
 {
-	vector<QString> vecLryNames;
-	vecLryNames.push_back("road");
-	vecLryNames.push_back("lane");
-	vecLryNames.push_back("light");
-    dpxMap* pMap = dpxMapManager::createMap("HDMap",vecLryNames);
-    addMapData(pMap);
+	static bool bHasAdd = false;//only once
+	if(bHasAdd)
+		return;
+	dpxMapManager* pMapManger = new dpxMapManager();
+    dpxMap* pMap = pMapManger->createHDMap();
+
+    //右边数据目录及dpxGeoEngine系统要同时更新Map数据
+    addMapData(pMap);//TOC Tree添加
+    dpxGeoEngine::Instance()->SetMap(pMap);
+    bHasAdd = true;
 }
 
 void  ccDBRoot::addMapData(dpxMap* pMap)

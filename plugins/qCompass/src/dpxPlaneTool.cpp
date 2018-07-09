@@ -24,6 +24,17 @@ dpxPlaneTool::~dpxPlaneTool()
 		delete m_poly3D;
 }
 
+//called when the tool is set to active (for initialization)
+void dpxPlaneTool::toolActivated()
+{
+	//若添加了地图，采集到地图中去
+	dpxLayer* pIndicatorLyr = dpxGeoEngine::Instance()->getIndicatorLry();
+	if(pIndicatorLyr!=nullptr && pIndicatorLyr->getRootData()!=nullptr)
+		m_pPickRoot = pIndicatorLyr->getRootData();
+
+	dpxPickAndEditTool::toolActivated();
+}
+
 void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 {
 	if(m_window==nullptr)

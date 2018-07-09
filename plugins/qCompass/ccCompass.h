@@ -183,12 +183,12 @@ protected:
 	ccTool* m_activeTool = nullptr;
 	ccFitPlaneTool* m_fitPlaneTool;
 	ccTraceTool* m_traceTool;
-	dpxTraceLineTool * m_traceLineTool;
 	ccLineationTool* m_lineationTool;
 	ccThicknessTool* m_thicknessTool;
 	ccTopologyTool* m_topologyTool;
 	ccNoteTool* m_noteTool;
 	ccPinchNodeTool* m_pinchNodeTool;
+	dpxTraceLineTool * m_traceLineTool;
 	dpxCylinderTool* m_dpxCylinderTool;
 	dpxPlaneTool* m_dpxPlaneTool;
 	dpxSphereTool* m_dpxSphereTool;
