@@ -39,6 +39,7 @@ public:
 	//! Default constructor
 	explicit ccCompassDlg(QWidget* parent = 0);
 
+	virtual bool eventFilter(QObject *obj, QEvent *e);
 	/*
 	Returns a flag describing the currently selected ccTrace::COST_MODE (used to build the cost function for optimisation)
 	*/
@@ -80,8 +81,8 @@ public:
 	//--
 	QAction *m_noteTool; //activates note tool
 	QAction *m_toSVG; //export to svg
-	
-
+signals:
+	void sigKeyPress(int nKey);
 protected slots:
 	//! To capture overridden shortcuts (pause button, etc.)
 	void onShortcutTriggered(int);
@@ -105,7 +106,7 @@ private:
 	QAction *m_dist;
 	QAction *m_scalar;
 	QAction *m_scalar_inv;
-	
+
 	//disactivates all cost function checkboxes
 	void clearCost()
 	{

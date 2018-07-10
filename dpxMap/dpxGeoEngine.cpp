@@ -45,6 +45,12 @@ dpxLayer* dpxGeoEngine::getOtherLry()
 	return getLyrFormType(eOT_Other);
 }
 
+//键盘摁下事件
+void dpxGeoEngine::slotKeyPress(const QString& sKey)
+{
+	emit slotKeyPress(sKey);
+}
+
 void dpxGeoEngine::slotMapChanged()
 {
 	emit sigMapChanged();

@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+import "id.proto";
+import "geometry.proto";
+import "object.proto";
+import "lane_marking.proto";
+import "traffic_sign.proto";
+import "traffic_light.proto";
+import "lane.proto";
+import "road.proto";
+
+package hdmap_proto;
+
+message Tile {
+	required Id tile_id = 1;
+  required Idx idx = 2;
+  
+	required Point min_point = 4;
+
+  enum TileRange {
+    T0 = 40;                            //m
+    T1 = 80;
+    T2 = 160;
+    T3 = 320;
+  }
+  required TileRange range = 5;         // different layer
+
+  repeated Id childs = 6;
+
+  repeated Id crosswalk_ids = 10;
+  repeated Id junction_ids = 11;
+  repeated Id parkingspace_ids = 12;
+  repeated Id road_ids = 13;
+
+  repeated Id refline_ids = 14;
+  repeated Id lane_ids = 15;
+
+  repeated Id stopline_ids = 16;
+  repeated Id speedbump_ids = 17;
+  repeated Id pole_ids = 18;
+  repeated Id board_ids = 19;
+  repeated Id zone_ids = 20;
+
+  repeated Id lane_marking_ids = 21;
+  repeated Id traffic_light_ids = 22;
+  repeated Id traffic_sign_ids = 23;
+  repeated Id sections_ids = 24;
+}

@@ -1,0 +1,74 @@
+syntax = "proto2";
+
+package hdmap_proto;
+
+import "id.proto";
+import "geometry.proto";
+
+message StopLine {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+
+  required LineSegment line = 4;
+  required float width = 5;
+  repeated Id link_ids = 6;
+}
+
+message SpeedBump {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+
+  required Polygon polygon = 4;
+  required float height = 5;
+  repeated Id link_ids = 6;
+}
+
+message Pole {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+
+  required Cylinder cylinder = 3;
+}
+
+message Board {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+
+  required Polygon polygon = 3;
+}
+
+message CrossWalk {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+  optional string name = 3;
+
+  required Polygon border = 4;
+  repeated Polygon lines = 5;
+  repeated Id link_ids = 6;
+}
+
+message Zone {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+
+  required Polygon border = 3;
+  repeated Id link_ids = 4;
+}
+
+message ParkingSpace {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+  repeated ParkingSlot parkingslots = 3;
+  repeated Id link_ids = 4;
+
+  //  required Polygon polygon = 4;
+}
+
+message Junction {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+
+  required Polygon polygon = 4;
+  repeated Id link_ids = 5;
+}
+

@@ -146,6 +146,9 @@ protected slots:
 	//display the help dialog
 	void showHelp();
 
+	//给工具传入快捷键
+	void slotKeyPress(int nKey);
+
 protected:
 
 	//event to get mouse-move updates & trigger repaint of overlay circle

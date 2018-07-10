@@ -27,6 +27,8 @@ public:
 	dpxLayer* getOtherLry();
 
 public slots:
+	void slotKeyPress(const QString& sKey);
+
     void slotMapChanged();
     void slotMapNameChanged();
 
@@ -38,6 +40,7 @@ public slots:
 	void slotFeatureAttributeChanged(const QString& strLayerID, int nFeatureID);
 
 signals:
+	void sigKeyPress(const QString& sKey);
 	void sigMapChanged();
     void sigMapNameChanged();
 

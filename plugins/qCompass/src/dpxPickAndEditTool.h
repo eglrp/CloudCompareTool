@@ -19,6 +19,8 @@ class ccPickingHub;
 /*
 Tool used to digitise traces
 */
+
+//一边采集一遍编辑的工具基类，通过鼠标左键是否点击到线节点来判断状态
 class dpxPickAndEditTool :	public dpxNodeEditTool
 {
 public:

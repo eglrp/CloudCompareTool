@@ -104,11 +104,11 @@ ccCompassDlg::ccCompassDlg(QWidget* parent/*=0*/)
 	m_settings_menu->addAction(m_showNames);
 	m_settings_menu->addSeparator();
 	m_settings_menu->addMenu(m_cost_algorithm_menu);
-	
+
 	algorithmButton->setPopupMode(QToolButton::InstantPopup);
 	algorithmButton->setMenu(m_settings_menu); //add settings menu
 	algorithmButton->setEnabled(true);
-	
+
 	//setup pair picking menu
 	m_pairpicking_menu = new QMenu(this);
 	m_research_menu = new QMenu(this);
@@ -151,8 +151,8 @@ ccCompassDlg::ccCompassDlg(QWidget* parent/*=0*/)
 	m_pairpicking_menu->addMenu(m_research_menu);
 	m_pairpicking_menu->addSeparator();
 	m_pairpicking_menu->addAction(m_toSVG);
-	
-	
+
+
 	//Add tools to research menu
 	m_recalculateFitPlanes = new QAction("Recalculate Fit-Planes", this);
 	m_toPointCloud = new QAction("Convert to point cloud", this);
@@ -184,6 +184,17 @@ ccCompassDlg::ccCompassDlg(QWidget* parent/*=0*/)
 	connect(this, SIGNAL(shortcutTriggered(int)), this, SLOT(onShortcutTriggered(int)));
 }
 
+bool ccCompassDlg::eventFilter(QObject *obj, QEvent *e)
+{
+	if (e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+		emit sigKeyPress(keyEvent->key());
+	}
+	//emit();
+	return ccOverlayDialog::eventFilter(obj,e);
+}
+
 int ccCompassDlg::getCostMode()
 {
 	int out = 0;
@@ -204,7 +215,7 @@ int ccCompassDlg::getCostMode()
 	if (m_scalar_inv->isChecked())
 		out = out | ccTrace::MODE::INV_SCALAR;
 
-	if (out == 0) 
+	if (out == 0)
 		return ccTrace::MODE::DISTANCE; //default to distance if everything has been unchecked
 
 	return out;

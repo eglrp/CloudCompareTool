@@ -34,11 +34,12 @@
 #include "ccTopologyTool.h"
 #include "ccTraceTool.h"
 #include "dpxTraceLineTool.h"//折线工具
+#include "dpxRoadTool.h"//折线工具
 #include "dpxCylinderTool.h"//圆柱工具
 #include "dpxPlaneTool.h"//平面工具
 #include "dpxSphereTool.h"//球采集工具
 #include "dpxNodeEditTool.h"//节点编辑工具
-#include "dpxSelectTool.h"
+#include "dpxSelectTool.h" //选择工具
 
 //initialize default static pars
 bool ccCompass::drawName = false;
@@ -57,7 +58,7 @@ ccCompass::ccCompass(QObject* parent) :
 	//initialize all tools
 	m_fitPlaneTool = new ccFitPlaneTool();
 	m_traceTool = new ccTraceTool();
-	m_traceLineTool = new dpxTraceLineTool();//新拓展折现工具
+	m_traceLineTool = new dpxRoadTool();  //new dpxTraceLineTool();//新拓展折现工具
 	m_lineationTool = new ccLineationTool();
 	m_thicknessTool = new ccThicknessTool();
 	m_topologyTool = new ccTopologyTool();
@@ -67,7 +68,7 @@ ccCompass::ccCompass(QObject* parent) :
 	m_dpxPlaneTool = new dpxPlaneTool();	//矩形工具
 	m_dpxSphereTool = new dpxSphereTool();//球采集工具
 	m_dpxNodeEditTool = new dpxNodeEditTool();//节点编辑工具
-	m_dpxSelectTool = new dpxSelectTool();
+	m_dpxSelectTool = new dpxSelectTool(); //选择工具
 }
 
 //deconstructor
@@ -287,6 +288,9 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->m_showStippled, SIGNAL(toggled(bool)), this, SLOT(toggleStipple(bool)));
 		ccCompassDlg::connect(m_dlg->m_showNormals, SIGNAL(toggled(bool)), this, SLOT(toggleNormals(bool)));
 		ccCompassDlg::connect(m_dlg->m_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedTraces()));
+
+		//传出
+		ccCompassDlg::connect(m_dlg, SIGNAL(sigKeyPress(int)), this, SLOT( slotKeyPress(int)));
 	}
 
 	if (!m_mapDlg)
@@ -714,6 +718,15 @@ void ccCompass::pointPicked(ccHObject* entity, unsigned itemIdx, int x, int y, c
 	m_app->getActiveGLWindow()->redraw();
 }
 
+//快捷键的传入
+void ccCompass::slotKeyPress(int nKey)
+{
+	if(m_activeTool==nullptr)
+		return ;
+
+	m_activeTool->onKeyPress(nKey);
+}
+
 //by duans 事件在此绑定非常重要
 bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 {
@@ -725,6 +738,7 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 	if(m_activeTool==nullptr)
 		return false;
 
+	//工具的鼠标事件
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent *>(event);
 	if(mouseEvent==nullptr)
 		return false;

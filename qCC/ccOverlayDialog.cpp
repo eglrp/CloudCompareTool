@@ -152,7 +152,7 @@ bool ccOverlayDialog::eventFilter(QObject *obj, QEvent *e)
 		{
 			emit shown();
 		}
-		
+
 		// standard event processing
 		return QObject::eventFilter(obj, e);
 	}

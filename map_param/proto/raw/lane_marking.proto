@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+import "id.proto";
+import "geometry.proto";
+
+package hdmap_proto;
+
+message LaneMarking {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+
+  enum Type {
+    UNKNOWN    = 0;
+    
+    ARROW_LEFT               = 1;
+    ARROW_FORWARD            = 2;
+    ARROW_RIGHT              = 3;
+    ARROW_LEFT_AND_FORWARD   = 4;
+    ARROW_RIGHT_AND_FORWARD  = 5;
+    ARROW_LEFT_AND_RIGHT     = 6;
+    ARROW_U_TURN             = 7;
+    ARROW_U_TURN_AND_FORWARD = 8;
+    ARROW_U_TURN_AND_LEFT    = 9;
+
+    ARROW_MERGE_LEFT         = 10;
+    ARROW_MERGE_RIGHT        = 11;
+
+    CROSSWALK_NOTICE = 12;
+
+    SPEED_LIMIT_LOW  = 13;
+    SPEED_LIMIT_HIGH = 14;
+  }
+  optional Type type = 3;
+  required Polygon polygon = 4;
+  optional float value = 5;
+  repeated Id link_ids = 6;
+}

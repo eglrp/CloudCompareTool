@@ -22,7 +22,6 @@
 #include <ccHObject.h>
 #include <ccGenericGLDisplay.h>
 
-
 #include "dpxPickAndEditTool.h"
 #include "ccTrace.h"
 
@@ -40,7 +39,7 @@ public:
 	dpxTraceLineTool();
 	virtual ~dpxTraceLineTool();
 
-	virtual void toolDisactivated();
+	virtual void toolActivated();
 	//called when a point in a point cloud gets picked while this tool is active
 	void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y=0) override;
 
@@ -52,19 +51,6 @@ public:
 
 	//! Oversamples the active 3D polyline
 	ccPolyline* polylineOverSampling(unsigned steps) const;
-
-protected:
-	//! Viewport parameters (used for picking)
-	struct SegmentGLParams
-	{
-		SegmentGLParams() {}
-		SegmentGLParams(ccGenericGLDisplay* display, int x, int y);
-		ccGLCameraParameters params;
-		CCVector2d clickPos;
-	};
-
-	//! Viewport parameters use to draw each segment of the polyline
-	std::vector<SegmentGLParams> m_segmentParams;
 };
 
 #endif

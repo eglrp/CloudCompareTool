@@ -5775,6 +5775,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 	case QEvent::Move:
 		updateOverlayDialogsPlacement();
 		break;
+
 	default:
 		//nothing to do
 		break;

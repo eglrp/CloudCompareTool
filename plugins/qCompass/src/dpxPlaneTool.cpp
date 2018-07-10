@@ -9,7 +9,7 @@
 #include "dpxPlaneTool.h"
 #include "ccCompass.h"
 #include "dpxAlgorithmFun.h"
-
+#include "dpxGeoEngine.h"
 
 dpxPlaneTool::dpxPlaneTool()
 	: dpxPickAndEditTool()

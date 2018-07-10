@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+import "id.proto";
+import "geometry.proto";
+import "attribute.proto";
+import "object.proto";
+import "lane_marking.proto";
+import "traffic_sign.proto";
+import "traffic_light.proto";
+import "lane.proto";
+
+package hdmap_proto;
+
+message Road {
+  required Id id = 1;
+  repeated Id tile_ids = 2;
+  
+	enum RoadType {
+    UNKNOWN = 0;
+  }
+	required RoadType type = 4;
+
+  repeated Lane reflines = 5;
+  repeated Lane lanes = 6;
+
+  repeated StopLine stoplines = 10;
+  repeated SpeedBump speedbumps = 11;
+  repeated Pole poles = 12;
+  repeated Board boards = 13;
+  repeated Zone zones = 14;
+
+  // road level
+  repeated LaneMarking lane_markings = 15;
+  repeated TrafficLight traffic_lights = 16;
+  repeated TrafficLight traffic_signs = 17;
+
+	repeated uint64 predecessors = 20;
+	repeated uint64 successors = 21;
+}
+
+

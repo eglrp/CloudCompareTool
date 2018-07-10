@@ -10,6 +10,7 @@
 #include "ccCylinder.h"
 #include "ccCone.h"
 #include "dpxAlgorithmFun.h"
+#include "dpxGeoEngine.h"
 
 
 dpxCylinderTool::dpxCylinderTool()
@@ -136,6 +137,7 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 
 		ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
 		pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
+		pCylinder->setTempColor(ccColor::cyan);
 		m_pPickRoot->addChild(pCylinder);
 
 		m_window->removeFromOwnDB(m_pPickRoot);

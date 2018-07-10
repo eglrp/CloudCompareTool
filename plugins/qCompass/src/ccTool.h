@@ -57,17 +57,19 @@ public:
 
 	//by duans
 	virtual void onMouseMove(int x, int y, Qt::MouseButtons buttons) { }
-
-	//by duans
+	//鼠标右键单击
 	virtual void onMouseRightClick(int x,int y) { }
-
-	//by duans
+	//鼠标左单击
 	virtual void onMouseLeftClick(int x,int y) { }
-
-	//by duans
+	//鼠标释放
 	virtual void onMouseReleaseEvent(int x,int y) { }
-
+	//鼠标双击
 	virtual void onLeftDoubleClick(int x,int y) {}
+	//键盘摁下
+	virtual void onKeyPress(int key)  {}
+	//键盘释放
+	//virtual void onKeyRelease(int key) {}
+
 	//called when "Return" or "Space" is pressed, or the "Accept Button" is clicked
 	virtual void accept() { }
 

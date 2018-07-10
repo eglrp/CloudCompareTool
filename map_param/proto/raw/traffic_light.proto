@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+import "id.proto";
+import "geometry.proto";
+
+package hdmap_proto;
+
+message TrafficLight {
+  required Id id = 1;
+  repeated Id tile_id = 2;
+
+  enum TrafficLightType {
+    NONE       = 0;
+    CIRCLE     = 1;
+    CROSS      = 2;
+    PEDESTRIAN = 3;
+    BICYCLE    = 4;
+    ARROW      = 5;
+    TIME       = 6;
+    // too much
+  }
+
+  optional TrafficLightType type = 3;
+  oneof geometry {
+    Circle circle = 4;
+    Rect rect = 5;
+  }
+
+  enum TrafficLightState {
+    UNKNOWN = 0;
+    RED     = 1;
+    GREEN   = 2;
+    BLUE    = 3;
+    YELLOW  = 4;
+  }
+  optional TrafficLightState state = 6;
+  repeated Id link_ids = 7;
+}

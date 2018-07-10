@@ -206,6 +206,9 @@
       <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/primCylinder.gif</normaloff>:/CC/images/primCylinder.gif</iconset>
      </property>
+     <property name="shortcut">
+      <string>S</string>
+     </property>
      <property name="checkable">
       <bool>true</bool>
      </property>
