@@ -3,35 +3,35 @@
 #include <QMainWindow>
 #include <QMessageBox>
 
-#include "dpxRoadTool.h"
+#include "dpxRoadRefLineTool.h"
 #include "dpxGeoEngine.h"
 
-dpxRoadTool::dpxRoadTool()
+dpxRoadRefLineTool::dpxRoadRefLineTool()
 {
 }
 
-dpxRoadTool::~dpxRoadTool()
+dpxRoadRefLineTool::~dpxRoadRefLineTool()
 {
 }
 
-void dpxRoadTool::toolActivated()
+void dpxRoadRefLineTool::toolActivated()
 {
 	dpxTraceLineTool::toolActivated();
 }
 
-void dpxRoadTool::toolDisactivated()
+void dpxRoadRefLineTool::toolDisactivated()
 {
 	dpxTraceLineTool::toolDisactivated();
 }
 
 
-void dpxRoadTool::onKeyPress(int sKey)
+void dpxRoadRefLineTool::onKeyPress(int sKey)
 {
-	ccLog::Warning("success! oh yare!!!");
+	ccLog::Warning("success! oh yare!!!" + QString::number(sKey));
 }
 
 //鼠标左键事件
-void dpxRoadTool::onMouseLeftClick(int x,int y)
+void dpxRoadRefLineTool::onMouseLeftClick(int x,int y)
 {
 	m_VNodeInfo.clear();
 	m_nToolState=0;//采集状态

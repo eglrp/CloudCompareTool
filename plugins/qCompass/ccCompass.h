@@ -43,6 +43,9 @@ class dpxPlaneTool;
 class dpxSphereTool;
 class dpxNodeEditTool;
 class dpxSelectTool;
+class dpxRoadRefLineTool;
+class dpxRoadLineTool;
+class dpxRoadStopLineTool;
 
 class ccCompass : public QObject, public ccStdPluginInterface, public ccPickingListener
 {
@@ -110,6 +113,9 @@ protected slots:
 	void setSphereTool();//球采集工具
 	void setNodeEditTool();//节点编辑工具
 	void setSelectTool();//选择工具
+	void setRoadRefLineTool();//道路参照线工具
+	void setRoadLineTool();//道路线工具
+	void setRoadStopLineTool();//道路停止线工具
 
 	//extra tools
 	void addPinchNode(); //activates the pinch node tool
@@ -191,12 +197,16 @@ protected:
 	ccTopologyTool* m_topologyTool;
 	ccNoteTool* m_noteTool;
 	ccPinchNodeTool* m_pinchNodeTool;
-	dpxTraceLineTool * m_traceLineTool;
-	dpxCylinderTool* m_dpxCylinderTool;
-	dpxPlaneTool* m_dpxPlaneTool;
-	dpxSphereTool* m_dpxSphereTool;
+	dpxTraceLineTool * m_traceLineTool; //折线工具
+	dpxCylinderTool* m_dpxCylinderTool; //圆柱
+	dpxPlaneTool* m_dpxPlaneTool;	//四边形工具
+	dpxSphereTool* m_dpxSphereTool; //球形工具
 	dpxNodeEditTool* m_dpxNodeEditTool;//节点编辑工具
-	dpxSelectTool* m_dpxSelectTool;
+	dpxSelectTool* m_dpxSelectTool; //选择工具
+
+	dpxRoadRefLineTool* m_dpxRoadRefLineTool; //道路参考线工具
+	dpxRoadLineTool* m_dpxRoadLineTool; //道路线工具
+	dpxRoadStopLineTool* m_dpxRoadStopLineTool;//道路停止线工具
 
 	//currently selected/active geoObject
 	ccGeoObject* m_geoObject = nullptr; //the GeoObject currently being written to

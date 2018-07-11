@@ -148,6 +148,9 @@
     <file>images/Map.png</file>
     <file>images/Road.png</file>
     <file>images/select.png</file>
+    <file>images/roadRefLine.png</file>
+    <file>images/roadLine.png</file>
+    <file>images/roadStopLine.png</file>
   </qresource>
   <qresource prefix="/CC/Icons">
     <file>images/icon/cc_viewer_icon_16.png</file>

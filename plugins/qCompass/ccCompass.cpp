@@ -34,12 +34,16 @@
 #include "ccTopologyTool.h"
 #include "ccTraceTool.h"
 #include "dpxTraceLineTool.h"//折线工具
-#include "dpxRoadTool.h"//折线工具
 #include "dpxCylinderTool.h"//圆柱工具
 #include "dpxPlaneTool.h"//平面工具
 #include "dpxSphereTool.h"//球采集工具
 #include "dpxNodeEditTool.h"//节点编辑工具
 #include "dpxSelectTool.h" //选择工具
+
+#include "dpxRoadRefLineTool.h" //道路参考线
+#include "dpxRoadLineTool.h"  //道路线工具
+#include "dpxRoadStopLineTool.h"//道路停止线
+
 
 //initialize default static pars
 bool ccCompass::drawName = false;
@@ -58,7 +62,7 @@ ccCompass::ccCompass(QObject* parent) :
 	//initialize all tools
 	m_fitPlaneTool = new ccFitPlaneTool();
 	m_traceTool = new ccTraceTool();
-	m_traceLineTool = new dpxRoadTool();  //new dpxTraceLineTool();//新拓展折现工具
+	m_traceLineTool = new dpxTraceLineTool;  //new dpxTraceLineTool();//新拓展折现工具
 	m_lineationTool = new ccLineationTool();
 	m_thicknessTool = new ccThicknessTool();
 	m_topologyTool = new ccTopologyTool();
@@ -69,6 +73,10 @@ ccCompass::ccCompass(QObject* parent) :
 	m_dpxSphereTool = new dpxSphereTool();//球采集工具
 	m_dpxNodeEditTool = new dpxNodeEditTool();//节点编辑工具
 	m_dpxSelectTool = new dpxSelectTool(); //选择工具
+
+	m_dpxRoadRefLineTool = new dpxRoadRefLineTool(); //道路参考线工具
+	m_dpxRoadLineTool = new dpxRoadLineTool(); //道路线工具
+	m_dpxRoadStopLineTool = new dpxRoadStopLineTool();//道路停止线工具
 }
 
 //deconstructor
@@ -88,6 +96,9 @@ ccCompass::~ccCompass()
 	delete m_dpxSphereTool;
 	delete m_dpxNodeEditTool;
 	delete m_dpxSelectTool;
+	delete m_dpxRoadRefLineTool;
+	delete m_dpxRoadLineTool;
+	delete m_dpxRoadStopLineTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -227,6 +238,10 @@ void ccCompass::doAction()
 	m_dpxNodeEditTool->initializeTool(m_app);
 	m_dpxSelectTool->initializeTool(m_app);
 
+	m_dpxRoadRefLineTool->initializeTool(m_app);
+	m_dpxRoadLineTool->initializeTool(m_app);
+	m_dpxRoadStopLineTool->initializeTool(m_app);
+
 	//check valid window
 	if (!m_app->getActiveGLWindow())
 	{
@@ -262,6 +277,9 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->sphereToolButton, SIGNAL(clicked()), this, SLOT(setSphereTool()));
 		ccCompassDlg::connect(m_dlg->NodeEditButton, SIGNAL(clicked()), this, SLOT(setNodeEditTool()));
 		ccCompassDlg::connect(m_dlg->SelectButton, SIGNAL(clicked()), this, SLOT(setSelectTool()));
+		ccCompassDlg::connect(m_dlg->RoadRefLineButton, SIGNAL(clicked()), this, SLOT(setRoadRefLineTool()));
+		ccCompassDlg::connect(m_dlg->RoadLineButton, SIGNAL(clicked()), this, SLOT(setRoadLineTool()));
+		ccCompassDlg::connect(m_dlg->RoadStopLineButton, SIGNAL(clicked()), this, SLOT(setRoadStopLineTool()));
 
 
 		//extra tools
@@ -289,7 +307,7 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->m_showNormals, SIGNAL(toggled(bool)), this, SLOT(toggleNormals(bool)));
 		ccCompassDlg::connect(m_dlg->m_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedTraces()));
 
-		//传出
+		//传出 by duans
 		ccCompassDlg::connect(m_dlg, SIGNAL(sigKeyPress(int)), this, SLOT( slotKeyPress(int)));
 	}
 
@@ -1051,6 +1069,52 @@ void ccCompass::setSelectTool()
 	m_dlg->acceptButton->setEnabled(true);
 	m_app->getActiveGLWindow()->redraw(true, false);
 }
+
+void ccCompass::setRoadRefLineTool()
+{
+	//cleanup
+	cleanupBeforeToolChange();
+	//activate trace tool
+	m_activeTool = m_dpxRoadRefLineTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxRoadRefLineTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+void ccCompass::setRoadLineTool()
+{
+	cleanupBeforeToolChange();
+	//activate trace tool
+	m_activeTool = m_dpxRoadLineTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxRoadLineTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+
+void ccCompass::setRoadStopLineTool()
+{
+	cleanupBeforeToolChange();
+	//activate trace tool
+	m_activeTool = m_dpxRoadStopLineTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(true);
+	m_dlg->undoButton->setEnabled( m_dpxRoadStopLineTool->canUndo() );
+	m_dlg->acceptButton->setEnabled(true);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
+
 
 //activate the paint tool
 void ccCompass::setPick()

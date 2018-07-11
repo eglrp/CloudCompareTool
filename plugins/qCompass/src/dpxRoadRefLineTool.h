@@ -1,7 +1,7 @@
 
 
-#ifndef _DPX_HDMAP_ROAD_TOOL_HEADER_
-#define _DPX_HDMAP_ROAD_TOOL_HEADER_
+#ifndef _DPX_HDMAP_ROAD_REF_LINE_TOOL_HEADER_
+#define _DPX_HDMAP_ROAD_REF_LINE_TOOL_HEADER_
 
 //qCC_db
 #include <ccHObject.h>
@@ -17,11 +17,11 @@ class ccPickingHub;
 /*
 Tool used to digitise traces
 */
-class dpxRoadTool : public dpxTraceLineTool
+class dpxRoadRefLineTool : public dpxTraceLineTool
 {
 public:
-	dpxRoadTool();
-	virtual ~dpxRoadTool();
+	dpxRoadRefLineTool();
+	virtual ~dpxRoadRefLineTool();
 public:
 	virtual void toolActivated();
 	virtual void toolDisactivated();

@@ -195,6 +195,48 @@
     </widget>
    </item>
    <item>
+    <widget class="QToolButton" name="RoadRefLineButton">
+     <property name="toolTip">
+      <string>RefLine</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../qCC/icones.qrc">
+       <normaloff>:/CC/images/roadRefLine.png</normaloff>:/CC/images/roadRefLine.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="RoadLineButton">
+     <property name="toolTip">
+      <string>RoadLine</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../qCC/icones.qrc">
+       <normaloff>:/CC/images/roadLine.png</normaloff>:/CC/images/roadLine.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="RoadStopLineButton">
+     <property name="toolTip">
+      <string>StopLine</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../qCC/icones.qrc">
+       <normaloff>:/CC/images/roadStopLine.png</normaloff>:/CC/images/roadStopLine.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="CylinderButton">
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Cylinder&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
