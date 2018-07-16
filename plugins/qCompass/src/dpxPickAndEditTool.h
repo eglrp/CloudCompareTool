@@ -56,7 +56,10 @@ protected:
 	//by duans 采集的线都挂在该节点上，使得所有线放一个节点上
 	ccHObject* m_pPickRoot;
 
-	int m_nToolState;//tool state:pick  edit
+	/*m_nToolState:记录工具状态的int变量
+	//brif:0:代表采集；1:代表编辑 2:拷贝 状态
+	*/
+	int m_nToolState;//
 };
 
 #endif

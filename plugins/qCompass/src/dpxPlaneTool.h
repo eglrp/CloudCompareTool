@@ -32,6 +32,7 @@ public:
 	void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y=0) override;
 
 	virtual void onMouseReleaseEvent(int x,int y);
+	virtual void onMouseRightClick(int x,int y);
 };
 
 #endif

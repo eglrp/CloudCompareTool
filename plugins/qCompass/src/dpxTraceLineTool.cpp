@@ -36,7 +36,7 @@ void dpxTraceLineTool::toolActivated()
 
 void dpxTraceLineTool::onLeftDoubleClick(int x,int y)
 {
-	if(m_nToolState)//编辑状体
+	if(m_nToolState==1)//编辑状体
 	{
         dpxNodeEditTool::onLeftDoubleClick(x,y);//删除节点功能
 	}
@@ -44,7 +44,7 @@ void dpxTraceLineTool::onLeftDoubleClick(int x,int y)
 
 void dpxTraceLineTool::onMouseRightClick(int x,int y)
 {
-	if(m_nToolState)//编辑状体
+	if(m_nToolState==1)//编辑状体
 	{
         dpxNodeEditTool::onMouseRightClick(x,y);//添加节点功能
 	}
@@ -78,7 +78,7 @@ void dpxTraceLineTool::onMouseRightClick(int x,int y)
 
 void dpxTraceLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
-	if(m_nToolState)//编辑状体
+	if(m_nToolState==1)//编辑状体
 		return;
 
 	if (!m_window)

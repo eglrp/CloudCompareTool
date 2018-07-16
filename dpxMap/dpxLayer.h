@@ -11,22 +11,6 @@
 /*
 * dpxLayer
 */
-enum DPX_MAP_API dpxObjectType
-{
-	eOT_Unknown,	//未知
-
-	//容器结构
-	eOT_Map,		//地图
-	eOT_Layer,		//图层
-
-	//具体类型
-	eOT_Road,		//道路
-	eOT_Lane,		//小路
-	eOT_Light,		//路灯
-	eOT_Indicator,  //指示牌
-	eOT_Other   	//其它
-	//补充..
-};
 
 typedef std::vector<ccHObject*> HObjectVec;
 class  DPX_MAP_API dpxLayer
@@ -38,8 +22,8 @@ public:
 
  public:
 
-	virtual void SetType(dpxObjectType eType);
-	virtual dpxObjectType GetType();
+	virtual void SetType(dpxLayerType eType);
+	virtual dpxLayerType GetType();
 	//图层名称
 	virtual QString getLayerName();
 	virtual void setLayerName(QString sName);

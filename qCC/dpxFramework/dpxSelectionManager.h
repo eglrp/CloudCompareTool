@@ -18,9 +18,11 @@ class dpxSelectionManager : public QObject
 public:
 	static dpxSelectionManager* Instance();
 public:
-	//清空所有选择的对象
-	bool IsEmpty();
 
+	vector<ccHObject*> getSelections() { return m_vecSeltHObjs; }
+	//获取选择集大小
+	int  getSelectionSize();
+	//几何是否被选择
 	bool isInSelectSet(ccHObject* pHObject);
 	//清空所有选择的对象
 	void ClearSelection();
@@ -38,7 +40,6 @@ private:
 	ccHObject* m_pShowSelectObject;
 	//当前激活的ccGLWindow
 	ccGLWindow* m_pCurActiveWindow;
-//私有构造
 private:
 	dpxSelectionManager();
 	dpxSelectionManager(const dpxSelectionManager&){}

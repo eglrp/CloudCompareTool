@@ -30,17 +30,17 @@ ccHObject* dpxMap::getRootData()
 	return m_MapRootData;
 }
 
-void dpxMap::SetType(dpxObjectType eType)
+void dpxMap::SetType(dpxLayerType eType)
 {
-	m_MapRootData->setMetaData(DPX_TYPE_NAME,eType);//自动转换成数字
+	m_MapRootData->setMetaData(DPX_LAYER_TYPE_NAME,eType);//自动转换成数字
 }
 
-dpxObjectType dpxMap::GetType()
+dpxLayerType dpxMap::GetType()
 {
-	if(!m_MapRootData->hasMetaData(DPX_TYPE_NAME))
-		return dpxObjectType::eOT_Unknown;
+	if(!m_MapRootData->hasMetaData(DPX_LAYER_TYPE_NAME))
+		return dpxLayerType::eOT_Unknown;
 
-	return dpxObjectType(m_MapRootData->getMetaData(DPX_TYPE_NAME).toInt());//自动转换成数字
+	return dpxLayerType(m_MapRootData->getMetaData(DPX_LAYER_TYPE_NAME).toInt());//自动转换成数字
 }
 
 void dpxMap::setMapId(const QString& strId)

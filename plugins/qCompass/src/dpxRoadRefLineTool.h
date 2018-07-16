@@ -14,6 +14,7 @@ class ccPointCloud;
 class ccGLWindow;
 class ccPickingHub;
 
+
 /*
 Tool used to digitise traces
 */
@@ -23,12 +24,15 @@ public:
 	dpxRoadRefLineTool();
 	virtual ~dpxRoadRefLineTool();
 public:
-	virtual void toolActivated();
-	virtual void toolDisactivated();
+//	virtual void toolActivated();
+//	virtual void toolDisactivated();
+//
+//	//重写基类原因：摁快捷键盘时，需要切换线拷贝的功能，
+//	//点击refLine 拷贝形成车道线
+//	virtual void onMouseLeftClick(int x,int y);
 
-	//重写基类原因：摁快捷键盘时，需要切换线拷贝的功能，
-	//点击refLine 拷贝形成车道线
-	virtual void onMouseLeftClick(int x,int y);
+	//在折线采集基础上，更改线的颜色、类型属性，并加到选择集中
+	virtual void onMouseRightClick(int x,int y);
 
 	//键盘事件
 	virtual void onKeyPress(int key);

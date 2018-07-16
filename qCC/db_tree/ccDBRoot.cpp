@@ -431,7 +431,7 @@ void ccDBRoot::deleteSelectedEntities()
 		}
 
 		//HDMap图层不能被右键删除 by duans
-		if(obj->hasMetaData(DPX_TYPE_NAME))
+		if(obj->hasMetaData(DPX_LAYER_TYPE_NAME))
 			continue;
 
 		//we don't consider objects that are 'descendent' of others in the selection
@@ -555,9 +555,9 @@ QVariant ccDBRoot::data(const QModelIndex &index, int role) const
 		case CC_TYPES::HIERARCHY_OBJECT:
 
 		//by duans
-		if(item->hasMetaData(DPX_TYPE_NAME)) //图层地图容器的图标设置
+		if(item->hasMetaData(DPX_LAYER_TYPE_NAME)) //图层地图容器的图标设置
 		{
-			dpxObjectType eType = dpxObjectType(item->getMetaData(DPX_TYPE_NAME).toInt()) ;
+			dpxLayerType eType = dpxLayerType(item->getMetaData(DPX_LAYER_TYPE_NAME).toInt()) ;
 			if(eType==eOT_Map)
 			{
 				return QIcon(QStringLiteral(":/CC/images/Map.png"));

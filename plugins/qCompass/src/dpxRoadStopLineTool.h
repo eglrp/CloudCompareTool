@@ -9,10 +9,7 @@
 
 #include "dpxTraceLineTool.h"
 
-class ccPolyline;
-class ccPointCloud;
-class ccGLWindow;
-class ccPickingHub;
+//停止线需要连接两个roadLine或一个refLine和RoadLine的断点
 
 /*
 Tool used to digitise traces

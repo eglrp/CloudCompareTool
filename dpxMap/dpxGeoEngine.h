@@ -52,7 +52,7 @@ signals:
 	void sigFeatureAttributeChanged(const QString& strLayerID, int nFeatureID);
 
 protected:
-	dpxLayer* getLyrFormType(dpxObjectType eType);
+	dpxLayer* getLyrFormType(dpxLayerType eType);
 //私有构造
 private:
 	dpxGeoEngine();

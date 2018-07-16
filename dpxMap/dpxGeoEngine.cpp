@@ -12,7 +12,7 @@ dpxGeoEngine::dpxGeoEngine()
 	m_pMap = nullptr;
 }
 
-dpxLayer* dpxGeoEngine::getLyrFormType(dpxObjectType eType)
+dpxLayer* dpxGeoEngine::getLyrFormType(dpxLayerType eType)
 {
 	if(m_pMap == nullptr)
 		return nullptr;

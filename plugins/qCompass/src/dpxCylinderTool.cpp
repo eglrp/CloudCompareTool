@@ -151,6 +151,26 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 	m_window->redraw(false, false);
 }
 
+//右键可取消两个点时的状态
+void dpxCylinderTool::onMouseRightClick(int x,int y)
+{
+	if(m_nToolState)//编辑状体
+		return;
+	//if the 3D polyline doesn't exist yet, we create it
+	if (!m_poly3D || !m_poly3DVertices)
+		return;
+
+	int nSize = m_poly3DVertices->size();
+	if(nSize<3)
+	{
+		m_pPickRoot->removeChild(m_poly3D);
+		m_polyTip->setEnabled(false);
+		m_poly3D = 0;
+		m_poly3DVertices = 0;
+		m_nToolState=1;//采集状态结束，默认编辑状态
+	}
+}
+
 void dpxCylinderTool::onMouseReleaseEvent(int x,int y)
 {
 	if(m_window==nullptr)

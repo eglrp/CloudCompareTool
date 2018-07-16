@@ -34,6 +34,8 @@ typedef unsigned char ColorCompType;
 //! Colors namespace
 namespace ccColor
 {
+	template <class Type> class RgbaTpl;
+
 	//! Max value of a single color component (default type)
 	const ColorCompType MAX = 255;
 
@@ -41,7 +43,7 @@ namespace ccColor
 	template <typename Type> class RgbTpl
 	{
 	public:
-	
+
 		//! 3-tuple as a union
 		union
 		{
@@ -63,8 +65,14 @@ namespace ccColor
 		//! Constructor from an array of 3 values
 		explicit inline RgbTpl(const Type col[3]) : r(col[0]), g(col[1]), b(col[2]) {}
 
+		//rgb转rgba
+		inline operator RgbaTpl<Type>() const { return RgbaTpl<Type>(rgb,MAX); }
+
 		//! Comparison operator
 		inline bool operator != (const RgbTpl<Type>& t) const { return (r != t.r || g != t.g || b != t.b); }
+
+		//! Comparison operator
+		inline bool operator == (const RgbTpl<Type>& t) const { return (r == t.r && g == t.g && b == t.b); }
 	};
 
 	//! 3 components, float type
@@ -78,7 +86,7 @@ namespace ccColor
 	template <class Type> class RgbaTpl
 	{
 	public:
-	
+
 		// 4-tuple values as a union
 		union
 		{
@@ -101,7 +109,7 @@ namespace ccColor
 		explicit inline RgbaTpl(const Type col[4]) : r(col[0]), g(col[1]), b(col[2]), a(col[3]) {}
 		//! RgbaTpl from an array of 3 values and a transparency value
 		explicit inline RgbaTpl(const Type col[3], Type alpha) : r(col[0]), g(col[1]), b(col[2]), a(alpha) {}
-	
+
 		//! Copy constructor
 		inline RgbaTpl(const RgbTpl<Type>& c, Type alpha) : r(c.r), g(c.g), b(c.b), a(alpha) {}
 
@@ -112,6 +120,9 @@ namespace ccColor
 
 		//! Comparison operator
 		inline bool operator != (const RgbaTpl<Type>& t) const { return (r != t.r || g != t.g || b != t.b || a != t.a); }
+
+		//! Comparison operator
+		inline bool operator == (const RgbaTpl<Type>& t) const { return (r == t.r && g == t.g && b == t.b && a == t.a); }
 	};
 
 	//! 4 components, float type
@@ -157,7 +168,7 @@ namespace ccColor
 	class Generator
 	{
 	public:
-		
+
 		//! Generates a random color
 		static Rgb Random(bool lightOnly = true)
 		{

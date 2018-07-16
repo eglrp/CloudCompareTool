@@ -5,7 +5,8 @@
 
 #include "dpxRoadRefLineTool.h"
 #include "dpxGeoEngine.h"
-
+#include "dpxMapDefine.h"
+#include "../../qCC/dpxFramework/dpxSelectionManager.h"
 dpxRoadRefLineTool::dpxRoadRefLineTool()
 {
 }
@@ -14,43 +15,52 @@ dpxRoadRefLineTool::~dpxRoadRefLineTool()
 {
 }
 
-void dpxRoadRefLineTool::toolActivated()
-{
-	dpxTraceLineTool::toolActivated();
-}
-
-void dpxRoadRefLineTool::toolDisactivated()
-{
-	dpxTraceLineTool::toolDisactivated();
-}
-
-
 void dpxRoadRefLineTool::onKeyPress(int sKey)
 {
-	ccLog::Warning("success! oh yare!!!" + QString::number(sKey));
+	return;
+	//Q键清除选择集
+	if(sKey == Qt::Key_Q)
+	{
+		dpxSelectionManager::Instance()->ClearSelection();
+		dpxSelectionManager::Instance()->redrawSelectionSet();
+	}
 }
 
-//鼠标左键事件
-void dpxRoadRefLineTool::onMouseLeftClick(int x,int y)
-{
-	m_VNodeInfo.clear();
-	m_nToolState=0;//采集状态
-	//获取最近的线与点
-	dpxNearestLine nearestInfo;
-	bool bFind = getNearestLineInfo(x,y,nearestInfo,true);
-	if(!bFind)
-		return;
 
-	if(nearestInfo.m_pLine==nullptr)
-		return;
-	//结点判断
-	ccPolyline* pLine = nearestInfo.m_pLine;
-	double dDistance = nearestInfo.m_dDistance;
-	int nSegNum = nearestInfo.m_nSegNum;
-	if(dDistance<SNAP_TOL_VALUE)
+void dpxRoadRefLineTool::onMouseRightClick(int x,int y)
+{
+	if(m_nToolState)//编辑状体
 	{
-		m_VNodeInfo.m_pLine = pLine;
-		m_VNodeInfo.m_nNodeIndex = nSegNum;
-		m_nToolState = 1;//若点击的时节点，则为编辑状态
+        dpxNodeEditTool::onMouseRightClick(x,y);//添加节点功能
+	}
+	else//采集状态
+	{
+		if (!m_poly3D || (QApplication::keyboardModifiers() & Qt::ControlModifier)) //CTRL + right click = panning
+			return;
+
+		unsigned vertCount = m_poly3D->size();
+		if (vertCount < 2)
+		{
+			if (m_polyTip)
+				m_polyTip->setEnabled(false);
+
+			m_poly3D = 0;
+			m_poly3DVertices = 0;
+		}
+		else
+		{
+			ccColor::Rgb refLineColor REF_LINE_COLOR; //宏定义颜色
+			m_poly3D->setTempColor(refLineColor);
+			m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadRefLine); //记录要素类型为refLine
+
+			dpxSelectionManager::Instance()->AddObject2Selection(m_poly3D);
+			dpxSelectionManager::Instance()->redrawSelectionSet();
+			m_poly3D = 0;
+			m_poly3DVertices = 0;
+			m_nToolState = 1;//右键停止采集，转为编辑状态
+		}
+		m_polyTip->setEnabled(false);
+		m_window->removeFromOwnDB(m_pPickRoot);
+		m_app->addToDB(m_pPickRoot);
 	}
 }

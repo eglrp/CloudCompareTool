@@ -22,17 +22,17 @@ dpxLayer::~dpxLayer()
 {
 }
 
-void dpxLayer::SetType(dpxObjectType eType)
+void dpxLayer::SetType(dpxLayerType eType)
 {
-	m_lyrRootData->setMetaData(DPX_TYPE_NAME,eType);//自动转换成数字
+	m_lyrRootData->setMetaData(DPX_LAYER_TYPE_NAME,eType);//自动转换成数字
 }
 
-dpxObjectType dpxLayer::GetType()
+dpxLayerType dpxLayer::GetType()
 {
-	if(!m_lyrRootData->hasMetaData(DPX_TYPE_NAME))
-		return dpxObjectType::eOT_Unknown;
+	if(!m_lyrRootData->hasMetaData(DPX_LAYER_TYPE_NAME))
+		return dpxLayerType::eOT_Unknown;
 
-	return dpxObjectType(m_lyrRootData->getMetaData(DPX_TYPE_NAME).toInt());//自动转换成数字
+	return dpxLayerType(m_lyrRootData->getMetaData(DPX_LAYER_TYPE_NAME).toInt());//自动转换成数字
 }
 
 QString dpxLayer::getLayerName()

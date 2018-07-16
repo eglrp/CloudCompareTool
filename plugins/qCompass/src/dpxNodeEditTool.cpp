@@ -32,7 +32,6 @@ dpxNodeEditTool::dpxNodeEditTool()
 	m_polyTip->setWidth(1); //'1' is equivalent to the default line size
 	m_polyTip->addChild(m_polyTipVertices);
 
-	m_nToolState =1;//编辑状态
 	//捕捉到节点
 	m_VNodeInfo.clear();
 }
