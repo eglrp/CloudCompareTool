@@ -20,15 +20,16 @@ public:
 	dpxRoadStopLineTool();
 	virtual ~dpxRoadStopLineTool();
 public:
-	virtual void toolActivated();
-	virtual void toolDisactivated();
-
 	//重写基类原因：摁快捷键盘时，需要切换线拷贝的功能，
 	//点击refLine 拷贝形成车道线
 	virtual void onMouseLeftClick(int x,int y);
 
-	//键盘事件
-	virtual void onKeyPress(int key);
+	//只支持单击节点生成停止线
+	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y=0);
+
+	virtual void onMouseMove(int x, int y, Qt::MouseButtons buttons);
+private:
+	bool  m_bHasSelectOne;
 };
 
 #endif

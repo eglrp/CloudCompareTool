@@ -45,7 +45,7 @@ void dpxRoadLineTool::toolActivated()
 
 void dpxRoadLineTool::onKeyPress(int sKey)
 {
-    ccLog::Warning("dpxRoadLineTool! oh yare!!!" + QString::number(sKey));
+    //ccLog::Warning("dpxRoadLineTool! oh yare!!!" + QString::number(sKey));
 }
 
 void dpxRoadLineTool::onMouseRightClick(int x,int y)
