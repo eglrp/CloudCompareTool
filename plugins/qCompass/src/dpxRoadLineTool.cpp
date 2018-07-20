@@ -166,6 +166,7 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		ccColor::Rgb roadLineColor ROAD_LINE_COLOR; //宏定义颜色
 		m_poly3D->setTempColor(roadLineColor);
 		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadLine); //记录要素类型为refLine
+		m_poly3D->setName("roadLine");
 
         m_pPickRoot->addChild(m_poly3D);
     }

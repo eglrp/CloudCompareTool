@@ -45,7 +45,7 @@ bool dpxEditTool::getCurrentRay(ccGLCameraParameters camera,int x,int y,CCVector
 	return true;
 }
 
-bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo,bool bNodeSnap/*=false*/)
+bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo,bool bNodeSnap/*=false*/,bool (*isObjValid)(ccHObject*)/*=nullptr*/)
 {
 	int pickWidth_pix = 1;//默认值
 	if (m_window==nullptr)
@@ -75,6 +75,10 @@ bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo,bo
 		ccHObject* pObj =  vecHObjs[i];
 		if(pObj==nullptr)
 			continue;
+		//by duans 补充
+		if(isObjValid!=nullptr && !isObjValid(pObj))
+			continue;
+
 		ccBBox box = pObj->getOwnBB();
 		//vecHObjs[i]->setTempColor(ccColor::green);
 		if (!AABB<PointCoordinateType>(box.minCorner()-margin,box.maxCorner() + margin).intersects(ray))

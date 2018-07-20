@@ -14,14 +14,29 @@ dpxRoadStopLineTool::dpxRoadStopLineTool()
 dpxRoadStopLineTool::~dpxRoadStopLineTool()
 {
 }
+
+bool isObjValid(ccHObject* pObj)
+{
+	if(pObj==nullptr)
+		return false;
+
+    if(!pObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
+        return false;
+
+	dpxObjectType eType = dpxObjectType(pObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
+    if(eType != eObj_RoadRefLine && eType != eObj_RoadLine)
+        return false;
+
+	return true;
+}
+
 //鼠标左键事件
 void dpxRoadStopLineTool::onMouseLeftClick(int x,int y)
 {
-	m_VNodeInfo.clear();
     m_nToolState=0;//采集状态
     //获取最近的线与点
     dpxNearestLine nearestInfo;
-    bool bFind = getNearestLineInfo(x,y,nearestInfo,true);
+    bool bFind = getNearestLineInfo(x,y,nearestInfo,true,isObjValid); //点击到线必须是 RefLine  RoadLine  不会选中刚采集到stopLine
     if(!bFind)
         return;
 
@@ -29,24 +44,12 @@ void dpxRoadStopLineTool::onMouseLeftClick(int x,int y)
     if(pLine==nullptr)
         return;
 
-    if(!pLine->hasMetaData(DPX_OBJECT_TYPE_NAME))
-        return;
-
-    dpxObjectType eType = dpxObjectType(pLine->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
-    if(eType != eObj_RoadRefLine && eType != eObj_RoadLine)
-        return;
-
     //结点判断
     double dDistance = nearestInfo.m_dDistance;
-    int nSegNum = nearestInfo.m_nSegNum;
-    if(dDistance<SNAP_TOL_VALUE)
-    {
-        m_VNodeInfo.m_pLine = pLine;
-        m_VNodeInfo.m_nNodeIndex = nSegNum;
-        m_pPickRoot = pLine;
-    }
+    if(dDistance>SNAP_TOL_VALUE)
+		return ;
 
-	CCVector3 Pt = *(m_VNodeInfo.m_pLine->getPoint(m_VNodeInfo.m_nNodeIndex));
+	CCVector3 Pt = nearestInfo.m_nearestPt;
 
 	if(!m_bHasSelectOne) //添加第一个点
 	{
@@ -55,14 +58,19 @@ void dpxRoadStopLineTool::onMouseLeftClick(int x,int y)
 		m_poly3DVertices->setDisplay(m_window);
 
 		m_poly3D = new ccPolyline(m_poly3DVertices);
-		m_poly3D->set2DMode(false);
 		m_poly3D->addChild(m_poly3DVertices);
-		m_poly3D->setWidth(1);
+		m_poly3D->setName("stopLine");
+		m_poly3D->setWidth(2);
+		ccColor::Rgb stopLineColor STOP_LINE_COLOR; //宏定义颜色
+		m_poly3D->setTempColor(stopLineColor);
+		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadStopLine); //记录要素类型为StopLine
 
+
+		m_pPickRoot = pLine; //点击到第一条线作为reodLine stopLine挂其下面
 		m_pPickRoot->addChild(m_poly3D);
 		//try to add one more point
-		if (!m_poly3DVertices->reserve(m_poly3DVertices->size() + 1)
-			||!m_poly3D->reserve(m_poly3DVertices->size() + 1))
+		if ( !m_poly3DVertices->reserve(m_poly3DVertices->size() + 1)
+			|| !m_poly3D->reserve(m_poly3DVertices->size() + 1))
 			return;
 
 		m_poly3DVertices->addPoint(Pt);
@@ -84,6 +92,9 @@ void dpxRoadStopLineTool::onMouseLeftClick(int x,int y)
 	}
     else if(m_bHasSelectOne)//添加第二个点
 	{
+		if(pLine==m_pPickRoot) //若两次点击到为同一条线，则点击无效
+			return;
+
 		if (!m_poly3DVertices->reserve(m_poly3DVertices->size() + 1)
 			||!m_poly3D->reserve(m_poly3DVertices->size() + 1))
 			return;

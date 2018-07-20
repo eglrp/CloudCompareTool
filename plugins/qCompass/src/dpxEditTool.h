@@ -43,7 +43,9 @@ public:
 	//rayOrigin:射线的起点，世界坐标系
 	bool getCurrentRay(ccGLCameraParameters camera,int x,int y,CCVector3& rayAxis,CCVector3& rayOrigin);
 
-	bool getNearestLineInfo(int x,int y,dpxNearestLine& nearestInfo,bool bNodeSnap=false);
+	//bNodeSnap 是否只选择节点   isValid函数指针，
+	bool getNearestLineInfo(int x,int y,dpxNearestLine& nearestInfo,bool bNodeSnap=false,bool (*isObjValid)(ccHObject*)=nullptr);
+
 };
 
 #endif

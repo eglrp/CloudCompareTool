@@ -52,6 +52,7 @@ void dpxRoadRefLineTool::onMouseRightClick(int x,int y)
 			ccColor::Rgb refLineColor REF_LINE_COLOR; //宏定义颜色
 			m_poly3D->setTempColor(refLineColor);
 			m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadRefLine); //记录要素类型为refLine
+			m_poly3D->setName("refLine");
 
 			dpxSelectionManager::Instance()->AddObject2Selection(m_poly3D);
 			dpxSelectionManager::Instance()->redrawSelectionSet();
