@@ -47,7 +47,6 @@ public:
 	virtual void onMouseRightClick(int x,int y) override;
 	virtual void onLeftDoubleClick(int x,int y);
 
-	virtual void onMouseMove(int x, int y, Qt::MouseButtons buttons);
 
 	//! Oversamples the active 3D polyline
 	ccPolyline* polylineOverSampling(unsigned steps) const;

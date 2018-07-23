@@ -15,6 +15,8 @@ dpxPlaneTool::dpxPlaneTool()
 	: dpxPickAndEditTool()
 {
 	m_pPickRoot = new ccHObject("Plane");
+	m_pAssistWin = nullptr;
+	m_nCreateType = 0; //0代表拟合到方式1：代表采集到方式
 }
 
 
@@ -22,17 +24,80 @@ dpxPlaneTool::~dpxPlaneTool()
 {
 	if (m_poly3D)
 		delete m_poly3D;
+
+	if(m_pAssistWin)
+		delete m_pAssistWin;
+
+	m_pAssistWin = nullptr;
 }
 
 //called when the tool is set to active (for initialization)
 void dpxPlaneTool::toolActivated()
 {
+	if(m_pAssistWin==nullptr)
+		m_pAssistWin = new dpxPlaneAssistDlg(this);
+	if(!m_pAssistWin->isVisible())
+		m_pAssistWin->show();
+
 	//若添加了地图，采集到地图中去
 	dpxLayer* pIndicatorLyr = dpxGeoEngine::Instance()->getIndicatorLry();
 	if(pIndicatorLyr!=nullptr && pIndicatorLyr->getRootData()!=nullptr)
 		m_pPickRoot = pIndicatorLyr->getRootData();
 
+	QObject::connect(m_pAssistWin, SIGNAL(sigTypeChange(int)), this, SLOT(slotChangeType(int)));
+
 	dpxPickAndEditTool::toolActivated();
+}
+
+
+void dpxPlaneTool::toolDisactivated()
+{
+	if(m_pAssistWin != nullptr && m_pAssistWin->isVisible())
+		m_pAssistWin->hide();
+
+	QObject::disconnect(m_pAssistWin, SIGNAL(sigTypeChange(int)), this, SLOT(slotChangeType(int)));
+
+	dpxPickAndEditTool::toolDisactivated();
+}
+
+void dpxPlaneTool::slotChangeType(int nType)
+{
+	m_nCreateType = nType;
+}
+
+
+void dpxPlaneTool::PtFitPlane()
+{
+	//Fit plane!
+	double rms = 0.0; //output for rms
+	ccFitPlane* pPlane = ccFitPlane::Fit(m_poly3DVertices, &rms);
+	QString strRelateID = QUuid::createUuid().toString();
+	if (pPlane) //valid fit
+	{
+		//make plane to add to display
+		pPlane->setVisible(true);
+		pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
+		pPlane->setDisplay(m_window);
+		pPlane->setMetaData(DPX_RELATED_UID,strRelateID);
+		QImage* pImage = new QImage(":/CC/plugin/qCompass/images/RedGreen.png");
+		if(pImage)
+		{
+			pPlane->setAsTexture(*pImage);
+		}
+
+		CCVector3 vNormal = pPlane->getNormal();
+		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
+		m_poly3D->setMetaData(DPX_NORMAL,strNormal);//法向量
+		m_poly3D->setMetaData(DPX_RELATED_UID,strRelateID);//关联的ID
+		m_pPickRoot->addChild(pPlane);
+	}
+
+	m_window->removeFromOwnDB(m_pPickRoot);
+	m_app->addToDB(m_pPickRoot);
+	m_polyTip->setEnabled(false);
+	m_poly3D = 0;
+	m_poly3DVertices = 0;
+	m_nToolState=1;//采集状态结束，默认编辑状态
 }
 
 //右键可取消两个点时的状态
@@ -53,6 +118,12 @@ void dpxPlaneTool::onMouseRightClick(int x,int y)
 		m_poly3DVertices = 0;
 		m_nToolState=1;//采集状态结束，默认编辑状态
 	}
+
+	if(m_nCreateType==0)//多点拟合
+	{
+		PtFitPlane(); //采集多个点直接拟合
+	}
+
 }
 
 void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
@@ -191,12 +262,65 @@ void dpxPlaneTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPoint
 	if(m_nToolState)//编辑状体
 		return;
 
-	if (!m_window)
+	if(m_nCreateType==0)
 	{
-		assert(false);
+		PickMutilPts(P,x,y);
+	}
+	else if(m_nCreateType==1)
+	{
+		ThreePtPick(P,x,y);
+	}
+
+	m_window->redraw(false, false);
+}
+
+//采集多个点 最后拟合平面
+void  dpxPlaneTool::PickMutilPts(const CCVector3& P ,int x,int y)
+{
+//if the 3D polyline doesn't exist yet, we create it
+	if (!m_poly3D || !m_poly3DVertices)
+	{
+		m_poly3DVertices = new ccPointCloud("Vertices");
+		m_poly3DVertices->setEnabled(false);
+		m_poly3DVertices->setDisplay(m_window);
+
+		m_poly3D = new ccPolyline(m_poly3DVertices);
+		m_poly3D->setTempColor(ccColor::green);
+		m_poly3D->set2DMode(false);
+		m_poly3D->addChild(m_poly3DVertices);
+		m_poly3D->setWidth(1);
+
+		m_pPickRoot->addChild(m_poly3D);
+	}
+
+	//try to add one more point
+	if (	!m_poly3DVertices->reserve(m_poly3DVertices->size() + 1)
+		||	!m_poly3D->reserve(m_poly3DVertices->size() + 1))
+	{
+		ccLog::Error("Not enough memory");
 		return;
 	}
 
+
+	m_poly3DVertices->addPoint(P);
+	m_poly3D->addPointIndex(m_poly3DVertices->size() - 1);
+
+	//we replace the first point of the tip by this new point
+	{
+		QPointF pos2D = m_window->toCenteredGLCoordinates(x, y);
+		CCVector3 P2D(	static_cast<PointCoordinateType>(pos2D.x()),
+						static_cast<PointCoordinateType>(pos2D.y()),
+						0);
+
+		CCVector3* firstTipPoint = const_cast<CCVector3*>(m_polyTipVertices->getPointPersistentPtr(0));
+		*firstTipPoint = P2D;
+		m_polyTip->setEnabled(false); //don't need to display it for now
+	}
+}
+
+//采集三个点 三点拟合平面
+void  dpxPlaneTool::ThreePtPick(const CCVector3& P ,int x,int y)
+{
 	//if the 3D polyline doesn't exist yet, we create it
 	if (!m_poly3D || !m_poly3DVertices)
 	{
@@ -210,12 +334,11 @@ void dpxPlaneTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPoint
 		m_poly3D->addChild(m_poly3DVertices);
 		m_poly3D->setWidth(1);
 
-		//insertPoint->addChild(m_poly3D);
 		m_pPickRoot->addChild(m_poly3D);
 	}
 
 	int nSize = m_poly3DVertices->size();
-	if(nSize==0||nSize==1)//两点形成圆柱的轴线
+	if(nSize==0||nSize==1)
 	{
 		//try to add one more point
 		if (!m_poly3DVertices->reserve(m_poly3DVertices->size() + 1)
@@ -263,37 +386,6 @@ void dpxPlaneTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPoint
 
 		m_poly3D->addPointIndex(0,4);
 
-		//Fit plane!
-		double rms = 0.0; //output for rms
-		ccFitPlane* pPlane = ccFitPlane::Fit(m_poly3DVertices, &rms);
-		QString strRelateID = QUuid::createUuid().toString();
-		if (pPlane) //valid fit
-		{
-			//make plane to add to display
-			pPlane->setVisible(true);
-			pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
-			pPlane->setDisplay(m_window);
-			pPlane->setMetaData(DPX_RELATED_UID,strRelateID);
-			QImage* pImage = new QImage(":/CC/plugin/qCompass/images/RedGreen.png");
-			if(pImage)
-			{
-				pPlane->setAsTexture(*pImage);
-			}
-
-			CCVector3 vNormal = pPlane->getNormal();
-			QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
-			m_poly3D->setMetaData(DPX_NORMAL,strNormal);//法向量
-			m_poly3D->setMetaData(DPX_RELATED_UID,strRelateID);//关联的ID
-			m_pPickRoot->addChild(pPlane);
-		}
-
-		m_window->removeFromOwnDB(m_pPickRoot);
-		m_app->addToDB(m_pPickRoot);
-		m_polyTip->setEnabled(false);
-		m_poly3D = 0;
-		m_poly3DVertices = 0;
-		m_nToolState=1;//采集状态结束，默认编辑状态
+		PtFitPlane(); //采集完三个点直接拟合
 	}
-
-	m_window->redraw(false, false);
 }

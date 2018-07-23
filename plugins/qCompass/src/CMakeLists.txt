@@ -36,6 +36,8 @@ set( CC_PLUGIN_CUSTOM_HEADER_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadRefLineTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadLineTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadStopLineTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolAssistDlg.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneAssistDlg.h
 	PARENT_SCOPE
 )
 
@@ -74,5 +76,7 @@ set( CC_PLUGIN_CUSTOM_SOURCE_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadRefLineTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadLineTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadStopLineTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolAssistDlg.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneAssistDlg.cpp
 	PARENT_SCOPE
 )

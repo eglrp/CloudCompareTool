@@ -69,10 +69,10 @@ void dpxPickAndEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 
 	if(m_nToolState==0)//采集状态
 	{
-		if (!m_poly3DVertices || m_poly3DVertices->size() == 0 || m_poly3DVertices->size() >2)
+		if (!m_poly3DVertices || m_poly3DVertices->size() == 0 /*|| m_poly3DVertices->size() >2*/)
 			return;
 
-		assert(m_polyTip && m_polyTipVertices && m_polyTipVertices->size() == 3);
+		assert(m_polyTip && m_polyTipVertices /*&& m_polyTipVertices->size() == 3*/);
 
 		//we replace the last point by the new one
 		{

@@ -27,6 +27,7 @@ Tool used to digitise traces
 */
 class dpxNodeEditTool : public dpxEditTool
 {
+
 public:
 	dpxNodeEditTool();
 	virtual ~dpxNodeEditTool();

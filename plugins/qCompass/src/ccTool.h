@@ -18,6 +18,8 @@
 #ifndef CC_TOOL_HEADER
 #define CC_TOOL_HEADER
 
+#include <QObject>
+
 #include <ccHObject.h>
 #include <ccPointCloud.h>
 #include <ccMainAppInterface.h>
@@ -26,8 +28,9 @@
 /*
 Template class that defining the basic functionality of qCompass "tools".
 */
-class ccTool
+class ccTool : public QObject
 {
+	Q_OBJECT
 public:
 
 	virtual ~ccTool()
@@ -81,6 +84,15 @@ public:
 
 	//called when the undo button is clicked
 	virtual void undo()	{ }
+
+	virtual QString GetToolName() { return "";}
+
+	virtual QMainWindow* getMainWindow()
+	{
+		if(m_app!=nullptr)
+			return m_app->getMainWindow();
+		return nullptr;
+	}
 
 protected:
 
