@@ -117,6 +117,7 @@ void dpxPlaneTool::onMouseRightClick(int x,int y)
 		m_poly3D = 0;
 		m_poly3DVertices = 0;
 		m_nToolState=1;//采集状态结束，默认编辑状态
+		return;
 	}
 
 	if(m_nCreateType==0)//多点拟合
@@ -170,7 +171,6 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 		if(sUID.compare(strUID,Qt::CaseInsensitive)==0)
 		{
 			m_pPickRoot->removeChild(plane);
-			//m_app->removeFromDB(plane);
 		}
 	}
 
@@ -178,73 +178,80 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 	CCVector3* modefyPt = const_cast<CCVector3*>(pLine->getPointPersistentPtr(nIndex));
 	*modefyPt = newPickPt;
 
-	CCVector3* Pt0 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(0));
-	CCVector3* Pt1 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(1));
-	CCVector3* Pt2 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(2));
-	CCVector3* Pt3 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(3));
 
-	if(nIndex==0)
-	{
-		CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt2,*Pt3,newPickPt);
-		CCVector3 ptQ(Pt2->x-ptP.x+newPickPt.x,Pt2->y-ptP.y+newPickPt.y,Pt2->z-ptP.z+newPickPt.z);
-		*Pt0 = newPickPt;
-		*Pt3 = ptP;
-		*Pt1 = ptQ;
-	}
-	else if(nIndex==1)
-	{
-		CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt3,*Pt2,newPickPt);
-		CCVector3 ptQ(Pt3->x-ptP.x+newPickPt.x,Pt3->y-ptP.y+newPickPt.y,Pt3->z-ptP.z+newPickPt.z);
-		*Pt1 = newPickPt;
-		*Pt2 = ptP;
-		*Pt0 = ptQ;
-		ccLog::Warning("释放鼠标1");
-	}
-	else if(nIndex==2)
-	{
-		CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt0,*Pt1,newPickPt);
-		CCVector3 ptQ(Pt0->x-ptP.x+newPickPt.x,Pt0->y-ptP.y+newPickPt.y,Pt0->z-ptP.z+newPickPt.z);
-		*Pt2 = newPickPt;
-		*Pt1 = ptP;
-		*Pt3 = ptQ;
-	}
-	else if(nIndex==3)
-	{
-		CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt1,*Pt0,newPickPt);
-		CCVector3 ptQ(Pt1->x-ptP.x+newPickPt.x,Pt1->y-ptP.y+newPickPt.y,Pt1->z-ptP.z+newPickPt.z);
-		*Pt3 = newPickPt;
-		*Pt0 = ptP;
-		*Pt2 = ptQ;
-	}
-
-	//四个点A P C Q
-	ccPointCloud* pCloud  = new ccPointCloud("Plane Cloud");
-	pCloud->reserve(4);
-	pCloud->addPoint(*Pt0);
-	pCloud->addPoint(*Pt1);
-	pCloud->addPoint(*Pt2);
-	pCloud->addPoint(*Pt3);
-
-	//Fit plane!
 	double rms = 0.0; //output for rms
-	ccFitPlane* pPlane = ccFitPlane::Fit(pCloud, &rms);
-	if (pPlane) //valid fit
+	ccFitPlane* pNewPlane = nullptr;
+	int nSize = pLine->size();
+	if(pLine->size()!=4) //多点采集每次修改一个点要重新调整平面
+	{
+		pNewPlane = ccFitPlane::Fit(pLine->getAssociatedCloud(), &rms);
+	}
+	else if(pLine->size()==4) //三点采集 每次修改一个角 临近两个点也要移动才能保持矩形不变
+	{
+		CCVector3* Pt0 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(0));
+		CCVector3* Pt1 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(1));
+		CCVector3* Pt2 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(2));
+		CCVector3* Pt3 = const_cast<CCVector3*>(pLine->getPointPersistentPtr(3));
+		if(nIndex==0)
+		{
+			CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt2,*Pt3,newPickPt);
+			CCVector3 ptQ(Pt2->x-ptP.x+newPickPt.x,Pt2->y-ptP.y+newPickPt.y,Pt2->z-ptP.z+newPickPt.z);
+			*Pt0 = newPickPt;
+			*Pt3 = ptP;
+			*Pt1 = ptQ;
+		}
+		else if(nIndex==1)
+		{
+			CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt3,*Pt2,newPickPt);
+			CCVector3 ptQ(Pt3->x-ptP.x+newPickPt.x,Pt3->y-ptP.y+newPickPt.y,Pt3->z-ptP.z+newPickPt.z);
+			*Pt1 = newPickPt;
+			*Pt2 = ptP;
+			*Pt0 = ptQ;
+		}
+		else if(nIndex==2)
+		{
+			CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt0,*Pt1,newPickPt);
+			CCVector3 ptQ(Pt0->x-ptP.x+newPickPt.x,Pt0->y-ptP.y+newPickPt.y,Pt0->z-ptP.z+newPickPt.z);
+			*Pt2 = newPickPt;
+			*Pt1 = ptP;
+			*Pt3 = ptQ;
+		}
+		else if(nIndex==3)
+		{
+			CCVector3 ptP  = dpxAlgorithmFun::PointProjectionToLine(*Pt1,*Pt0,newPickPt);
+			CCVector3 ptQ(Pt1->x-ptP.x+newPickPt.x,Pt1->y-ptP.y+newPickPt.y,Pt1->z-ptP.z+newPickPt.z);
+			*Pt3 = newPickPt;
+			*Pt0 = ptP;
+			*Pt2 = ptQ;
+		}
+		//四个点A P C Q
+		ccPointCloud* pCloud  = new ccPointCloud("Plane Cloud");
+		pCloud->reserve(4);
+		pCloud->addPoint(*Pt0);
+		pCloud->addPoint(*Pt1);
+		pCloud->addPoint(*Pt2);
+		pCloud->addPoint(*Pt3);
+
+		pNewPlane = ccFitPlane::Fit(pCloud, &rms);//重新拟合平面
+	}
+
+	if (pNewPlane) //valid fit
 	{
 		//make plane to add to display
-		pPlane->setVisible(true);
-		pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
-		pPlane->setDisplay(m_window);
+		pNewPlane->setVisible(true);
+		pNewPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
+		pNewPlane->setDisplay(m_window);
 		QImage* pImage = new QImage(":/CC/plugin/qCompass/images/RedGreen.png");
 		if(pImage)
 		{
-			pPlane->setAsTexture(*pImage);
+			pNewPlane->setAsTexture(*pImage);
 		}
 
-		CCVector3 vNormal = pPlane->getNormal();
+		CCVector3 vNormal = pNewPlane->getNormal();
 		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
 		pLine->setMetaData(DPX_NORMAL,strNormal);
-		pPlane->setMetaData(DPX_RELATED_UID,strUID);
-		m_pPickRoot->addChild(pPlane);
+		pNewPlane->setMetaData(DPX_RELATED_UID,strUID);
+		m_pPickRoot->addChild(pNewPlane);
 		m_window->removeFromOwnDB(m_pPickRoot);
 		m_app->addToDB(m_pPickRoot);
 	}
