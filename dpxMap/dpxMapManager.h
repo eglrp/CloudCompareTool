@@ -26,6 +26,14 @@ public:
 	bool saveMapDoc(dpxMap* pMap,QString strFile);
 	//加载地图
 	dpxMap* LoadMapDoc(QString strMapFile);
+
+	bool outPutMap(ccHObject* pMapRootData);
+
+protected:
+	void Export_Recursion(ccHObject* pObj);
+
+private:
+	QTextStream m_textStream;
 };
 
 #endif

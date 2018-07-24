@@ -43,7 +43,7 @@
 #include "dpxRoadRefLineTool.h" //道路参考线
 #include "dpxRoadLineTool.h"  //道路线工具
 #include "dpxRoadStopLineTool.h"//道路停止线
-
+#include "dpxZebraCrossLineTool.h"//斑马线采集工具
 
 //initialize default static pars
 bool ccCompass::drawName = false;
@@ -77,6 +77,8 @@ ccCompass::ccCompass(QObject* parent) :
 	m_dpxRoadRefLineTool = new dpxRoadRefLineTool(); //道路参考线工具
 	m_dpxRoadLineTool = new dpxRoadLineTool(); //道路线工具
 	m_dpxRoadStopLineTool = new dpxRoadStopLineTool();//道路停止线工具
+	m_dpxZebraCrossLineTool = new dpxZebraCrossLineTool();//道路停止线工具
+
 }
 
 //deconstructor
@@ -99,6 +101,7 @@ ccCompass::~ccCompass()
 	delete m_dpxRoadRefLineTool;
 	delete m_dpxRoadLineTool;
 	delete m_dpxRoadStopLineTool;
+	delete m_dpxZebraCrossLineTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -241,6 +244,7 @@ void ccCompass::doAction()
 	m_dpxRoadRefLineTool->initializeTool(m_app);
 	m_dpxRoadLineTool->initializeTool(m_app);
 	m_dpxRoadStopLineTool->initializeTool(m_app);
+	m_dpxZebraCrossLineTool->initializeTool(m_app);
 
 	//check valid window
 	if (!m_app->getActiveGLWindow())
@@ -280,6 +284,8 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->RoadRefLineButton, SIGNAL(clicked()), this, SLOT(setRoadRefLineTool()));
 		ccCompassDlg::connect(m_dlg->RoadLineButton, SIGNAL(clicked()), this, SLOT(setRoadLineTool()));
 		ccCompassDlg::connect(m_dlg->RoadStopLineButton, SIGNAL(clicked()), this, SLOT(setRoadStopLineTool()));
+		ccCompassDlg::connect(m_dlg->ZebraLineButton, SIGNAL(clicked()), this, SLOT(setZebraCrossLineTool()));
+
 
 
 		//extra tools
@@ -1115,6 +1121,21 @@ void ccCompass::setRoadStopLineTool()
 	m_app->getActiveGLWindow()->redraw(true, false);
 }
 
+//斑马线采集工具
+void ccCompass::setZebraCrossLineTool()
+{
+	cleanupBeforeToolChange();
+	//activate trace tool
+	m_activeTool = m_dpxZebraCrossLineTool;
+	m_activeTool->toolActivated();
+	//trigger selection changed
+	onNewSelection(m_app->getSelectedEntities());
+	//update GUI
+	m_dlg->traceModeButton->setChecked(false);
+	m_dlg->undoButton->setEnabled(m_dpxZebraCrossLineTool->canUndo());
+	m_dlg->acceptButton->setEnabled(false);
+	m_app->getActiveGLWindow()->redraw(true, false);
+}
 
 //activate the paint tool
 void ccCompass::setPick()

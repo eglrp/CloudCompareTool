@@ -17,6 +17,7 @@ dpxPlaneTool::dpxPlaneTool()
 	m_pPickRoot = new ccHObject("Plane");
 	m_pAssistWin = nullptr;
 	m_nCreateType = 0; //0代表拟合到方式1：代表采集到方式
+	m_eCurObjType = eObj_OfficeLight;//默认初始采集到是红绿灯
 }
 
 
@@ -45,6 +46,7 @@ void dpxPlaneTool::toolActivated()
 		m_pPickRoot = pIndicatorLyr->getRootData();
 
 	QObject::connect(m_pAssistWin, SIGNAL(sigTypeChange(int)), this, SLOT(slotChangeType(int)));
+	QObject::connect(m_pAssistWin, SIGNAL(sigObjTypeChange(int)), this, SLOT(slotObjTypeChangeType(int)));
 
 	dpxPickAndEditTool::toolActivated();
 }
@@ -56,48 +58,21 @@ void dpxPlaneTool::toolDisactivated()
 		m_pAssistWin->hide();
 
 	QObject::disconnect(m_pAssistWin, SIGNAL(sigTypeChange(int)), this, SLOT(slotChangeType(int)));
+	QObject::disconnect(m_pAssistWin, SIGNAL(sigObjTypeChange(int)), this, SLOT(slotObjTypeChangeType(int)));
 
 	dpxPickAndEditTool::toolDisactivated();
 }
 
+//采集方法发生变化
 void dpxPlaneTool::slotChangeType(int nType)
 {
 	m_nCreateType = nType;
 }
 
-
-void dpxPlaneTool::PtFitPlane()
+//采集的地物类型发生变化
+void dpxPlaneTool::slotObjTypeChangeType(int nObjType)
 {
-	//Fit plane!
-	double rms = 0.0; //output for rms
-	ccFitPlane* pPlane = ccFitPlane::Fit(m_poly3DVertices, &rms);
-	QString strRelateID = QUuid::createUuid().toString();
-	if (pPlane) //valid fit
-	{
-		//make plane to add to display
-		pPlane->setVisible(true);
-		pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
-		pPlane->setDisplay(m_window);
-		pPlane->setMetaData(DPX_RELATED_UID,strRelateID);
-		QImage* pImage = new QImage(":/CC/plugin/qCompass/images/RedGreen.png");
-		if(pImage)
-		{
-			pPlane->setAsTexture(*pImage);
-		}
-
-		CCVector3 vNormal = pPlane->getNormal();
-		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
-		m_poly3D->setMetaData(DPX_NORMAL,strNormal);//法向量
-		m_poly3D->setMetaData(DPX_RELATED_UID,strRelateID);//关联的ID
-		m_pPickRoot->addChild(pPlane);
-	}
-
-	m_window->removeFromOwnDB(m_pPickRoot);
-	m_app->addToDB(m_pPickRoot);
-	m_polyTip->setEnabled(false);
-	m_poly3D = 0;
-	m_poly3DVertices = 0;
-	m_nToolState=1;//采集状态结束，默认编辑状态
+	m_eCurObjType = dpxObjectType(nObjType);
 }
 
 //右键可取消两个点时的状态
@@ -122,7 +97,15 @@ void dpxPlaneTool::onMouseRightClick(int x,int y)
 
 	if(m_nCreateType==0)//多点拟合
 	{
-		PtFitPlane(); //采集多个点直接拟合
+		//Fit plane!
+		double rms = 0.0; //output for rms
+		ccFitPlane* pPlane = ccFitPlane::Fit(m_poly3DVertices, &rms);
+		AddPlaneToData(pPlane);
+
+		m_polyTip->setEnabled(false);
+		m_poly3D = 0;
+		m_poly3DVertices = 0;
+		m_nToolState=1;//采集状态结束，默认编辑状态
 	}
 
 }
@@ -161,7 +144,6 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 	dpxSnapHelper::Instance()->FindAllObjs(vecHObjs,CC_TYPES::PLANE);//旧的删除
 	for(int i =0;i<vecHObjs.size();i++)
 	{
-		ccLog::Warning("遍历PLANE"+QString::number(i));
 		ccPlane* plane = ccHObjectCaster::ToPlane(vecHObjs[i]);
 		if(plane==nullptr)
 			continue;
@@ -241,7 +223,7 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 		pNewPlane->setVisible(true);
 		pNewPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
 		pNewPlane->setDisplay(m_window);
-		QImage* pImage = new QImage(":/CC/plugin/qCompass/images/RedGreen.png");
+		QImage* pImage = new QImage(getImageName());
 		if(pImage)
 		{
 			pNewPlane->setAsTexture(*pImage);
@@ -251,15 +233,71 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
 		pLine->setMetaData(DPX_NORMAL,strNormal);
 		pNewPlane->setMetaData(DPX_RELATED_UID,strUID);
-		m_pPickRoot->addChild(pNewPlane);
-		m_window->removeFromOwnDB(m_pPickRoot);
-		m_app->addToDB(m_pPickRoot);
+
+		pLine->addChild(pNewPlane);
 	}
 
+	m_window->removeFromOwnDB(m_pPickRoot);
+	m_app->addToDB(m_pPickRoot);
+
+
+	m_polyTip->setEnabled(false);
 	m_bMoveNode = false;
 	pLine->invalidateBoundingBox();
-	m_polyTip->setEnabled(false);
 	m_window->redraw(false, true);
+}
+
+QString dpxPlaneTool::getImageName()
+{
+	if(m_eCurObjType==eObj_OfficeLight)
+		return ":/CC/plugin/qCompass/images/RedGreen.png";
+	else if(m_eCurObjType==eObj_Indication_OnRoad)
+		return   ":/CC/plugin/qCompass/images/OnRoadIndication.png";
+	else if (m_eCurObjType==eObj_Indication_InSpace)
+		return  ":/CC/plugin/qCompass/images/InSpaceIndication.png";
+	else
+		return "";
+}
+
+QString dpxPlaneTool::getObjectName()
+{
+	if(m_eCurObjType==eObj_OfficeLight)
+		return "OfficeLight";
+	else if(m_eCurObjType==eObj_Indication_OnRoad)
+		return   "IndicationOnRoad";
+	else if (m_eCurObjType==eObj_Indication_InSpace)
+		return  "IndicationInSpace";
+	else
+		return "";
+}
+
+void dpxPlaneTool::AddPlaneToData(ccFitPlane* pPlane)
+{
+	QString strRelateID = QUuid::createUuid().toString();
+	if (pPlane) //valid fit
+	{
+		//make plane to add to display
+		pPlane->setVisible(true);
+		pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
+		pPlane->setDisplay(m_window);
+		pPlane->setMetaData(DPX_RELATED_UID,strRelateID);
+		QImage* pImage = new QImage(getImageName());
+		if(pImage)
+		{
+			pPlane->setAsTexture(*pImage);
+		}
+
+		CCVector3 vNormal = pPlane->getNormal();
+		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
+		m_poly3D->setMetaData(DPX_NORMAL,strNormal);//法向量
+		m_poly3D->setMetaData(DPX_RELATED_UID,strRelateID);//关联的ID
+		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,m_eCurObjType); //地物类型
+		m_poly3D->setName(getObjectName());//设置名称
+		m_poly3D->addChild(pPlane);
+	}
+
+	m_window->removeFromOwnDB(m_pPickRoot);
+	m_app->addToDB(m_pPickRoot);
 }
 
 //called when a point in a point cloud gets picked while this tool is active
@@ -393,6 +431,13 @@ void  dpxPlaneTool::ThreePtPick(const CCVector3& P ,int x,int y)
 
 		m_poly3D->addPointIndex(0,4);
 
-		PtFitPlane(); //采集完三个点直接拟合
+		double rms = 0.0;
+		ccFitPlane* pPlane = ccFitPlane::Fit(m_poly3DVertices, &rms);//重新拟合平面
+		AddPlaneToData(pPlane);
+
+		m_polyTip->setEnabled(false);
+		m_poly3D = 0;
+		m_poly3DVertices = 0;
+		m_nToolState=1;//采集状态结束，默认编辑状态
 	}
 }

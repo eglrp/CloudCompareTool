@@ -7,14 +7,11 @@
 
 //qCC_db
 #include <ccHObject.h>
-#include <ccGenericGLDisplay.h>
 #include <QImage>
 
 #include "dpxNodeEditTool.h"
 #include "dpxGeoEngine.h"
-class ccPointCloud;
-class ccGLWindow;
-class ccPickingHub;
+
 
 /*
 Tool used to digitise traces

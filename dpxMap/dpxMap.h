@@ -18,9 +18,6 @@ public:
 	virtual ~dpxMap();
 public:
 
-	virtual void SetType(dpxLayerType eType);
-	virtual dpxLayerType GetType();
-
 	virtual  ccHObject* getRootData();
 	void setMapId(const QString& strId);
 	const QString& getMapId() const;

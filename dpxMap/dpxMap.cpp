@@ -7,8 +7,7 @@ dpxMap::dpxMap(QString strMapName,QString strMapID)
 {
 	m_vecLrys.clear();
 	m_MapRootData = new ccHObject(strMapName);
-
-	SetType(eOT_Map);
+	m_MapRootData->setMetaData(DPX_LAYER_TYPE_NAME,eOT_Map);//自动转换成数字
 }
 
 dpxMap::dpxMap(QString strMapName)
@@ -17,8 +16,7 @@ dpxMap::dpxMap(QString strMapName)
 	m_strMapID = QUuid::createUuid().toString();
 	m_vecLrys.clear();
 	m_MapRootData = new ccHObject(strMapName);
-
-	SetType(eOT_Map);
+	m_MapRootData->setMetaData(DPX_LAYER_TYPE_NAME,eOT_Map);//自动转换成数字
 }
 
 dpxMap::~dpxMap()
@@ -30,18 +28,18 @@ ccHObject* dpxMap::getRootData()
 	return m_MapRootData;
 }
 
-void dpxMap::SetType(dpxLayerType eType)
-{
-	m_MapRootData->setMetaData(DPX_LAYER_TYPE_NAME,eType);//自动转换成数字
-}
-
-dpxLayerType dpxMap::GetType()
-{
-	if(!m_MapRootData->hasMetaData(DPX_LAYER_TYPE_NAME))
-		return dpxLayerType::eOT_Unknown;
-
-	return dpxLayerType(m_MapRootData->getMetaData(DPX_LAYER_TYPE_NAME).toInt());//自动转换成数字
-}
+//void dpxMap::SetType(dpxLayerType eType)
+//{
+//	m_MapRootData->setMetaData(DPX_LAYER_TYPE_NAME,eType);//自动转换成数字
+//}
+//
+//dpxLayerType dpxMap::GetType()
+//{
+//	if(!m_MapRootData->hasMetaData(DPX_LAYER_TYPE_NAME))
+//		return dpxLayerType::eOT_Unknown;
+//
+//	return dpxLayerType(m_MapRootData->getMetaData(DPX_LAYER_TYPE_NAME).toInt());//自动转换成数字
+//}
 
 void dpxMap::setMapId(const QString& strId)
 {

@@ -25,6 +25,7 @@ public:
 	dpxLayer* getLightLyr();
 	dpxLayer* getIndicatorLry();
 	dpxLayer* getOtherLry();
+	dpxLayer* getZebraLineLry();//斑马线层
 
 public slots:
 	void slotKeyPress(const QString& sKey);

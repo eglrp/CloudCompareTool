@@ -232,6 +232,7 @@ protected slots:
 	void editAttribute();//编辑属性
 	void ExportLights();//输出灯
 	void ExportLightPole();//输出灯杆
+	void ExportMap(); //输出地图
 
 signals:
 	void selectionChanged();
@@ -333,6 +334,7 @@ protected:
 	QAction* m_attributeEdit;
 	QAction* m_ExportLights;
 	QAction* m_ExportLightsPole;
+	QAction* m_ExportMap;
 
 	QTextStream m_TextStream;
 	//! Last context menu pos

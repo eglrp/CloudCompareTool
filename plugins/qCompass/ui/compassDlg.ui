@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>33</height>
+    <width>849</width>
+    <height>30</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -233,6 +233,26 @@
      <property name="icon">
       <iconset resource="../../../qCC/icones.qrc">
        <normaloff>:/CC/images/roadStopLine.png</normaloff>:/CC/images/roadStopLine.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="ZebraLineButton">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../qCC/icones.qrc">
+       <normaloff>:/CC/images/ZebarCross.png</normaloff>:/CC/images/ZebarCross.png</iconset>
      </property>
     </widget>
    </item>

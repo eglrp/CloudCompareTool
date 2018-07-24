@@ -16,9 +16,11 @@ public:
 
 signals:
 	void sigTypeChange(int nType);
+	void sigObjTypeChange(int nObjType);
 
 public slots:
-	void slotTypeChanged();
+	void slotTypeChanged();		//采集模式改变   单选按钮的变化
+	void slotComboBoxValueChanged();	//采集的地物改变 下拉框的变化
 
 private:
 	Ui_PickAssistDialog dlg;

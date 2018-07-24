@@ -45,6 +45,11 @@ dpxLayer* dpxGeoEngine::getOtherLry()
 	return getLyrFormType(eOT_Other);
 }
 
+dpxLayer* dpxGeoEngine::getZebraLineLry()
+{
+	return getLyrFormType(eOT_ZebraLine);
+}
+
 //键盘摁下事件
 void dpxGeoEngine::slotKeyPress(const QString& sKey)
 {

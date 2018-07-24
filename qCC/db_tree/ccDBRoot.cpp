@@ -141,6 +141,7 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	m_attributeEdit = new QAction("Edit Attribute", this);
 	m_ExportLights = new QAction("Export Lights", this);
 	m_ExportLightsPole = new QAction("Export LightsPole", this);
+	m_ExportMap = new QAction("Export Map", this);
 
 	m_contextMenuPos = QPoint(-1,-1);
 
@@ -171,6 +172,8 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	connect(m_attributeEdit,					SIGNAL(triggered()),								this, SLOT(editAttribute()));
 	connect(m_ExportLights,						SIGNAL(triggered()),								this, SLOT(ExportLights()));
 	connect(m_ExportLightsPole,					SIGNAL(triggered()),								this, SLOT(ExportLightPole()));
+	connect(m_ExportMap,						SIGNAL(triggered()),								this, SLOT(ExportMap()));
+
 
 
 
@@ -2121,6 +2124,23 @@ void ccDBRoot::showContextMenu(const QPoint& menuPos)
 		//selected items?
 		QModelIndexList selectedIndexes = qism->selectedIndexes();
 		int selCount = selectedIndexes.size();
+
+		//by duans
+		if(selCount==1)
+		{
+			ccHObject* item = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
+			if(item && item->hasMetaData(DPX_LAYER_TYPE_NAME))
+			{
+				dpxLayerType eType = dpxLayerType(item->getMetaData(DPX_LAYER_TYPE_NAME).toInt());
+				if(eType==eOT_Map)
+				{
+					menu.addAction(m_ExportMap);
+					menu.exec(m_dbTreeWidget->mapToGlobal(menuPos));
+					return;
+				}
+			}
+		}
+
 		if (selCount)
 		{
 			bool toggleVisibility = false;
@@ -2371,6 +2391,25 @@ void ccDBRoot::setAttr_Recursion(ccHObject* pObj,const QMap<QString, QVariant>& 
 			setAttr_Recursion(pChildObj,VariantMap);
 		}
 	}
+}
+
+//输出地图
+void ccDBRoot::ExportMap()
+{
+	//输出地图各个要素
+
+	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
+	QModelIndexList selectedIndexes = qism->selectedIndexes();
+	int selCount = selectedIndexes.size();
+	if (selCount == 0)
+		return;
+
+	ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
+	if(!pObj)
+		return ;
+
+	dpxMapManager* pMapManager = new  dpxMapManager();
+	pMapManager->outPutMap(pObj);
 }
 
 //输出灯杆

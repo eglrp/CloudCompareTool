@@ -46,6 +46,7 @@ class dpxSelectTool;
 class dpxRoadRefLineTool;
 class dpxRoadLineTool;
 class dpxRoadStopLineTool;
+class dpxZebraCrossLineTool;
 
 class ccCompass : public QObject, public ccStdPluginInterface, public ccPickingListener
 {
@@ -116,6 +117,7 @@ protected slots:
 	void setRoadRefLineTool();//道路参照线工具
 	void setRoadLineTool();//道路线工具
 	void setRoadStopLineTool();//道路停止线工具
+	void setZebraCrossLineTool();//斑马线采集工具
 
 	//extra tools
 	void addPinchNode(); //activates the pinch node tool
@@ -207,6 +209,7 @@ protected:
 	dpxRoadRefLineTool* m_dpxRoadRefLineTool; //道路参考线工具
 	dpxRoadLineTool* m_dpxRoadLineTool; //道路线工具
 	dpxRoadStopLineTool* m_dpxRoadStopLineTool;//道路停止线工具
+	dpxZebraCrossLineTool* m_dpxZebraCrossLineTool;
 
 	//currently selected/active geoObject
 	ccGeoObject* m_geoObject = nullptr; //the GeoObject currently being written to

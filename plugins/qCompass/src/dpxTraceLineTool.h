@@ -19,16 +19,8 @@
 #define _DPX_TRACE_LINE_TOOL_HEADER_
 
 //qCC_db
-#include <ccHObject.h>
-#include <ccGenericGLDisplay.h>
 
 #include "dpxPickAndEditTool.h"
-#include "ccTrace.h"
-
-class ccPolyline;
-class ccPointCloud;
-class ccGLWindow;
-class ccPickingHub;
 
 /*
 Tool used to digitise traces

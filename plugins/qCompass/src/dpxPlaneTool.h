@@ -37,17 +37,24 @@ public:
 	virtual void onMouseRightClick(int x,int y);
 
 protected:
-	void  PtFitPlane();
+	void AddPlaneToData(ccFitPlane* pPlane);
+	//void  PtFitPlane();
 	void  PickMutilPts(const CCVector3& P ,int x,int y);
 	void  ThreePtPick(const CCVector3& P ,int x,int y);
 
+	QString getImageName();//每种类型的纹理图片
+	QString getObjectName();
+
 protected slots:
 	void slotChangeType(int nType);
+	void slotObjTypeChangeType(int nObjType);
 
 
 private:
 	dpxPlaneAssistDlg* m_pAssistWin;
 	int m_nCreateType; //是用采集还是用拟合到方式生成
+	dpxObjectType m_eCurObjType; //当前采集到是什么类型
+
 };
 
 #endif

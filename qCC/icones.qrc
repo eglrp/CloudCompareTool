@@ -151,6 +151,7 @@
     <file>images/roadRefLine.png</file>
     <file>images/roadLine.png</file>
     <file>images/roadStopLine.png</file>
+    <file>images/ZebarCross.png</file>
   </qresource>
   <qresource prefix="/CC/Icons">
     <file>images/icon/cc_viewer_icon_16.png</file>
