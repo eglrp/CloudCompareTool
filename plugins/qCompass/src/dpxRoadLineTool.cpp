@@ -103,7 +103,7 @@ void dpxRoadLineTool::onMouseLeftClick(int x,int y)
         return;
 
     ccPolyline* pLine = nearestInfo.m_pLine;
-    if(pLine==nullptr)
+    if(pLine==nullptr || pLine==0)
         return;
 
     if(!pLine->hasMetaData(DPX_OBJECT_TYPE_NAME))

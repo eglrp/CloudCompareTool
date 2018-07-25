@@ -80,6 +80,9 @@ void dpxSelectTool::onMouseLeftClick(int x,int y)
 	dpxNearestLine nearestInfo1;
 	if(getNearestLineInfo(x,y,nearestInfo1))//获取临近线
 	{
+		if(nearestInfo1.m_pLine==nullptr || nearestInfo1.m_pLine==0)
+			return;
+
 		bool bHasInselect = dpxSelectionManager::Instance()->isInSelectSet(nearestInfo1.m_pLine);
         if(bHasInselect && !bPushCtrlKey)
         {
@@ -104,7 +107,7 @@ void dpxSelectTool::onMouseLeftClick(int x,int y)
 	if(!bFind)
 		return;
 
-	if(nearestInfo.m_pLine==nullptr)
+	if(nearestInfo.m_pLine==nullptr || nearestInfo.m_pLine==0)
 		return;
 	//结点判断
 	ccPolyline* pLine = nearestInfo.m_pLine;

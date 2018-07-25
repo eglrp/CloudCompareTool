@@ -6,7 +6,7 @@
 
 #include "dpxMap_IO.h"
 #include "dpxMap.h"
-
+#include "ccPolyline.h"
 /*
 * dpxMap
 */
@@ -31,6 +31,10 @@ public:
 
 protected:
 	void Export_Recursion(ccHObject* pObj);
+
+	void ExportPlane(ccPolyline* pLine,int eType);
+	void ExportLine(ccPolyline* pLine,int eType);
+	void ExportOfficeLightPole(ccPolyline* pLine,int eType);
 
 private:
 	QTextStream m_textStream;

@@ -41,7 +41,7 @@ void dpxRoadStopLineTool::onMouseLeftClick(int x,int y)
         return;
 
     ccPolyline* pLine = nearestInfo.m_pLine;
-    if(pLine==nullptr)
+    if(pLine==nullptr || pLine==0)
         return;
 
     //结点判断

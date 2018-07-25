@@ -79,6 +79,8 @@ void dpxNodeEditTool::onMouseRightClick(int x,int y)
 	//add Point  Index:nsegNum+1 Pt:newPickPt
 	int nsegNum = nearestInfo.m_nSegNum;
 	ccPolyline* pLine = nearestInfo.m_pLine;
+	if(pLine==nullptr || pLine==0)
+		return;
 	if(nsegNum<0||nsegNum>pLine->size()-2)
 		return;
 
@@ -117,7 +119,7 @@ void dpxNodeEditTool::onLeftDoubleClick(int x,int y)
 	double dDistance = nearestInfo.m_dDistance;
 	int nSegNum = nearestInfo.m_nSegNum;
 
-	if(pLine==nullptr)
+	if(pLine==nullptr || pLine==0)
 		return;
 
 	if(dDistance>=SNAP_TOL_VALUE)
@@ -142,7 +144,7 @@ void dpxNodeEditTool::onMouseLeftClick(int x,int y)
 	if(!bFind)
 		return;
 
-	if(nearestInfo.m_pLine==nullptr)
+	if(nearestInfo.m_pLine==nullptr || nearestInfo.m_pLine==0)
 		return;
 	//结点判断
 	ccPolyline* pLine = nearestInfo.m_pLine;
@@ -276,6 +278,8 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 		else //添加显示效果
 		{
 			ccPolyline* pNearestLine = nearestInfo.m_pLine;
+			if(pNearestLine==nullptr||pNearestLine==0)
+				return;
 			int nSize = pNearestLine->size();
 			for(int i=0;i<nSize;i++)
 			{

@@ -59,6 +59,7 @@ void dpxTraceLineTool::onMouseRightClick(int x,int y)
 			if (m_polyTip)
 				m_polyTip->setEnabled(false);
 
+			m_pPickRoot->removeChild(m_poly3D); //只有一个点不保存
 			m_poly3D = 0;
 			m_poly3DVertices = 0;
 		}

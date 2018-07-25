@@ -58,7 +58,6 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 
 		m_poly3D = new ccPolyline(m_poly3DVertices);
 		m_poly3D->setTempColor(ccColor::green);
-		m_poly3D->set2DMode(false);
 		m_poly3D->addChild(m_poly3DVertices);
 		m_poly3D->setWidth(1);
 		m_pPickRoot->addChild(m_poly3D);
@@ -131,14 +130,15 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 
 		QDateTime current_time =QDateTime::currentDateTime();
 		QString sCurrentTime =current_time.toString("hh:mm:ss");
-		m_poly3D->setName("Line_"+sCurrentTime);
+		m_poly3D->setName("CylinderLine_"+sCurrentTime);
 		m_poly3D->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
 		m_poly3D->setMetaData("Radius",QString::number(dRadius));
+		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_OfficeLight_pole); //地物类型
 
 		ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
 		pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
 		pCylinder->setTempColor(ccColor::cyan);
-		m_pPickRoot->addChild(pCylinder);
+		m_poly3D->addChild(pCylinder);
 
 		m_window->removeFromOwnDB(m_pPickRoot);
 		m_app->addToDB(m_pPickRoot);
@@ -214,7 +214,7 @@ void dpxCylinderTool::onMouseReleaseEvent(int x,int y)
 		QString sUID = pCylinder->getMetaData(DPX_CYLINEDER_RELATED_UID).toString();
 		if(sUID.compare(strUID,Qt::CaseInsensitive)==0)
 		{
-			m_pPickRoot->removeChild(pCylinder);
+			pLine->removeChild(pCylinder);
 		}
 	}
 
@@ -247,7 +247,7 @@ void dpxCylinderTool::onMouseReleaseEvent(int x,int y)
 
 	ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
 	pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strUID);//关联的ID
-	m_pPickRoot->addChild(pCylinder);
+	pLine->addChild(pCylinder);
 	m_window->removeFromOwnDB(m_pPickRoot);
 	m_app->addToDB(m_pPickRoot);
 

@@ -152,7 +152,7 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 		QString sUID = plane->getMetaData(DPX_RELATED_UID).toString();
 		if(sUID.compare(strUID,Qt::CaseInsensitive)==0)
 		{
-			m_pPickRoot->removeChild(plane);
+			pLine->removeChild(plane);
 		}
 	}
 

@@ -122,7 +122,7 @@ void dpxPickAndEditTool::onMouseLeftClick(int x,int y)
 	if(!bFind)
 		return;
 
-	if(nearestInfo.m_pLine==nullptr)
+	if(nearestInfo.m_pLine==nullptr || nearestInfo.m_pLine==0)
 		return;
 	//结点判断
 	ccPolyline* pLine = nearestInfo.m_pLine;

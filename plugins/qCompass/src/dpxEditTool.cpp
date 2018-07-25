@@ -73,7 +73,7 @@ bool dpxEditTool::getNearestLineInfo(int x, int y,dpxNearestLine& nearestInfo,bo
 	for(int i =0;i<vecHObjs.size();i++)
 	{
 		ccHObject* pObj =  vecHObjs[i];
-		if(pObj==nullptr)
+		if(pObj==nullptr || pObj==0)
 			continue;
 		//by duans 补充
 		if(isObjValid!=nullptr && !isObjValid(pObj))
