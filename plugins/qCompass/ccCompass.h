@@ -29,14 +29,15 @@
 class ccCompassDlg;
 class ccFitPlaneTool;
 class ccGeoObject;
-class ccLineationTool;
-class ccMapDlg;
-class ccNoteTool;
-class ccPinchNodeTool;
-class ccThicknessTool;
+//class ccLineationTool;
+//class ccMapDlg;
+//class ccNoteTool;
+//class ccPinchNodeTool;
+//class ccThicknessTool;
 class ccTool;
-class ccTopologyTool;
-class ccTraceTool;
+//class ccTopologyTool;
+//class ccTraceTool;
+
 class dpxTraceLineTool;
 class dpxCylinderTool;
 class dpxPlaneTool;
@@ -69,7 +70,6 @@ public:
 	virtual void getActions(QActionGroup& group) override;
 
 	//sets the specified object to be the current trace - provided it is a ccTrace object. If not, ccTrace becomes null.
-	void pickupTrace(ccHObject* o);
 
 protected slots:
 
@@ -88,25 +88,17 @@ protected slots:
 	//picked point callback (called by the above function)
 	void pointPicked(ccHObject* entity, unsigned itemIdx, int x, int y, const CCVector3& P);
 
-	//**************
-	//GUI actions:
-	//**************
 	//general
 	void onClose();
-	void onAccept();
-	void onSave();
 	void onUndo();
 
 	//modes
-	void enableMapMode(); //turns on/off map mode
+	//void enableMapMode(); //turns on/off map mode
 	void enableMeasureMode(); //turns on/off map mode
 
 	//tools
-	void setPick(); //activates the picking tool
-	void setLineation(); //activates the lineation tool
-	void setPlane(); //activates the plane tool
-	void setTrace(); //activates the trace tool
-
+	void setPick(); //activates the picking tool //隐藏点云
+	void setPlane(); //activates the plane tool  //拟合平面
 	//new tool by duans
 	void setTraceLine();//折线采集功能
 	void setCylinderTool();//圆柱工具
@@ -119,40 +111,8 @@ protected slots:
 	void setRoadStopLineTool();//道路停止线工具
 	void setZebraCrossLineTool();//斑马线采集工具
 
-	//extra tools
-	void addPinchNode(); //activates the pinch node tool
-	void setThickness(); //activates the thickness tool
-	void setThickness2(); //activates the thickness tool in two-point mode
-	void setYoungerThan(); //activates topology tool in "younger-than" mode
-	void setFollows(); //activates topology tool in "follows" mode
-	void setEquivalent(); //activates topology mode in "equivalent" mode
-	void setNote(); //activates the note tool
-	void recalculateSelectedTraces(); //recalculate any selected traces (for updating with a different cost function)
-	void mergeGeoObjects(); //merges the selected GeoObjects
-	void fitPlaneToGeoObject(); //calculates best-fit plane for the upper and lower surfaces of the selected GeoObject
-	void recalculateFitPlanes(); //recalcs fit planes for traces and GeoObjects
-	void convertToPointCloud(); //converts selected traces or geoObjects to point clouds
-	void distributeSelection(); //distributes selected objects into GeoObjects with the same name
-	void exportToSVG(); //exports current view to SVG
-
-	//map mode dialog
-	void writeToInterior(); //new digitization will be added to the GeoObjects interior
-	void writeToUpper(); //new digitization will be added to the GeoObjects upper boundary
-	void writeToLower(); //new digitiziation will be added to the GeoObjects lower boundary
-	void addGeoObject(bool singleSurface=false); //creates a new GeoObject
-	void addGeoObjectSS(); //creates a new single surface GeoObject
-
 	//drawing options
 	void hideAllPointClouds(ccHObject* o); //hides all point clouds and adds them to the m_hiddenObjects list
-	void toggleStipple(bool checked);
-	void recurseStipple(ccHObject* object, bool checked);
-	void toggleLabels(bool checked);
-	void recurseLabels(ccHObject* object, bool checked);
-	void toggleNormals(bool checked);
-	void recurseNormals(ccHObject* object, bool checked);
-
-	//display the help dialog
-	void showHelp();
 
 	//给工具传入快捷键
 	void slotKeyPress(int nKey);
@@ -162,6 +122,7 @@ protected:
 	//event to get mouse-move updates & trigger repaint of overlay circle
 	virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
+	void setActiveTool(ccTool* pActiveTool);
 	//used to get the place/object that new measurements or interpretation should be stored
 	ccHObject* getInsertPoint();
 
@@ -174,9 +135,6 @@ protected:
 	//removes this plugin from the picking hub
 	void stopPicking();
 
-	//checks if the passed object, or any of it's children, represent unloaded ccCompass objects (e.g. traces, fitplanes etc).
-	void tryLoading(ccHObject* obj, std::vector<int>* originals, std::vector<ccHObject*>* replacements);
-
 	//Action to start ccCompass
 	QAction* m_action = nullptr;
 
@@ -188,17 +146,11 @@ protected:
 
 	//ccCompass toolbar gui
 	ccCompassDlg* m_dlg = nullptr;
-	ccMapDlg* m_mapDlg = nullptr;
 
 	//tools
 	ccTool* m_activeTool = nullptr;
+
 	ccFitPlaneTool* m_fitPlaneTool;
-	ccTraceTool* m_traceTool;
-	ccLineationTool* m_lineationTool;
-	ccThicknessTool* m_thicknessTool;
-	ccTopologyTool* m_topologyTool;
-	ccNoteTool* m_noteTool;
-	ccPinchNodeTool* m_pinchNodeTool;
 	dpxTraceLineTool * m_traceLineTool; //折线工具
 	dpxCylinderTool* m_dpxCylinderTool; //圆柱
 	dpxPlaneTool* m_dpxPlaneTool;	//四边形工具
@@ -219,18 +171,6 @@ protected:
 	//used to 'guess' the name of new GeoObjects
 	QString m_lastGeoObjectName = "GeoObject";
 
-	//used while exporting data
-	int writePlanes(ccHObject* object, QTextStream* out, QString parentName = QString());
-	int writeTraces(ccHObject* object, QTextStream* out, QString parentName = QString());
-	int writeLineations(ccHObject* object, QTextStream* out, QString parentName = QString(), bool thickness=false); //if thickness is true this will write "thickness lineations" rather than orientation lineations
-
-	int writeTracesSVG(ccHObject* object, QTextStream* out, int height, float zoom);
-
-	int writeToXML(QString filename); //exports Compass interpretation tree to xml
-	int writeObjectXML(ccHObject* object, QXmlStreamWriter* out); //writes the provided object (recursive)
-
-	//checks if an object was made by this app (i.e. returns true if we are responsible for a given layer)
-	bool madeByMe(ccHObject* object);
 
 //static flags used to define simple behaviours
 public:

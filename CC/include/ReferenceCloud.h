@@ -147,9 +147,7 @@ public:
 	inline virtual const GenericIndexedCloudPersist* getAssociatedCloud() const { return m_theAssociatedCloud; }
 
     //! Sets the associated (source) cloud
-	virtual void setAssociatedCloud(GenericIndexedCloudPersist* cloud);
-
-	//! Add another reference cloud
+	virtual void setAssociatedCloud(GenericIndexedCloudPersist* cloud);	//! Add another reference cloud
 	/** Warnings:
 		- the clouds must have the same reference cloud!
 		- no verification for duplicates!

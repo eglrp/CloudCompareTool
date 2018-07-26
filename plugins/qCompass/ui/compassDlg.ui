@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>849</width>
-    <height>30</height>
+    <width>589</width>
+    <height>28</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -62,23 +62,6 @@
      </property>
      <property name="flat">
       <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="mapMode">
-     <property name="toolTip">
-      <string>Activate map mode to define geological features</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/mapIcon.png</normaloff>:/CC/images/mapIcon.png</iconset>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -376,101 +359,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="traceModeButton">
-     <property name="toolTip">
-      <string>Trace Tool: Measure orientation from structure trace</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/orthoSections.png</normaloff>:/CC/images/orthoSections.png</iconset>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-     <property name="autoDefault">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pairModeButton">
-     <property name="toolTip">
-      <string>Lineation Tool: Measure distances and directions</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/smallPointDistance.png</normaloff>:/CC/images/smallPointDistance.png</iconset>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoDefault">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="extraModeButton">
-     <property name="toolTip">
-      <string>Other Tools</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/ccAddConstSF.png</normaloff>:/CC/images/ccAddConstSF.png</iconset>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="algorithmButton">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="toolTip">
-      <string>Change tool and visibility settings</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/ccGear.png</normaloff>:/CC/images/ccGear.png</iconset>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::InstantPopup</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -488,54 +379,6 @@
      </property>
      <property name="shortcut">
       <string>Ctrl+Z</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="saveButton">
-     <property name="toolTip">
-      <string>Export interpretation and measurements</string>
-     </property>
-     <property name="statusTip">
-      <string>Save current label (added to cloud children)</string>
-     </property>
-     <property name="text">
-      <string>...</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/ccSave.png</normaloff>:/CC/images/ccSave.png</iconset>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="infoButton">
-     <property name="toolTip">
-      <string>Show readme and help information</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/ccConsole.png</normaloff>:/CC/images/ccConsole.png</iconset>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="acceptButton">
-     <property name="toolTip">
-      <string>Accept latest changes</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../../qCC/icones.qrc">
-       <normaloff>:/CC/images/smallValidate.png</normaloff>:/CC/images/smallValidate.png</iconset>
-     </property>
-     <property name="shortcut">
-      <string>Return</string>
      </property>
     </widget>
    </item>
