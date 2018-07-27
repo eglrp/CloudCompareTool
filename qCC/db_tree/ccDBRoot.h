@@ -222,7 +222,6 @@ protected slots:
 	inline void toggleSelectedEntities3DName()      { toggleSelectedEntitiesProperty(TG_3D_NAME); }
 
 	void addEmptyGroup();
-	void addHDMap();
 	void alignCameraWithEntityDirect() { alignCameraWithEntity(false); }
 	void alignCameraWithEntityIndirect() { alignCameraWithEntity(true); }
 	void enableBubbleViewMode();
@@ -233,6 +232,9 @@ protected slots:
 	void ExportLights();//输出灯
 	void ExportLightPole();//输出灯杆
 	void ExportMap(); //输出地图
+
+public slots:
+	void addHDMap();
 
 signals:
 	void selectionChanged();

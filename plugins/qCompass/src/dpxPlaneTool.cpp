@@ -15,6 +15,7 @@ dpxPlaneTool::dpxPlaneTool()
 	: dpxPickAndEditTool()
 {
 	m_pPickRoot = new ccHObject("Plane");
+	m_pPickRoot->setMetaData(DPX_LAYER_TYPE_NAME,0);
 	m_pAssistWin = nullptr;
 	m_nCreateType = 0; //0代表拟合到方式1：代表采集到方式
 	m_eCurObjType = eObj_OfficeLight;//默认初始采集到是红绿灯

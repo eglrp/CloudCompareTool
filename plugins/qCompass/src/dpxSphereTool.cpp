@@ -9,8 +9,7 @@
 #include "ccCompass.h"
 #include "dpxAlgorithmFun.h"
 #include <ccSphere.h>
-
-
+#include "dpxMapDefine.h"
 
 dpxSphereTool::dpxSphereTool()
 	: ccTool(),m_polyTip(0)
@@ -32,6 +31,7 @@ dpxSphereTool::dpxSphereTool()
 	m_polyTip->addChild(m_polyTipVertices);
 
 	m_pPickRoot = new ccHObject("Plane");
+	m_pPickRoot->setMetaData(DPX_LAYER_TYPE_NAME,0);
 	m_bHasSetFirstPt = false;
 }
 

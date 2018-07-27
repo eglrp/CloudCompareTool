@@ -6,6 +6,7 @@ dpxZebraCrossLineTool::dpxZebraCrossLineTool()
 	: dpxTraceLineTool()
 {
 	m_pPickRoot = new ccHObject("ZebraCross Lines");
+	m_pPickRoot->setMetaData(DPX_LAYER_TYPE_NAME,0);
 }
 
 

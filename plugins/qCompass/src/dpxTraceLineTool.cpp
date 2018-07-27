@@ -12,6 +12,7 @@ dpxTraceLineTool::dpxTraceLineTool()
 	: dpxPickAndEditTool()
 {
 	m_pPickRoot = new ccHObject("Pick Lines");
+	m_pPickRoot->setMetaData(DPX_LAYER_TYPE_NAME,0);
 }
 
 

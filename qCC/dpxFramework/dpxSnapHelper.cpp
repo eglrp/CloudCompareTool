@@ -51,7 +51,7 @@ void dpxSnapHelper::AddTempShowObject(ccHObject* pTempShowObj,bool bOnlyOne /*= 
 bool dpxSnapHelper::FindAllObjs(ccHObject::Container& vecHObjs,CC_CLASS_ENUM filter/*= CC_TYPES::POLY_LINE*/)
 {
 	MainWindow* pMainWindow = MainWindow::TheInstance();
-	ccDBRoot* pDBRootModel  = pMainWindow->GetDBRoot();
+	ccDBRoot* pDBRootModel  = pMainWindow->db();
 	if(pDBRootModel==nullptr)
 		return false;
 	ccHObject*pHRoot = pDBRootModel->getRootEntity();

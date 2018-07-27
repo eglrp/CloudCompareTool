@@ -133,6 +133,21 @@ void ccCompass::doAction()
 {
 	assert(m_app);
 
+	//首次启动 自动加载地图HDMap
+    static bool bLoadMap = false;
+    if(!bLoadMap)
+    {
+		//m_app->getMainWindow()->db();
+		MainWindow* pMainWindow = MainWindow::TheInstance();
+		ccDBRoot* pDBRootModel  = pMainWindow->db();
+		if(pDBRootModel==nullptr)
+			return ;
+
+		pDBRootModel->addHDMap();
+		bLoadMap = true;
+    }
+
+    //工具的初始化
 	m_traceLineTool->initializeTool(m_app);
 	m_fitPlaneTool->initializeTool(m_app);
 	m_dpxCylinderTool->initializeTool(m_app);

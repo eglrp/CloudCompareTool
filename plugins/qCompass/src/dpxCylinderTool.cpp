@@ -17,6 +17,7 @@ dpxCylinderTool::dpxCylinderTool()
 	: dpxPickAndEditTool()
 {
 	m_pPickRoot = new ccHObject("Cylinder");
+	m_pPickRoot->setMetaData(DPX_LAYER_TYPE_NAME,0);
 }
 
 
