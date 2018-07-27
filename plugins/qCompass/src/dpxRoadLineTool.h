@@ -43,6 +43,13 @@ public:
 	virtual void pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x=0,int y=0);
 	//键盘事件
 	virtual void onKeyPress(int key);
+
+protected:
+	void CheckSelectRefLine();
+
+public slots:
+	virtual void slotDeleteObj();
+
 private:
 	bool m_bSetRefLine;
 };

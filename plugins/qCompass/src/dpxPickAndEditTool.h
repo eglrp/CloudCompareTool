@@ -20,6 +20,7 @@ Tool used to digitise traces
 //一边采集一遍编辑的工具基类，通过鼠标左键是否点击到线节点来判断状态
 class dpxPickAndEditTool :	public dpxNodeEditTool
 {
+	Q_OBJECT
 public:
 	dpxPickAndEditTool();
 	virtual ~dpxPickAndEditTool();
@@ -43,6 +44,9 @@ public:
 	virtual void onMouseRightClick(int x,int y){ }
 
 	virtual void onLeftDoubleClick(int x,int y){ }
+
+public slots:
+	virtual void slotDeleteObj();//删除要素后作出相应
 
 protected:
 

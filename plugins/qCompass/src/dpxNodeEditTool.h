@@ -17,7 +17,7 @@ struct NodeInfo
 	int m_nNodeIndex;
 	void clear()
 	{
-		m_pLine==nullptr;
+		m_pLine=nullptr;
 		m_nNodeIndex=-1;
 	}
 	NodeInfo() {clear();}
@@ -27,7 +27,7 @@ Tool used to digitise traces
 */
 class dpxNodeEditTool : public dpxEditTool
 {
-
+	Q_OBJECT
 public:
 	dpxNodeEditTool();
 	virtual ~dpxNodeEditTool();
@@ -49,6 +49,7 @@ public:
 	virtual void onMouseReleaseEvent(int x,int y);
 
 	virtual void onLeftDoubleClick(int x,int y);
+
 protected:
 
 	//! 2D polyline (for the currently edited part)

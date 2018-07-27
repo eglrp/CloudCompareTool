@@ -60,6 +60,7 @@
 
 //duans
 #include "../dpxAttributeEditDlg.h"
+#include "../dpxFramework/dpxSelectionManager.h"
 //system
 #include <assert.h>
 #include <algorithm>
@@ -173,9 +174,6 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	connect(m_ExportLights,						SIGNAL(triggered()),								this, SLOT(ExportLights()));
 	connect(m_ExportLightsPole,					SIGNAL(triggered()),								this, SLOT(ExportLightPole()));
 	connect(m_ExportMap,						SIGNAL(triggered()),								this, SLOT(ExportMap()));
-
-
-
 
 	//other DB tree signals/slots connection
 	connect(m_dbTreeWidget->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(changeSelection(const QItemSelection&, const QItemSelection&)));
@@ -419,6 +417,7 @@ void ccDBRoot::deleteSelectedEntities()
 	hidePropertiesView();
 	bool verticesWarningIssued = false;
 
+	bool bDeleteSuccess = false;
 	//we remove all objects that are children of other deleted ones!
 	//(otherwise we may delete the parent before the child!)
 	//TODO DGM: not sure this is still necessary with the new dependency mechanism
@@ -477,6 +476,10 @@ void ccDBRoot::deleteSelectedEntities()
 		assert(object);
 		toBeDeleted.pop_back();
 
+		//by duans  去掉选择集中要被删除到要素,否则引起崩溃
+		dpxSelectionManager::Instance()->RemoveSelection(object);
+
+
 		object->prepareDisplayForRefresh_recursive();
 
 		if (object->isKindOf(CC_TYPES::MESH))
@@ -496,6 +499,7 @@ void ccDBRoot::deleteSelectedEntities()
 		beginRemoveRows(index(object).parent(), childPos, childPos);
 		parent->removeChild(childPos);
 		endRemoveRows();
+		bDeleteSuccess = true;
 	}
 
 	updatePropertiesView();
@@ -506,6 +510,10 @@ void ccDBRoot::deleteSelectedEntities()
 	}
 
 	MainWindow::RefreshAllGLWindow(false);
+	if(bDeleteSuccess)
+	{
+        dpxGeoEngine::Instance()->slotObjDelete();
+	}
 }
 
 QVariant ccDBRoot::data(const QModelIndex &index, int role) const

@@ -11,7 +11,7 @@
 
 #include "GenericIndexedCloudPersist.h"
 
-#include "../../qCC/dpxFramework/dpxSnapHelper.h"
+#include "../../qCC/dpxFramework/dpxSnapHelper.h"]
 
 using namespace CCLib;
 dpxNodeEditTool::dpxNodeEditTool()

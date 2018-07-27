@@ -9,7 +9,7 @@
 #include "dpxPickAndEditTool.h"
 #include "ccCompass.h"
 #include "dpxAlgorithmFun.h"
-
+#include "dpxGeoEngine.h"
 
 dpxPickAndEditTool::dpxPickAndEditTool()
 	: dpxNodeEditTool()
@@ -35,6 +35,9 @@ void dpxPickAndEditTool::toolActivated()
 		ccLog::Warning("[Trace Polyline Tool] No associated window!");
 		return ;
 	}
+
+	connect(dpxGeoEngine::Instance(),SIGNAL(sigObjDelete()),this,SLOT(slotDeleteObj()));
+
 	//duans
 	m_window->addToOwnDB(m_pPickRoot);
 	m_window->setCursor(Qt::CrossCursor);
@@ -56,7 +59,15 @@ void dpxPickAndEditTool::toolDisactivated()
 	m_poly3D = 0;
 	m_poly3DVertices = 0;
 
+	disconnect(dpxGeoEngine::Instance(),SIGNAL(sigObjDelete()),this,SLOT(slotDeleteObj()));
+
 	dpxNodeEditTool::toolDisactivated();
+}
+
+void dpxPickAndEditTool::slotDeleteObj()
+{
+    //删除后的响应
+	m_VNodeInfo.clear();
 }
 
 void dpxPickAndEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)

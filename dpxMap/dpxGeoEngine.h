@@ -20,6 +20,10 @@ public:
 	void SetMap(dpxMap* pMap) {m_pMap = pMap;}
 	dpxMap* GetMap() { return m_pMap;}
 
+	//是否可删除
+	void setCanDelete(bool bCanDelete);
+	bool getCanDelete();
+
 	//HDmap特定图层的获取
 	dpxLayer* getRoadLyr();
 	dpxLayer* getLightLyr();
@@ -28,7 +32,7 @@ public:
 	dpxLayer* getZebraLineLry();//斑马线层
 
 public slots:
-	void slotKeyPress(const QString& sKey);
+	void slotObjDelete(); //删除对象
 
     void slotMapChanged();
     void slotMapNameChanged();
@@ -41,6 +45,8 @@ public slots:
 	void slotFeatureAttributeChanged(const QString& strLayerID, int nFeatureID);
 
 signals:
+	void sigObjDelete();//删除对象
+
 	void sigKeyPress(const QString& sKey);
 	void sigMapChanged();
     void sigMapNameChanged();
@@ -61,6 +67,9 @@ private:
 	dpxGeoEngine& operator=(const dpxGeoEngine&){}
 private:
 	dpxMap* m_pMap;
+
+	//工具激活状态下，不能轻易删除要素，不然会引起崩溃，初始化可删除
+	bool m_bCanDelete;
 };
 
 #endif

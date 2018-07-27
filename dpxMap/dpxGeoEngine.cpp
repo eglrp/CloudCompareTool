@@ -10,6 +10,7 @@ dpxGeoEngine* dpxGeoEngine::Instance()
 dpxGeoEngine::dpxGeoEngine()
 {
 	m_pMap = nullptr;
+	m_bCanDelete = true;
 }
 
 dpxLayer* dpxGeoEngine::getLyrFormType(dpxLayerType eType)
@@ -50,10 +51,9 @@ dpxLayer* dpxGeoEngine::getZebraLineLry()
 	return getLyrFormType(eOT_ZebraLine);
 }
 
-//键盘摁下事件
-void dpxGeoEngine::slotKeyPress(const QString& sKey)
+void dpxGeoEngine::slotObjDelete()
 {
-	emit slotKeyPress(sKey);
+	emit sigObjDelete();
 }
 
 void dpxGeoEngine::slotMapChanged()
@@ -91,4 +91,12 @@ void dpxGeoEngine::slotFeatureAttributeChanged(const QString& strLayerID, int nF
 	emit sigFeatureAttributeChanged(strLayerID,nFeatureID);
 }
 
+void dpxGeoEngine::setCanDelete(bool bCanDelete)
+{
+	m_bCanDelete = bCanDelete;
+}
 
+bool dpxGeoEngine::getCanDelete()
+{
+	return m_bCanDelete;
+}

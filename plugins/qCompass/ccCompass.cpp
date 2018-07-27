@@ -56,19 +56,19 @@ ccCompass::ccCompass(QObject* parent) :
   , m_action( nullptr )
 {
 	//initialize all tools
-	m_fitPlaneTool = new ccFitPlaneTool(); //
-	m_traceLineTool = new dpxTraceLineTool;  //new dpxTraceLineTool();//新拓展折现工具
+	m_fitPlaneTool = new ccFitPlaneTool(); 					//拟合平面工具-old
+	m_traceLineTool = new dpxTraceLineTool;  				//new dpxTraceLineTool();//新拓展折现工具
 
-	m_dpxCylinderTool = new dpxCylinderTool();//圆柱工具
-	m_dpxPlaneTool = new dpxPlaneTool();	//矩形工具
-	m_dpxSphereTool = new dpxSphereTool();//球采集工具
-	m_dpxNodeEditTool = new dpxNodeEditTool();//节点编辑工具
-	m_dpxSelectTool = new dpxSelectTool(); //选择工具
+	m_dpxCylinderTool = new dpxCylinderTool();				//圆柱工具
+	m_dpxPlaneTool = new dpxPlaneTool();					//矩形工具
+	m_dpxSphereTool = new dpxSphereTool();					//球采集工具
+	m_dpxNodeEditTool = new dpxNodeEditTool();				//节点编辑工具
+	m_dpxSelectTool = new dpxSelectTool(); 					//选择工具
 
-	m_dpxRoadRefLineTool = new dpxRoadRefLineTool(); //道路参考线工具
-	m_dpxRoadLineTool = new dpxRoadLineTool(); //道路线工具
-	m_dpxRoadStopLineTool = new dpxRoadStopLineTool();//道路停止线工具
-	m_dpxZebraCrossLineTool = new dpxZebraCrossLineTool();//道路停止线工具
+	m_dpxRoadRefLineTool = new dpxRoadRefLineTool(); 		//道路参考线工具
+	m_dpxRoadLineTool = new dpxRoadLineTool(); 				//道路线工具
+	m_dpxRoadStopLineTool = new dpxRoadStopLineTool();		//道路停止线工具
+	m_dpxZebraCrossLineTool = new dpxZebraCrossLineTool();	//道路停止线工具
 }
 
 //deconstructor

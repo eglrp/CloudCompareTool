@@ -18,7 +18,14 @@ dpxRoadLineTool::~dpxRoadLineTool()
 void dpxRoadLineTool::toolActivated()
 {
     dpxTraceLineTool::toolActivated();
-    m_bSetRefLine = false;
+
+    CheckSelectRefLine();
+}
+
+void dpxRoadLineTool::CheckSelectRefLine()
+{
+	m_bSetRefLine = false;
+	m_pPickRoot = nullptr;
     vector<ccHObject*> vecObjs = dpxSelectionManager::Instance()->getSelections();
     do
     {
@@ -42,6 +49,18 @@ void dpxRoadLineTool::toolActivated()
         QMessageBox::warning(nullptr,"waring","please Select one RefLine");
 }
 
+void dpxRoadLineTool::slotDeleteObj()
+{
+    //删除后的响应
+	m_VNodeInfo.clear();
+	m_nToolState=0;//采集状态
+	if(m_VNodeInfo.m_pLine==nullptr)
+	{
+		ccLog::Warning(" m_VNodeInfo success clear");
+	}
+	CheckSelectRefLine();
+	ccLog::Warning("dpxRoadLineTool delete Obj");
+}
 
 void dpxRoadLineTool::onKeyPress(int sKey)
 {
@@ -65,6 +84,7 @@ void dpxRoadLineTool::onMouseRightClick(int x,int y)
 			if (m_polyTip)
 				m_polyTip->setEnabled(false);
 
+			m_pPickRoot->removeChild(m_poly3D);
 			m_poly3D = 0;
 			m_poly3DVertices = 0;
 		}
@@ -150,6 +170,9 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 {
     if(m_nToolState==1)//编辑状态不需要左键点击加点
         return;
+
+	if(!m_bSetRefLine) //若没有选中refLine则无法操作
+		return ;
 
     //if the 3D polyline doesn't exist yet, we create it
     if (!m_poly3D || !m_poly3DVertices)
