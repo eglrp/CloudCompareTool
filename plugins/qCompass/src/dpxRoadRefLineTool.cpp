@@ -17,7 +17,6 @@ dpxRoadRefLineTool::~dpxRoadRefLineTool()
 
 void dpxRoadRefLineTool::onKeyPress(int sKey)
 {
-	return;
 	//Q键清除选择集
 	if(sKey == Qt::Key_Q)
 	{
