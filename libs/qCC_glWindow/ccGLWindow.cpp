@@ -6338,11 +6338,14 @@ QString ccGLWindow::getShadersPath()
 	// Shaders are relative to the bin directory where the executable is found
 	QDir  theDir( appPath );
 
-	if ( theDir.dirName() == "bin" )
+	//by duans 渲染配置路径
+	//if ( theDir.dirName() == "bin" )
+	if (theDir.dirName().endsWith("bin",Qt::CaseInsensitive) )
 	{
-		theDir.cdUp();
+		//theDir.cdUp();
 
-		shaderPath = (theDir.absolutePath() + "/share/cloudcompare/shaders");
+		//shaderPath = (theDir.absolutePath() + "/share/cloudcompare/shaders");
+		shaderPath = appPath + "/shaders";
 	}
 	else
 	{

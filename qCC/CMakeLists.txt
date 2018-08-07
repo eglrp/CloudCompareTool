@@ -63,6 +63,7 @@ target_link_libraries( ${PROJECT_NAME} QCC_DB_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_IO_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_GL_LIB )
 target_link_libraries( ${PROJECT_NAME} qcustomplot )
+target_link_libraries(${PROJECT_NAME} QPCL_PLUGIN_UTILS_LIB) #by duans 
 
 # Qt
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL PrintSupport)

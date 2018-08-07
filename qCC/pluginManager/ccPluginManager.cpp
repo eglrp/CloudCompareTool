@@ -156,15 +156,19 @@ QStringList ccPluginManager::pluginPaths()
 	// Plugins are relative to the bin directory where the executable is found
 	QDir  binDir(appPath);
 
-	if (binDir.dirName() == "bin")
+	if (binDir.dirName().endsWith("bin",Qt::CaseInsensitive)) //若结尾以Bin结尾，则从可执行文件下plugins下找插件
 	{
-		binDir.cdUp();
+		//安装模式下的插件
+		//binDir.cdUp();
 
-		pluginPaths << (binDir.absolutePath() + "/lib/cloudcompare/plugins");
+		//pluginPaths << (binDir.absolutePath() + "/lib/cloudcompare/plugins");
+
+		//by duans插件
+		pluginPaths << (binDir.absolutePath() + "/plugins");
 	}
 	else
 	{
-		////读文本
+		////读文本 插件 by duans
 		QFile file("../../config/PluginPath.xml");
 		if(file.exists())
 		{
