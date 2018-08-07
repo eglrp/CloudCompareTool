@@ -96,6 +96,10 @@ public:
 	**/
 	void getEquation(CCVector3& N, PointCoordinateType& constVal) const;
 
+public:
+	//by duans
+    std::vector<CCVector3>  get4CornerPts();
+
 protected:
 
 	//inherited from ccDrawable

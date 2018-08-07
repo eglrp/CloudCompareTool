@@ -14,9 +14,8 @@
 #include "dpxPickAndEditTool.h"
 #include "dpxPlaneAssistDlg.h"
 
+#include "dpxMapDefine.h"
 
-#define DPX_RELATED_UID  "relatedUID"
-#define DPX_NORMAL  "Normal"
 /*
 Tool used to digitise traces
 */

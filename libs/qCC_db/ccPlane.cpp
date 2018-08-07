@@ -26,6 +26,7 @@
 
 //CCLIB
 #include "DistanceComputationTools.h"
+using namespace std;
 
 ccPlane::ccPlane(PointCoordinateType xWidth, PointCoordinateType yWidth, const ccGLMatrix* transMat/*=0*/, QString name/*=QString("Plane")*/)
 	: ccGenericPrimitive(name, transMat)
@@ -71,6 +72,7 @@ bool ccPlane::buildUp()
 
 	return true;
 }
+
 
 ccGenericPrimitive* ccPlane::clone() const
 {
@@ -262,12 +264,12 @@ bool ccPlane::SetQuadTexture(ccMesh* quadMesh, QImage image, QString imageFilena
 			quadMesh->removePerTriangleMtlIndexes();
 			return false;
 		}
-		
+
 		//set default texture indexes
 		quadMesh->addTriangleTexCoordIndexes(0, 2, 1);
 		quadMesh->addTriangleTexCoordIndexes(0, 3, 2);
 	}
-	
+
 	if (!quadMesh->hasPerTriangleMtlIndexes())
 	{
 		if (!quadMesh->reservePerTriangleMtlIndexes())
@@ -303,4 +305,21 @@ bool ccPlane::SetQuadTexture(ccMesh* quadMesh, QImage image, QString imageFilena
 	quadMesh->showMaterials(true);
 
 	return true;
+}
+
+std::vector<CCVector3>  ccPlane::get4CornerPts()
+{
+	std::vector<CCVector3> vecPts;
+	//
+	ccPointCloud* pVerts = vertices();
+	if(pVerts->size()>3)
+	{
+//		vecPts.push_back(m_transformation* *(pVerts->getPoint(0))); //has been changed no need to modefy by transM
+		vecPts.push_back(*(pVerts->getPoint(0)));
+		vecPts.push_back(*(pVerts->getPoint(1)));
+		vecPts.push_back(*(pVerts->getPoint(2)));
+		vecPts.push_back(*(pVerts->getPoint(3)));
+	}
+
+	return vecPts;
 }

@@ -24,6 +24,13 @@
 #define  ROAD_LINE_COLOR  (255,165,0)
 #define  STOP_LINE_COLOR  (160,32,240)
 #define  ZEBAR_CROSS_LINE_COLOR  (255,255,255)
+
+
+#define DPX_CYLINEDER_RELATED_UID  "relatedCylinderID"
+#define DPX_RELATED_PLANE_UID  "relatedPlaneUID"
+#define DPX_NORMAL  "Normal"
+
+
 enum DPX_MAP_API dpxLayerType
 {
 	eOT_Unknown,	//未知

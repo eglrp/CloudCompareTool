@@ -4,6 +4,9 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <ccPolyline.h>
+#include <ccPlane.h>
+#include <ccHObjectCaster.h>
+#include "dpxMapDefine.h"
 dpxMapManager::dpxMapManager()
 {
 }
@@ -96,7 +99,7 @@ bool dpxMapManager::outPutMap(ccHObject* pMapRootData)
 
 	m_textStream.setDevice(&file);
 	// QString strHead = "      X1"+"      Y1"+"      Z1"+"      X2"+"      Y2"+"      Z2"+"      Radius";
-	m_textStream<< "   Objtype   "<< "  Important key  " << "  coordinateXYZ  "  << "\n";
+	m_textStream<< " Objtype "<< " Important key " << " coordinateXYZ "  << "\n";
 
    //迭代输出
 	Export_Recursion(pMapRootData);
@@ -153,31 +156,34 @@ void dpxMapManager::Export_Recursion(ccHObject* pObj)
 
 void dpxMapManager::ExportPlane(ccPolyline* pLine,int eType)
 {
-	m_textStream << "   Objtype   " <<  QString::number(eType) ;
+	m_textStream << " Objtype " <<  QString::number(eType);
 	if(pLine==nullptr || pLine==0)
 		return;
-//		//删除旧的
-//	QString strUID = pLine->getMetaData(DPX_RELATED_UID).toString();
-//	ccHObject::Container vecHObjs;
-//	pLine->filterChildren(vecHObjs,true,CC_TYPES::PLANE);
-//	for(int i =0;i<vecHObjs.size();i++)
-//	{
-//		ccPlane* plane = ccHObjectCaster::ToPlane(vecHObjs[i]);
-//		if(plane==nullptr)
-//			continue;
-//		if(!plane->hasMetaData(DPX_RELATED_UID))
-//			continue;
-//		QString sUID = plane->getMetaData(DPX_RELATED_UID).toString();
-//		if(sUID.compare(strUID,Qt::CaseInsensitive)==0)
-//		{
-//		}
-//	}
-
-	for(int i = 0;i<pLine->size();i++)
+	//
+	QString strUID = pLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
+	ccHObject::Container vecHObjs;
+	pLine->filterChildren(vecHObjs,true,CC_TYPES::PLANE);
+	for(int i =0;i<vecHObjs.size();i++)
 	{
-		const CCVector3*  pPt = pLine->getPoint(i);
-		m_textStream << " ( " << QString::number(pPt->x) <<"  "<<QString::number(pPt->y) <<"  "<<QString::number(pPt->z) << " ) ";
+		ccPlane* plane = ccHObjectCaster::ToPlane(vecHObjs[i]);
+		if(plane==nullptr)
+			continue;
+		if(!plane->hasMetaData(DPX_RELATED_PLANE_UID))
+			continue;
+		QString sUID = plane->getMetaData(DPX_RELATED_PLANE_UID).toString();
+		if(sUID.compare(strUID,Qt::CaseInsensitive)==0)//
+		{
+			CCVector3 vecNormal = plane->getNormal();
+			m_textStream << " Normal:"<< " ( " << QString::number(vecNormal.x) <<"  "<<QString::number(vecNormal.y) <<"  "<<QString::number(vecNormal.z) << " ) ";
+			vector<CCVector3> vecPts = plane->get4CornerPts();
+			for(int i = 0;i<vecPts.size();i++)
+			{
+				CCVector3  pPt = vecPts.at(i);
+				m_textStream << " ( " << QString::number(pPt.x) <<"  "<<QString::number(pPt.y) <<"  "<<QString::number(pPt.z) << " ) ";
+			}
+		}
 	}
+
 	m_textStream << "\n";
 }
 
@@ -200,7 +206,7 @@ void dpxMapManager::ExportOfficeLightPole(ccPolyline* pLine,int eType)
 	const CCVector3* pFirst = pLine->getPoint(0);
 	const CCVector3* pSecond = pLine->getPoint(1);
 
-	m_textStream << " Objtype " <<  QString::number(eType)  <<   " Radius " << strRadius
+	m_textStream << " Objtype " <<  QString::number(eType)  << " Radius " << strRadius
 	<<  " ( " << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<" ) "
 	<<  " ( " <<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y)<<"  "<<QString::number(pSecond->z) <<" ) "
 	<< "\n";

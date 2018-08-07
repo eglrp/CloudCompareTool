@@ -136,11 +136,11 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 		return;
 	}
 
-	if(!pLine->hasMetaData(DPX_RELATED_UID) || !pLine->hasMetaData(DPX_NORMAL))
+	if(!pLine->hasMetaData(DPX_RELATED_PLANE_UID) || !pLine->hasMetaData(DPX_NORMAL))
 		return;
 
 	//删除旧的
-	QString strUID = pLine->getMetaData(DPX_RELATED_UID).toString();
+	QString strUID = pLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
 	ccHObject::Container vecHObjs;
 	dpxSnapHelper::Instance()->FindAllObjs(vecHObjs,CC_TYPES::PLANE);//旧的删除
 	for(int i =0;i<vecHObjs.size();i++)
@@ -148,9 +148,9 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 		ccPlane* plane = ccHObjectCaster::ToPlane(vecHObjs[i]);
 		if(plane==nullptr)
 			continue;
-		if(!plane->hasMetaData(DPX_RELATED_UID))
+		if(!plane->hasMetaData(DPX_RELATED_PLANE_UID))
 			continue;
-		QString sUID = plane->getMetaData(DPX_RELATED_UID).toString();
+		QString sUID = plane->getMetaData(DPX_RELATED_PLANE_UID).toString();
 		if(sUID.compare(strUID,Qt::CaseInsensitive)==0)
 		{
 			pLine->removeChild(plane);
@@ -233,7 +233,7 @@ void dpxPlaneTool::onMouseReleaseEvent(int x,int y)
 		CCVector3 vNormal = pNewPlane->getNormal();
 		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
 		pLine->setMetaData(DPX_NORMAL,strNormal);
-		pNewPlane->setMetaData(DPX_RELATED_UID,strUID);
+		pNewPlane->setMetaData(DPX_RELATED_PLANE_UID,strUID);
 
 		pLine->addChild(pNewPlane);
 	}
@@ -281,7 +281,7 @@ void dpxPlaneTool::AddPlaneToData(ccFitPlane* pPlane)
 		pPlane->setVisible(true);
 		pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
 		pPlane->setDisplay(m_window);
-		pPlane->setMetaData(DPX_RELATED_UID,strRelateID);
+		pPlane->setMetaData(DPX_RELATED_PLANE_UID,strRelateID);
 		QImage* pImage = new QImage(getImageName());
 		if(pImage)
 		{
@@ -291,7 +291,7 @@ void dpxPlaneTool::AddPlaneToData(ccFitPlane* pPlane)
 		CCVector3 vNormal = pPlane->getNormal();
 		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
 		m_poly3D->setMetaData(DPX_NORMAL,strNormal);//法向量
-		m_poly3D->setMetaData(DPX_RELATED_UID,strRelateID);//关联的ID
+		m_poly3D->setMetaData(DPX_RELATED_PLANE_UID,strRelateID);//关联的ID
 		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,m_eCurObjType); //地物类型
 		m_poly3D->setName(getObjectName());//设置名称
 		m_poly3D->addChild(pPlane);

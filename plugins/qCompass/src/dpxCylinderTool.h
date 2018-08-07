@@ -11,8 +11,7 @@
 
 
 #include "dpxPickAndEditTool.h"
-
-#define DPX_CYLINEDER_RELATED_UID  "relatedCylinderID"
+#include "dpxMapDefine.h"
 
 class ccPolyline;
 class ccPointCloud;
