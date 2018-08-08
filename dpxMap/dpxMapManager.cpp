@@ -84,17 +84,24 @@ bool dpxMapManager::saveMapDoc(dpxMap* pMap,QString strFile)
 	return false;
 }
 //地图文档，可以用于加载
-bool dpxMapManager::outPutMap(ccHObject* pMapRootData)
+bool dpxMapManager::outPutMap(ccHObject* pMapRootData,QString strOutFile/*=""*/)
 {
-	QString strFileName=QFileDialog::getSaveFileName(nullptr, "select the location to be saved"/*, exportDir, "*.xodr"*/);
-    if(strFileName.isEmpty())
-        return false;
+	bool bEmpty = (strOutFile=="");
+	if(bEmpty)
+	{
+		strOutFile=QFileDialog::getSaveFileName(nullptr, "select the location to be saved"/*, exportDir, "*.xodr"*/);
+		if(strOutFile.isEmpty())
+		{
+			ccLog::Warning("no set out File");
+			return false;
+		}
+	}
 
-	QFile file(strFileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text))
+	QFile file(strOutFile);
+    if (!file.open(QFile::ReadWrite | QFile::Text))
     {
 		QMessageBox::warning(nullptr,"waring","Error: cannot creat file");
-			return false;
+		return false;
     }
 
 	m_textStream.setDevice(&file);
@@ -103,14 +110,72 @@ bool dpxMapManager::outPutMap(ccHObject* pMapRootData)
 
    //迭代输出
 	Export_Recursion(pMapRootData);
+	//Export_Recursion2XML(pMapRootData);
 
 	file.close();
 
-	QMessageBox::warning(nullptr,"out success", "out OK!");
+	if(bEmpty)
+		QMessageBox::warning(nullptr,"out success", "out OK!");
 
 	return true;
 }
 
+void dpxMapManager::Export_Recursion2XML(ccHObject* pObj)
+{
+	if(pObj == nullptr || !pObj)
+		return;
+
+	ccPolyline* pLine = pObj && pObj->isA(CC_TYPES::POLY_LINE) ? static_cast<ccPolyline*>(pObj) : 0;
+	if(pLine!=0 && pLine != nullptr)
+	{
+		dpxObjectType eType = eObj_Unknown;
+		bool bHasObjType = pLine->hasMetaData(DPX_OBJECT_TYPE_NAME);
+		if(bHasObjType)
+            eType = dpxObjectType(pLine->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
+
+		if(eType==eObj_RoadRefLine) //道路线
+		{
+			ExportLine(pLine,eType);
+		}
+		else if(eType==eObj_RoadLine ) //RoadLine(Lane)
+		{
+			ExportLine(pLine,eType);
+		}
+		else if(eType==eObj_RoadStopLine) //StopLine
+		{
+			ExportLine(pLine,eType);
+		}
+		else if(eType==eObj_ZebraCrossingLine) //Zebra Line
+		{
+			ExportLine(pLine,eType);
+		}
+		else if(eType==eObj_OfficeLight_pole) //圆柱特征
+		{
+			ExportOfficeLightPole(pLine,eType);
+		}
+		else if(eType==eObj_OfficeLight || eType==eObj_Indication_OnRoad || eType==eObj_Indication_InSpace) //Plane
+		{
+			ExportPlane(pLine,eType);
+		}
+		else
+		{
+			//...
+		}
+	}
+
+	int nSize = pObj->getChildrenNumber();
+	if(nSize>0)
+	{
+		for(int i=0;i<nSize;i++)
+		{
+			ccHObject* pChildObj = pObj->getChild(i);
+			Export_Recursion2XML(pChildObj);
+		}
+	}
+	return ;
+}
+
+//-----------------output nomarl txt----------------------------//
 void dpxMapManager::Export_Recursion(ccHObject* pObj)
 {
 	if(pObj == nullptr || !pObj)
@@ -138,10 +203,8 @@ void dpxMapManager::Export_Recursion(ccHObject* pObj)
 		}
 		else
 		{
-			//...
 		}
 	}
-
 	int nSize = pObj->getChildrenNumber();
 	if(nSize>0)
 	{
@@ -179,7 +242,7 @@ void dpxMapManager::ExportPlane(ccPolyline* pLine,int eType)
 			for(int i = 0;i<vecPts.size();i++)
 			{
 				CCVector3  pPt = vecPts.at(i);
-				m_textStream << " ( " << QString::number(pPt.x) <<"  "<<QString::number(pPt.y) <<"  "<<QString::number(pPt.z) << " ) ";
+				outPtCoordinate(pPt);
 			}
 		}
 	}
@@ -194,7 +257,7 @@ void dpxMapManager::ExportLine(ccPolyline* pLine,int eType)
 	for(int i = 0;i<pLine->size();i++)
 	{
 		const CCVector3*  pPt = pLine->getPoint(i);
-		m_textStream << " ( " << QString::number(pPt->x) <<"  "<<QString::number(pPt->y) <<"  "<<QString::number(pPt->z) << " ) ";
+		outPtCoordinate(*pPt);
 	}
 	m_textStream << "\n";
 }
@@ -206,14 +269,24 @@ void dpxMapManager::ExportOfficeLightPole(ccPolyline* pLine,int eType)
 	const CCVector3* pFirst = pLine->getPoint(0);
 	const CCVector3* pSecond = pLine->getPoint(1);
 
-	m_textStream << " Objtype " <<  QString::number(eType)  << " Radius " << strRadius
-	<<  " ( " << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<" ) "
-	<<  " ( " <<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y)<<"  "<<QString::number(pSecond->z) <<" ) "
-	<< "\n";
+	m_textStream << " Objtype " <<  QString::number(eType)  << " Radius " << strRadius;
+	outPtCoordinate(*pFirst);
+	outPtCoordinate(*pSecond);
+	m_textStream << "\n";
 }
 
 //加载地图文档
 dpxMap* dpxMapManager::LoadMapDoc(QString strMapFile)
 {
 	return nullptr;
+}
+
+void dpxMapManager::outPtCoordinate(CCVector3 pt)
+{
+	m_textStream
+		<< " ( " <<
+	QString::number(pt.x) <<" "<<
+	QString::number(pt.y) <<" "<<
+	QString::number(pt.z)
+		<< " ) ";
 }

@@ -25,6 +25,8 @@
 #include "../ccStdPluginInterface.h"
 #include <ccPickingListener.h>
 #include <qbuffer.h>
+#include <QTimer>
+#include <QThread>
 
 class ccCompassDlg;
 class ccFitPlaneTool;
@@ -117,6 +119,7 @@ protected slots:
 	//给工具传入快捷键
 	void slotKeyPress(int nKey);
 
+	void slotOnTimeOutPut();//ding shi bao cun  di tu
 protected:
 
 	//event to get mouse-move updates & trigger repaint of overlay circle
@@ -186,6 +189,9 @@ public:
 	//digitization mode
 	static bool mapMode; //true if map mode, false if measure mode
 	static int mapTo; //see flags in ccGeoObject.h for definition of different mapping locations
+
+	QTimer *m_pTimer;
+	QThread* m_pThread;
 };
 
 #endif

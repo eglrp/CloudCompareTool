@@ -27,14 +27,17 @@ public:
 	//加载地图
 	dpxMap* LoadMapDoc(QString strMapFile);
 
-	bool outPutMap(ccHObject* pMapRootData);
+	bool outPutMap(ccHObject* pMapRootData,QString strOutFile="");
 
 protected:
-	void Export_Recursion(ccHObject* pObj);
+	void Export_Recursion2XML(ccHObject* pObj);
 
+	void Export_Recursion(ccHObject* pObj);
 	void ExportPlane(ccPolyline* pLine,int eType);
 	void ExportLine(ccPolyline* pLine,int eType);
 	void ExportOfficeLightPole(ccPolyline* pLine,int eType);
+
+	void outPtCoordinate(CCVector3 pt);
 
 private:
 	QTextStream m_textStream;

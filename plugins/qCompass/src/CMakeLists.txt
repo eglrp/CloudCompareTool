@@ -38,6 +38,7 @@ set( CC_PLUGIN_CUSTOM_HEADER_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolAssistDlg.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneAssistDlg.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxZebraCrossLineTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxThreadBase.h
 	PARENT_SCOPE
 )
 
@@ -78,5 +79,6 @@ set( CC_PLUGIN_CUSTOM_SOURCE_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolAssistDlg.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneAssistDlg.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxZebraCrossLineTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxThreadBase.cpp
 	PARENT_SCOPE
 )

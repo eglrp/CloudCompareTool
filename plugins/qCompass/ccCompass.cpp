@@ -28,7 +28,12 @@
 #include "ccFitPlaneTool.h"
 #include "ccGeoObject.h"
 
+#include <QThread>
+#include <QMessageBox>
 
+#include "dpxGeoEngine.h"
+#include "dpxMapManager.h"
+#include "dpxThreadBase.h"//
 #include "dpxTraceLineTool.h"//折线工具
 #include "dpxCylinderTool.h"//圆柱工具
 #include "dpxPlaneTool.h"//平面工具
@@ -49,6 +54,7 @@ bool ccCompass::fitPlanes = true;
 int ccCompass::costMode = ccTrace::DARK;
 bool ccCompass::mapMode = false;
 int ccCompass::mapTo = ccGeoObject::LOWER_BOUNDARY;
+const int nMsecod = 6*1000; //60 seconds per output
 
 ccCompass::ccCompass(QObject* parent) :
 	QObject( parent )
@@ -69,6 +75,9 @@ ccCompass::ccCompass(QObject* parent) :
 	m_dpxRoadLineTool = new dpxRoadLineTool(); 				//道路线工具
 	m_dpxRoadStopLineTool = new dpxRoadStopLineTool();		//道路停止线工具
 	m_dpxZebraCrossLineTool = new dpxZebraCrossLineTool();	//道路停止线工具
+
+	m_pTimer = new QTimer(this);
+	connect(m_pTimer, SIGNAL(timeout()), this, SLOT(slotOnTimeOutPut()));
 }
 
 //deconstructor
@@ -211,6 +220,8 @@ void ccCompass::doAction()
 
 	//begin measuring
 	startMeasuring();
+
+	m_pTimer->start(nMsecod); // 60 seconds
 }
 
 //Begin measuring
@@ -727,4 +738,56 @@ void ccCompass::enableMeasureMode() //turns on/off map mode
 
 	//turn off map mode dialog
 	m_app->updateOverlayDialogsPlacement();
+}
+
+void outMapFunc()
+{
+	static int nNumber = 0;
+	dpxMap* pCurrentMap = dpxGeoEngine::Instance()->GetMap();
+	if(pCurrentMap==nullptr)
+	{
+		ccLog::Warning("no Map Find to output");
+		return;
+	}
+
+	ccHObject* rootData = pCurrentMap->getRootData();
+	if(rootData==nullptr)
+	{
+		ccLog::Warning("no Map rootData");
+		return;
+	}
+
+	QString appPath = QCoreApplication::applicationDirPath();
+	QString strTempPath = appPath + "/temp/" ;
+	QDir tempDir(strTempPath);
+    if(!tempDir.exists())
+    {
+       bool bSuccess = tempDir.mkpath(strTempPath);//创建多级目录
+       if(!bSuccess)
+       {
+			QMessageBox::warning(nullptr, "waring" , "please creat 'temp' dir in the exe Dir!");
+			return;
+       }
+	}
+
+	QString  strFile =  strTempPath+ QString::number(nNumber)+ ".temp";
+	QFile file(strFile);
+    if(file.exists())
+		file.remove();
+
+	ccLog::Warning("output temp" + strFile);
+
+    dpxMapManager* pManager = new dpxMapManager();
+    pManager->outPutMap(rootData,strFile);
+
+    nNumber++;
+    if(nNumber>9)
+		nNumber = 0;
+}
+
+void ccCompass::slotOnTimeOutPut()
+{
+    //out map
+	dpxThreadBase* pThread = new dpxThreadBase(outMapFunc);
+    pThread->start();
 }
