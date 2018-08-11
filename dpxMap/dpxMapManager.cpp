@@ -7,6 +7,12 @@
 #include <ccPlane.h>
 #include <ccHObjectCaster.h>
 #include "dpxMapDefine.h"
+
+//#include "../map_param/include/map.pb.h"
+//#include "map.pb.h"
+
+//using namespace hdmap_proto;
+
 dpxMapManager::dpxMapManager()
 {
 }
@@ -122,6 +128,8 @@ bool dpxMapManager::outPutMap(ccHObject* pMapRootData,QString strOutFile/*=""*/)
 
 void dpxMapManager::Export_Recursion2XML(ccHObject* pObj)
 {
+	//hdmap_proto::Map *pProtoMap = new hdmap_proto::Map();
+	//pProtoMap->add_roads();
 	if(pObj == nullptr || !pObj)
 		return;
 

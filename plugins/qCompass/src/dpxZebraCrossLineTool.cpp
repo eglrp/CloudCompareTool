@@ -17,9 +17,13 @@ dpxZebraCrossLineTool::~dpxZebraCrossLineTool()
 void dpxZebraCrossLineTool::toolActivated()
 {
 	//若添加了地图，采集到地图中去
-	dpxLayer* pZebraLineLyr = dpxGeoEngine::Instance()->getZebraLineLry();
-	if(pZebraLineLyr!=nullptr && pZebraLineLyr->getRootData()!=nullptr)
-		m_pPickRoot = pZebraLineLyr->getRootData();
+	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+	if(pMap!=nullptr)
+	{
+		dpxLayer* pZebraLineLyr = pMap->getZebraLineLry();
+		if(pZebraLineLyr!=nullptr && pZebraLineLyr->getRootData()!=nullptr)
+			m_pPickRoot = pZebraLineLyr->getRootData();
+	}
 
 	dpxPickAndEditTool::toolActivated();
 }

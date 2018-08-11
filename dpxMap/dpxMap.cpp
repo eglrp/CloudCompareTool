@@ -28,19 +28,6 @@ ccHObject* dpxMap::getRootData()
 	return m_MapRootData;
 }
 
-//void dpxMap::SetType(dpxLayerType eType)
-//{
-//	m_MapRootData->setMetaData(DPX_LAYER_TYPE_NAME,eType);//自动转换成数字
-//}
-//
-//dpxLayerType dpxMap::GetType()
-//{
-//	if(!m_MapRootData->hasMetaData(DPX_LAYER_TYPE_NAME))
-//		return dpxLayerType::eOT_Unknown;
-//
-//	return dpxLayerType(m_MapRootData->getMetaData(DPX_LAYER_TYPE_NAME).toInt());//自动转换成数字
-//}
-
 void dpxMap::setMapId(const QString& strId)
 {
 	m_strMapID = strId;
@@ -111,4 +98,39 @@ bool dpxMap::RemoveAllLayers()
 	m_vecLrys.swap(vecLrys);
  	m_MapRootData->removeAllChildren();
  	return true;
+}
+
+dpxLayer* dpxMap::getLyrFormType(dpxLayerType eType)
+{
+	for(int i =0;i<m_vecLrys.size();i++)
+	{
+		if(m_vecLrys[i]!=nullptr && m_vecLrys[i]->GetType()==eType)
+			return m_vecLrys[i];
+	}
+	return nullptr;
+}
+//道路层
+dpxLayer* dpxMap::getRoadLyr()
+{
+	return getLyrFormType(eOT_Road);
+}
+//路灯层
+dpxLayer* dpxMap::getLightLyr()
+{
+	return getLyrFormType(eOT_Light);
+}
+//指示牌层
+dpxLayer* dpxMap::getIndicatorLry()
+{
+	return getLyrFormType(eOT_Indicator);
+}
+//获取其它层
+dpxLayer* dpxMap::getOtherLry()
+{
+	return getLyrFormType(eOT_Other);
+}
+
+dpxLayer* dpxMap::getZebraLineLry()
+{
+	return getLyrFormType(eOT_ZebraLine);
 }

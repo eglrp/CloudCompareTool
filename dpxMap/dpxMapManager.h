@@ -7,6 +7,7 @@
 #include "dpxMap_IO.h"
 #include "dpxMap.h"
 #include "ccPolyline.h"
+
 /*
 * dpxMap
 */
@@ -31,7 +32,6 @@ public:
 
 protected:
 	void Export_Recursion2XML(ccHObject* pObj);
-
 	void Export_Recursion(ccHObject* pObj);
 	void ExportPlane(ccPolyline* pLine,int eType);
 	void ExportLine(ccPolyline* pLine,int eType);

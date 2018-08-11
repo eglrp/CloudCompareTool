@@ -30,8 +30,19 @@ public:
 	bool RemoveLayer(dpxLayer* pLayer);//
 	bool RemoveAllLayers();//
 
+
+public:
+	//--------HDmap特定图层的获取------
+	dpxLayer* getRoadLyr();
+	dpxLayer* getLightLyr();
+	dpxLayer* getIndicatorLry();
+	dpxLayer* getOtherLry();
+	dpxLayer* getZebraLineLry();//斑马线层
+
 protected:
 	dpxMap(){}
+
+	dpxLayer* getLyrFormType(dpxLayerType eType);
 protected:
 	LayerVec m_vecLrys;
 	QString m_strMapName;//图层名称

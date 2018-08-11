@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.0)
 
 project( DPX_MAP_LIB  VERSION 1.0 )
-
 #添加头文件
 include_directories( ${CC_CORE_LIB_SOURCE_DIR}/include )#依赖CC_CORE_LIB
 include_directories( ${QCC_DB_LIB_SOURCE_DIR} )#依赖QCC_DB_LIB
 include_directories( ${QCC_GL_LIB_SOURCE_DIR} )#依赖QCC_DB_LIB
-#include_directories( ${CloudComparePlugins_SOURCE_DIR} )#依赖CloudComparePlugins_SOURCE_DIR
+
+#include_directories( ${PROTOBUF_DIR} )#依赖QCC_DB_LIB
+
 
 include ( ../cmake/CMakePolicies.cmake )
 include ( ../cmake/CMakeSetCompilerOptions.cmake )
@@ -28,6 +29,11 @@ add_library( ${PROJECT_NAME} SHARED ${header_list} ${source_list} ${generated_ui
 target_link_libraries( ${PROJECT_NAME} CC_CORE_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_DB_LIB )
 
+#添加protobufMap
+#by duans
+#include_directories( ../map_param/include )
+#target_link_libraries( ../map_param/lib/libmap_io.so )
+#target_link_libraries( ../map_param/lib/libmap_param.a )
 
 # Qt
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets )

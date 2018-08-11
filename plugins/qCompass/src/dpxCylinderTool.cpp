@@ -33,9 +33,14 @@ dpxCylinderTool::~dpxCylinderTool()
 //called when the tool is set to active (for initialization)
 void dpxCylinderTool::toolActivated()
 {
-	dpxLayer* pLightLyr = dpxGeoEngine::Instance()->getLightLyr();
-	if(pLightLyr!=nullptr && pLightLyr->getRootData()!=nullptr)
-		m_pPickRoot = pLightLyr->getRootData();
+	//若添加了地图，采集到地图中去
+	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+	if(pMap!=nullptr)
+	{
+		dpxLayer* pLightLyr = pMap->getLightLyr();
+		if(pLightLyr!=nullptr && pLightLyr->getRootData()!=nullptr)
+			m_pPickRoot = pLightLyr->getRootData();
+	}
 
 	dpxPickAndEditTool::toolActivated();
 }

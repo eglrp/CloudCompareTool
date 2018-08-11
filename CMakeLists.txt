@@ -82,6 +82,7 @@ include( cmake/CMakeInclude.cmake )
 add_subdirectory( CC )
 
 # by duan
+#add_subdirectory( mapparam )
 add_subdirectory( dpxMap )
 
 # Add external libraries
@@ -102,6 +103,7 @@ add_subdirectory( plugins )
 
 # qCC
 add_subdirectory( qCC )
+
 
 # CCViewer
 if( ${OPTION_BUILD_CCVIEWER} )

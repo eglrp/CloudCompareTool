@@ -13,44 +13,6 @@ dpxGeoEngine::dpxGeoEngine()
 	m_bCanDelete = true;
 }
 
-dpxLayer* dpxGeoEngine::getLyrFormType(dpxLayerType eType)
-{
-	if(m_pMap == nullptr)
-		return nullptr;
-	LayerVec vecLyrs = m_pMap->GetAllLayers();
-	for(int i =0;i<vecLyrs.size();i++)
-	{
-		if(vecLyrs[i]!=nullptr && vecLyrs[i]->GetType()==eType)
-			return vecLyrs[i];
-	}
-	return nullptr;
-}
-//道路层
-dpxLayer* dpxGeoEngine::getRoadLyr()
-{
-	return getLyrFormType(eOT_Road);
-}
-//路灯层
-dpxLayer* dpxGeoEngine::getLightLyr()
-{
-	return getLyrFormType(eOT_Light);
-}
-//指示牌层
-dpxLayer* dpxGeoEngine::getIndicatorLry()
-{
-	return getLyrFormType(eOT_Indicator);
-}
-//获取其它层
-dpxLayer* dpxGeoEngine::getOtherLry()
-{
-	return getLyrFormType(eOT_Other);
-}
-
-dpxLayer* dpxGeoEngine::getZebraLineLry()
-{
-	return getLyrFormType(eOT_ZebraLine);
-}
-
 void dpxGeoEngine::slotObjDelete()
 {
 	emit sigObjDelete();

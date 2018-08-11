@@ -28,9 +28,13 @@ dpxTraceLineTool::~dpxTraceLineTool()
 void dpxTraceLineTool::toolActivated()
 {
 	//若添加了地图，采集到地图中去
-	dpxLayer* pRoadLyr = dpxGeoEngine::Instance()->getRoadLyr();
-	if(pRoadLyr!=nullptr && pRoadLyr->getRootData()!=nullptr)
-		m_pPickRoot = pRoadLyr->getRootData();
+	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+	if(pMap!=nullptr)
+	{
+		dpxLayer* pRoadLyr = pMap->getRoadLyr();
+		if(pRoadLyr!=nullptr && pRoadLyr->getRootData()!=nullptr)
+			m_pPickRoot = pRoadLyr->getRootData();
+	}
 
 	dpxPickAndEditTool::toolActivated();
 }

@@ -63,7 +63,6 @@ target_link_libraries( ${PROJECT_NAME} QCC_DB_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_IO_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_GL_LIB )
 target_link_libraries( ${PROJECT_NAME} qcustomplot )
-target_link_libraries(${PROJECT_NAME} QPCL_PLUGIN_UTILS_LIB) #by duans 
 
 # Qt
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL PrintSupport)
@@ -165,6 +164,7 @@ endif()
 # Copy shader dirs into our shadow build directory
 file( COPY ${CC_FBO_LIB_SOURCE_DIR}/shaders DESTINATION "${CMAKE_BINARY_DIR}" )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION "${CMAKE_BINARY_DIR}" )
+
 
 # Export common shader files to all install destinations
 if( APPLE )

@@ -42,9 +42,13 @@ void dpxPlaneTool::toolActivated()
 		m_pAssistWin->show();
 
 	//若添加了地图，采集到地图中去
-	dpxLayer* pIndicatorLyr = dpxGeoEngine::Instance()->getIndicatorLry();
-	if(pIndicatorLyr!=nullptr && pIndicatorLyr->getRootData()!=nullptr)
-		m_pPickRoot = pIndicatorLyr->getRootData();
+	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+	if(pMap!=nullptr)
+	{
+		dpxLayer* pIndicatorLyr = pMap->getIndicatorLry();
+		if(pIndicatorLyr!=nullptr && pIndicatorLyr->getRootData()!=nullptr)
+			m_pPickRoot = pIndicatorLyr->getRootData();
+	}
 
 	QObject::connect(m_pAssistWin, SIGNAL(sigTypeChange(int)), this, SLOT(slotChangeType(int)));
 	QObject::connect(m_pAssistWin, SIGNAL(sigObjTypeChange(int)), this, SLOT(slotObjTypeChangeType(int)));
