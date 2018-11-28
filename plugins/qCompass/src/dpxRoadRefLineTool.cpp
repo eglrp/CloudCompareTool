@@ -50,7 +50,7 @@ void dpxRoadRefLineTool::onMouseRightClick(int x,int y)
 		else
 		{
 			vector<ccPolyline*> vecRefLine;
-			ccPolyline* pCopyLine = CopyNewLine(m_poly3D);
+			ccPolyline* pCopyLine = dpxToolCommonFun::CopyNewLine(m_poly3D);
 			vecRefLine.push_back(pCopyLine);
 
 			ccHObject* pSection = dpxToolCommonFun::CreateSection(vecRefLine);
@@ -61,6 +61,7 @@ void dpxRoadRefLineTool::onMouseRightClick(int x,int y)
 
 			//RefLines
 			vector<ccHObject*> vecRefLines = dpxToolCommonFun::getRefLines(pSection);
+
 			dpxSelectionManager::Instance()->AddObject2Selection(vecRefLines);
 			dpxSelectionManager::Instance()->redrawSelectionSet();
 
@@ -75,33 +76,4 @@ void dpxRoadRefLineTool::onMouseRightClick(int x,int y)
 		m_window->removeFromOwnDB(m_pPickRoot);
 		m_app->addToDB(m_pPickRoot);
 	}
-}
-
-ccPolyline* dpxRoadRefLineTool::CopyNewLine(ccPolyline* poly3D)
-{
-	if(poly3D==nullptr || poly3D->size()<2)
-		return nullptr;
-
-	ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
-	poly3DVertices->setEnabled(false);
-
-	ccPolyline* pTargetLine = new ccPolyline(poly3DVertices);
-	pTargetLine->setVisible(true);
-	pTargetLine->setDisplay(m_window);
-	for(int i =0;i<poly3D->size();i++)
-	{
-		const CCVector3* pPt =  poly3D->getPoint(i);
-		//try to add one more point
-		if (!poly3DVertices->reserve(poly3DVertices->size() + 1)
-			||!pTargetLine->reserve(poly3DVertices->size() + 1))
-		{
-			ccLog::Error("Not enough memory");
-			return nullptr;
-		}
-
-		poly3DVertices->addPoint(*pPt);
-		pTargetLine->addPointIndex(poly3DVertices->size() - 1);
-	}
-	pTargetLine->addChild(poly3DVertices);
-	return pTargetLine;
 }

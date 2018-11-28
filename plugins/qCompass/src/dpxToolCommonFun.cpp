@@ -355,6 +355,30 @@ vector<ccHObject*> dpxToolCommonFun::getRoadLineSets(ccHObject* pSection)
 	return vecResults;
 }
 
+vector<ccPolyline*>  dpxToolCommonFun::getLinesFromLineSet(ccHObject* pLineSet)
+{
+	vector<ccPolyline*>  vecResults;
+	if(pLineSet==nullptr)
+		return vecResults;
+	int nSize = pLineSet->getChildrenNumber();
+	for(int j=0;j<nSize;j++)
+	{
+		ccHObject* pLineObj = pLineSet->getChild(j);
+		if(!pLineObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
+			continue;
+		dpxObjectType eType = dpxObjectType(pLineObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
+		if(eType!=eObj_RoadLine && eType!=eObj_RoadRefLine)
+			continue;
+
+		ccPolyline* pPolyLine = ccHObjectCaster::ToPolyline(pLineObj);
+		if(pPolyLine==nullptr)
+			continue;
+
+		vecResults.push_back(pPolyLine);
+	}
+}
+
+
 vector<ccPolyline*>  dpxToolCommonFun::getRoadLines(ccHObject* pRoadLineSet)
 {
 	vector<ccPolyline*>  vecResults;
@@ -378,11 +402,148 @@ vector<ccPolyline*>  dpxToolCommonFun::getRoadLines(ccHObject* pRoadLineSet)
 	}
 }
 
-ccPolyline* CopyNewLine(ccPolyline* pLine)
+ccHObject*  dpxToolCommonFun::getRelatedLineSet(ccPolyline* pLine)
 {
-
+	ccHObject* pCCHObj =  pLine->getParent();
+	if(pCCHObj==nullptr)
+		return nullptr;
+	if(!pCCHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
+		return nullptr;
+	dpxObjectType eType = dpxObjectType(pCCHObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
+	if(eType == eObj_RoadRefLineSet || eType == eObj_RoadLineSet)
+		return pCCHObj;
 }
 
+ccHObject* dpxToolCommonFun::getRelatedSection(ccPolyline* pLine)
+{
+	//LineSet
+	ccHObject* pCCHObj =  pLine->getParent();
+	if(pCCHObj==nullptr)
+		return nullptr;
+	if(!pCCHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
+		return nullptr;
+	dpxObjectType eType = dpxObjectType(pCCHObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
+	if(eType != eObj_RoadRefLineSet && eType != eObj_RoadLineSet)
+		return nullptr;
+
+	//Section
+	ccHObject* pSection =  pCCHObj->getParent();
+	if(pSection==nullptr)
+		return nullptr;
+	if(!pSection->hasMetaData(DPX_OBJECT_TYPE_NAME))
+		return nullptr;
+	dpxObjectType eType2 = dpxObjectType(pSection->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
+	if(eType2 != eObj_Section)
+		return nullptr;
+	return pSection;
+}
+
+ccPolyline* dpxToolCommonFun::CopyNewLine(ccPolyline* poly3D)
+{
+	if(poly3D==nullptr || poly3D->size()<2)
+		return nullptr;
+
+	ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
+	poly3DVertices->setEnabled(false);
+
+	ccPolyline* pTargetLine = new ccPolyline(poly3DVertices);
+	pTargetLine->setVisible(true);
+	pTargetLine->setDisplay(poly3D->getDisplay());
+	for(int i =0;i<poly3D->size();i++)
+	{
+		const CCVector3* pPt =  poly3D->getPoint(i);
+		//try to add one more point
+		if (!poly3DVertices->reserve(poly3DVertices->size() + 1)
+			||!pTargetLine->reserve(poly3DVertices->size() + 1))
+		{
+			ccLog::Error("Not enough memory");
+			return nullptr;
+		}
+
+		poly3DVertices->addPoint(*pPt);
+		pTargetLine->addPointIndex(poly3DVertices->size() - 1);
+	}
+	pTargetLine->addChild(poly3DVertices);
+	return pTargetLine;
+}
+
+//获取线上所有点
+vector<CCVector3> dpxToolCommonFun::GetAllPoints(ccPolyline* pLine)
+{
+	vector<CCVector3>  vecPts;
+	if(pLine==nullptr)
+		return vecPts;
+	for(int i = 0;i<pLine->size();i++)
+	{
+		vecPts.push_back(*(pLine->getPoint(i)));
+	}
+	return vecPts;
+}
+//通过点创建折线
+ccPolyline* dpxToolCommonFun::CreatLineFromPts(vector<CCVector3> vecPts)
+{
+	ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
+	poly3DVertices->setEnabled(false);
+
+	ccPolyline* pTargetLine = new ccPolyline(poly3DVertices);
+	pTargetLine->setVisible(true);
+	for(int i = 0;i < vecPts.size();i++)
+	{
+		//try to add one more point
+		if (!poly3DVertices->reserve(poly3DVertices->size() + 1)
+			||!pTargetLine->reserve(poly3DVertices->size() + 1))
+		{
+			ccLog::Error("Not enough memory");
+			return nullptr;
+		}
+
+		poly3DVertices->addPoint(vecPts[i]);
+		pTargetLine->addPointIndex(poly3DVertices->size() - 1);
+	}
+	pTargetLine->addChild(poly3DVertices);
+	return pTargetLine;
+}
+
+bool dpxToolCommonFun::splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,vector<ccPolyline*>& vecResult)
+{
+	if(pTargetLine==nullptr)
+		return false;
+	int nPtSize = pTargetLine->size();
+    if(nPtSize<3) //将该线段删除
+		return true;
+	vector<CCVector3>  vecPts =  dpxToolCommonFun::GetAllPoints(pTargetLine);
+    if(nDeleteSegmetIndex==0)//删除首段——删除首个点
+    {
+		vector<CCVector3> vecPt1 = vecPts;
+		vecPt1.erase(vecPt1.begin()+0);
+		ccPolyline* pLine = dpxToolCommonFun::CreatLineFromPts(vecPt1);
+		if(pLine != nullptr)
+			vecResult.push_back(pLine);
+    }
+	else if(nDeleteSegmetIndex==nPtSize-2)//删除尾端 删除尾点
+	{
+		vector<CCVector3> vecPt2 = vecPts;
+		vecPt2.erase(vecPt2.begin()+vecPt2.size()-1);
+		ccPolyline* pLine = dpxToolCommonFun::CreatLineFromPts(vecPt2);
+		if(pLine != nullptr)
+			vecResult.push_back(pLine);
+	}
+	else
+	{
+		//折线一分为二
+        //Line 1[0,nDeleteSegmetIndex]    Line2[nDeleteSegmetIndex+1,nPtSize-1]
+        vector<CCVector3> vecPt1,vecPt2;
+		vecPt1.insert(vecPt1.end(),vecPts.begin(),vecPts.begin()+nDeleteSegmetIndex+1);
+        vecPt2.insert(vecPt2.end(),vecPts.begin()+nDeleteSegmetIndex+1,vecPts.end());
+        ccPolyline* pLine1 = dpxToolCommonFun::CreatLineFromPts(vecPt1);
+		ccPolyline* pLine2 = dpxToolCommonFun::CreatLineFromPts(vecPt2);
+		if(pLine1 != nullptr)
+			vecResult.push_back(pLine1);
+		if(pLine2 != nullptr)
+			vecResult.push_back(pLine2);
+	}
+	return true;
+}
 //判断选择集中的refLine是否属于同一个RefLineSet
 //通过refLine找到其对应的Section
 

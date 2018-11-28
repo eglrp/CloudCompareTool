@@ -32,14 +32,25 @@ public:
 	static vector<ccHObject*> getRefLines(ccHObject* pSection);//
 	static vector<ccPolyline*> getRefLinesV2(ccHObject* pSection);//
 
+	static vector<ccPolyline*>  getLinesFromLineSet(ccHObject* pLineSet);
 	static vector<ccPolyline*>  getRoadLines(ccHObject* pRoadLineSet);
 
 	//创建RoadLine结构
 	static ccHObject* CreateRoadLine(vector<ccPolyline*> vecLines,bool isRefLine);
 	static ccHObject* CreateSection(vector<ccPolyline*> vecLine);
 
+	//由一个道路线获取上层的节点 LineSet和Section
+	static ccHObject*  getRelatedLineSet(ccPolyline* pLine);
+	static ccHObject*  getRelatedSection(ccPolyline* pLine);
 	//复制一跟线
-	//static ccPolyline* CopyNewLine(ccPolyline* pLine);
+	static ccPolyline* CopyNewLine(ccPolyline* poly3D);
+
+	//获取线上所有点
+	static vector<CCVector3> GetAllPoints(ccPolyline* pLine);
+	//通过点创建折线
+	static ccPolyline* CreatLineFromPts(vector<CCVector3> vecPts);
+
+	static bool splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,vector<ccPolyline*>& vecResult);
 };
 
 #endif
