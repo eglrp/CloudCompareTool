@@ -14,6 +14,9 @@ public:
 	explicit dpxPlaneAssistDlg(ccTool* pTool);
 	virtual ~dpxPlaneAssistDlg();
 
+public:
+	void HideCombobox();
+
 signals:
 	void sigTypeChange(int nType);
 	void sigObjTypeChange(int nObjType);

@@ -29,7 +29,6 @@
 
 //Local
 #include <ui_compassDlg.h>
-#include "ccTrace.h"
 
 class ccCompassDlg : public ccOverlayDialog, public Ui::compassDlg
 {

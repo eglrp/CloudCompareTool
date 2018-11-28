@@ -26,11 +26,10 @@
 #include "ccCompassInfo.h"
 
 #include "ccFitPlaneTool.h"
-#include "ccGeoObject.h"
 
 #include <QThread>
 #include <QMessageBox>
-
+#include "dpxProtobufWriter.h"
 #include "dpxGeoEngine.h"
 #include "dpxMapManager.h"
 #include "dpxThreadBase.h"//
@@ -44,17 +43,15 @@
 #include "dpxRoadRefLineTool.h" //道路参考线
 #include "dpxRoadLineTool.h"  //道路线工具
 #include "dpxRoadStopLineTool.h"//道路停止线
-#include "dpxZebraCrossLineTool.h"//斑马线采集工具
-
-//initialize default static pars
-bool ccCompass::drawName = false;
-bool ccCompass::drawStippled = true;
-bool ccCompass::drawNormals = true;
-bool ccCompass::fitPlanes = true;
-int ccCompass::costMode = ccTrace::DARK;
-bool ccCompass::mapMode = false;
-int ccCompass::mapTo = ccGeoObject::LOWER_BOUNDARY;
-const int nMsecod = 6*1000; //60 seconds per output
+#include "dpxCrossWalkTool.h"//斑马线采集工具
+#include "dpxMeasureTool.h"
+#include "dpxTrafficSignTool.h"
+#include "dpxLaneMarkingTool.h"
+#include "dpxParkingSpaceTool.h"
+#include "dpxJunctionTool.h"
+#include "dpxLineBreakTool.h"
+//int ccCompass::mapTo = ccGeoObject::LOWER_BOUNDARY;
+const int nMsecod = 30*1000; //60 seconds per output
 
 ccCompass::ccCompass(QObject* parent) :
 	QObject( parent )
@@ -66,7 +63,7 @@ ccCompass::ccCompass(QObject* parent) :
 	m_traceLineTool = new dpxTraceLineTool;  				//new dpxTraceLineTool();//新拓展折现工具
 
 	m_dpxCylinderTool = new dpxCylinderTool();				//圆柱工具
-	m_dpxPlaneTool = new dpxPlaneTool();					//矩形工具
+	m_dpxLightPlaneTool = new dpxTrafficLightPlaneTool();	//矩形工具
 	m_dpxSphereTool = new dpxSphereTool();					//球采集工具
 	m_dpxNodeEditTool = new dpxNodeEditTool();				//节点编辑工具
 	m_dpxSelectTool = new dpxSelectTool(); 					//选择工具
@@ -74,7 +71,17 @@ ccCompass::ccCompass(QObject* parent) :
 	m_dpxRoadRefLineTool = new dpxRoadRefLineTool(); 		//道路参考线工具
 	m_dpxRoadLineTool = new dpxRoadLineTool(); 				//道路线工具
 	m_dpxRoadStopLineTool = new dpxRoadStopLineTool();		//道路停止线工具
-	m_dpxZebraCrossLineTool = new dpxZebraCrossLineTool();	//道路停止线工具
+	m_dpxCrossWalkTool = new dpxCrossWalkTool();	//道路停止线工具
+	m_dpxMeasureTool = new dpxMeasureTool();
+
+	//5个新工具
+	m_dpxSpeedBumpTool = new dpxSpeedBumpTool();
+	m_dpxBoardTool = new dpxBoardTool();
+	m_dpxTrafficSignTool = new dpxTrafficSignTool();
+	m_dpxLaneMarkingTool = new dpxLaneMarkingToolV2();
+	m_dpxParkingSpaceTool = new dpxParkingSpaceTool();
+	m_dpxJunctionTool = new dpxJunctionTool();
+	m_dpxLineBreakTool = new dpxLineBreakTool();
 
 	m_pTimer = new QTimer(this);
 	connect(m_pTimer, SIGNAL(timeout()), this, SLOT(slotOnTimeOutPut()));
@@ -87,14 +94,23 @@ ccCompass::~ccCompass()
 	delete m_fitPlaneTool;
 	delete m_traceLineTool;
 	delete m_dpxCylinderTool;
-	delete m_dpxPlaneTool;
+	delete m_dpxLightPlaneTool;
 	delete m_dpxSphereTool;
 	delete m_dpxNodeEditTool;
 	delete m_dpxSelectTool;
 	delete m_dpxRoadRefLineTool;
 	delete m_dpxRoadLineTool;
 	delete m_dpxRoadStopLineTool;
-	delete m_dpxZebraCrossLineTool;
+	delete m_dpxCrossWalkTool;
+	delete m_dpxMeasureTool;
+
+	delete m_dpxSpeedBumpTool;
+	delete m_dpxBoardTool;
+	delete m_dpxTrafficSignTool;
+	delete m_dpxLaneMarkingTool;
+	delete m_dpxParkingSpaceTool;
+	delete m_dpxJunctionTool;
+	delete m_dpxLineBreakTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -160,7 +176,7 @@ void ccCompass::doAction()
 	m_traceLineTool->initializeTool(m_app);
 	m_fitPlaneTool->initializeTool(m_app);
 	m_dpxCylinderTool->initializeTool(m_app);
-	m_dpxPlaneTool->initializeTool(m_app);
+	m_dpxLightPlaneTool->initializeTool(m_app);
 	m_dpxSphereTool->initializeTool(m_app);
 	m_dpxNodeEditTool->initializeTool(m_app);
 	m_dpxSelectTool->initializeTool(m_app);
@@ -168,7 +184,16 @@ void ccCompass::doAction()
 	m_dpxRoadRefLineTool->initializeTool(m_app);
 	m_dpxRoadLineTool->initializeTool(m_app);
 	m_dpxRoadStopLineTool->initializeTool(m_app);
-	m_dpxZebraCrossLineTool->initializeTool(m_app);
+	m_dpxCrossWalkTool->initializeTool(m_app);
+	m_dpxMeasureTool->initializeTool(m_app);
+
+	m_dpxSpeedBumpTool->initializeTool(m_app);
+	m_dpxBoardTool->initializeTool(m_app);
+	m_dpxTrafficSignTool->initializeTool(m_app);
+	m_dpxLaneMarkingTool->initializeTool(m_app);
+	m_dpxParkingSpaceTool->initializeTool(m_app);
+	m_dpxJunctionTool->initializeTool(m_app);
+	m_dpxLineBreakTool->initializeTool(m_app);
 
 	//check valid window
 	if (!m_app->getActiveGLWindow())
@@ -197,14 +222,24 @@ void ccCompass::doAction()
 		//ccCompassDlg::connect(m_dlg->traceModeButton, SIGNAL(clicked()), this, SLOT(setTrace()));
 		ccCompassDlg::connect(m_dlg->PolyLineButton, SIGNAL(clicked()), this, SLOT(setTraceLine()));
 		ccCompassDlg::connect(m_dlg->CylinderButton, SIGNAL(clicked()), this, SLOT(setCylinderTool()));
-		ccCompassDlg::connect(m_dlg->planeToolButton, SIGNAL(clicked()), this, SLOT(setPlaneTool()));
+		ccCompassDlg::connect(m_dlg->planeToolButton, SIGNAL(clicked()), this, SLOT(setLightPlaneTool()));
 		ccCompassDlg::connect(m_dlg->sphereToolButton, SIGNAL(clicked()), this, SLOT(setSphereTool()));
 		ccCompassDlg::connect(m_dlg->NodeEditButton, SIGNAL(clicked()), this, SLOT(setNodeEditTool()));
 		ccCompassDlg::connect(m_dlg->SelectButton, SIGNAL(clicked()), this, SLOT(setSelectTool()));
 		ccCompassDlg::connect(m_dlg->RoadRefLineButton, SIGNAL(clicked()), this, SLOT(setRoadRefLineTool()));
 		ccCompassDlg::connect(m_dlg->RoadLineButton, SIGNAL(clicked()), this, SLOT(setRoadLineTool()));
 		ccCompassDlg::connect(m_dlg->RoadStopLineButton, SIGNAL(clicked()), this, SLOT(setRoadStopLineTool()));
-		ccCompassDlg::connect(m_dlg->ZebraLineButton, SIGNAL(clicked()), this, SLOT(setZebraCrossLineTool()));
+		ccCompassDlg::connect(m_dlg->CrossWalkButton, SIGNAL(clicked()), this, SLOT(setCrossWalkTool()));
+		ccCompassDlg::connect(m_dlg->MeasureButton, SIGNAL(clicked()), this, SLOT(setMeasureTool()));
+
+		ccCompassDlg::connect(m_dlg->SpeedBumpButton, SIGNAL(clicked()), this, SLOT(setSpeedBumpTool()));
+		ccCompassDlg::connect(m_dlg->BoardButton, SIGNAL(clicked()), this, SLOT(setBoardTool()));
+		ccCompassDlg::connect(m_dlg->TrafficSignButton, SIGNAL(clicked()), this, SLOT(setTrafficSignTool()));
+		ccCompassDlg::connect(m_dlg->LaneMarkingButton, SIGNAL(clicked()), this, SLOT(setLaneMarkingTool()));
+		ccCompassDlg::connect(m_dlg->ParkingSpaceButton, SIGNAL(clicked()), this, SLOT(setParkingSpaceTool()));
+		ccCompassDlg::connect(m_dlg->JunctionButton, SIGNAL(clicked()), this, SLOT(setJunctionTool()));
+		ccCompassDlg::connect(m_dlg->LineBreakButton, SIGNAL(clicked()), this, SLOT(setLineBreakTool()));
+
 
 		//传出 by duans
 		ccCompassDlg::connect(m_dlg, SIGNAL(sigKeyPress(int)), this, SLOT( slotKeyPress(int)));
@@ -329,86 +364,6 @@ void  ccCompass::stopPicking()
 	m_picking = false;
 }
 
-//Get the place/object that new measurements or interpretation should be stored
-ccHObject* ccCompass::getInsertPoint()
-{
-	//check if there is an active GeoObject or we are in mapMode
-	if (ccCompass::mapMode || m_geoObject)
-	{
-		//check there is an active GeoObject
-		if (!m_geoObject)
-		{
-			m_app->dispToConsole("[ccCompass] Error: Please select a GeoObject to digitize to.", ccMainAppInterface::ERR_CONSOLE_MESSAGE);
-		}
-
-		//check it actually exists/hasn't been deleted
-		if (!m_app->dbRootObject()->find(m_geoObject_id))
-		{
-			//object has been deleted
-			m_geoObject = nullptr;
-			m_geoObject_id = -1;
-			m_app->dispToConsole("[ccCompass] Error: Please select a GeoObject to digitize to.", ccMainAppInterface::ERR_CONSOLE_MESSAGE);
-		}
-		else
-		{
-			//object exists - we can use it to find the insert point
-			ccHObject* insertPoint = m_geoObject->getRegion(ccCompass::mapTo);
-			if (!insertPoint) //something went wrong?
-			{
-				m_app->dispToConsole("[ccCompass] Warning: Could not retrieve valid mapping region for the active GeoObject.", ccMainAppInterface::WRN_CONSOLE_MESSAGE);
-			}
-			else
-			{
-				return insertPoint; // :)
-			}
-		}
-	}
-	else
-	{
-
-		//otherwise, we're in "Compass" mode, so...
-		//find/create a group called "measurements"
-		ccHObject* measurement_group = nullptr;
-
-		//search for a "measurements" group
-		for (unsigned i = 0; i < m_app->dbRootObject()->getChildrenNumber(); i++)
-		{
-			if (m_app->dbRootObject()->getChild(i)->getName() == "measurements")
-			{
-				measurement_group = m_app->dbRootObject()->getChild(i);
-			}
-			else
-			{
-				//also search first-level children of root node (when files are re-loaded this is where things will sit)
-				for (unsigned c = 0; c < m_app->dbRootObject()->getChild(i)->getChildrenNumber(); c++)
-				{
-					if (m_app->dbRootObject()->getChild(i)->getChild(c)->getName() == "measurements")
-					{
-						measurement_group = m_app->dbRootObject()->getChild(i)->getChild(c);
-						break;
-					}
-				}
-			}
-
-			//found a valid group :)
-			if (measurement_group)
-			{
-				break;
-			}
-		}
-
-		//didn't find it - create a new one!
-		if (!measurement_group)
-		{
-			measurement_group = new ccHObject("measurements");
-			m_app->dbRootObject()->addChild(measurement_group);
-			m_app->addToDB(measurement_group, false, true, false, false);
-		}
-
-		return measurement_group; //this is the insert point
-	}
-	return nullptr; //no valid insert point
-}
 
 //This function is called when a point is picked (through the picking hub)
 void ccCompass::onItemPicked(const ccPickingListener::PickedItem& pi)
@@ -432,7 +387,7 @@ void ccCompass::pointPicked(ccHObject* entity, unsigned itemIdx, int x, int y, c
 	}
 
 	//find relevant node to add data to
-	ccHObject* parentNode = getInsertPoint();
+	ccHObject* parentNode = nullptr;
 
 	if (parentNode != nullptr) //could not get insert point for some reason
 	{
@@ -510,7 +465,7 @@ bool ccCompass::eventFilter(QObject* obj, QEvent* event)
 	}//补充了鼠标移动事件
 	else if (event->type() == QEvent::MouseMove)
 	{
-		//采集时摁着Ctrl键能实现视图漫游
+		//采集时摁着Shift键能实现视图漫游
 		if(bPushShiftKey)
 		{
 			m_app->getActiveGLWindow()->mouseMoveEvent(mouseEvent);
@@ -654,9 +609,9 @@ void ccCompass::setCylinderTool()
 	//m_dlg->traceModeButton->setChecked(true);
 }
 
-void ccCompass::setPlaneTool()
+void ccCompass::setLightPlaneTool()
 {
-	setActiveTool(m_dpxPlaneTool);
+	setActiveTool(m_dpxLightPlaneTool);
 }
 
 void ccCompass::setSphereTool()
@@ -690,10 +645,17 @@ void ccCompass::setRoadStopLineTool()
 }
 
 //斑马线采集工具
-void ccCompass::setZebraCrossLineTool()
+void ccCompass::setCrossWalkTool()
 {
-	setActiveTool(m_dpxZebraCrossLineTool);
+	setActiveTool(m_dpxCrossWalkTool);
 }
+
+//量测工具
+void ccCompass::setMeasureTool()
+{
+	setActiveTool(m_dpxMeasureTool);
+}
+
 
 //activate the paint tool
 void ccCompass::setPick()
@@ -711,7 +673,36 @@ void ccCompass::setPick()
 	m_app->getActiveGLWindow()->redraw(true, false);
 }
 
+void ccCompass::setSpeedBumpTool()
+{
+	setActiveTool(m_dpxSpeedBumpTool);
+}
+void ccCompass::setBoardTool()
+{
+	setActiveTool(m_dpxBoardTool);
+}
+void ccCompass::setTrafficSignTool()
+{
+	setActiveTool(m_dpxTrafficSignTool);
+}
+void ccCompass::setLaneMarkingTool()
+{
+	setActiveTool(m_dpxLaneMarkingTool);
+}
+void ccCompass::setParkingSpaceTool()
+{
+	setActiveTool(m_dpxParkingSpaceTool);
+}
 
+void ccCompass::setJunctionTool()
+{
+	setActiveTool(m_dpxJunctionTool);
+}
+
+void ccCompass::setLineBreakTool()
+{
+	setActiveTool(m_dpxLineBreakTool);
+}
 //recurse and hide visisble point clouds
 void ccCompass::hideAllPointClouds(ccHObject* o)
 {
@@ -733,7 +724,6 @@ void ccCompass::enableMeasureMode() //turns on/off map mode
 {
 	//m_app->dispToConsole("ccCompass: Changing to Compass mode. Measurements will be stored in the \"Measurements\" folder.", ccMainAppInterface::STD_CONSOLE_MESSAGE);
 	m_dlg->compassMode->setChecked(true);
-	ccCompass::mapMode = false;
 	m_app->getActiveGLWindow()->redraw(true, false);
 
 	//turn off map mode dialog
@@ -758,7 +748,7 @@ void outMapFunc()
 	}
 
 	QString appPath = QCoreApplication::applicationDirPath();
-	QString strTempPath = appPath + "/temp/" ;
+	QString strTempPath = appPath + "/temp/";
 	QDir tempDir(strTempPath);
     if(!tempDir.exists())
     {
@@ -770,7 +760,7 @@ void outMapFunc()
        }
 	}
 
-	QString  strFile =  strTempPath+ QString::number(nNumber)+ ".temp";
+	QString  strFile =  strTempPath+ QString::number(nNumber)+ ".Prototemp";
 	QFile file(strFile);
     if(file.exists())
 		file.remove();
@@ -778,7 +768,9 @@ void outMapFunc()
 	ccLog::Warning("output temp" + strFile);
 
     dpxMapManager* pManager = new dpxMapManager();
-    pManager->outPutMap(rootData,strFile);
+    dpxProtobufWriter* pWriter = new dpxProtobufWriter();
+    pManager->setWriter(pWriter);
+    pManager->AutoOutPutMap2Protobuf(pCurrentMap,strFile);
 
     nNumber++;
     if(nNumber>9)
@@ -791,3 +783,4 @@ void ccCompass::slotOnTimeOutPut()
 	dpxThreadBase* pThread = new dpxThreadBase(outMapFunc);
     pThread->start();
 }
+

@@ -1,0 +1,155 @@
+syntax = "proto2";
+
+import "id.proto";
+import "geometry.proto";
+
+package hdmap_proto;
+
+message TrafficSign {
+  required Id id = 1;
+  repeated Id tile_id = 2;
+
+  enum TrafficSignType {
+    UNKNOWN                       = 0;
+
+    P_Stop_For                    = 1; //停车让行
+    P_Slow_For                    = 2; //减速让行
+    P_Give_Way                    = 3; //会车让行
+    P_Noway                       = 4; //禁止通行
+    P_No_Entry                    = 5; //禁止驶入
+    P_No_Parking                  = 6; //禁止停车
+    P_No_Long_Parking             = 7; //禁止长时停车
+    P_Parking_Check               = 8; //停车检查
+    P_No_Motor                    = 9; //禁止机动车驶入
+    P_No_Motorcycle               = 10; //禁止摩托车驶入
+    P_No_Truck                    = 11; //禁止载货汽车驶入
+    P_No_Moto_Tricycle            = 12; //禁止电动三轮车驶入
+    P_No_Bus                      = 13; //禁止客车驶入
+    P_No_Car                      = 14; //禁止小汽车驶入
+    P_No_Trailer                  = 15; //禁止挂车驶入
+    P_No_Tractor                  = 16; //禁止拖拉机驶入
+    P_No_Cargo_Tricycle           = 17; //禁止三轮货车驶入
+    P_No_Non_Motor                = 18; //禁止非机动车进入
+    P_No_Animal_Vehicle           = 19; //禁止畜力车进入
+    P_No_Human_Vehicle            = 20; //禁止人力车进入
+    P_No_Human_Cargo_Triangle     = 21; //禁止人力载货三轮车进入
+    P_No_Human_Passenger_Triangle = 22; //禁止人力载客三轮车进入
+    P_No_Human                    = 23; //禁止行人进入
+    P_No_Left_Turn                = 24; //禁止左转弯
+    P_No_Right_Turn               = 25; //禁止右转弯
+    P_No_Left_Right_Turn          = 26; //禁止左右转弯
+    P_No_Foward                   = 27; //禁止直行
+    P_No_Forward_Left             = 28; //禁止直行和左转
+    P_No_Forward_Right            = 29; //禁止直行和右转
+    P_No_Return                   = 30; //禁止掉头
+    P_No_Horning                  = 31; //禁鸣喇叭
+    P_Height_Lim                  = 32; //限高
+    P_Width_Lim                   = 33; //限宽
+    P_Weight_Lim                  = 34; //限重
+    P_Weight_Lim_wheel            = 35; //限轴重
+    P_Speed_Lim                   = 36; //限速
+    P_Speed_Lim_Rev               = 37; //解除限速
+    P_No_Passing                  = 38; //禁止超车
+    P_No_Dangerous                = 39; //禁止危险品车辆驶入
+    P_Custom                      = 40; //海关
+    P_Other                       = 41; //其它禁止+
+
+    W_T_Shap                      = 42; //注意丁字路口
+    W_T_Shap_Left                 = 43; //注意左向丁字路口
+    W_T_Shap_Right                = 44; //注意右向丁字路口
+    W_T_Shaps                     = 45; //注意连续丁字路口
+    W_Cross                       = 46; //注意十字路口
+    W_Circle                      = 47; //注意环形路口
+    W_Y_Left                      = 48; //注意左前方叉口
+    W_Y_Right                     = 49; //注意右前方叉口
+    W_YB_Left                     = 50; //注意左后方叉口
+    W_YB_Right                    = 51; //注意右后方叉口
+    W_Left_Turn                   = 52; //注意左急转弯
+    W_Right_Turn                  = 53; //注意右急转弯
+    W_RL_Turn                     = 54; //注意右边反向弯道
+    W_LR_Turn                     = 55; //注意左边反向弯道
+    W_Continuous_Turn             = 56; //注意连续弯道
+    W_Up                          = 57; //注意上坡
+    W_Down                        = 58; //注意下坡
+    W_Continuous_Down             = 59; //注意连续下坡
+    W_Accident_Prone              = 60; //注意事故易发路段
+    W_Danger                      = 61; //注意危险
+    W_Left_Narrow                 = 62; //注意左侧变窄
+    W_Right_Narrow                = 63; //注意右侧变窄
+    W_LR_Narrow                   = 64; //注意两侧变窄
+    W_Narrow_Bridge               = 65; //注意窄桥
+    W_Slip                        = 66; //注意易滑路段
+    W_Pedestrain                  = 67; //注意行人
+    W_Children                    = 68; //注意儿童
+    W_Cycle                       = 69; //注意非机动车
+    W_Disabled                    = 70; //注意残疾人
+    W_Side_Wind                   = 71; //注意横风
+    W_Domestic                    = 72; //注意牲畜
+    W_Animal                      = 73; //注意野生动物
+    W_Tunnel                      = 74; //注意隧道
+    W_Tunnel_Headlight            = 75; //注意隧道开车灯
+    W_Traffic_Light               = 76; //注意信号灯
+    W_Left_Falling                = 77; //注意左方落石
+    W_Right_Falling               = 78; //注意右方落石
+    W_Mount_Left                  = 79; //注意左旁山险路
+    W_Mount_Right                 = 80; //注意右旁山险路
+    W_Village                     = 81; //注意村庄
+    W_Dam_Right                   = 82; //注意堤坝右侧水域
+    W_Dam_Left                    = 83; //注意堤坝左侧水域
+    W_Ferry                       = 84; //注意渡口
+    W_Ford                        = 85; //注意过水路面
+    W_Slow                        = 86; //注意减速慢行
+    W_Hump_Bridge                 = 87; //注意驼峰桥
+    W_Bumpy                       = 88; //注意颠簸路面
+    W_Bump                        = 89; //注意路面凸起
+    W_Low_Lying                   = 90; //注意路面低洼
+    W_Working                     = 91; //注意施工
+    W_Guarded_Railway             = 92; //注意看守铁道口
+    W_Railway                     = 93; //注意无人看守铁道口
+    W_Detour_Around               = 94; //注意左右绕行
+    W_Detour_Left                 = 95; //注意左侧绕行
+    W_Detour_Right                = 96; //注意右侧绕行
+    W_Merge_Left                  = 97; //注意左侧合流
+    W_Merge_Right                 = 98; //注意右侧合流
+    W_Two_Way                     = 99; //注意双向交通
+    W_Tidal                       = 100; //注意潮汐车道
+    W_Keep_Distance               = 101; //注意保持车距
+    W_Cross_Intersection          = 102; //注意十字平面交叉
+    W_T_Intersection              = 103; //注意T字平面交叉
+    W_Vehicle_Queue               = 104; //注意车辆排队
+    W_Ice                         = 105; //注意路面结冰
+    W_Rain                        = 106; //注意雨雪
+    W_Fog                         = 107; //注意雾天
+    W_Bad_Weather                 = 108; //注意恶劣天气
+    W_Other                       = 109; //其它
+
+    I_Forward                     = 110; //直行
+    I_Left_Turn                   = 111; //向左转弯
+    I_Right_Turn                  = 112; //向右转弯
+    I_Forward_Left                = 113; //直行和左转
+    I_Forward_Right               = 114; //直行和右转
+    I_Left_Right                  = 115; //左转和右转
+    I_Right                       = 116; //靠右侧行驶
+    I_Left                        = 117; //靠左侧行驶
+    I_Forward_Left_Stereo         = 118; //立体交叉直行和左转
+    I_Forward_Right_Stereo        = 119; //立体交叉直行和右转
+    I_Circle                      = 120; //环岛行驶
+    I_Walk                        = 121; //步行
+    I_Honk                        = 122; //鸣喇叭
+    I_Min_Speed_Lim               = 123; //最低时速限制
+    I_Motors                      = 124; //机动车行驶
+    I_Non_Motors                  = 125; //非机动车行驶
+    I_Pedestrian_Cross            = 126; //人行横道
+    I_Other                       = 127; //其它
+  }
+
+  optional TrafficSignType type = 4;
+  oneof geometry {
+    Circle circle = 5;
+    Rect rect = 6;
+    Cube cube = 7;
+    Polygon polygon = 8;
+  }
+  optional float value = 9;
+  repeated Id link_ids = 10;
+}

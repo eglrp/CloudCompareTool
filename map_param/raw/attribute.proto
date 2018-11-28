@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package hdmap_proto;
+
+message Color {
+	required int32 r = 1;
+	required int32 g = 2;
+	required int32 b = 3;
+}
+
+enum ColorType {
+  UNKNOWN = 0;
+  GRAY    = 1;
+  WHITE   = 2;
+  BLACK   = 3;
+  RED     = 4;
+  GREEN   = 5;
+  BLUE    = 6;
+  YELLOW  = 7;
+  BROWN   = 8;
+}
+
+message CurveAttr {
+  required uint64 ref_idx = 1;
+  enum Type {
+    UNKNOWN = 0;
+    DOTTED_YELLOW_LINE = 1;
+    DOTTED_YELLOW_BLANK = 2;
+    DOTTED_WHITE_LINE = 3;
+    DOTTED_WHITE_BLANK = 4;
+    SOLID_YELLOW = 5;
+    SOLID_WHITE = 6;
+    DOUBLE_YELLOW = 7;
+    CURB = 8;
+  }
+  required Type type = 2;
+  required float width = 3;
+}

@@ -15,7 +15,7 @@
 //#                                                                        #
 //##########################################################################
 
-#ifdef CC_LAS_SUPPORT
+//#ifdef CC_LAS_SUPPORT
 
 #include "LASFilter.h"
 
@@ -365,7 +365,7 @@ CC_FILE_ERROR LASFilter::saveToFile(ccHObject* entity, const QString& filename, 
 		pdalId = id(dimName);
 		table.layout()->registerDim(pdalId);
 	}
-	
+
 	std::vector<ExtraLasField::Shared> extraFieldsToSave;
 
 	for (unsigned int i = 0; i < extraFields.size(); ++i)
@@ -373,7 +373,7 @@ CC_FILE_ERROR LASFilter::saveToFile(ccHObject* entity, const QString& filename, 
 		if (!s_saveDlg || s_saveDlg->doSaveEVLR(i))
 		{
 			dimName = extraFields[i]->getName().toStdString();
-			// All extra scalar fields are written as double. 
+			// All extra scalar fields are written as double.
 			// A more specific solution would be welcome.
 			Type t = Type::Double;
 			extraFields[i]->pdalId = table.layout()->registerOrAssignDim(dimName, t);
@@ -1078,7 +1078,7 @@ CC_FILE_ERROR LASFilter::loadFile(const QString& filename, ccHObject& container,
 				pDlg->exec();
 			}
 			reader.waitForFinished();
-		
+
 			PointViewSet viewSet = reader.result();
 			PointViewPtr pointView = *viewSet.begin();
 
@@ -1177,17 +1177,17 @@ CC_FILE_ERROR LASFilter::loadFile(const QString& filename, ccHObject& container,
 			loadedCloud = pointChunk.loadedCloud;
 			fieldsToLoad = pointChunk.lasFields;
 
-			//first point check for 'big' coordinates 
+			//first point check for 'big' coordinates
 			if (nbPointsRead == 0)
 			{
 				CCVector3d P(static_cast<PointCoordinateType>(point.getFieldAs<int>(Id::X)),
 							static_cast<PointCoordinateType>(point.getFieldAs<int>(Id::Y)),
 							static_cast<PointCoordinateType>(point.getFieldAs<int>(Id::Z)));
 
-				//backup input global parameters 
+				//backup input global parameters
 				ccGlobalShiftManager::Mode csModeBackup = parameters.shiftHandlingMode;
 				bool useLasShift = false;
-				//set the lasShift as default if none was provided 
+				//set the lasShift as default if none was provided
 				if (lasShift.norm2() != 0 && (!parameters.coordinatesShiftEnabled || !*parameters.coordinatesShiftEnabled))
 				{
 						if (csModeBackup != ccGlobalShiftManager::NO_DIALOG) //No dialog, practically means that we don't want any shift!
@@ -1434,4 +1434,4 @@ CC_FILE_ERROR LASFilter::loadFile(const QString& filename, ccHObject& container,
 	return CC_FERR_NO_ERROR;
 }
 
-#endif
+//#endif

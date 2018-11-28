@@ -820,6 +820,8 @@ public: //Level of Detail (LOD)
 	//! Clears the LOD structure
 	void clearLOD();
 
+	//! 获取Scalar值
+	ScalarType getPointScalarValueV2(int nScalarIndex,unsigned pointIndex) const;
 protected: //Level of Detail (LOD)
 
 	//! L.O.D. structure

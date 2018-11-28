@@ -706,11 +706,11 @@ const ccPointCloud& ccPointCloud::append(ccPointCloud* addedCloud, unsigned poin
 				{
 					size_t newKeyCount = addedCloud->m_fwfDescriptors.size();
 					assert(newKeyCount < 256); //IDs should range from 1 to 255
-					
+
 					if (!m_fwfDescriptors.empty())
 					{
 						assert(m_fwfDescriptors.size() < 256); //IDs should range from 1 to 255
-						
+
 						//we'll have to find free descriptor IDs (not used in the destination cloud) before merging
 						std::queue<uint8_t> freeDescriptorIDs;
 						for (uint8_t k = 0; k < 255; ++k)
@@ -2457,7 +2457,7 @@ template <class QOpenGLFunctions> void glLODChunkNormalPointer(	NormsIndexesTabl
 }
 
 template <class QOpenGLFunctions> void glLODChunkColorPointer(	ColorsTableType* colors,
-																QOpenGLFunctions* glFunc, 
+																QOpenGLFunctions* glFunc,
 																const LODIndexSet& indexMap,
 																unsigned startIndex,
 																unsigned stopIndex)
@@ -2533,10 +2533,10 @@ struct DisplayDesc : LODLevelDesc
 		endIndex = startIndex + count;
 		return *this;
 	}
-	
+
 	//! Last index (excluded)
 	unsigned endIndex;
-	
+
 	//! Decimation step (for non-octree based LoD)
 	unsigned decimStep;
 
@@ -2610,6 +2610,7 @@ void ccPointCloud::drawMeOnly(CC_DRAW_CONTEXT& context)
 						//DGM: can't spawn a progress dialog here as the process will be async
 						//ccProgressDialog pDlg(false, context.display ? context.display->asWidget() : 0);
 						initLOD(/*&pDlg*/);
+						ccLog::Warning("using LOD to show");
 					}
 					else
 					{
@@ -3386,7 +3387,7 @@ ccGenericPointCloud* ccPointCloud::createNewCloudFromVisibilitySelection(bool re
 		//TODO: handle associated meshes
 
 		resize(lastPoint);
-		
+
 		refreshBB(); //calls notifyGeometryUpdate + releaseVBOs
 	}
 
@@ -3648,7 +3649,7 @@ ccPointCloud* ccPointCloud::unrollOnCylinder(PointCoordinateType radius,
 		}
 	}
 
-	
+
 	std::vector<CCVector3> unrolledNormals;
 	std::vector<ScalarType> deviationValues;
 
@@ -3668,7 +3669,7 @@ ccPointCloud* ccPointCloud::unrollOnCylinder(PointCoordinateType radius,
 			return nullptr;
 		}
 	}
-	
+
 	//compute cylinder center (if none was provided)
 	CCVector3 C;
 	if (!center)
@@ -3683,7 +3684,7 @@ ccPointCloud* ccPointCloud::unrollOnCylinder(PointCoordinateType radius,
 	for (unsigned i = 0; i < numberOfPoints; i++)
 	{
 		const CCVector3* Pin = getPoint(i);
-		
+
 		CCVector3 CP = *Pin - *center;
 
 		PointCoordinateType u = sqrt(CP.u[dim.x] * CP.u[dim.x] + CP.u[dim.y] * CP.u[dim.y]);
@@ -3912,7 +3913,7 @@ ccPointCloud* ccPointCloud::unrollOnCone(	double coneAngle_deg,
 		clone->setCurrentDisplayedScalarField(sfIdx);
 		clone->showSF(true);
 	}
-	
+
 	PointCoordinateType alpha_rad = coneAngle_deg * CC_DEG_TO_RAD;
 	PointCoordinateType sin_alpha = static_cast<PointCoordinateType>( sin(alpha_rad) );
 
@@ -4828,7 +4829,7 @@ bool ccPointCloud::updateVBOs(const CC_DRAW_CONTEXT& context, const glDrawParams
 		{
 			m_vboManager.updateFlags |= vboSet::UPDATE_COLORS;
 		}
-		
+
 		if (	glParams.showSF
 		&& (		!m_vboManager.hasColors
 				||	!m_vboManager.colorIsSF
@@ -4920,7 +4921,7 @@ bool ccPointCloud::updateVBOs(const CC_DRAW_CONTEXT& context, const glDrawParams
 			//allocate memory for current VBO
 			int vboSizeBytes = m_vboManager.vbos[i]->init(chunkSize, m_vboManager.hasColors, m_vboManager.hasNormals, &reallocated);
 
-			QOpenGLFunctions_2_1* glFunc = context.glFunctions<QOpenGLFunctions_2_1>(); 
+			QOpenGLFunctions_2_1* glFunc = context.glFunctions<QOpenGLFunctions_2_1>();
 			if (glFunc)
 			{
 				CatchGLErrors(glFunc->glGetError(), "ccPointCloud::vbo.init");
@@ -5074,7 +5075,7 @@ int ccPointCloud::VBO::init(int count, bool withColors, bool withNormals, bool* 
 			//no message as it will probably happen on a lot on (old) graphic cards
 			return -1;
 		}
-		
+
 		setUsagePattern(QGLBuffer::DynamicDraw);	//"StaticDraw: The data will be set once and used many times for drawing operations."
 													//"DynamicDraw: The data will be modified repeatedly and used many times for drawing operations.
 	}
@@ -5106,7 +5107,7 @@ int ccPointCloud::VBO::init(int count, bool withColors, bool withNormals, bool* 
 	}
 
 	release();
-	
+
 	return totalSizeBytes;
 }
 
@@ -5330,7 +5331,7 @@ bool ccPointCloud::computeNormalsWithGrids(	double minTriangleAngle_deg/*=1.0*/,
 						{
 							continue;
 						}
-						
+
 						PointCoordinateType cosC = -uBC.dot(uCA);
 						if (cosC > minAngleCos)
 						{
@@ -5513,7 +5514,7 @@ bool ccPointCloud::computeNormalsWithOctree(CC_LOCAL_MODEL_TYPES model,
 		ccLog::Warning(QString("[computeNormals] Failed to compute normals on cloud '%1'").arg(getName()));
 		return false;
 	}
-	
+
 	ccLog::Print("[ComputeCloudNormals] Timing: %3.2f s.", eTimer.elapsed() / 1000.0);
 
 	if (!hasNormals())
@@ -5577,7 +5578,7 @@ unsigned char ccPointCloud::testVisibility(const CCVector3& P) const
 {
 	if (m_visibilityCheckEnabled)
 	{
-		//if we have associated sensors, we can use them to check the visibility of other points 
+		//if we have associated sensors, we can use them to check the visibility of other points
 		unsigned char bestVisibility = 255;
 		for (size_t i = 0; i < m_children.size(); ++i)
 		{
@@ -5626,7 +5627,7 @@ void ccPointCloud::clearFWFData()
 bool ccPointCloud::computeFWFAmplitude(double& minVal, double& maxVal, ccProgressDialog* pDlg/*=0*/) const
 {
 	minVal = maxVal = 0;
-	
+
 	if (size() != m_fwfWaveforms.size())
 	{
 		return false;
@@ -5747,7 +5748,7 @@ ccMesh* ccPointCloud::triangulateGrid(const Grid& grid, double minTriangleAngle_
 
 	PointCoordinateType minAngleCos = static_cast<PointCoordinateType>(cos(minTriangleAngle_deg * CC_DEG_TO_RAD));
 	//double minTriangleAngle_rad = minTriangleAngle_deg * CC_DEG_TO_RAD;
-	
+
 	for (int j = 0; j < static_cast<int>(grid.h) - 1; ++j)
 	{
 		for (int i = 0; i < static_cast<int>(grid.w) - 1; ++i)
@@ -5811,7 +5812,7 @@ ccMesh* ccPointCloud::triangulateGrid(const Grid& grid, double minTriangleAngle_
 				}
 				break;
 			}
-			
+
 			default:
 				continue;
 			}
@@ -5928,4 +5929,11 @@ bool ccPointCloud::exportCoordToSF(bool exportDims[3])
 	}
 
 	return true;
+}
+
+ScalarType ccPointCloud::getPointScalarValueV2(int nScalarIndex,unsigned pointIndex) const
+{
+	assert(nScalarIndex >= 0 && nScalarIndex < static_cast<int>(m_scalarFields.size()));
+
+	return m_scalarFields[nScalarIndex]->getValue(pointIndex);
 }

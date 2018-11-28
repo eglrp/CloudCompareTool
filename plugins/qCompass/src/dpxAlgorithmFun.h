@@ -5,8 +5,10 @@
 #ifndef _DPX_Algorithm_Fun_HEADER_
 #define _DPX_Algorithm_Fun_HEADER_
 
-#include "ccGeoObject.h"
 #include "math.h"
+#include <CCGeom.h>
+#include <ccPolyline.h>
+#include <dpxMapDefine.h>
 
 class dpxAlgorithmFun
 {
@@ -35,6 +37,9 @@ public:
 											double& dDistance,double& dRatio12,
 											double& dRatio34,bool bToRay=false);
 
+	//已知平面法向量及其上任一点，求目标点到平面距离
+	static double DistancePt2Plane(CCVector3  VecNormal,CCVector3 ptPlane,CCVector3 ptTarget);
+	static CCVector3 Project2Plane(CCVector3 VecNormal,CCVector3 ptPlane,CCVector3 ptTarget);
 	//查询点query是否在直径segStart，segEnd圆内部
 	static bool inCircle(const CCVector3* segStart, const CCVector3* segEnd, const CCVector3* query);
 	//把向量转为单位向量
@@ -49,15 +54,7 @@ public:
 	//根据XYZ平移求平移矩阵 返回指针用完free
 	static double* translateMatrix(double dX,double dY,double dZ);
 
-	//根据旋转轴、旋转角度求旋转矩阵(返回指针用完free)
-//	static double* rotateMatrix(const CCVector3& a_axis,const double& dAngleRad);
-//	static double* rotateMatrix(CCVector3 vbefor,CCVector3 vafter);
-};
 
-class dpxSystemFun
-{
-public:
-	static QString GetRootDir();
-	static QString GetQccImageDir();
+	static bool isPointInsidePoly(const CCVector2& P,const std::vector<CCVector2>& polyVertices);
 };
 #endif

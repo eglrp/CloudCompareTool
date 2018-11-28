@@ -13,9 +13,8 @@ dpxPlaneAssistDlg::dpxPlaneAssistDlg(ccTool* pTool)
 	dlg.setupUi(this);
 	dlg.radioButton->setChecked(true);
 
-	dlg.comboBox->addItem("Traffic Light",eObj_OfficeLight);
-	dlg.comboBox->addItem("Indication On Road",eObj_Indication_OnRoad);
-	dlg.comboBox->addItem( "Indication In Space",eObj_Indication_InSpace);
+	dlg.comboBox->addItem("Traffic Light",eObj_TrafficLight);
+	dlg.comboBox->addItem("eObj_TrafficSign",eObj_TrafficSign);
 
 	connect(dlg.radioButton, SIGNAL(clicked()), this, SLOT(slotTypeChanged()));
 	connect(dlg.radioButton_2, SIGNAL(clicked()), this, SLOT(slotTypeChanged()));
@@ -26,6 +25,12 @@ dpxPlaneAssistDlg::dpxPlaneAssistDlg(ccTool* pTool)
 dpxPlaneAssistDlg::~dpxPlaneAssistDlg()
 {
 }
+
+void dpxPlaneAssistDlg::HideCombobox()
+{
+	dlg.comboBox->hide();
+}
+
 
 void dpxPlaneAssistDlg::slotTypeChanged()
 {

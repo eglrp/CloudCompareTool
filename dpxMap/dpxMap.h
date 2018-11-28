@@ -17,7 +17,6 @@ public:
 	dpxMap(QString strMapName);
 	virtual ~dpxMap();
 public:
-
 	virtual  ccHObject* getRootData();
 	void setMapId(const QString& strId);
 	const QString& getMapId() const;
@@ -30,19 +29,25 @@ public:
 	bool RemoveLayer(dpxLayer* pLayer);//
 	bool RemoveAllLayers();//
 
-
 public:
 	//--------HDmap特定图层的获取------
 	dpxLayer* getRoadLyr();
-	dpxLayer* getLightLyr();
-	dpxLayer* getIndicatorLry();
+	dpxLayer* getTrafficLightLyr();
+	dpxLayer* getTrafficSignLyr();
 	dpxLayer* getOtherLry();
-	dpxLayer* getZebraLineLry();//斑马线层
+	dpxLayer* getCrossWalkLyr();//斑马线
+	dpxLayer* getStopLineLyr();//停止线
+	dpxLayer* getParkingSpaceLyr();//停车位
+	dpxLayer* getSpeedbumpsLyr();//减速带
+	dpxLayer* getBoardLyr(); //其它面状
+	dpxLayer* getJunctionLyr(); //其它面状
+	dpxLayer* getLaneMarkingLyr(); //路面标识
 
+	dpxLayer* getLyrFormType(dpxLayerType eType);
 protected:
 	dpxMap(){}
 
-	dpxLayer* getLyrFormType(dpxLayerType eType);
+
 protected:
 	LayerVec m_vecLrys;
 	QString m_strMapName;//图层名称

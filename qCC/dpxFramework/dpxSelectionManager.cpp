@@ -38,6 +38,25 @@ void dpxSelectionManager::ClearSelection()
 }
 
 
+void dpxSelectionManager::AddObject2Selection(vector<ccHObject*> vecHObject,bool bOnlyOne/*=true*/)
+{
+	//const ccColor::Rgb
+	for(int i = 0;i<vecHObject.size();i++)
+	{
+		const ccColor::Rgba& oldColor =  vecHObject[i]->getTempColor();
+		QString colorStr = QString("%1;%2;%3").arg(oldColor.rgba[0]).arg(oldColor.rgba[1]).arg(oldColor.rgba[2]);
+		 vecHObject[i]->setMetaData(DPX_OLD_COLOR,colorStr);
+	}
+
+	rebackColor();
+
+	if(bOnlyOne)
+		m_vecSeltHObjs.clear();
+
+	m_vecSeltHObjs.insert(m_vecSeltHObjs.end(),vecHObject.begin(),vecHObject.end());
+}
+
+
 void dpxSelectionManager::AddObject2Selection(ccHObject* pHObject,bool bOnlyOne/*=true*/)
 {
 	//若已存在，则返回
@@ -81,8 +100,8 @@ void dpxSelectionManager::rebackColor()
 			if(strList.size()>2)
 			{
 				int R = strList.at(0).toInt();
-				int G = strList.at(1).toInt();;
-				int B = strList.at(2).toInt();;
+				int G = strList.at(1).toInt();
+				int B = strList.at(2).toInt();
 
 				ccColor::Rgb rgb(R,G,B);
 				pLine->setTempColor(rgb);

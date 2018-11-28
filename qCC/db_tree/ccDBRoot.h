@@ -229,9 +229,11 @@ protected slots:
 
 	//duans
 	void editAttribute();//编辑属性
-	void ExportLights();//输出灯
-	void ExportLightPole();//输出灯杆
+//	void ExportLights();//输出灯
+//	void ExportLightPole();//输出灯杆
 	void ExportMap(); //输出地图
+	void ImportMap(); //导入地图
+	void CreateJunction(); //创建Junction
 
 public slots:
 	void addHDMap();
@@ -334,9 +336,11 @@ protected:
 
 	//! Context menu action: 编辑属性菜单 duans
 	QAction* m_attributeEdit;
-	QAction* m_ExportLights;
-	QAction* m_ExportLightsPole;
+//	QAction* m_ExportLights;
+//	QAction* m_ExportLightsPole;
 	QAction* m_ExportMap;
+	QAction* m_ImportMap;
+	QAction* m_CreateJunction;
 
 	QTextStream m_TextStream;
 	//! Last context menu pos

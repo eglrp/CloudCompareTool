@@ -1,9 +1,4 @@
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qCompass
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qAdditionalIO
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qPCL/PclIO
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qPCL
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qSRA
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qSSAO
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qRANSAC_SD
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qPhotoscanIO
-/home/ds/3rdPart/CloudCompareTool/BuildRelease/plugins/qAnimation
+/home/ds/3rd/map_editor/Build/plugins/qCompass
+/home/ds/3rd/map_editor/Build/plugins/qAdditionalIO
+/home/ds/3rd/map_editor/Build/plugins/qPCL/PclIO
+/home/ds/3rd/map_editor/Build/plugins/qPCL

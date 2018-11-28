@@ -36,6 +36,8 @@ public:
 
 	//键盘事件
 	virtual void onKeyPress(int key);
+
+	ccPolyline* CopyNewLine(ccPolyline* poly3D);
 };
 
 #endif

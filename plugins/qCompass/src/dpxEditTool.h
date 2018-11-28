@@ -11,6 +11,7 @@
 #include "RayAndBox.h"
 #include "../../qCC/dpxFramework/dpxSnapHelper.h"
 #include "dpxAlgorithmFun.h"
+#include "dpxToolCommonFun.h"
 
 #define SNAP_TOL_VALUE  0.1
 

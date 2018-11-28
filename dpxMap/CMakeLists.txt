@@ -6,7 +6,8 @@ include_directories( ${CC_CORE_LIB_SOURCE_DIR}/include )#依赖CC_CORE_LIB
 include_directories( ${QCC_DB_LIB_SOURCE_DIR} )#依赖QCC_DB_LIB
 include_directories( ${QCC_GL_LIB_SOURCE_DIR} )#依赖QCC_DB_LIB
 
-#include_directories( ${PROTOBUF_DIR} )#依赖QCC_DB_LIB
+include_directories( ${PROTOBUF_DIR} )#依赖param
+include_directories( ${PROTOBUF_RAW_DIR} )
 
 
 include ( ../cmake/CMakePolicies.cmake )
@@ -30,10 +31,8 @@ target_link_libraries( ${PROJECT_NAME} CC_CORE_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_DB_LIB )
 
 #添加protobufMap
-#by duans
-#include_directories( ../map_param/include )
-#target_link_libraries( ../map_param/lib/libmap_io.so )
-#target_link_libraries( ../map_param/lib/libmap_param.a )
+target_link_libraries( ${PROJECT_NAME} map_param )
+
 
 # Qt
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets )

@@ -77,7 +77,7 @@ static const float  CC_DISPLAYED_TRIHEDRON_AXES_LENGTH = 25.0f;
 static const float  CC_DISPLAYED_CENTER_CROSS_LENGTH = 10.0f;
 
 //Max click duration for enabling picking mode (in ms)
-static const int CC_MAX_PICKING_CLICK_DURATION_MS = 200;
+static const int CC_MAX_PICKING_CLICK_DURATION_MS = 200;  //200; //by duans
 
 //invalid GL list index
 static const GLuint GL_INVALID_LIST_ID = (~0);

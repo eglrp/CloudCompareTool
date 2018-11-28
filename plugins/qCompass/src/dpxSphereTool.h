@@ -11,7 +11,6 @@
 
 
 #include "ccTool.h"
-#include "ccTrace.h"
 
 class ccPointCloud;
 class ccGLWindow;

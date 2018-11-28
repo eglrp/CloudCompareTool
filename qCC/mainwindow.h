@@ -58,6 +58,7 @@ class ccRecentFiles;
 class ccSectionExtractionTool;
 class ccStdPluginInterface;
 class ccTracePolylineTool;
+class dpxVisibleSetting;//by duans
 
 namespace Ui {
 	class MainWindow;
@@ -436,6 +437,12 @@ private slots:
 	//! Creates a cloud with the (bounding-box) centers of all selected entities
 	void doActionCreateCloudFromEntCenters();
 
+	//by duans  visibleSetting
+	void doActionVisibleSettingDialog();
+
+	//数据预处理
+	void doActionDataPretreat();
+
 private:
 	//! Shortcut: asks the user to select one cloud
 	/** \param defaultCloudEntity a cloud to select by default (optional)
@@ -595,7 +602,6 @@ private:
 	ccPointPairRegistrationDlg* m_pprDlg;
 	//! Primitive factory dialog
 	ccPrimitiveFactoryDlg* m_pfDlg;
-
 	/*** plugins ***/
 	//! Manages plugins - menus, toolbars, and the about dialog
 	ccPluginUIManager	*m_pluginUIManager;

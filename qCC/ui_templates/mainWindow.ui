@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>28</height>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -669,6 +669,8 @@ QTreeView::branch:open:has-children:has-siblings  {
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
+   <addaction name="actionDataPretreatment"/>
+   <addaction name="actionVisibleSetting"/>
    <addaction name="actionPointPicking"/>
    <addaction name="actionPointListPicking"/>
    <addaction name="actionTracePolyline"/>
@@ -2978,6 +2980,30 @@ QTreeView::branch:open:has-children:has-siblings  {
   <action name="actionSamplePointsOnPolyline">
    <property name="text">
     <string>Sample points</string>
+   </property>
+  </action>
+  <action name="actionVisibleSetting">
+   <property name="icon">
+    <iconset theme="VisibleSetting" resource="../icones.qrc">
+     <normaloff>:/CC/images/Visible.png</normaloff>:/CC/images/Visible.png</iconset>
+   </property>
+   <property name="text">
+    <string>VisibleSetting</string>
+   </property>
+   <property name="toolTip">
+    <string>Visible Setting</string>
+   </property>
+  </action>
+  <action name="actionDataPretreatment">
+   <property name="icon">
+    <iconset resource="../icones.qrc">
+     <normaloff>:/CC/images/restore.png</normaloff>:/CC/images/restore.png</iconset>
+   </property>
+   <property name="text">
+    <string>dataPretreatment</string>
+   </property>
+   <property name="toolTip">
+    <string>dataPretreatment</string>
    </property>
   </action>
  </widget>

@@ -2,7 +2,8 @@
 
 #include "dpxAlgorithmFun.h"
 #include "RayAndBox.h"
-
+#include <ccHObjectCaster.h>
+#include "dpxGeoEngine.h"
 //#define DBL_MAX 1.7976931348623158e+30 /* max value */
 //const double DBL_MAX = 1.7976931348623158e+308;
 //点到三维线的距离
@@ -369,5 +370,55 @@ void dpxAlgorithmFun::DistanceLineNodeToRay(ccPolyline* pLine,CCVector3 rayAxis,
 	}
 }
 
+//isPointInsidePoly
+bool dpxAlgorithmFun::isPointInsidePoly(const CCVector2& P,const std::vector<CCVector2>& polyVertices)
+{
+	//number of vertices
+	size_t vertCount = polyVertices.size();
+	if (vertCount < 2)
+		return false;
+
+	bool inside = false;
+
+	for (unsigned i = 1; i <= vertCount; ++i)
+	{
+		const CCVector2& A = polyVertices[i - 1];
+		const CCVector2& B = polyVertices[i%vertCount];
+
+		//Point Inclusion in Polygon Test (inspired from W. Randolph Franklin - WRF)
+		//The polyline is considered as a 2D polyline here!
+		if ((B.y <= P.y && P.y < A.y) || (A.y <= P.y && P.y < B.y))
+		{
+			PointCoordinateType t = (P.x - B.x)*(A.y - B.y) - (A.x - B.x)*(P.y - B.y);
+			if (A.y < B.y)
+				t = -t;
+			if (t < 0)
+				inside = !inside;
+		}
+	}
+
+	return inside;
+}
+
+//已知平面法向量及其上任一点，求目标点到平面距离 参照 https://blog.csdn.net/jameskinger/article/details/80269397
+double dpxAlgorithmFun::DistancePt2Plane(CCVector3  VecNormal,CCVector3 ptPlane,CCVector3 ptTarget)
+{
+	double dM_Normal = sqrt(VecNormal.x * VecNormal.x + VecNormal.y * VecNormal.y + VecNormal.z * VecNormal.z);
+
+	CCVector3 vecPQ = CCVector3( ptTarget.x-ptPlane.x, ptTarget.y-ptPlane.y, ptTarget.z-ptPlane.z);
+	double dDistance = VecNormal.dot( vecPQ ) / dM_Normal;
+
+	return dDistance;
+}
+
+CCVector3 dpxAlgorithmFun::Project2Plane(CCVector3 VecNormal,CCVector3 ptPlane,CCVector3 ptTarget)
+{
+	double dM_Normal = sqrt(VecNormal.x * VecNormal.x + VecNormal.y * VecNormal.y + VecNormal.z * VecNormal.z);
+
+	CCVector3 vecPQ = CCVector3( ptTarget.x-ptPlane.x, ptTarget.y-ptPlane.y, ptTarget.z-ptPlane.z);
+	double dDistance = VecNormal.dot( vecPQ ) / dM_Normal;
+
+	return CCVector3(ptTarget.x-dDistance*VecNormal.x,ptTarget.y-dDistance*VecNormal.y,ptTarget.z-dDistance*VecNormal.z);
+}
 
 

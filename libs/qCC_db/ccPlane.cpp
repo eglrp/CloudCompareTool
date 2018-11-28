@@ -312,6 +312,8 @@ std::vector<CCVector3>  ccPlane::get4CornerPts()
 	std::vector<CCVector3> vecPts;
 	//
 	ccPointCloud* pVerts = vertices();
+	if(pVerts==0)
+		return vecPts;
 	if(pVerts->size()>3)
 	{
 //		vecPts.push_back(m_transformation* *(pVerts->getPoint(0))); //has been changed no need to modefy by transM

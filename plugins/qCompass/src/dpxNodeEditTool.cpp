@@ -11,7 +11,7 @@
 
 #include "GenericIndexedCloudPersist.h"
 
-#include "../../qCC/dpxFramework/dpxSnapHelper.h"]
+#include "../../qCC/dpxFramework/dpxSnapHelper.h"
 
 using namespace CCLib;
 dpxNodeEditTool::dpxNodeEditTool()
@@ -149,15 +149,12 @@ void dpxNodeEditTool::onMouseLeftClick(int x,int y)
 	//结点判断
 	ccPolyline* pLine = nearestInfo.m_pLine;
 	double dDistance = nearestInfo.m_dDistance;
-	double dSegRatio = nearestInfo.m_dSegRatio;
 	int nSegNum = nearestInfo.m_nSegNum;
-	CCVector3 nearPt = nearestInfo.m_nearestPt;
 
 	if(dDistance<SNAP_TOL_VALUE)
 	{
 		m_VNodeInfo.m_pLine = pLine;
 		m_VNodeInfo.m_nNodeIndex = nSegNum;
-		ccLog::Warning(QString::number(nSegNum));
 	}
 }
 
@@ -215,7 +212,7 @@ void dpxNodeEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 
 		CCVector3d First2D,Last2D;
 
-		if(nIndex==0 )//拖动首节点效果
+		if(nIndex==0)//拖动首节点效果
 		{
 			const CCVector3* pFirst = pLine->getPoint(nIndex+1);
 			const CCVector3* pLast = pLine->getPoint(nIndex+1);

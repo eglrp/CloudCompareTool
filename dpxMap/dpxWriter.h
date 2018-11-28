@@ -13,7 +13,7 @@ public:
 
 public:
 	//输出Map
-	virtual void outPutMap(dpxMap* pMap) = 0;
+	virtual bool outPutMap(dpxMap* pMap,const QString& strOutFile) = 0;
 };
 
 #endif

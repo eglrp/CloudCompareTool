@@ -11,6 +11,7 @@
 #include "ccCone.h"
 #include "dpxAlgorithmFun.h"
 #include "dpxGeoEngine.h"
+#include "../../qCC/dpxFramework/dpxSelectionManager.h"
 
 
 dpxCylinderTool::dpxCylinderTool()
@@ -33,13 +34,32 @@ dpxCylinderTool::~dpxCylinderTool()
 //called when the tool is set to active (for initialization)
 void dpxCylinderTool::toolActivated()
 {
-	//若添加了地图，采集到地图中去
-	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
-	if(pMap!=nullptr)
+	bool bsetRefRoot = false;
+	vector<ccHObject*> vecObjs = dpxSelectionManager::Instance()->getSelections();
+	if(vecObjs.size()==1)
 	{
-		dpxLayer* pLightLyr = pMap->getLightLyr();
-		if(pLightLyr!=nullptr && pLightLyr->getRootData()!=nullptr)
-			m_pPickRoot = pLightLyr->getRootData();
+		ccHObject* pHObj = vecObjs[0];
+        if(pHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
+        {
+			int index = pHObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt();
+			if(dpxObjectType(index) == eObj_RoadRefLine)
+			{
+				//生成的RoadLine挂在RefLine节点下
+				m_pPickRoot = pHObj;
+				bsetRefRoot = true;
+			}
+        }
+	}
+	if(!bsetRefRoot)
+	{
+		//若添加了地图，采集到地图中去
+		dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+		if(pMap!=nullptr)
+		{
+			dpxLayer* pLightLyr = pMap->getTrafficLightLyr();
+			if(pLightLyr!=nullptr && pLightLyr->getRootData()!=nullptr)
+				m_pPickRoot = pLightLyr->getRootData();
+		}
 	}
 
 	dpxPickAndEditTool::toolActivated();
@@ -138,8 +158,8 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		QString sCurrentTime =current_time.toString("hh:mm:ss");
 		m_poly3D->setName("CylinderLine_"+sCurrentTime);
 		m_poly3D->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
-		m_poly3D->setMetaData("Radius",QString::number(dRadius));
-		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_OfficeLight_pole); //地物类型
+		m_poly3D->setMetaData(DPX_RADIUS,QString::number(dRadius));
+		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_TrafficLight_pole); //地物类型
 
 		ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
 		pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
@@ -242,7 +262,7 @@ void dpxCylinderTool::onMouseReleaseEvent(int x,int y)
 	QDateTime current_time =QDateTime::currentDateTime();
 	QString sCurrentTime =current_time.toString("hh:mm:ss");
 	pLine->setName("Line_"+sCurrentTime);
-	pLine->setMetaData("Radius",QString::number(dRadius));
+	pLine->setMetaData(DPX_RADIUS,QString::number(dRadius));
 
 	CCVector3 vbefore(0,0,1);
 	CCVector3 vafter(Pt1->x-Pt0->x, Pt1->y-Pt0->y, Pt1->z-Pt0->z);

@@ -152,6 +152,22 @@
     <file>images/roadLine.png</file>
     <file>images/roadStopLine.png</file>
     <file>images/ZebarCross.png</file>
+    <file>images/measure.png</file>
+    <file>images/Visible.png</file>
+    <file>images/TrafficSign.png</file>
+    <file>images/TrafficSignIcon.png</file>
+    <file>images/SpeedBump.png</file>
+    <file>images/SpeedBumpIcon.png</file>
+    <file>images/Blue.png</file>
+    <file>images/Yellow.png</file>
+    <file>images/White.png</file>
+    <file>images/Red.png</file>
+    <file>images/Purple.png</file>
+    <file>images/Green.png</file>
+    <file>images/ParkingSpaceIcon.png</file>
+    <file>images/LaneMarkingIcon.png</file>
+    <file>images/Junction.png</file>
+    <file>images/Cut.png</file>
   </qresource>
   <qresource prefix="/CC/Icons">
     <file>images/icon/cc_viewer_icon_16.png</file>

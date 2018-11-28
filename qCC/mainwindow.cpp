@@ -108,6 +108,7 @@
 #include "ccUnrollDlg.h"
 #include "ccVolumeCalcTool.h"
 #include "ccWaveformDialog.h"
+#include "dpxVisibleSetting.h"
 
 //other
 #include "ccCropTool.h"
@@ -132,7 +133,7 @@
 #include <ui_distanceMapDlg.h>
 #include <ui_globalShiftSettingsDlg.h>
 #include <ui_mainWindow.h>
-
+#include <dpxDataPretreatDlg.h>
 //System
 #include <iostream>
 #include <random>
@@ -726,6 +727,12 @@ void MainWindow::connectActions()
 
 	//hidden
 	connect(m_UI->actionEnableVisualDebugTraces,	&QAction::triggered, this, &MainWindow::toggleVisualDebugTraces);
+
+
+	//visiable setting
+	connect(m_UI->actionVisibleSetting,	&QAction::triggered, this, &MainWindow::doActionVisibleSettingDialog);
+	connect(m_UI->actionDataPretreatment,	&QAction::triggered, this, &MainWindow::doActionDataPretreat);
+
 }
 
 void MainWindow::doActionColorize()
@@ -10371,6 +10378,26 @@ void MainWindow::doActionShowWaveDialog()
 	wDlg->setModal(false);
 	wDlg->show();
 }
+
+
+void MainWindow::doActionVisibleSettingDialog()
+{
+	if (!haveSelection())
+		return;
+
+    dpxVisibleSetting dlg(MainWindow::GetActiveGLWindow(),this);
+    dlg.setSelectEntitys(m_selectedEntities);
+    if(dlg.exec()!=QDialog::Accepted)
+		return;
+}
+
+void MainWindow::doActionDataPretreat()
+{
+	dpxDataPretreatDlg dlg( this);
+    if(dlg.exec()!=QDialog::Accepted)
+		return;
+}
+
 
 void MainWindow::doActionCreatePlane()
 {

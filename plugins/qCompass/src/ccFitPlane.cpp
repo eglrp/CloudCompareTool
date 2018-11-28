@@ -53,9 +53,9 @@ ccFitPlane::ccFitPlane(ccPlane* p)
 	updateAttributes(rms,search_r);
 
 	//update drawing properties based on ccCompass state
-	enableStippling(ccCompass::drawStippled);
-	showNameIn3D(ccCompass::drawName);
-	showNormalVector(ccCompass::drawNormals);
+	enableStippling(true);
+	showNameIn3D(true);
+	showNormalVector(true);
 }
 
 ccFitPlane::~ccFitPlane()

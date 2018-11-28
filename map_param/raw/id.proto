@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package hdmap_proto;
+
+message Id {
+  required uint64 id = 1;
+  optional string name = 2;
+}
+
+message Idx {
+  required uint64 x_idx = 1;
+  required uint64 y_idx = 2;
+  required uint64 z_idx = 3;
+}

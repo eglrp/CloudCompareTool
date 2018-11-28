@@ -140,9 +140,11 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 
 	//duans
 	m_attributeEdit = new QAction("Edit Attribute", this);
-	m_ExportLights = new QAction("Export Lights", this);
-	m_ExportLightsPole = new QAction("Export LightsPole", this);
+//	m_ExportLights = new QAction("Export Lights", this);
+//	m_ExportLightsPole = new QAction("Export LightsPole", this);
 	m_ExportMap = new QAction("Export Map", this);
+	m_ImportMap = new QAction("Import Map", this);
+	m_CreateJunction = new QAction("Create Junction", this);
 
 	m_contextMenuPos = QPoint(-1,-1);
 
@@ -171,9 +173,12 @@ ccDBRoot::ccDBRoot(ccCustomQTreeView* dbTreeWidget, QTreeView* propertiesTreeWid
 	connect(m_editLabelScalarValue,				SIGNAL(triggered()),								this, SLOT(editLabelScalarValue()));
 	//duans
 	connect(m_attributeEdit,					SIGNAL(triggered()),								this, SLOT(editAttribute()));
-	connect(m_ExportLights,						SIGNAL(triggered()),								this, SLOT(ExportLights()));
-	connect(m_ExportLightsPole,					SIGNAL(triggered()),								this, SLOT(ExportLightPole()));
+//	connect(m_ExportLights,						SIGNAL(triggered()),								this, SLOT(ExportLights()));
+//	connect(m_ExportLightsPole,					SIGNAL(triggered()),								this, SLOT(ExportLightPole()));
 	connect(m_ExportMap,						SIGNAL(triggered()),								this, SLOT(ExportMap()));
+	connect(m_ImportMap,						SIGNAL(triggered()),								this, SLOT(ImportMap()));
+	connect(m_CreateJunction,					SIGNAL(triggered()),								this, SLOT(CreateJunction()));
+
 
 	//other DB tree signals/slots connection
 	connect(m_dbTreeWidget->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(changeSelection(const QItemSelection&, const QItemSelection&)));
@@ -2143,6 +2148,8 @@ void ccDBRoot::showContextMenu(const QPoint& menuPos)
 				if(eType==eOT_Map)
 				{
 					menu.addAction(m_ExportMap);
+					menu.addAction(m_ImportMap);
+					menu.addAction(m_CreateJunction);
 					menu.exec(m_dbTreeWidget->mapToGlobal(menuPos));
 					return;
 				}
@@ -2278,8 +2285,8 @@ void ccDBRoot::showContextMenu(const QPoint& menuPos)
 
 			//by duans
 			menu.addAction(m_attributeEdit);
-			menu.addAction(m_ExportLights);
-			menu.addAction(m_ExportLightsPole);
+//			menu.addAction(m_ExportLights);
+//			menu.addAction(m_ExportLightsPole);
 
 			menu.addSeparator();
 		}
@@ -2402,10 +2409,28 @@ void ccDBRoot::setAttr_Recursion(ccHObject* pObj,const QMap<QString, QVariant>& 
 }
 
 //输出地图
+void ccDBRoot::ImportMap()
+{
+	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+	if(pMap==nullptr)
+		return;
+
+	QString strImportFile = QFileDialog::getOpenFileName(nullptr,"select Map Data File");
+	if(strImportFile.isEmpty())
+	{
+		ccLog::Warning("no set out File");
+		return;
+	}
+	dpxMapManager* pMapManager = new  dpxMapManager();
+	pMapManager->ImportMap(pMap,strImportFile);
+
+	addElement(pMap->getRootData());
+}
+
+//输出地图
 void ccDBRoot::ExportMap()
 {
 	//输出地图各个要素
-
 	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
 	QModelIndexList selectedIndexes = qism->selectedIndexes();
 	int selCount = selectedIndexes.size();
@@ -2416,144 +2441,172 @@ void ccDBRoot::ExportMap()
 	if(!pObj)
 		return ;
 
-	dpxMapManager* pMapManager = new  dpxMapManager();
-	pMapManager->outPutMap(pObj);
+	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+	if(pMap==nullptr)
+		return;
+
+	QString	strOutFile=QFileDialog::getSaveFileName(nullptr, "select the location to be saved"/*, exportDir, "*.xodr"*/);
+	if(strOutFile.isEmpty())
+	{
+		ccLog::Warning("no set out File");
+		return;
+	}
+	dpxMapManager* pMapManager = new dpxMapManager();
+	pMapManager->ManMadeOutPutMap(pMap,strOutFile);
 }
 
-//输出灯杆
-void ccDBRoot::ExportLightPole()
+void ccDBRoot::CreateJunction()
 {
+	//输出地图各个要素
 	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
 	QModelIndexList selectedIndexes = qism->selectedIndexes();
 	int selCount = selectedIndexes.size();
 	if (selCount == 0)
 		return;
 
-	QString strFileName=QFileDialog::getSaveFileName(MainWindow::TheInstance(), "select the location to be saved"/*, exportDir, "*.xodr"*/);
-    if(strFileName.isEmpty())
-        return;
-
-	QFile file(strFileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text))
-    {
-		QMessageBox::warning(MainWindow::TheInstance(),"waring","Error: cannot creat file");
-			return ;
-    }
-
-	m_TextStream.setDevice(&file);
-  // QString strHead = "      X1"+"      Y1"+"      Z1"+"      X2"+"      Y2"+"      Z2"+"      Radius";
-   m_TextStream<< "    X1"<< "      Y1"<<"      Z1"<<"      X2"<< "      Y2"<< "      Z2"<< "      Radius"<< "\n";
-
-   ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
-
-   //迭代输出
-	ExportLightPole_Recursion(pObj);
-
-   file.close();
-}
-
-//设置属性
-void ccDBRoot::ExportLightPole_Recursion(ccHObject* pObj)
-{
-	if(pObj == nullptr || !pObj)
-		return;
-
-	ccPolyline* pLine = pObj && pObj->isA(CC_TYPES::POLY_LINE) ? static_cast<ccPolyline*>(pObj) : 0;
-	if(pLine!=0 && pLine != nullptr)
-	{
-		if(pLine->hasMetaData("Radius"))
-		{
-			QString strRadius = pObj->getMetaData("Radius").toString();
-			const CCVector3* pFirst = pLine->getPoint(0);
-			const CCVector3* pSecond = pLine->getPoint(1);
-			m_TextStream << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<"  "
-						<<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y) <<"  "<<QString::number(pSecond->z) <<"  "
-						<<strRadius<< "\n";
-		}
-	}
-
-	int nSize = pObj->getChildrenNumber();
-	if(nSize>0)
-	{
-		for(int i=0;i<nSize;i++)
-		{
-			ccHObject* pChildObj = pObj->getChild(i);
-			ExportLightPole_Recursion(pChildObj);
-		}
-	}
-}
-
-//输出灯杆
-void ccDBRoot::ExportLights()
-{
-	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
-	QModelIndexList selectedIndexes = qism->selectedIndexes();
-	int selCount = selectedIndexes.size();
-	if (selCount == 0)
-		return;
-
-	QString strFileName=QFileDialog::getSaveFileName(MainWindow::TheInstance(), "select the location to be saved");
-    if(strFileName.isEmpty())
-        return;
-
-	QFile file(strFileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text))
-    {
-		QMessageBox::warning(MainWindow::TheInstance(),"waring","Error: cannot creat file");
+	ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
+	if(!pObj)
 		return ;
-    }
 
-   m_TextStream.setDevice(&file);
-   m_TextStream<<"    X1"<<"       Y1"<<"       Z1"<<"       X2"<<"       Y2"<<"       Z2"<<"       X3" <<"       Y3"<<"       Z3"
-				<<"       X4"<<"       Y4"<<"       Z4"<<"  NomelX" << "  NomelY" << "  NomelZ"<<"\n";
-	//<<" NomelX" << " NomelY" << " NomelZ"
-   ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
-
-	//迭代输出
-	ExportLight_Recursion(pObj);
-
-   file.close();
-}
-
-//设置属性
-void ccDBRoot::ExportLight_Recursion(ccHObject* pObj)
-{
-	if(pObj == nullptr || !pObj)
+	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+	if(pMap==nullptr)
 		return;
-
-	ccPolyline* pLine = pObj && pObj->isA(CC_TYPES::POLY_LINE) ? static_cast<ccPolyline*>(pObj) : 0;
-	while(pLine!=0 && pLine != nullptr)
-	{
-		if(pLine->segmentCount()!=3)
-			break;
-
-		if(!pLine->hasMetaData("Normal"))
-			break;
-
-		QString strNormal = pLine->getMetaData("Normal").toString();
-
-		const CCVector3* pFirst = pLine->getPoint(0);
-		const CCVector3* pSecond = pLine->getPoint(1);
-		const CCVector3* pThird = pLine->getPoint(2);
-		const CCVector3* pFour = pLine->getPoint(3);
-
-		m_TextStream << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<"  "
-					<<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y) <<"  "<<QString::number(pSecond->z) <<"  "
-					<<QString::number(pThird->x) <<"  "<<QString::number(pThird->y) <<"  "<<QString::number(pThird->z) <<"  "
-					<<QString::number(pFour->x) <<"  "<<QString::number(pFour->y) <<"  "<<QString::number(pFour->z) <<"  "
-					<< strNormal << "\n";
-		break;
-	}
-	int nSize = pObj->getChildrenNumber();
-	if(nSize>0)
-	{
-		for(int i=0;i<nSize;i++)
-		{
-			ccHObject* pChildObj = pObj->getChild(i);
-			ExportLight_Recursion(pChildObj);
-		}
-	}
+	dpxMapManager* pMapManager = new dpxMapManager();
+	pMapManager->AutoCreateJunction(pMap);
 }
+
+////输出灯杆
+//void ccDBRoot::ExportLightPole()
+//{
+//	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
+//	QModelIndexList selectedIndexes = qism->selectedIndexes();
+//	int selCount = selectedIndexes.size();
+//	if (selCount == 0)
+//		return;
+//
+//	QString strFileName=QFileDialog::getSaveFileName(MainWindow::TheInstance(), "select the location to be saved"/*, exportDir, "*.xodr"*/);
+//    if(strFileName.isEmpty())
+//        return;
+//
+//	QFile file(strFileName);
+//    if (!file.open(QFile::WriteOnly | QFile::Text))
+//    {
+//		QMessageBox::warning(MainWindow::TheInstance(),"waring","Error: cannot creat file");
+//		return ;
+//    }
+//
+//	m_TextStream.setDevice(&file);
+//	m_TextStream<< "    X1"<< "      Y1"<<"      Z1"<<"      X2"<< "      Y2"<< "      Z2"<< "      Radius"<< "\n";
+//
+//	ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
+//	//迭代输出
+//	ExportLightPole_Recursion(pObj);
+//
+//	file.close();
+//}
+//
+////设置属性
+//void ccDBRoot::ExportLightPole_Recursion(ccHObject* pObj)
+//{
+//	if(pObj == nullptr || !pObj)
+//		return;
+//
+//	ccPolyline* pLine = pObj && pObj->isA(CC_TYPES::POLY_LINE) ? static_cast<ccPolyline*>(pObj) : 0;
+//	if(pLine!=0 && pLine != nullptr)
+//	{
+//		if(pLine->hasMetaData("Radius"))
+//		{
+//			QString strRadius = pObj->getMetaData("Radius").toString();
+//			const CCVector3* pFirst = pLine->getPoint(0);
+//			const CCVector3* pSecond = pLine->getPoint(1);
+//			m_TextStream << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<"  "
+//						<<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y) <<"  "<<QString::number(pSecond->z) <<"  "
+//						<<strRadius<< "\n";
+//		}
+//	}
+//
+//	int nSize = pObj->getChildrenNumber();
+//	if(nSize>0)
+//	{
+//		for(int i=0;i<nSize;i++)
+//		{
+//			ccHObject* pChildObj = pObj->getChild(i);
+//			ExportLightPole_Recursion(pChildObj);
+//		}
+//	}
+//}
+//
+////输出灯杆
+//void ccDBRoot::ExportLights()
+//{
+//	QItemSelectionModel* qism = m_dbTreeWidget->selectionModel();
+//	QModelIndexList selectedIndexes = qism->selectedIndexes();
+//	int selCount = selectedIndexes.size();
+//	if (selCount == 0)
+//		return;
+//
+//	QString strFileName=QFileDialog::getSaveFileName(MainWindow::TheInstance(), "select the location to be saved");
+//    if(strFileName.isEmpty())
+//        return;
+//
+//	QFile file(strFileName);
+//    if (!file.open(QFile::WriteOnly | QFile::Text))
+//    {
+//		QMessageBox::warning(MainWindow::TheInstance(),"waring","Error: cannot creat file");
+//		return ;
+//    }
+//
+//   m_TextStream.setDevice(&file);
+//   m_TextStream<<"    X1"<<"       Y1"<<"       Z1"<<"       X2"<<"       Y2"<<"       Z2"<<"       X3" <<"       Y3"<<"       Z3"
+//				<<"       X4"<<"       Y4"<<"       Z4"<<"  NomelX" << "  NomelY" << "  NomelZ"<<"\n";
+//	//<<" NomelX" << " NomelY" << " NomelZ"
+//   ccHObject* pObj = static_cast<ccHObject*>(selectedIndexes[0].internalPointer());
+//
+//	//迭代输出
+//	ExportLight_Recursion(pObj);
+//
+//   file.close();
+//}
+//
+////设置属性
+//void ccDBRoot::ExportLight_Recursion(ccHObject* pObj)
+//{
+//	if(pObj == nullptr || !pObj)
+//		return;
+//
+//	ccPolyline* pLine = pObj && pObj->isA(CC_TYPES::POLY_LINE) ? static_cast<ccPolyline*>(pObj) : 0;
+//	while(pLine!=0 && pLine != nullptr)
+//	{
+//		if(pLine->segmentCount()!=3)
+//			break;
+//
+//		if(!pLine->hasMetaData("Normal"))
+//			break;
+//
+//		QString strNormal = pLine->getMetaData("Normal").toString();
+//
+//		const CCVector3* pFirst = pLine->getPoint(0);
+//		const CCVector3* pSecond = pLine->getPoint(1);
+//		const CCVector3* pThird = pLine->getPoint(2);
+//		const CCVector3* pFour = pLine->getPoint(3);
+//
+//		m_TextStream << QString::number(pFirst->x) <<"  "<<QString::number(pFirst->y) <<"  "<<QString::number(pFirst->z) <<"  "
+//					<<QString::number(pSecond->x) <<"  "<<QString::number(pSecond->y) <<"  "<<QString::number(pSecond->z) <<"  "
+//					<<QString::number(pThird->x) <<"  "<<QString::number(pThird->y) <<"  "<<QString::number(pThird->z) <<"  "
+//					<<QString::number(pFour->x) <<"  "<<QString::number(pFour->y) <<"  "<<QString::number(pFour->z) <<"  "
+//					<< strNormal << "\n";
+//		break;
+//	}
+//	int nSize = pObj->getChildrenNumber();
+//	if(nSize>0)
+//	{
+//		for(int i=0;i<nSize;i++)
+//		{
+//			ccHObject* pChildObj = pObj->getChild(i);
+//			ExportLight_Recursion(pChildObj);
+//		}
+//	}
+//}
 
 
 

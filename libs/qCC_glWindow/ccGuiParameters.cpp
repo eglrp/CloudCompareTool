@@ -81,9 +81,9 @@ void ccGui::ParamStruct::reset()
 	drawBackgroundGradient		= true;
 	drawRoundedPoints			= false;
 	decimateMeshOnMove			= true;
-	minLoDMeshSize				= 2500000;
+	minLoDMeshSize				= 500000; // 250万改成50万
 	decimateCloudOnMove			= true;
-	minLoDCloudSize				= 10000000;
+	minLoDCloudSize				= 2000000; // 1000万改成200万
 	useVBOs						= true;
 	displayCross				= true;
 
@@ -101,7 +101,7 @@ void ccGui::ParamStruct::reset()
 	defaultFontSize				= 10;
 	labelFontSize				= 8;
 #endif
-	
+
 	displayedNumPrecision		= 6;
 	labelOpacity				= 75;
 
@@ -134,9 +134,9 @@ void ccGui::ParamStruct::fromPersistentSettings()
 	drawBackgroundGradient		=                                      settings.value("backgroundGradient",      true ).toBool();
 	drawRoundedPoints			=                                      settings.value("drawRoundedPoints",       false).toBool();
 	decimateMeshOnMove			=                                      settings.value("meshDecimation",          true ).toBool();
-	minLoDMeshSize				=                                      settings.value("minLoDMeshSize",       2500000 ).toUInt();
+	minLoDMeshSize				=                                      500000;//settings.value("minLoDMeshSize",       500000 ).toUInt(); //250万改成50万
 	decimateCloudOnMove			=                                      settings.value("cloudDecimation",         true ).toBool();
-	minLoDCloudSize				=                                      settings.value("minLoDCloudSize",     10000000 ).toUInt();
+	minLoDCloudSize				=                                      2000000;//settings.value("minLoDCloudSize",     2000000 ).toUInt(); //1000万改成200万
 	useVBOs						=                                      settings.value("useVBOs",                 true ).toBool();
 	displayCross				=                                      settings.value("crossDisplayed",          true ).toBool();
 	labelMarkerSize				= static_cast<unsigned>(std::max(0,    settings.value("labelMarkerSize",         5    ).toInt()));

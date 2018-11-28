@@ -82,7 +82,7 @@ include( cmake/CMakeInclude.cmake )
 add_subdirectory( CC )
 
 # by duan
-#add_subdirectory( mapparam )
+add_subdirectory( map_param )
 add_subdirectory( dpxMap )
 
 # Add external libraries

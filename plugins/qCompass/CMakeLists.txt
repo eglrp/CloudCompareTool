@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-option( INSTALL_QCOMPASS_PLUGIN "Check to install compass plugin" OFF )
+option( INSTALL_QCOMPASS_PLUGIN "Check to install compass plugin" ON )
 
 # CloudCompare 'compass' plugin
 if (INSTALL_QCOMPASS_PLUGIN)

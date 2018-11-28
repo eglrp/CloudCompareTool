@@ -75,7 +75,7 @@ struct ccGLDrawContext
 {
 	//! Drawing options (see below)
 	int drawingFlags;
-	
+
 	//! GL screen width
 	int glW;
 	//! GL screen height
@@ -126,7 +126,7 @@ struct ccGLDrawContext
 
 	//! Currently displayed color scale (the corresponding scalar field in fact)
 	ccScalarField* sfColorScaleToDisplay;
-	
+
 	//! Shader for fast dynamic color ramp lookup
 	ccColorRampShader* colorRampShader;
 	//! Custom rendering shader (OpenGL 3.3+)
@@ -174,12 +174,12 @@ struct ccGLDrawContext
 		, labelDefaultMarkerCol(ccColor::defaultLabelMarkerColor)
 		, bbDefaultCol(ccColor::yellow)
 		, decimateCloudOnMove(true)
-		, minLODPointCount(10000000)
+		, minLODPointCount(2000000) //默认1千万，改成200万 by duans
 		, currentLODLevel(0)
 		, moreLODPointsAvailable(false)
 		, higherLODLevelsAvailable(false)
 		, decimateMeshOnMove(true)
-		, minLODTriangleCount(2500000)
+		, minLODTriangleCount(500000) //数量缩小5倍 250-50万
 		, sfColorScaleToDisplay(0)
 		, colorRampShader(0)
 		, customRenderingShader(0)
@@ -193,12 +193,12 @@ struct ccGLDrawContext
 		, stereoPassIndex(0)
 		, drawRoundedPoints(false)
 	{}
-   
+
 	template<class TYPE>
 	TYPE *glFunctions() const
-	{				
+	{
 		return qGLContext ? qGLContext->versionFunctions<TYPE>() : 0;
-	}   
+	}
 };
 typedef ccGLDrawContext CC_DRAW_CONTEXT;
 

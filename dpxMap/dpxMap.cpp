@@ -115,14 +115,14 @@ dpxLayer* dpxMap::getRoadLyr()
 	return getLyrFormType(eOT_Road);
 }
 //路灯层
-dpxLayer* dpxMap::getLightLyr()
+dpxLayer* dpxMap::getTrafficLightLyr()
 {
-	return getLyrFormType(eOT_Light);
+	return getLyrFormType(eOT_TrafficLight);
 }
 //指示牌层
-dpxLayer* dpxMap::getIndicatorLry()
+dpxLayer* dpxMap::getTrafficSignLyr()
 {
-	return getLyrFormType(eOT_Indicator);
+	return getLyrFormType(eOT_TrafficSign);
 }
 //获取其它层
 dpxLayer* dpxMap::getOtherLry()
@@ -130,7 +130,33 @@ dpxLayer* dpxMap::getOtherLry()
 	return getLyrFormType(eOT_Other);
 }
 
-dpxLayer* dpxMap::getZebraLineLry()
+dpxLayer* dpxMap::getCrossWalkLyr()
 {
-	return getLyrFormType(eOT_ZebraLine);
+	return getLyrFormType(eOT_CrossWalk);
 }
+
+dpxLayer* dpxMap::getStopLineLyr()
+{
+	return getLyrFormType(eOT_StopLine);
+}
+dpxLayer* dpxMap::getParkingSpaceLyr()
+{
+	return getLyrFormType(eOT_ParkingSpace);
+}
+dpxLayer* dpxMap::getSpeedbumpsLyr()
+{
+	return getLyrFormType(eOT_SpeedBump);
+}
+dpxLayer* dpxMap::getBoardLyr()
+{
+	return getLyrFormType(eOT_Board);
+}
+dpxLayer* dpxMap::getJunctionLyr()
+{
+	return getLyrFormType(eOT_Junction);
+}
+dpxLayer* dpxMap::getLaneMarkingLyr()
+{
+	return getLyrFormType(eOT_LaneMarking);
+}
+

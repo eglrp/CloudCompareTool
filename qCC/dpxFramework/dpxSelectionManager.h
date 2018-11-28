@@ -28,6 +28,8 @@ public:
 	void ClearSelection();
 	//bOnlyOne代表是否清除其它临时显示项
 	void AddObject2Selection(ccHObject* pHObject,bool bOnlyOne = true);
+	void AddObject2Selection(vector<ccHObject*> vecHObject,bool bOnlyOne=true);
+
 	void RemoveSelection(ccHObject* pHObject);
 
 	void redrawSelectionSet();

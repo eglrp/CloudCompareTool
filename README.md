@@ -1,2 +1,1 @@
-# CloudCompareTool
-Cloud Pick Tool
+地图标注工具，基于CloudCompare进行定制

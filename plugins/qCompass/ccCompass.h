@@ -30,26 +30,29 @@
 
 class ccCompassDlg;
 class ccFitPlaneTool;
-class ccGeoObject;
-//class ccLineationTool;
-//class ccMapDlg;
-//class ccNoteTool;
-//class ccPinchNodeTool;
-//class ccThicknessTool;
 class ccTool;
-//class ccTopologyTool;
-//class ccTraceTool;
 
 class dpxTraceLineTool;
 class dpxCylinderTool;
-class dpxPlaneTool;
+class dpxTrafficLightPlaneTool;
 class dpxSphereTool;
 class dpxNodeEditTool;
 class dpxSelectTool;
 class dpxRoadRefLineTool;
 class dpxRoadLineTool;
 class dpxRoadStopLineTool;
-class dpxZebraCrossLineTool;
+class dpxCrossWalkTool;
+class dpxMeasureTool;
+
+class dpxSpeedBumpTool;
+class dpxBoardTool;
+class dpxTrafficSignTool;
+class dpxLaneMarkingTool;
+class dpxLaneMarkingToolV2;
+class dpxParkingSpaceTool;
+class dpxJunctionTool;
+class dpxLineBreakTool;
+
 
 class ccCompass : public QObject, public ccStdPluginInterface, public ccPickingListener
 {
@@ -104,14 +107,23 @@ protected slots:
 	//new tool by duans
 	void setTraceLine();//折线采集功能
 	void setCylinderTool();//圆柱工具
-	void setPlaneTool();//平面采集工具
+	void setLightPlaneTool();//平面采集工具
 	void setSphereTool();//球采集工具
 	void setNodeEditTool();//节点编辑工具
 	void setSelectTool();//选择工具
 	void setRoadRefLineTool();//道路参照线工具
 	void setRoadLineTool();//道路线工具
 	void setRoadStopLineTool();//道路停止线工具
-	void setZebraCrossLineTool();//斑马线采集工具
+	void setCrossWalkTool();//斑马线采集工具
+	void setMeasureTool(); //MeasureTool
+
+	void setSpeedBumpTool();
+	void setBoardTool();
+	void setTrafficSignTool();
+	void setLaneMarkingTool();
+	void setParkingSpaceTool();
+	void setJunctionTool();
+	void setLineBreakTool();
 
 	//drawing options
 	void hideAllPointClouds(ccHObject* o); //hides all point clouds and adds them to the m_hiddenObjects list
@@ -127,7 +139,6 @@ protected:
 
 	void setActiveTool(ccTool* pActiveTool);
 	//used to get the place/object that new measurements or interpretation should be stored
-	ccHObject* getInsertPoint();
 
 	//cleans up pointers etc before changing tools
 	void cleanupBeforeToolChange();
@@ -156,7 +167,7 @@ protected:
 	ccFitPlaneTool* m_fitPlaneTool;
 	dpxTraceLineTool * m_traceLineTool; //折线工具
 	dpxCylinderTool* m_dpxCylinderTool; //圆柱
-	dpxPlaneTool* m_dpxPlaneTool;	//四边形工具
+	dpxTrafficLightPlaneTool* m_dpxLightPlaneTool;	//四边形工具
 	dpxSphereTool* m_dpxSphereTool; //球形工具
 	dpxNodeEditTool* m_dpxNodeEditTool;//节点编辑工具
 	dpxSelectTool* m_dpxSelectTool; //选择工具
@@ -164,31 +175,26 @@ protected:
 	dpxRoadRefLineTool* m_dpxRoadRefLineTool; //道路参考线工具
 	dpxRoadLineTool* m_dpxRoadLineTool; //道路线工具
 	dpxRoadStopLineTool* m_dpxRoadStopLineTool;//道路停止线工具
-	dpxZebraCrossLineTool* m_dpxZebraCrossLineTool;
+	dpxCrossWalkTool* m_dpxCrossWalkTool;
+	dpxMeasureTool* m_dpxMeasureTool; //量测工具
+
+	//新增加5个工具
+	dpxSpeedBumpTool* m_dpxSpeedBumpTool;
+	dpxBoardTool* m_dpxBoardTool;
+	dpxTrafficSignTool* m_dpxTrafficSignTool;
+	dpxLaneMarkingToolV2* m_dpxLaneMarkingTool;
+	dpxParkingSpaceTool* m_dpxParkingSpaceTool;
+	dpxJunctionTool* m_dpxJunctionTool;
+	dpxLineBreakTool* m_dpxLineBreakTool;
+
 
 	//currently selected/active geoObject
-	ccGeoObject* m_geoObject = nullptr; //the GeoObject currently being written to
-	int m_geoObject_id = -1; //used to check if m_geoObject has been deleted
 	std::vector<int> m_hiddenObjects; //used to hide objects (for picking)
-
-	//used to 'guess' the name of new GeoObjects
-	QString m_lastGeoObjectName = "GeoObject";
 
 
 //static flags used to define simple behaviours
 public:
-	//drawing properties
-	static bool drawName;
-	static bool drawStippled;
-	static bool drawNormals;
-
-	//calculation properties
-	static bool fitPlanes;
 	static int costMode;
-
-	//digitization mode
-	static bool mapMode; //true if map mode, false if measure mode
-	static int mapTo; //see flags in ccGeoObject.h for definition of different mapping locations
 
 	QTimer *m_pTimer;
 	QThread* m_pThread;

@@ -1,71 +1,54 @@
 
 set( CC_PLUGIN_CUSTOM_HEADER_LIST
-	${CC_PLUGIN_CUSTOM_HEADER_LIST} 
+	${CC_PLUGIN_CUSTOM_HEADER_LIST}
 	${CMAKE_CURRENT_SOURCE_DIR}/ccCompassDlg.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ccCompassInfo.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ccFitPlane.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ccFitPlaneTool.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccGeoObject.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccLineation.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccLineationTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ccMeasurement.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ccMouseCircle.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccNote.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccNoteTool.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccPinchNode.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccPinchNodeTool.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccPointPair.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccThickness.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccThicknessTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ccTool.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTopologyRelation.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTopologyTool.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTrace.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTraceTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxTraceLineTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxCylinderTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxAlgorithmFun.h
-	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolCommonFun.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxSphereTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxEditTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxNodeEditTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxPickAndEditTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxSelectTool.h
-
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadRefLineTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadLineTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadStopLineTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolAssistDlg.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxCrossWalkDlg.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneAssistDlg.h
-	${CMAKE_CURRENT_SOURCE_DIR}/dpxZebraCrossLineTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxCrossWalkTool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxThreadBase.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxMeasureTool.h
+
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneToolBase.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxTrafficSignTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxLaneMarkingTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxParkingSpaceTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxJunctionTool.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadLine.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxLineBreakTool.h
 	PARENT_SCOPE
 )
 
 set( CC_PLUGIN_CUSTOM_SOURCE_LIST
-	${CC_PLUGIN_CUSTOM_SOURCE_LIST} 
+	${CC_PLUGIN_CUSTOM_SOURCE_LIST}
 	${CMAKE_CURRENT_SOURCE_DIR}/ccCompassDlg.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ccCompassInfo.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ccFitPlane.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ccFitPlaneTool.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccGeoObject.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccLineation.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccLineationTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ccMouseCircle.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccNote.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccNoteTool.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccPinchNode.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccPinchNodeTool.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccPointPair.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccThickness.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccThicknessTool.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTopologyRelation.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTopologyTool.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTrace.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ccTraceTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxTraceLineTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxCylinderTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxAlgorithmFun.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolCommonFun.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxSphereTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxEditTool.cpp
@@ -78,7 +61,16 @@ set( CC_PLUGIN_CUSTOM_SOURCE_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadStopLineTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxToolAssistDlg.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneAssistDlg.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/dpxZebraCrossLineTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxCrossWalkTool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dpxThreadBase.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxMeasureTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxCrossWalkDlg.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxPlaneToolBase.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxTrafficSignTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxLaneMarkingTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxParkingSpaceTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxJunctionTool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxRoadLine.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/dpxLineBreakTool.cpp
 	PARENT_SCOPE
 )
