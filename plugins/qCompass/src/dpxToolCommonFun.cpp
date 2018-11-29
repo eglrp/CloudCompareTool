@@ -202,9 +202,12 @@ ccHObject* dpxToolCommonFun::CreateRoadLine(vector<ccPolyline*> vecLines,bool is
 	for(int i = 0;i < vecLines.size();i++)
 	{
 		ccPolyline* pTempLine = vecLines[i];
+		pTempLine->setVisible(true);
 		pTempLine->setTempColor(isRefLine ? refLineColor:RoadLineColor);
 		pTempLine->setMetaData(DPX_OBJECT_TYPE_NAME,isRefLine ? eObj_RoadRefLine : eObj_RoadLine); //记录要素类型为refLine
 		pTempLine->setName(isRefLine ? "RefLine":"RoadLine");
+		if(pTempLine->size()<2)
+			ccLog::Warning("LineSize<2");
 
 		pHObjec->addChild(pTempLine);//RefLine
 	}
@@ -214,8 +217,8 @@ ccHObject* dpxToolCommonFun::CreateRoadLine(vector<ccPolyline*> vecLines,bool is
 	{
 		ccPolyline* pFirstLine = vecLines[j];
 		ccPolyline* pSecondLine = vecLines[j+1];
-		CCVector3* pPt1 = const_cast<CCVector3*>(pFirstLine->getPointPersistentPtr(pFirstLine->size()-1));
-		CCVector3* pPt2 = const_cast<CCVector3*>(pSecondLine->getPointPersistentPtr(pSecondLine->size()-1));
+		CCVector3* pPt1 = const_cast<CCVector3*>(pFirstLine->getPointPersistentPtr(pFirstLine->size()-1)); //前一个线段的尾点
+		CCVector3* pPt2 = const_cast<CCVector3*>(pSecondLine->getPointPersistentPtr(0)); //后一个线段的头点
 
 		ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
 		poly3DVertices->setEnabled(false);
@@ -236,6 +239,8 @@ ccHObject* dpxToolCommonFun::CreateRoadLine(vector<ccPolyline*> vecLines,bool is
 		SymbolLine->addPointIndex(1);
 		SymbolLine->setTempColor(ccColor::yellow);
 		//创建虚线
+		SymbolLine->setDisplay(vecLines[0]->getDisplay());
+		SymbolLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_DashedSymbol);
 		pHObjec->addChild(SymbolLine);//RefLine
 	}
 
@@ -510,7 +515,7 @@ bool dpxToolCommonFun::splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,
 		return false;
 	int nPtSize = pTargetLine->size();
     if(nPtSize<3) //将该线段删除
-		return true;
+		return false;
 	vector<CCVector3>  vecPts =  dpxToolCommonFun::GetAllPoints(pTargetLine);
     if(nDeleteSegmetIndex==0)//删除首段——删除首个点
     {
@@ -533,8 +538,15 @@ bool dpxToolCommonFun::splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,
 		//折线一分为二
         //Line 1[0,nDeleteSegmetIndex]    Line2[nDeleteSegmetIndex+1,nPtSize-1]
         vector<CCVector3> vecPt1,vecPt2;
-		vecPt1.insert(vecPt1.end(),vecPts.begin(),vecPts.begin()+nDeleteSegmetIndex+1);
-        vecPt2.insert(vecPt2.end(),vecPts.begin()+nDeleteSegmetIndex+1,vecPts.end());
+        for(int i = 0;i<=nDeleteSegmetIndex;i++)
+        {
+			vecPt1.push_back(vecPts[i]);
+        }
+        for(int j = nDeleteSegmetIndex+1;j<nPtSize;j++)
+        {
+			vecPt2.push_back(vecPts[j]);
+        }
+
         ccPolyline* pLine1 = dpxToolCommonFun::CreatLineFromPts(vecPt1);
 		ccPolyline* pLine2 = dpxToolCommonFun::CreatLineFromPts(vecPt2);
 		if(pLine1 != nullptr)
@@ -542,11 +554,75 @@ bool dpxToolCommonFun::splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,
 		if(pLine2 != nullptr)
 			vecResult.push_back(pLine2);
 	}
+
+	for(int i = 0;i<vecResult.size();i++)
+		vecResult[i]->setDisplay(pTargetLine->getDisplay());
+
 	return true;
 }
-//判断选择集中的refLine是否属于同一个RefLineSet
-//通过refLine找到其对应的Section
 
+//更新LineSet中的符号线
+bool dpxToolCommonFun::UpdateSymbolLine(ccHObject* pLineSet)
+{
+	vector<ccPolyline*>  vecLines,vecSymbolLines;
+	if(pLineSet==nullptr)
+		return false;
+	int nSize = pLineSet->getChildrenNumber();
+	for(int j=0;j<nSize;j++)
+	{
+		ccHObject* pLineObj = pLineSet->getChild(j);
+		if(!pLineObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
+			continue;
+
+		ccPolyline* pPolyLine = ccHObjectCaster::ToPolyline(pLineObj);
+		if(pPolyLine==nullptr)
+			continue;
+
+		dpxObjectType eType = dpxObjectType(pLineObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
+		if(eType == eObj_RoadLine || eType == eObj_RoadRefLine)
+			vecLines.push_back(pPolyLine);
+		else
+			vecSymbolLines.push_back(pPolyLine);
+	}
+	// remove old SymbolLines
+    for(int i = 0;i < vecSymbolLines.size();i++)
+    {
+		pLineSet->removeChild(vecSymbolLines[i]);
+    }
+
+	//add new eObj_DashedSymbol
+	for(int j = 0; j<vecLines.size()-1;j++)
+	{
+		ccPolyline* pFirstLine = vecLines[j];
+		ccPolyline* pSecondLine = vecLines[j+1];
+		CCVector3* pPt1 = const_cast<CCVector3*>(pFirstLine->getPointPersistentPtr(pFirstLine->size()-1)); //前一个线段的尾点
+		CCVector3* pPt2 = const_cast<CCVector3*>(pSecondLine->getPointPersistentPtr(0)); //后一个线段的头点
+
+		//创建符号虚线
+		ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
+		poly3DVertices->setEnabled(false);
+
+		ccPolyline* SymbolLine = new ccPolyline(poly3DVertices);
+		SymbolLine->setVisible(true);
+
+		//Add first Pt
+		poly3DVertices->reserve(1);
+		SymbolLine->reserve(2);
+		poly3DVertices->addPoint(*pPt1);
+		SymbolLine->addPointIndex(0);
+
+		//Add second Pt
+		poly3DVertices->reserve(2);
+		SymbolLine->reserve(3);
+		poly3DVertices->addPoint(*pPt2);
+		SymbolLine->addPointIndex(1);
+		SymbolLine->setTempColor(ccColor::yellow);
+
+		SymbolLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_DashedSymbol);
+		SymbolLine->setDisplay(vecLines[0]->getDisplay());
+		pLineSet->addChild(SymbolLine);//RefLine
+	}
+}
 
 
 

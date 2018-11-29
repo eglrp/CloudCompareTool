@@ -14,6 +14,11 @@ public:
 	dpxLineBreakTool();
 	virtual ~dpxLineBreakTool();
 
+	//鼠标右键事件
+	virtual void onMouseRightClick(int x,int y);
+	//鼠标释放事件
+	virtual void onMouseReleaseEvent(int x,int y);
+
 public:
 	//鼠标左键事件
 	virtual void onMouseLeftClick(int x,int y);

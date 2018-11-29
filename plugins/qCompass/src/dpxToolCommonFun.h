@@ -51,6 +51,9 @@ public:
 	static ccPolyline* CreatLineFromPts(vector<CCVector3> vecPts);
 
 	static bool splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,vector<ccPolyline*>& vecResult);
+
+	//更新LineSet中的符号线
+	static bool UpdateSymbolLine(ccHObject* pLineSet);
 };
 
 #endif

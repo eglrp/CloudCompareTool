@@ -676,29 +676,6 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_LaneMarking)
 			{
-//				if(!pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
-//					continue;
-//				QString strUID = pUnknownLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
-//				ccHObject::Container vecHObjs;
-//				pUnknownLine->filterChildren(vecHObjs,true,CC_TYPES::PLANE);
-//				for(int i =0;i<vecHObjs.size();i++)
-//				{
-//					ccPlane* pPlane = ccHObjectCaster::ToPlane(vecHObjs[i]);
-//					if(pPlane==nullptr)
-//						continue;
-//					if(pPlane->get4CornerPts().size()!=4)
-//						continue;
-//					if(!pPlane->hasMetaData(DPX_RELATED_PLANE_UID))
-//						continue;
-//					QString sUID = pPlane->getMetaData(DPX_RELATED_PLANE_UID).toString();
-//					if(sUID.compare(strUID,Qt::CaseInsensitive)==0)//
-//					{
-//						nLanemarking++;
-//						hdmap_proto::LaneMarking* pLaneMarking = pSection->add_lane_markings();
-//						addLanemarkingInfo(pPlane,pLaneMarking,nLanemarking);
-//					}
-//				}
-
 				nLanemarking++;
 				hdmap_proto::LaneMarking* pLaneMarking = pSection->add_lane_markings();
 				addLanemarkingInfo(pUnknownLine,pLaneMarking,nLanemarking);
