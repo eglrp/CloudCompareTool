@@ -36,20 +36,32 @@ void dpxCylinderTool::toolActivated()
 {
 	bool bsetRefRoot = false;
 	vector<ccHObject*> vecObjs = dpxSelectionManager::Instance()->getSelections();
-	if(vecObjs.size()==1)
-	{
-		ccHObject* pHObj = vecObjs[0];
-        if(pHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
-        {
-			int index = pHObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt();
-			if(dpxObjectType(index) == eObj_RoadRefLine)
-			{
-				//生成的RoadLine挂在RefLine节点下
-				m_pPickRoot = pHObj;
-				bsetRefRoot = true;
-			}
-        }
-	}
+	do
+    {
+        if(vecObjs.size()<1)
+            break;
+        ccHObject* pHObj = vecObjs[0];
+        if(!pHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
+            break;
+
+        int index = pHObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt();
+        if(dpxObjectType(index) != eObj_RoadRefLine)
+            break;
+
+        //生成的RoadLine挂在RefLine节点下
+		ccPolyline* pLine = ccHObjectCaster::ToPolyline(pHObj);
+		if(pLine==nullptr)
+			break;
+
+        ccHObject* pSection = dpxToolCommonFun::getRelatedSection(pLine);
+        if(pSection==nullptr)
+			break;
+
+		m_pPickRoot = pSection;
+		bsetRefRoot= true;
+
+    }while(0);
+
 	if(!bsetRefRoot)
 	{
 		//若添加了地图，采集到地图中去

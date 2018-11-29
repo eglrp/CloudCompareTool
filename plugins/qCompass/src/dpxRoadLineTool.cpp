@@ -29,7 +29,7 @@ void dpxRoadLineTool::CheckSelectRefLine()
     vector<ccHObject*> vecObjs = dpxSelectionManager::Instance()->getSelections();
     do
     {
-        if(vecObjs.size()!=1)
+        if(vecObjs.size()<1)
             break;
         ccHObject* pHObj = vecObjs[0];
         if(!pHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
@@ -40,8 +40,16 @@ void dpxRoadLineTool::CheckSelectRefLine()
             break;
 
         //生成的RoadLine挂在RefLine节点下
-        m_bSetRefLine= true;
-        m_pPickRoot = pHObj;
+		ccPolyline* pLine = ccHObjectCaster::ToPolyline(pHObj);
+		if(pLine==nullptr)
+			break;
+
+        ccHObject* pSection = dpxToolCommonFun::getRelatedSection(pLine);
+        if(pSection==nullptr)
+			break;
+
+		m_pPickRoot = pSection;
+		m_bSetRefLine= true;
 
     }while(0);
 

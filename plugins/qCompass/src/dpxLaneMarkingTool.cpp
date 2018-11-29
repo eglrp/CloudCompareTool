@@ -44,9 +44,8 @@ bool dpxLaneMarkingToolV2::CheckSelectRefLine()
     vector<ccHObject*> vecObjs = dpxSelectionManager::Instance()->getSelections();
     do
     {
-        if(vecObjs.size()!=1)
+        if(vecObjs.size()<1)
             break;
-
         ccHObject* pHObj = vecObjs[0];
         if(!pHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
             break;
@@ -54,9 +53,18 @@ bool dpxLaneMarkingToolV2::CheckSelectRefLine()
         int index = pHObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt();
         if(dpxObjectType(index) != eObj_RoadRefLine)
             break;
+
         //生成的RoadLine挂在RefLine节点下
-        m_bSetRefLine= true;
-        m_pPickRoot = pHObj;
+		ccPolyline* pLine = ccHObjectCaster::ToPolyline(pHObj);
+		if(pLine==nullptr)
+			break;
+
+        ccHObject* pSection = dpxToolCommonFun::getRelatedSection(pLine);
+        if(pSection==nullptr)
+			break;
+
+		m_pPickRoot = pSection;
+		m_bSetRefLine= true;
 
     }while(0);
 
@@ -67,16 +75,6 @@ bool dpxLaneMarkingToolV2::CheckSelectRefLine()
 
 void dpxLaneMarkingToolV2::toolActivated()
 {
-	//若添加了地图，采集到地图中去
-//	dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
-//	if(pMap!=nullptr)
-//	{
-//		dpxLayer* pLaneMarkingLyr = pMap->getLaneMarkingLyr();
-//		if(pLaneMarkingLyr != nullptr && pLaneMarkingLyr->getRootData() != nullptr)
-//			m_pPickRoot = pLaneMarkingLyr->getRootData();
-//	}
-//
-//	dpxPickAndEditTool::toolActivated();
 	if(!CheckSelectRefLine())
 		return;
 	dpxPickAndEditTool::toolActivated();
