@@ -209,6 +209,7 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
         ccPolyline* pLine =  m_VNodeInfo.m_pLine;
         if(pLine==nullptr)
 			return;
+
         int nsize = pLine->size();
         int nNode = m_VNodeInfo.m_nNodeIndex;
         //try to add one more point
@@ -219,25 +220,54 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
         double dY_Offset = P.y - ptNode.y;
         double dZ_Offset = P.z - ptNode.z;
 
-        ccGLMatrix transM ;//平移矩阵
+        ccGLMatrix transM;//平移矩阵
         CCVector3 vecTrans(dX_Offset,dY_Offset,dZ_Offset);
         transM.setTranslation(vecTrans);
 
-        for(int i = 0;i<pLine->size();i++)
-        {
-            CCVector3 pPoint = *(pLine->getPoint(i));
-            CCVector3 newPt =   transM*pPoint;
+        //拷贝要拷贝整个线的集体
+        ccHObject* pRefLineSet = dpxToolCommonFun::getRelatedLineSet(pLine);
+        vector<ccPolyline*> vecRefLines = dpxToolCommonFun::getLinesFromLineSet(pRefLineSet);
+        if(pRefLineSet==nullptr || vecRefLines.size()<1)
+			return;
 
-			if ( !m_poly3DVertices->reserve(m_poly3DVertices->size() + 1)
-				|| !m_poly3D->reserve(m_poly3DVertices->size() + 1))
+		vector<ccPolyline*> vecResultLines;
+		for(int n = 0;n < vecRefLines.size();n++)
+		{
+			ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
+			poly3DVertices->setEnabled(false);
+
+			ccPolyline* poly3D = new ccPolyline(poly3DVertices);
+			poly3D->set2DMode(false);
+			poly3D->setDisplay(m_window);
+			poly3D->addChild(poly3DVertices);
+
+			for(int i = 0;i < vecRefLines[n]->size();i++)
 			{
-				ccLog::Error("Not enough memory");
-				return;
-			}
+				CCVector3 pPoint = *(vecRefLines[n]->getPoint(i));
+				CCVector3 newPt =  transM*pPoint;
 
-			m_poly3DVertices->addPoint(newPt);
-			m_poly3D->addPointIndex(m_poly3DVertices->size() - 1);
-        }
+				if ( !poly3DVertices->reserve(poly3DVertices->size() + 1)
+					|| !poly3D->reserve(poly3DVertices->size() + 1))
+				{
+					ccLog::Error("Not enough memory");
+					return;
+				}
+				poly3DVertices->addPoint(newPt);
+				poly3D->addPointIndex(poly3DVertices->size() - 1);
+			}
+			poly3D->setDisplay(m_window);
+			vecResultLines.push_back(poly3D);
+		}
+
+		ccHObject* pRoadLineSet = dpxToolCommonFun::CreateRoadLine(vecResultLines,false);
+		if(pRoadLineSet!=nullptr)
+		{
+			pRoadLineSet->setDisplay(m_window);
+			m_pPickRoot->addChild(pRoadLineSet);
+		}
+
+		//移除
+		m_pPickRoot->removeChild(m_poly3D);
 
         m_poly3D = 0;
         m_poly3DVertices = 0;

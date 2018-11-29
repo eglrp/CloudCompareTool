@@ -202,12 +202,12 @@ ccHObject* dpxToolCommonFun::CreateRoadLine(vector<ccPolyline*> vecLines,bool is
 	for(int i = 0;i < vecLines.size();i++)
 	{
 		ccPolyline* pTempLine = vecLines[i];
+		if(pTempLine->size()<2)
+			continue;
 		pTempLine->setVisible(true);
 		pTempLine->setTempColor(isRefLine ? refLineColor:RoadLineColor);
 		pTempLine->setMetaData(DPX_OBJECT_TYPE_NAME,isRefLine ? eObj_RoadRefLine : eObj_RoadLine); //记录要素类型为refLine
 		pTempLine->setName(isRefLine ? "RefLine":"RoadLine");
-		if(pTempLine->size()<2)
-			ccLog::Warning("LineSize<2");
 
 		pHObjec->addChild(pTempLine);//RefLine
 	}
