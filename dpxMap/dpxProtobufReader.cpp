@@ -667,90 +667,69 @@ void dpxProtobufReader::getRDisPt(CCVector3 ptFirst,CCVector3 ptSecond,double dD
 	return ;
 }
 
-//bool dpxProtobufReader::getPtsFromSegment(hdmap_proto::LineSegment* pSegment,CCVector3& ptFirst,CCVector3& ptSecond)
-//{
-//	if(pSegment==nullptr)
-//		return false;
-//
-//	if(!pSegment->has_end() || !pSegment->has_start())
-//		return false;
-//
-//	hdmap_proto::Vector3d* pStartPt = pSegment->mutable_start();
-//	hdmap_proto::Vector3d* pEndPt = pSegment->mutable_end();
-//
-//	ptFirst.x = pStartPt->x();
-//	ptFirst.y = pStartPt->y();
-//	ptFirst.z = pStartPt->z();
-//
-//	ptSecond.x = pEndPt->x();
-//	ptSecond.y = pEndPt->y();
-//	ptSecond.z = pEndPt->z();
-//	return true;
-//}
-//
-//
-//
-//bool dpxProtobufReader::AddStopLineInfor(hdmap_proto::StopLine* pStopLine,ccPointCloud* p3DVertices,ccPolyline* pCCStopLine)
-//{
-//	if(pStopLine==nullptr)
-//		return false;
-//	if(!pStopLine->has_polygon())
-//		return false;
-//
-//	hdmap_proto::Polygon* pPolygon = pStopLine->mutable_polygon();
-//	if(pPolygon==nullptr)
-//		return false;
-//
-//	int nPtSize = pPolygon->points_size();
-//	if(nPtSize<4)
-//		return false;
-//
-//	p3DVertices->reserve(nPtSize);
-//	pCCStopLine->reserve(nPtSize+1);
-//
-//	for(int i =0;i<nPtSize;i++)
-//	{
-//		//addPt
-//		CCVector3 ccpt;
-//		hdmap_proto::Vector3d pt = pPolygon->points(i);
-//		ccpt.x = pt.x();
-//		ccpt.y = pt.y();
-//		ccpt.z = pt.z();
-//		p3DVertices->addPoint(ccpt);
-//		pCCStopLine->addPointIndex(i);
-//	}
-//
-//	QString strRelateID = QUuid::createUuid().toString();
-//	double rms = 0.0;
-//	ccPlane* pPlane = ccPlane::Fit(p3DVertices, &rms);//重新拟合平面
-//	if (pPlane) //valid fit
-//	{
-//		//make plane to add to display
-//		pPlane->setVisible(true);
-//		pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
-//		pPlane->setMetaData(DPX_RELATED_PLANE_UID,strRelateID);
-//		QImage* pImage = new QImage("");
-//		if(pImage)
-//			pPlane->setAsTexture(*pImage);
-//
-//		CCVector3 vNormal = pPlane->getNormal();
-//		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
-//		pCCStopLine->setMetaData(DPX_NORMAL,strNormal);//法向量
-//		pCCStopLine->setMetaData(DPX_RELATED_PLANE_UID,strRelateID);//关联的ID
-//		pCCStopLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadStopLine); //地物类型
-//		pCCStopLine->setName("stopline");//设置名称
-//		pCCStopLine->addChild(pPlane);
-//	}
-//
-//	//Attribute
-//	ccColor::Rgb stopLineColor STOP_LINE_COLOR; //宏定义颜色
-//	pCCStopLine->setTempColor(stopLineColor);
-//	pCCStopLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadStopLine); //记录要素类型为StopLine
-//
-//	return true;
-//}
-//
-//
+
+
+bool dpxProtobufReader::AddStopLineInfor(hdmap_proto::StopLine* pStopLine,ccPointCloud* p3DVertices,ccPolyline* pCCStopLine)
+{
+	if(pStopLine==nullptr)
+		return false;
+	if(!pStopLine->has_border())
+		return false;
+
+	hdmap_proto::Polygon* pPolygon = pStopLine->mutable_border();
+	if(pPolygon==nullptr)
+		return false;
+
+	int nPtSize = pPolygon->points_size();
+	if(nPtSize<4)
+		return false;
+
+	p3DVertices->reserve(nPtSize);
+	pCCStopLine->reserve(nPtSize+1);
+
+	for(int i =0;i<nPtSize;i++)
+	{
+		//addPt
+		CCVector3 ccpt;
+		hdmap_proto::Vector3d pt = pPolygon->points(i);
+		ccpt.x = pt.x();
+		ccpt.y = pt.y();
+		ccpt.z = pt.z();
+		p3DVertices->addPoint(ccpt);
+		pCCStopLine->addPointIndex(i);
+	}
+
+	QString strRelateID = QUuid::createUuid().toString();
+	double rms = 0.0;
+	ccPlane* pPlane = ccPlane::Fit(p3DVertices, &rms);//重新拟合平面
+	if (pPlane) //valid fit
+	{
+		//make plane to add to display
+		pPlane->setVisible(true);
+		pPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
+		pPlane->setMetaData(DPX_RELATED_PLANE_UID,strRelateID);
+		QImage* pImage = new QImage("");
+		if(pImage)
+			pPlane->setAsTexture(*pImage);
+
+		CCVector3 vNormal = pPlane->getNormal();
+		QString strNormal = QString::number(vNormal.x).append(" ").append(QString::number(vNormal.y)).append(" ").append(QString::number(vNormal.z));
+		pCCStopLine->setMetaData(DPX_NORMAL,strNormal);//法向量
+		pCCStopLine->setMetaData(DPX_RELATED_PLANE_UID,strRelateID);//关联的ID
+		pCCStopLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadStopLine); //地物类型
+		pCCStopLine->setName("stopline");//设置名称
+		pCCStopLine->addChild(pPlane);
+	}
+
+	//Attribute
+	ccColor::Rgb stopLineColor STOP_LINE_COLOR; //宏定义颜色
+	pCCStopLine->setTempColor(stopLineColor);
+	pCCStopLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadStopLine); //记录要素类型为StopLine
+
+	return true;
+}
+
+
 //bool dpxProtobufReader::AddRoadLines(hdmap_proto::Section* pSection,ccHObject* pFatherObj)
 //{
 //	if(pSection==nullptr || pFatherObj==nullptr)

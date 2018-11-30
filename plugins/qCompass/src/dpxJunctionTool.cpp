@@ -96,15 +96,15 @@ void dpxJunctionTool::onMouseRightClick(int x,int y)
 			}
 
 			dpxMap* pCurrentMap = dpxGeoEngine::Instance()->GetMap();
-			vector<ccHObject*>  vecSections = dpxToolCommonFun::GetAllSection(pCurrentMap);
+			vector<ccHObject*>  vecSections = MapCommon::GetAllSection(pCurrentMap);
 
 			ccPointCloud* vertices3D = new ccPointCloud("Vertices");
-			int nMaxJunctionId = dpxToolCommonFun::getMaxJunctionID();
+			int nMaxJunctionId = MapCommon::getMaxJunctionID();
 			vector<int> vecHeadIds,vecTailIds,vecRefIDs;
 			for(int j=0;j<vecSections.size();j++)
 			{
 				ccHObject* pSection = vecSections[j];
-				vector<ccPolyline*> vecRefLines = dpxToolCommonFun::getRefLinesV2(pSection);
+				vector<ccPolyline*> vecRefLines = MapCommon::getRefLinesV2(pSection);
 				int nSize = vecRefLines.size();
 				if(nSize<1)
 					continue;
@@ -124,7 +124,7 @@ void dpxJunctionTool::onMouseRightClick(int x,int y)
 				vecRefIDs.push_back(nID);
 
 				//RefLine及其下属的RoadLine首尾节点都加入
-				vector<ccHObject*> vecRoadLineSet = dpxToolCommonFun::getRoadLineSets(pSection); //RoadLineSet  severl
+				vector<ccHObject*> vecRoadLineSet = MapCommon::getRoadLineSets(pSection); //RoadLineSet  severl
 				if(bFirstIn)//头部进入区域
 				{
 					vecHeadIds.push_back(j);
@@ -133,7 +133,7 @@ void dpxJunctionTool::onMouseRightClick(int x,int y)
 					for(int temp=0;temp<vecRoadLineSet.size();temp++)
 					{
 						ccHObject* pRoadLineSet = vecRoadLineSet[temp];  //取首点
-						vector<ccPolyline*> vecLines = dpxToolCommonFun::getRoadLines(pRoadLineSet);
+						vector<ccPolyline*> vecLines = MapCommon::getRoadLines(pRoadLineSet);
 						if(vecLines.size()<1)
 							continue;
 
@@ -150,7 +150,7 @@ void dpxJunctionTool::onMouseRightClick(int x,int y)
 					for(int temp=0;temp<vecRoadLineSet.size();temp++)
 					{
 						ccHObject* pRoadLineSet = vecRoadLineSet[temp];  //取首点
-						vector<ccPolyline*> vecLines = dpxToolCommonFun::getRoadLines(pRoadLineSet);
+						vector<ccPolyline*> vecLines = MapCommon::getRoadLines(pRoadLineSet);
 						 int nSize = vecLines.size();
 							continue;
 

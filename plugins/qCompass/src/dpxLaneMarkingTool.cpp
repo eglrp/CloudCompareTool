@@ -59,7 +59,7 @@ bool dpxLaneMarkingToolV2::CheckSelectRefLine()
 		if(pLine==nullptr)
 			break;
 
-        ccHObject* pSection = dpxToolCommonFun::getRelatedSection(pLine);
+        ccHObject* pSection = MapCommon::getRelatedSection(pLine);
         if(pSection==nullptr)
 			break;
 

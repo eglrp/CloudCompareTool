@@ -27,16 +27,16 @@ protected:
 	//地图头Header
 	bool SettingMapHeader(hdmap_proto::Header* pHead);
 //	//输出Section信息
-//	bool OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap);
+	bool OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap);
 //	//输出其余信息
-//	bool OutPutOtherAll(dpxMap* pMap,hdmap_proto::Map* protoMap);
+	bool OutPutOtherAll(dpxMap* pMap,hdmap_proto::Map* protoMap);
 //
-//private:
-//	bool addRefLaneInfo(ccPolyline* pDPXRefLine,hdmap_proto::Lane* pRefLane);
-//	bool addRoadLaneInfo(ccPolyline* pDPXRoadLine,hdmap_proto::Lane* pRoadLane,int nID);
-//	//bool addStopLineInfo(ccPolyline* pDPXLine,hdmap_proto::StopLine* pStopLine,int nID);
-//	bool addStopLineInfo(ccPlane* pPlane,hdmap_proto::StopLine* pStopLine,int nID);
-//
+private:
+	bool addRefLaneInfo(ccHObject* pRefLineSet,hdmap_proto::Lane* pRefLane)
+	bool addRoadLaneInfo(ccPolyline* pDPXRoadLine,hdmap_proto::Lane* pRoadLane,int nID);
+
+	bool addStopLineInfo(ccPlane* pPlane,hdmap_proto::StopLine* pStopLine,int nID);
+
 	bool addPoleInfo(ccPolyline* pDPXLine,hdmap_proto::Pole* pPole,float fRadius,int nID);
 	bool addOfficLightInfo(ccPlane* pPlane,hdmap_proto::TrafficLight* pTrafficLight,int nID);
 	bool addOfficSignInfo(ccPlane* pPlane,hdmap_proto::TrafficSign* pTrafficSign,int nID);
@@ -50,11 +50,11 @@ protected:
 	bool addCrossWalkInfo(ccPolyline* pDPXLine,hdmap_proto::CrossWalk* pCrossWalk,int nID);
 //
 //	//Junction信息
-//	bool addJunctionInfo(ccPolyline* pDPXine,hdmap_proto::Junction* pJunction);
-//
+	bool addJunctionInfo(ccPolyline* pDPXine,hdmap_proto::Junction* pJunction);
+
 	bool getRelatedPlaneBorderPts(ccPolyline* pLine,vector<CCVector3>& vecBorderPts);
 //
-//	void ccLine2ProtoLane(ccPolyline* pCCLine,hdmap_proto::Lane* pProtoLane);
+	void ccLine2ProtoLane(ccPolyline* pCCLine,hdmap_proto::Lane* pProtoLane);
 //	void createPtotoPt(CCVector3 ccPt,hdmap_proto::Vector3d* pProtpPt);
 //
 //	//Ctrl比率的点

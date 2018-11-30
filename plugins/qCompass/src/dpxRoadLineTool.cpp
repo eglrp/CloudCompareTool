@@ -44,7 +44,7 @@ void dpxRoadLineTool::CheckSelectRefLine()
 		if(pLine==nullptr)
 			break;
 
-        ccHObject* pSection = dpxToolCommonFun::getRelatedSection(pLine);
+        ccHObject* pSection = MapCommon::getRelatedSection(pLine);
         if(pSection==nullptr)
 			break;
 
@@ -225,8 +225,8 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
         transM.setTranslation(vecTrans);
 
         //拷贝要拷贝整个线的集体
-        ccHObject* pRefLineSet = dpxToolCommonFun::getRelatedLineSet(pLine);
-        vector<ccPolyline*> vecRefLines = dpxToolCommonFun::getLinesFromLineSet(pRefLineSet);
+        ccHObject* pRefLineSet = MapCommon::getRelatedLineSet(pLine);
+        vector<ccPolyline*> vecRefLines = MapCommon::getLinesFromLineSet(pRefLineSet);
         if(pRefLineSet==nullptr || vecRefLines.size()<1)
 			return;
 
@@ -259,7 +259,7 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 			vecResultLines.push_back(poly3D);
 		}
 
-		ccHObject* pRoadLineSet = dpxToolCommonFun::CreateRoadLine(vecResultLines,false);
+		ccHObject* pRoadLineSet = MapCommon::CreateRoadLine(vecResultLines,false);
 		if(pRoadLineSet!=nullptr)
 		{
 			pRoadLineSet->setDisplay(m_window);
