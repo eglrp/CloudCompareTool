@@ -24,10 +24,8 @@ const ::google::protobuf::Descriptor* TrafficSign_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   TrafficSign_reflection_ = NULL;
 struct TrafficSignOneofInstance {
-  const ::hdmap_proto::Circle* circle_;
-  const ::hdmap_proto::Rect* rect_;
-  const ::hdmap_proto::Cube* cube_;
-  const ::hdmap_proto::Polygon* polygon_;
+  const ::hdmap_proto::Circle* cborder_;
+  const ::hdmap_proto::Polygon* pborder_;
 }* TrafficSign_default_oneof_instance_ = NULL;
 const ::google::protobuf::EnumDescriptor* TrafficSign_TrafficSignType_descriptor_ = NULL;
 
@@ -41,14 +39,12 @@ void protobuf_AssignDesc_traffic_5fsign_2eproto() {
       "traffic_sign.proto");
   GOOGLE_CHECK(file != NULL);
   TrafficSign_descriptor_ = file->message_type(0);
-  static const int TrafficSign_offsets_[10] = {
+  static const int TrafficSign_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficSign, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficSign, tile_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficSign, type_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficSign_default_oneof_instance_, circle_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficSign_default_oneof_instance_, rect_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficSign_default_oneof_instance_, cube_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficSign_default_oneof_instance_, polygon_),
+    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficSign_default_oneof_instance_, cborder_),
+    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficSign_default_oneof_instance_, pborder_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficSign, value_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficSign, link_ids_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficSign, geometry_),
@@ -101,73 +97,71 @@ void protobuf_AddDesc_traffic_5fsign_2eproto() {
   ::hdmap_proto::protobuf_AddDesc_geometry_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\022traffic_sign.proto\022\013hdmap_proto\032\010id.pr"
-    "oto\032\016geometry.proto\"\314\024\n\013TrafficSign\022\033\n\002i"
+    "oto\032\016geometry.proto\"\207\024\n\013TrafficSign\022\033\n\002i"
     "d\030\001 \002(\0132\017.hdmap_proto.Id\022 \n\007tile_id\030\002 \003("
     "\0132\017.hdmap_proto.Id\0226\n\004type\030\004 \001(\0162(.hdmap"
-    "_proto.TrafficSign.TrafficSignType\022%\n\006ci"
-    "rcle\030\005 \001(\0132\023.hdmap_proto.CircleH\000\022!\n\004rec"
-    "t\030\006 \001(\0132\021.hdmap_proto.RectH\000\022!\n\004cube\030\007 \001"
-    "(\0132\021.hdmap_proto.CubeH\000\022\'\n\007polygon\030\010 \001(\013"
-    "2\024.hdmap_proto.PolygonH\000\022\r\n\005value\030\t \001(\002\022"
-    "!\n\010link_ids\030\n \003(\0132\017.hdmap_proto.Id\"\361\021\n\017T"
-    "rafficSignType\022\013\n\007UNKNOWN\020\000\022\016\n\nP_Stop_Fo"
-    "r\020\001\022\016\n\nP_Slow_For\020\002\022\016\n\nP_Give_Way\020\003\022\013\n\007P"
-    "_Noway\020\004\022\016\n\nP_No_Entry\020\005\022\020\n\014P_No_Parking"
-    "\020\006\022\025\n\021P_No_Long_Parking\020\007\022\023\n\017P_Parking_C"
-    "heck\020\010\022\016\n\nP_No_Motor\020\t\022\023\n\017P_No_Motorcycl"
-    "e\020\n\022\016\n\nP_No_Truck\020\013\022\026\n\022P_No_Moto_Tricycl"
-    "e\020\014\022\014\n\010P_No_Bus\020\r\022\014\n\010P_No_Car\020\016\022\020\n\014P_No_"
-    "Trailer\020\017\022\020\n\014P_No_Tractor\020\020\022\027\n\023P_No_Carg"
-    "o_Tricycle\020\021\022\022\n\016P_No_Non_Motor\020\022\022\027\n\023P_No"
-    "_Animal_Vehicle\020\023\022\026\n\022P_No_Human_Vehicle\020"
-    "\024\022\035\n\031P_No_Human_Cargo_Triangle\020\025\022!\n\035P_No"
-    "_Human_Passenger_Triangle\020\026\022\016\n\nP_No_Huma"
-    "n\020\027\022\022\n\016P_No_Left_Turn\020\030\022\023\n\017P_No_Right_Tu"
-    "rn\020\031\022\030\n\024P_No_Left_Right_Turn\020\032\022\017\n\013P_No_F"
-    "oward\020\033\022\025\n\021P_No_Forward_Left\020\034\022\026\n\022P_No_F"
-    "orward_Right\020\035\022\017\n\013P_No_Return\020\036\022\020\n\014P_No_"
-    "Horning\020\037\022\020\n\014P_Height_Lim\020 \022\017\n\013P_Width_L"
-    "im\020!\022\020\n\014P_Weight_Lim\020\"\022\026\n\022P_Weight_Lim_w"
-    "heel\020#\022\017\n\013P_Speed_Lim\020$\022\023\n\017P_Speed_Lim_R"
-    "ev\020%\022\020\n\014P_No_Passing\020&\022\022\n\016P_No_Dangerous"
-    "\020\'\022\014\n\010P_Custom\020(\022\013\n\007P_Other\020)\022\014\n\010W_T_Sha"
-    "p\020*\022\021\n\rW_T_Shap_Left\020+\022\022\n\016W_T_Shap_Right"
-    "\020,\022\r\n\tW_T_Shaps\020-\022\013\n\007W_Cross\020.\022\014\n\010W_Circ"
-    "le\020/\022\014\n\010W_Y_Left\0200\022\r\n\tW_Y_Right\0201\022\r\n\tW_Y"
-    "B_Left\0202\022\016\n\nW_YB_Right\0203\022\017\n\013W_Left_Turn\020"
-    "4\022\020\n\014W_Right_Turn\0205\022\r\n\tW_RL_Turn\0206\022\r\n\tW_"
-    "LR_Turn\0207\022\025\n\021W_Continuous_Turn\0208\022\010\n\004W_Up"
-    "\0209\022\n\n\006W_Down\020:\022\025\n\021W_Continuous_Down\020;\022\024\n"
-    "\020W_Accident_Prone\020<\022\014\n\010W_Danger\020=\022\021\n\rW_L"
-    "eft_Narrow\020>\022\022\n\016W_Right_Narrow\020\?\022\017\n\013W_LR"
-    "_Narrow\020@\022\023\n\017W_Narrow_Bridge\020A\022\n\n\006W_Slip"
-    "\020B\022\020\n\014W_Pedestrain\020C\022\016\n\nW_Children\020D\022\013\n\007"
-    "W_Cycle\020E\022\016\n\nW_Disabled\020F\022\017\n\013W_Side_Wind"
-    "\020G\022\016\n\nW_Domestic\020H\022\014\n\010W_Animal\020I\022\014\n\010W_Tu"
-    "nnel\020J\022\026\n\022W_Tunnel_Headlight\020K\022\023\n\017W_Traf"
-    "fic_Light\020L\022\022\n\016W_Left_Falling\020M\022\023\n\017W_Rig"
-    "ht_Falling\020N\022\020\n\014W_Mount_Left\020O\022\021\n\rW_Moun"
-    "t_Right\020P\022\r\n\tW_Village\020Q\022\017\n\013W_Dam_Right\020"
-    "R\022\016\n\nW_Dam_Left\020S\022\013\n\007W_Ferry\020T\022\n\n\006W_Ford"
-    "\020U\022\n\n\006W_Slow\020V\022\021\n\rW_Hump_Bridge\020W\022\013\n\007W_B"
-    "umpy\020X\022\n\n\006W_Bump\020Y\022\017\n\013W_Low_Lying\020Z\022\r\n\tW"
-    "_Working\020[\022\025\n\021W_Guarded_Railway\020\\\022\r\n\tW_R"
-    "ailway\020]\022\023\n\017W_Detour_Around\020^\022\021\n\rW_Detou"
-    "r_Left\020_\022\022\n\016W_Detour_Right\020`\022\020\n\014W_Merge_"
-    "Left\020a\022\021\n\rW_Merge_Right\020b\022\r\n\tW_Two_Way\020c"
-    "\022\013\n\007W_Tidal\020d\022\023\n\017W_Keep_Distance\020e\022\030\n\024W_"
-    "Cross_Intersection\020f\022\024\n\020W_T_Intersection"
-    "\020g\022\023\n\017W_Vehicle_Queue\020h\022\t\n\005W_Ice\020i\022\n\n\006W_"
-    "Rain\020j\022\t\n\005W_Fog\020k\022\021\n\rW_Bad_Weather\020l\022\013\n\007"
-    "W_Other\020m\022\r\n\tI_Forward\020n\022\017\n\013I_Left_Turn\020"
-    "o\022\020\n\014I_Right_Turn\020p\022\022\n\016I_Forward_Left\020q\022"
-    "\023\n\017I_Forward_Right\020r\022\020\n\014I_Left_Right\020s\022\013"
-    "\n\007I_Right\020t\022\n\n\006I_Left\020u\022\031\n\025I_Forward_Lef"
-    "t_Stereo\020v\022\032\n\026I_Forward_Right_Stereo\020w\022\014"
-    "\n\010I_Circle\020x\022\n\n\006I_Walk\020y\022\n\n\006I_Honk\020z\022\023\n\017"
-    "I_Min_Speed_Lim\020{\022\014\n\010I_Motors\020|\022\020\n\014I_Non"
-    "_Motors\020}\022\026\n\022I_Pedestrian_Cross\020~\022\013\n\007I_O"
-    "ther\020\177B\n\n\010geometry", 2698);
+    "_proto.TrafficSign.TrafficSignType\022&\n\007cb"
+    "order\030\005 \001(\0132\023.hdmap_proto.CircleH\000\022\'\n\007pb"
+    "order\030\006 \001(\0132\024.hdmap_proto.PolygonH\000\022\r\n\005v"
+    "alue\030\t \001(\002\022!\n\010link_ids\030\n \003(\0132\017.hdmap_pro"
+    "to.Id\"\361\021\n\017TrafficSignType\022\013\n\007UNKNOWN\020\000\022\016"
+    "\n\nP_Stop_For\020\001\022\016\n\nP_Slow_For\020\002\022\016\n\nP_Give"
+    "_Way\020\003\022\013\n\007P_Noway\020\004\022\016\n\nP_No_Entry\020\005\022\020\n\014P"
+    "_No_Parking\020\006\022\025\n\021P_No_Long_Parking\020\007\022\023\n\017"
+    "P_Parking_Check\020\010\022\016\n\nP_No_Motor\020\t\022\023\n\017P_N"
+    "o_Motorcycle\020\n\022\016\n\nP_No_Truck\020\013\022\026\n\022P_No_M"
+    "oto_Tricycle\020\014\022\014\n\010P_No_Bus\020\r\022\014\n\010P_No_Car"
+    "\020\016\022\020\n\014P_No_Trailer\020\017\022\020\n\014P_No_Tractor\020\020\022\027"
+    "\n\023P_No_Cargo_Tricycle\020\021\022\022\n\016P_No_Non_Moto"
+    "r\020\022\022\027\n\023P_No_Animal_Vehicle\020\023\022\026\n\022P_No_Hum"
+    "an_Vehicle\020\024\022\035\n\031P_No_Human_Cargo_Triangl"
+    "e\020\025\022!\n\035P_No_Human_Passenger_Triangle\020\026\022\016"
+    "\n\nP_No_Human\020\027\022\022\n\016P_No_Left_Turn\020\030\022\023\n\017P_"
+    "No_Right_Turn\020\031\022\030\n\024P_No_Left_Right_Turn\020"
+    "\032\022\017\n\013P_No_Foward\020\033\022\025\n\021P_No_Forward_Left\020"
+    "\034\022\026\n\022P_No_Forward_Right\020\035\022\017\n\013P_No_Return"
+    "\020\036\022\020\n\014P_No_Horning\020\037\022\020\n\014P_Height_Lim\020 \022\017"
+    "\n\013P_Width_Lim\020!\022\020\n\014P_Weight_Lim\020\"\022\026\n\022P_W"
+    "eight_Lim_wheel\020#\022\017\n\013P_Speed_Lim\020$\022\023\n\017P_"
+    "Speed_Lim_Rev\020%\022\020\n\014P_No_Passing\020&\022\022\n\016P_N"
+    "o_Dangerous\020\'\022\014\n\010P_Custom\020(\022\013\n\007P_Other\020)"
+    "\022\014\n\010W_T_Shap\020*\022\021\n\rW_T_Shap_Left\020+\022\022\n\016W_T"
+    "_Shap_Right\020,\022\r\n\tW_T_Shaps\020-\022\013\n\007W_Cross\020"
+    ".\022\014\n\010W_Circle\020/\022\014\n\010W_Y_Left\0200\022\r\n\tW_Y_Rig"
+    "ht\0201\022\r\n\tW_YB_Left\0202\022\016\n\nW_YB_Right\0203\022\017\n\013W"
+    "_Left_Turn\0204\022\020\n\014W_Right_Turn\0205\022\r\n\tW_RL_T"
+    "urn\0206\022\r\n\tW_LR_Turn\0207\022\025\n\021W_Continuous_Tur"
+    "n\0208\022\010\n\004W_Up\0209\022\n\n\006W_Down\020:\022\025\n\021W_Continuou"
+    "s_Down\020;\022\024\n\020W_Accident_Prone\020<\022\014\n\010W_Dang"
+    "er\020=\022\021\n\rW_Left_Narrow\020>\022\022\n\016W_Right_Narro"
+    "w\020\?\022\017\n\013W_LR_Narrow\020@\022\023\n\017W_Narrow_Bridge\020"
+    "A\022\n\n\006W_Slip\020B\022\020\n\014W_Pedestrain\020C\022\016\n\nW_Chi"
+    "ldren\020D\022\013\n\007W_Cycle\020E\022\016\n\nW_Disabled\020F\022\017\n\013"
+    "W_Side_Wind\020G\022\016\n\nW_Domestic\020H\022\014\n\010W_Anima"
+    "l\020I\022\014\n\010W_Tunnel\020J\022\026\n\022W_Tunnel_Headlight\020"
+    "K\022\023\n\017W_Traffic_Light\020L\022\022\n\016W_Left_Falling"
+    "\020M\022\023\n\017W_Right_Falling\020N\022\020\n\014W_Mount_Left\020"
+    "O\022\021\n\rW_Mount_Right\020P\022\r\n\tW_Village\020Q\022\017\n\013W"
+    "_Dam_Right\020R\022\016\n\nW_Dam_Left\020S\022\013\n\007W_Ferry\020"
+    "T\022\n\n\006W_Ford\020U\022\n\n\006W_Slow\020V\022\021\n\rW_Hump_Brid"
+    "ge\020W\022\013\n\007W_Bumpy\020X\022\n\n\006W_Bump\020Y\022\017\n\013W_Low_L"
+    "ying\020Z\022\r\n\tW_Working\020[\022\025\n\021W_Guarded_Railw"
+    "ay\020\\\022\r\n\tW_Railway\020]\022\023\n\017W_Detour_Around\020^"
+    "\022\021\n\rW_Detour_Left\020_\022\022\n\016W_Detour_Right\020`\022"
+    "\020\n\014W_Merge_Left\020a\022\021\n\rW_Merge_Right\020b\022\r\n\t"
+    "W_Two_Way\020c\022\013\n\007W_Tidal\020d\022\023\n\017W_Keep_Dista"
+    "nce\020e\022\030\n\024W_Cross_Intersection\020f\022\024\n\020W_T_I"
+    "ntersection\020g\022\023\n\017W_Vehicle_Queue\020h\022\t\n\005W_"
+    "Ice\020i\022\n\n\006W_Rain\020j\022\t\n\005W_Fog\020k\022\021\n\rW_Bad_We"
+    "ather\020l\022\013\n\007W_Other\020m\022\r\n\tI_Forward\020n\022\017\n\013I"
+    "_Left_Turn\020o\022\020\n\014I_Right_Turn\020p\022\022\n\016I_Forw"
+    "ard_Left\020q\022\023\n\017I_Forward_Right\020r\022\020\n\014I_Lef"
+    "t_Right\020s\022\013\n\007I_Right\020t\022\n\n\006I_Left\020u\022\031\n\025I_"
+    "Forward_Left_Stereo\020v\022\032\n\026I_Forward_Right"
+    "_Stereo\020w\022\014\n\010I_Circle\020x\022\n\n\006I_Walk\020y\022\n\n\006I"
+    "_Honk\020z\022\023\n\017I_Min_Speed_Lim\020{\022\014\n\010I_Motors"
+    "\020|\022\020\n\014I_Non_Motors\020}\022\026\n\022I_Pedestrian_Cro"
+    "ss\020~\022\013\n\007I_Other\020\177B\n\n\010geometry", 2629);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "traffic_sign.proto", &protobuf_RegisterTypes);
   TrafficSign::default_instance_ = new TrafficSign();
@@ -462,10 +456,8 @@ const int TrafficSign::TrafficSignType_ARRAYSIZE;
 const int TrafficSign::kIdFieldNumber;
 const int TrafficSign::kTileIdFieldNumber;
 const int TrafficSign::kTypeFieldNumber;
-const int TrafficSign::kCircleFieldNumber;
-const int TrafficSign::kRectFieldNumber;
-const int TrafficSign::kCubeFieldNumber;
-const int TrafficSign::kPolygonFieldNumber;
+const int TrafficSign::kCborderFieldNumber;
+const int TrafficSign::kPborderFieldNumber;
 const int TrafficSign::kValueFieldNumber;
 const int TrafficSign::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
@@ -478,10 +470,8 @@ TrafficSign::TrafficSign()
 
 void TrafficSign::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
-  TrafficSign_default_oneof_instance_->circle_ = const_cast< ::hdmap_proto::Circle*>(&::hdmap_proto::Circle::default_instance());
-  TrafficSign_default_oneof_instance_->rect_ = const_cast< ::hdmap_proto::Rect*>(&::hdmap_proto::Rect::default_instance());
-  TrafficSign_default_oneof_instance_->cube_ = const_cast< ::hdmap_proto::Cube*>(&::hdmap_proto::Cube::default_instance());
-  TrafficSign_default_oneof_instance_->polygon_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
+  TrafficSign_default_oneof_instance_->cborder_ = const_cast< ::hdmap_proto::Circle*>(&::hdmap_proto::Circle::default_instance());
+  TrafficSign_default_oneof_instance_->pborder_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
 }
 
 TrafficSign::TrafficSign(const TrafficSign& from)
@@ -537,20 +527,12 @@ TrafficSign* TrafficSign::New() const {
 
 void TrafficSign::clear_geometry() {
   switch(geometry_case()) {
-    case kCircle: {
-      delete geometry_.circle_;
+    case kCborder: {
+      delete geometry_.cborder_;
       break;
     }
-    case kRect: {
-      delete geometry_.rect_;
-      break;
-    }
-    case kCube: {
-      delete geometry_.cube_;
-      break;
-    }
-    case kPolygon: {
-      delete geometry_.polygon_;
+    case kPborder: {
+      delete geometry_.pborder_;
       break;
     }
     case GEOMETRY_NOT_SET: {
@@ -572,7 +554,7 @@ void TrafficSign::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 133) {
+  if (_has_bits_[0 / 32] & 37) {
     ZR_(type_, value_);
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
@@ -641,55 +623,29 @@ bool TrafficSign::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_circle;
+        if (input->ExpectTag(42)) goto parse_cborder;
         break;
       }
 
-      // optional .hdmap_proto.Circle circle = 5;
+      // optional .hdmap_proto.Circle cborder = 5;
       case 5: {
         if (tag == 42) {
-         parse_circle:
+         parse_cborder:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_circle()));
+               input, mutable_cborder()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_rect;
+        if (input->ExpectTag(50)) goto parse_pborder;
         break;
       }
 
-      // optional .hdmap_proto.Rect rect = 6;
+      // optional .hdmap_proto.Polygon pborder = 6;
       case 6: {
         if (tag == 50) {
-         parse_rect:
+         parse_pborder:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_rect()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(58)) goto parse_cube;
-        break;
-      }
-
-      // optional .hdmap_proto.Cube cube = 7;
-      case 7: {
-        if (tag == 58) {
-         parse_cube:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_cube()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(66)) goto parse_polygon;
-        break;
-      }
-
-      // optional .hdmap_proto.Polygon polygon = 8;
-      case 8: {
-        if (tag == 66) {
-         parse_polygon:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_polygon()));
+               input, mutable_pborder()));
         } else {
           goto handle_unusual;
         }
@@ -769,28 +725,16 @@ void TrafficSign::SerializeWithCachedSizes(
       4, this->type(), output);
   }
 
-  // optional .hdmap_proto.Circle circle = 5;
-  if (has_circle()) {
+  // optional .hdmap_proto.Circle cborder = 5;
+  if (has_cborder()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->circle(), output);
+      5, this->cborder(), output);
   }
 
-  // optional .hdmap_proto.Rect rect = 6;
-  if (has_rect()) {
+  // optional .hdmap_proto.Polygon pborder = 6;
+  if (has_pborder()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, this->rect(), output);
-  }
-
-  // optional .hdmap_proto.Cube cube = 7;
-  if (has_cube()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      7, this->cube(), output);
-  }
-
-  // optional .hdmap_proto.Polygon polygon = 8;
-  if (has_polygon()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      8, this->polygon(), output);
+      6, this->pborder(), output);
   }
 
   // optional float value = 9;
@@ -834,32 +778,18 @@ void TrafficSign::SerializeWithCachedSizes(
       4, this->type(), target);
   }
 
-  // optional .hdmap_proto.Circle circle = 5;
-  if (has_circle()) {
+  // optional .hdmap_proto.Circle cborder = 5;
+  if (has_cborder()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        5, this->circle(), target);
+        5, this->cborder(), target);
   }
 
-  // optional .hdmap_proto.Rect rect = 6;
-  if (has_rect()) {
+  // optional .hdmap_proto.Polygon pborder = 6;
+  if (has_pborder()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        6, this->rect(), target);
-  }
-
-  // optional .hdmap_proto.Cube cube = 7;
-  if (has_cube()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        7, this->cube(), target);
-  }
-
-  // optional .hdmap_proto.Polygon polygon = 8;
-  if (has_polygon()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        8, this->polygon(), target);
+        6, this->pborder(), target);
   }
 
   // optional float value = 9;
@@ -922,32 +852,18 @@ int TrafficSign::ByteSize() const {
   }
 
   switch (geometry_case()) {
-    // optional .hdmap_proto.Circle circle = 5;
-    case kCircle: {
+    // optional .hdmap_proto.Circle cborder = 5;
+    case kCborder: {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->circle());
+          this->cborder());
       break;
     }
-    // optional .hdmap_proto.Rect rect = 6;
-    case kRect: {
+    // optional .hdmap_proto.Polygon pborder = 6;
+    case kPborder: {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->rect());
-      break;
-    }
-    // optional .hdmap_proto.Cube cube = 7;
-    case kCube: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->cube());
-      break;
-    }
-    // optional .hdmap_proto.Polygon polygon = 8;
-    case kPolygon: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->polygon());
+          this->pborder());
       break;
     }
     case GEOMETRY_NOT_SET: {
@@ -982,20 +898,12 @@ void TrafficSign::MergeFrom(const TrafficSign& from) {
   tile_id_.MergeFrom(from.tile_id_);
   link_ids_.MergeFrom(from.link_ids_);
   switch (from.geometry_case()) {
-    case kCircle: {
-      mutable_circle()->::hdmap_proto::Circle::MergeFrom(from.circle());
+    case kCborder: {
+      mutable_cborder()->::hdmap_proto::Circle::MergeFrom(from.cborder());
       break;
     }
-    case kRect: {
-      mutable_rect()->::hdmap_proto::Rect::MergeFrom(from.rect());
-      break;
-    }
-    case kCube: {
-      mutable_cube()->::hdmap_proto::Cube::MergeFrom(from.cube());
-      break;
-    }
-    case kPolygon: {
-      mutable_polygon()->::hdmap_proto::Polygon::MergeFrom(from.polygon());
+    case kPborder: {
+      mutable_pborder()->::hdmap_proto::Polygon::MergeFrom(from.pborder());
       break;
     }
     case GEOMETRY_NOT_SET: {
@@ -1035,17 +943,11 @@ bool TrafficSign::IsInitialized() const {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_id())) return false;
-  if (has_circle()) {
-    if (!this->circle().IsInitialized()) return false;
+  if (has_cborder()) {
+    if (!this->cborder().IsInitialized()) return false;
   }
-  if (has_rect()) {
-    if (!this->rect().IsInitialized()) return false;
-  }
-  if (has_cube()) {
-    if (!this->cube().IsInitialized()) return false;
-  }
-  if (has_polygon()) {
-    if (!this->polygon().IsInitialized()) return false;
+  if (has_pborder()) {
+    if (!this->pborder().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;

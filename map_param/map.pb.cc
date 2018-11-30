@@ -56,20 +56,22 @@ void protobuf_AssignDesc_map_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Header));
   Map_descriptor_ = file->message_type(1);
-  static const int Map_offsets_[13] = {
+  static const int Map_offsets_[15] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, header_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, sections_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, crosswalks_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, junctions_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, parkingspaces_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, stoplines_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, speedbumps_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, poles_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, boards_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, zones_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, lane_markings_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, traffic_lights_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, traffic_signs_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, maptiles_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, parking_spaces_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, borders_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, tiles_),
   };
   Map_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -118,30 +120,37 @@ void protobuf_AddDesc_map_2eproto() {
   ::hdmap_proto::protobuf_AddDesc_geometry_2eproto();
   ::hdmap_proto::protobuf_AddDesc_object_2eproto();
   ::hdmap_proto::protobuf_AddDesc_tile_2eproto();
+  ::hdmap_proto::protobuf_AddDesc_lane_2eproto();
   ::hdmap_proto::protobuf_AddDesc_section_2eproto();
+  ::hdmap_proto::protobuf_AddDesc_lane_5fmarking_2eproto();
   ::hdmap_proto::protobuf_AddDesc_traffic_5flight_2eproto();
   ::hdmap_proto::protobuf_AddDesc_traffic_5fsign_2eproto();
+  ::hdmap_proto::protobuf_AddDesc_parking_5fspace_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\tmap.proto\022\013hdmap_proto\032\016geometry.proto"
-    "\032\014object.proto\032\ntile.proto\032\rsection.prot"
-    "o\032\023traffic_light.proto\032\022traffic_sign.pro"
-    "to\"~\n\006Header\022\017\n\007version\030\001 \001(\t\022\014\n\004date\030\002 "
-    "\001(\t\022\022\n\nprojection\030\003 \001(\t\022\037\n\003low\030\004 \001(\0132\022.h"
-    "dmap_proto.Point\022 \n\004high\030\005 \001(\0132\022.hdmap_p"
-    "roto.Point\"\241\004\n\003Map\022#\n\006header\030\001 \001(\0132\023.hdm"
-    "ap_proto.Header\022&\n\010sections\030\002 \003(\0132\024.hdma"
-    "p_proto.Section\022*\n\ncrosswalks\030\003 \003(\0132\026.hd"
-    "map_proto.CrossWalk\022(\n\tjunctions\030\004 \003(\0132\025"
-    ".hdmap_proto.Junction\0220\n\rparkingspaces\030\005"
-    " \003(\0132\031.hdmap_proto.ParkingSpace\022(\n\tstopl"
-    "ines\030\006 \003(\0132\025.hdmap_proto.StopLine\022*\n\nspe"
-    "edbumps\030\007 \003(\0132\026.hdmap_proto.SpeedBump\022 \n"
-    "\005poles\030\010 \003(\0132\021.hdmap_proto.Pole\022\"\n\006board"
-    "s\030\t \003(\0132\022.hdmap_proto.Board\022 \n\005zones\030\n \003"
-    "(\0132\021.hdmap_proto.Zone\0221\n\016traffic_lights\030"
-    "\013 \003(\0132\031.hdmap_proto.TrafficLight\022/\n\rtraf"
-    "fic_signs\030\014 \003(\0132\030.hdmap_proto.TrafficSig"
-    "n\022#\n\010maptiles\030\r \003(\0132\021.hdmap_proto.Tile", 798);
+    "\032\014object.proto\032\ntile.proto\032\nlane.proto\032\r"
+    "section.proto\032\022lane_marking.proto\032\023traff"
+    "ic_light.proto\032\022traffic_sign.proto\032\023park"
+    "ing_space.proto\"\204\001\n\006Header\022\017\n\007version\030\001 "
+    "\001(\t\022\014\n\004date\030\002 \001(\t\022\022\n\nprojection\030\003 \001(\t\022\"\n"
+    "\003low\030\004 \001(\0132\025.hdmap_proto.Vector3d\022#\n\004hig"
+    "h\030\005 \001(\0132\025.hdmap_proto.Vector3d\"\364\004\n\003Map\022#"
+    "\n\006header\030\001 \001(\0132\023.hdmap_proto.Header\022&\n\010s"
+    "ections\030\002 \003(\0132\024.hdmap_proto.Section\022*\n\nc"
+    "rosswalks\030\003 \003(\0132\026.hdmap_proto.CrossWalk\022"
+    "(\n\tjunctions\030\004 \003(\0132\025.hdmap_proto.Junctio"
+    "n\022(\n\tstoplines\030\005 \003(\0132\025.hdmap_proto.StopL"
+    "ine\022*\n\nspeedbumps\030\006 \003(\0132\026.hdmap_proto.Sp"
+    "eedBump\022 \n\005poles\030\007 \003(\0132\021.hdmap_proto.Pol"
+    "e\022\"\n\006boards\030\010 \003(\0132\022.hdmap_proto.Board\022 \n"
+    "\005zones\030\t \003(\0132\021.hdmap_proto.Zone\022/\n\rlane_"
+    "markings\030\n \003(\0132\030.hdmap_proto.LaneMarking"
+    "\0221\n\016traffic_lights\030\013 \003(\0132\031.hdmap_proto.T"
+    "rafficLight\022/\n\rtraffic_signs\030\014 \003(\0132\030.hdm"
+    "ap_proto.TrafficSign\0221\n\016parking_spaces\030\r"
+    " \003(\0132\031.hdmap_proto.ParkingSpace\022\"\n\007borde"
+    "rs\030\016 \003(\0132\021.hdmap_proto.Lane\022 \n\005tiles\030\017 \003"
+    "(\0132\021.hdmap_proto.Tile", 941);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "map.proto", &protobuf_RegisterTypes);
   Header::default_instance_ = new Header();
@@ -175,8 +184,8 @@ Header::Header()
 }
 
 void Header::InitAsDefaultInstance() {
-  low_ = const_cast< ::hdmap_proto::Point*>(&::hdmap_proto::Point::default_instance());
-  high_ = const_cast< ::hdmap_proto::Point*>(&::hdmap_proto::Point::default_instance());
+  low_ = const_cast< ::hdmap_proto::Vector3d*>(&::hdmap_proto::Vector3d::default_instance());
+  high_ = const_cast< ::hdmap_proto::Vector3d*>(&::hdmap_proto::Vector3d::default_instance());
 }
 
 Header::Header(const Header& from)
@@ -257,10 +266,10 @@ void Header::Clear() {
       }
     }
     if (has_low()) {
-      if (low_ != NULL) low_->::hdmap_proto::Point::Clear();
+      if (low_ != NULL) low_->::hdmap_proto::Vector3d::Clear();
     }
     if (has_high()) {
-      if (high_ != NULL) high_->::hdmap_proto::Point::Clear();
+      if (high_ != NULL) high_->::hdmap_proto::Vector3d::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -327,7 +336,7 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .hdmap_proto.Point low = 4;
+      // optional .hdmap_proto.Vector3d low = 4;
       case 4: {
         if (tag == 34) {
          parse_low:
@@ -340,7 +349,7 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .hdmap_proto.Point high = 5;
+      // optional .hdmap_proto.Vector3d high = 5;
       case 5: {
         if (tag == 42) {
          parse_high:
@@ -408,13 +417,13 @@ void Header::SerializeWithCachedSizes(
       3, this->projection(), output);
   }
 
-  // optional .hdmap_proto.Point low = 4;
+  // optional .hdmap_proto.Vector3d low = 4;
   if (has_low()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       4, this->low(), output);
   }
 
-  // optional .hdmap_proto.Point high = 5;
+  // optional .hdmap_proto.Vector3d high = 5;
   if (has_high()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       5, this->high(), output);
@@ -463,14 +472,14 @@ void Header::SerializeWithCachedSizes(
         3, this->projection(), target);
   }
 
-  // optional .hdmap_proto.Point low = 4;
+  // optional .hdmap_proto.Vector3d low = 4;
   if (has_low()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         4, this->low(), target);
   }
 
-  // optional .hdmap_proto.Point high = 5;
+  // optional .hdmap_proto.Vector3d high = 5;
   if (has_high()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -510,14 +519,14 @@ int Header::ByteSize() const {
           this->projection());
     }
 
-    // optional .hdmap_proto.Point low = 4;
+    // optional .hdmap_proto.Vector3d low = 4;
     if (has_low()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->low());
     }
 
-    // optional .hdmap_proto.Point high = 5;
+    // optional .hdmap_proto.Vector3d high = 5;
     if (has_high()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -561,10 +570,10 @@ void Header::MergeFrom(const Header& from) {
       set_projection(from.projection());
     }
     if (from.has_low()) {
-      mutable_low()->::hdmap_proto::Point::MergeFrom(from.low());
+      mutable_low()->::hdmap_proto::Vector3d::MergeFrom(from.low());
     }
     if (from.has_high()) {
-      mutable_high()->::hdmap_proto::Point::MergeFrom(from.high());
+      mutable_high()->::hdmap_proto::Vector3d::MergeFrom(from.high());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -622,15 +631,17 @@ const int Map::kHeaderFieldNumber;
 const int Map::kSectionsFieldNumber;
 const int Map::kCrosswalksFieldNumber;
 const int Map::kJunctionsFieldNumber;
-const int Map::kParkingspacesFieldNumber;
 const int Map::kStoplinesFieldNumber;
 const int Map::kSpeedbumpsFieldNumber;
 const int Map::kPolesFieldNumber;
 const int Map::kBoardsFieldNumber;
 const int Map::kZonesFieldNumber;
+const int Map::kLaneMarkingsFieldNumber;
 const int Map::kTrafficLightsFieldNumber;
 const int Map::kTrafficSignsFieldNumber;
-const int Map::kMaptilesFieldNumber;
+const int Map::kParkingSpacesFieldNumber;
+const int Map::kBordersFieldNumber;
+const int Map::kTilesFieldNumber;
 #endif  // !_MSC_VER
 
 Map::Map()
@@ -695,15 +706,17 @@ void Map::Clear() {
   sections_.Clear();
   crosswalks_.Clear();
   junctions_.Clear();
-  parkingspaces_.Clear();
   stoplines_.Clear();
   speedbumps_.Clear();
   poles_.Clear();
   boards_.Clear();
   zones_.Clear();
+  lane_markings_.Clear();
   traffic_lights_.Clear();
   traffic_signs_.Clear();
-  maptiles_.Clear();
+  parking_spaces_.Clear();
+  borders_.Clear();
+  tiles_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -768,90 +781,90 @@ bool Map::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(34)) goto parse_junctions;
-        if (input->ExpectTag(42)) goto parse_parkingspaces;
+        if (input->ExpectTag(42)) goto parse_stoplines;
         break;
       }
 
-      // repeated .hdmap_proto.ParkingSpace parkingspaces = 5;
+      // repeated .hdmap_proto.StopLine stoplines = 5;
       case 5: {
         if (tag == 42) {
-         parse_parkingspaces:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_parkingspaces()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(42)) goto parse_parkingspaces;
-        if (input->ExpectTag(50)) goto parse_stoplines;
-        break;
-      }
-
-      // repeated .hdmap_proto.StopLine stoplines = 6;
-      case 6: {
-        if (tag == 50) {
          parse_stoplines:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_stoplines()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_stoplines;
-        if (input->ExpectTag(58)) goto parse_speedbumps;
+        if (input->ExpectTag(42)) goto parse_stoplines;
+        if (input->ExpectTag(50)) goto parse_speedbumps;
         break;
       }
 
-      // repeated .hdmap_proto.SpeedBump speedbumps = 7;
-      case 7: {
-        if (tag == 58) {
+      // repeated .hdmap_proto.SpeedBump speedbumps = 6;
+      case 6: {
+        if (tag == 50) {
          parse_speedbumps:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_speedbumps()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(58)) goto parse_speedbumps;
-        if (input->ExpectTag(66)) goto parse_poles;
+        if (input->ExpectTag(50)) goto parse_speedbumps;
+        if (input->ExpectTag(58)) goto parse_poles;
         break;
       }
 
-      // repeated .hdmap_proto.Pole poles = 8;
-      case 8: {
-        if (tag == 66) {
+      // repeated .hdmap_proto.Pole poles = 7;
+      case 7: {
+        if (tag == 58) {
          parse_poles:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_poles()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(66)) goto parse_poles;
-        if (input->ExpectTag(74)) goto parse_boards;
+        if (input->ExpectTag(58)) goto parse_poles;
+        if (input->ExpectTag(66)) goto parse_boards;
         break;
       }
 
-      // repeated .hdmap_proto.Board boards = 9;
-      case 9: {
-        if (tag == 74) {
+      // repeated .hdmap_proto.Board boards = 8;
+      case 8: {
+        if (tag == 66) {
          parse_boards:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_boards()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(74)) goto parse_boards;
-        if (input->ExpectTag(82)) goto parse_zones;
+        if (input->ExpectTag(66)) goto parse_boards;
+        if (input->ExpectTag(74)) goto parse_zones;
         break;
       }
 
-      // repeated .hdmap_proto.Zone zones = 10;
-      case 10: {
-        if (tag == 82) {
+      // repeated .hdmap_proto.Zone zones = 9;
+      case 9: {
+        if (tag == 74) {
          parse_zones:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_zones()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(82)) goto parse_zones;
+        if (input->ExpectTag(74)) goto parse_zones;
+        if (input->ExpectTag(82)) goto parse_lane_markings;
+        break;
+      }
+
+      // repeated .hdmap_proto.LaneMarking lane_markings = 10;
+      case 10: {
+        if (tag == 82) {
+         parse_lane_markings:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_lane_markings()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(82)) goto parse_lane_markings;
         if (input->ExpectTag(90)) goto parse_traffic_lights;
         break;
       }
@@ -880,20 +893,48 @@ bool Map::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(98)) goto parse_traffic_signs;
-        if (input->ExpectTag(106)) goto parse_maptiles;
+        if (input->ExpectTag(106)) goto parse_parking_spaces;
         break;
       }
 
-      // repeated .hdmap_proto.Tile maptiles = 13;
+      // repeated .hdmap_proto.ParkingSpace parking_spaces = 13;
       case 13: {
         if (tag == 106) {
-         parse_maptiles:
+         parse_parking_spaces:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_maptiles()));
+                input, add_parking_spaces()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(106)) goto parse_maptiles;
+        if (input->ExpectTag(106)) goto parse_parking_spaces;
+        if (input->ExpectTag(114)) goto parse_borders;
+        break;
+      }
+
+      // repeated .hdmap_proto.Lane borders = 14;
+      case 14: {
+        if (tag == 114) {
+         parse_borders:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_borders()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(114)) goto parse_borders;
+        if (input->ExpectTag(122)) goto parse_tiles;
+        break;
+      }
+
+      // repeated .hdmap_proto.Tile tiles = 15;
+      case 15: {
+        if (tag == 122) {
+         parse_tiles:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_tiles()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(122)) goto parse_tiles;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -947,40 +988,40 @@ void Map::SerializeWithCachedSizes(
       4, this->junctions(i), output);
   }
 
-  // repeated .hdmap_proto.ParkingSpace parkingspaces = 5;
-  for (int i = 0; i < this->parkingspaces_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->parkingspaces(i), output);
-  }
-
-  // repeated .hdmap_proto.StopLine stoplines = 6;
+  // repeated .hdmap_proto.StopLine stoplines = 5;
   for (int i = 0; i < this->stoplines_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, this->stoplines(i), output);
+      5, this->stoplines(i), output);
   }
 
-  // repeated .hdmap_proto.SpeedBump speedbumps = 7;
+  // repeated .hdmap_proto.SpeedBump speedbumps = 6;
   for (int i = 0; i < this->speedbumps_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      7, this->speedbumps(i), output);
+      6, this->speedbumps(i), output);
   }
 
-  // repeated .hdmap_proto.Pole poles = 8;
+  // repeated .hdmap_proto.Pole poles = 7;
   for (int i = 0; i < this->poles_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      8, this->poles(i), output);
+      7, this->poles(i), output);
   }
 
-  // repeated .hdmap_proto.Board boards = 9;
+  // repeated .hdmap_proto.Board boards = 8;
   for (int i = 0; i < this->boards_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      9, this->boards(i), output);
+      8, this->boards(i), output);
   }
 
-  // repeated .hdmap_proto.Zone zones = 10;
+  // repeated .hdmap_proto.Zone zones = 9;
   for (int i = 0; i < this->zones_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      10, this->zones(i), output);
+      9, this->zones(i), output);
+  }
+
+  // repeated .hdmap_proto.LaneMarking lane_markings = 10;
+  for (int i = 0; i < this->lane_markings_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      10, this->lane_markings(i), output);
   }
 
   // repeated .hdmap_proto.TrafficLight traffic_lights = 11;
@@ -995,10 +1036,22 @@ void Map::SerializeWithCachedSizes(
       12, this->traffic_signs(i), output);
   }
 
-  // repeated .hdmap_proto.Tile maptiles = 13;
-  for (int i = 0; i < this->maptiles_size(); i++) {
+  // repeated .hdmap_proto.ParkingSpace parking_spaces = 13;
+  for (int i = 0; i < this->parking_spaces_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      13, this->maptiles(i), output);
+      13, this->parking_spaces(i), output);
+  }
+
+  // repeated .hdmap_proto.Lane borders = 14;
+  for (int i = 0; i < this->borders_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      14, this->borders(i), output);
+  }
+
+  // repeated .hdmap_proto.Tile tiles = 15;
+  for (int i = 0; i < this->tiles_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      15, this->tiles(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -1039,46 +1092,46 @@ void Map::SerializeWithCachedSizes(
         4, this->junctions(i), target);
   }
 
-  // repeated .hdmap_proto.ParkingSpace parkingspaces = 5;
-  for (int i = 0; i < this->parkingspaces_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        5, this->parkingspaces(i), target);
-  }
-
-  // repeated .hdmap_proto.StopLine stoplines = 6;
+  // repeated .hdmap_proto.StopLine stoplines = 5;
   for (int i = 0; i < this->stoplines_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        6, this->stoplines(i), target);
+        5, this->stoplines(i), target);
   }
 
-  // repeated .hdmap_proto.SpeedBump speedbumps = 7;
+  // repeated .hdmap_proto.SpeedBump speedbumps = 6;
   for (int i = 0; i < this->speedbumps_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        7, this->speedbumps(i), target);
+        6, this->speedbumps(i), target);
   }
 
-  // repeated .hdmap_proto.Pole poles = 8;
+  // repeated .hdmap_proto.Pole poles = 7;
   for (int i = 0; i < this->poles_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        8, this->poles(i), target);
+        7, this->poles(i), target);
   }
 
-  // repeated .hdmap_proto.Board boards = 9;
+  // repeated .hdmap_proto.Board boards = 8;
   for (int i = 0; i < this->boards_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        9, this->boards(i), target);
+        8, this->boards(i), target);
   }
 
-  // repeated .hdmap_proto.Zone zones = 10;
+  // repeated .hdmap_proto.Zone zones = 9;
   for (int i = 0; i < this->zones_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        10, this->zones(i), target);
+        9, this->zones(i), target);
+  }
+
+  // repeated .hdmap_proto.LaneMarking lane_markings = 10;
+  for (int i = 0; i < this->lane_markings_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        10, this->lane_markings(i), target);
   }
 
   // repeated .hdmap_proto.TrafficLight traffic_lights = 11;
@@ -1095,11 +1148,25 @@ void Map::SerializeWithCachedSizes(
         12, this->traffic_signs(i), target);
   }
 
-  // repeated .hdmap_proto.Tile maptiles = 13;
-  for (int i = 0; i < this->maptiles_size(); i++) {
+  // repeated .hdmap_proto.ParkingSpace parking_spaces = 13;
+  for (int i = 0; i < this->parking_spaces_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        13, this->maptiles(i), target);
+        13, this->parking_spaces(i), target);
+  }
+
+  // repeated .hdmap_proto.Lane borders = 14;
+  for (int i = 0; i < this->borders_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        14, this->borders(i), target);
+  }
+
+  // repeated .hdmap_proto.Tile tiles = 15;
+  for (int i = 0; i < this->tiles_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        15, this->tiles(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1146,15 +1213,7 @@ int Map::ByteSize() const {
         this->junctions(i));
   }
 
-  // repeated .hdmap_proto.ParkingSpace parkingspaces = 5;
-  total_size += 1 * this->parkingspaces_size();
-  for (int i = 0; i < this->parkingspaces_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->parkingspaces(i));
-  }
-
-  // repeated .hdmap_proto.StopLine stoplines = 6;
+  // repeated .hdmap_proto.StopLine stoplines = 5;
   total_size += 1 * this->stoplines_size();
   for (int i = 0; i < this->stoplines_size(); i++) {
     total_size +=
@@ -1162,7 +1221,7 @@ int Map::ByteSize() const {
         this->stoplines(i));
   }
 
-  // repeated .hdmap_proto.SpeedBump speedbumps = 7;
+  // repeated .hdmap_proto.SpeedBump speedbumps = 6;
   total_size += 1 * this->speedbumps_size();
   for (int i = 0; i < this->speedbumps_size(); i++) {
     total_size +=
@@ -1170,7 +1229,7 @@ int Map::ByteSize() const {
         this->speedbumps(i));
   }
 
-  // repeated .hdmap_proto.Pole poles = 8;
+  // repeated .hdmap_proto.Pole poles = 7;
   total_size += 1 * this->poles_size();
   for (int i = 0; i < this->poles_size(); i++) {
     total_size +=
@@ -1178,7 +1237,7 @@ int Map::ByteSize() const {
         this->poles(i));
   }
 
-  // repeated .hdmap_proto.Board boards = 9;
+  // repeated .hdmap_proto.Board boards = 8;
   total_size += 1 * this->boards_size();
   for (int i = 0; i < this->boards_size(); i++) {
     total_size +=
@@ -1186,12 +1245,20 @@ int Map::ByteSize() const {
         this->boards(i));
   }
 
-  // repeated .hdmap_proto.Zone zones = 10;
+  // repeated .hdmap_proto.Zone zones = 9;
   total_size += 1 * this->zones_size();
   for (int i = 0; i < this->zones_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->zones(i));
+  }
+
+  // repeated .hdmap_proto.LaneMarking lane_markings = 10;
+  total_size += 1 * this->lane_markings_size();
+  for (int i = 0; i < this->lane_markings_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->lane_markings(i));
   }
 
   // repeated .hdmap_proto.TrafficLight traffic_lights = 11;
@@ -1210,12 +1277,28 @@ int Map::ByteSize() const {
         this->traffic_signs(i));
   }
 
-  // repeated .hdmap_proto.Tile maptiles = 13;
-  total_size += 1 * this->maptiles_size();
-  for (int i = 0; i < this->maptiles_size(); i++) {
+  // repeated .hdmap_proto.ParkingSpace parking_spaces = 13;
+  total_size += 1 * this->parking_spaces_size();
+  for (int i = 0; i < this->parking_spaces_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->maptiles(i));
+        this->parking_spaces(i));
+  }
+
+  // repeated .hdmap_proto.Lane borders = 14;
+  total_size += 1 * this->borders_size();
+  for (int i = 0; i < this->borders_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->borders(i));
+  }
+
+  // repeated .hdmap_proto.Tile tiles = 15;
+  total_size += 1 * this->tiles_size();
+  for (int i = 0; i < this->tiles_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->tiles(i));
   }
 
   if (!unknown_fields().empty()) {
@@ -1246,15 +1329,17 @@ void Map::MergeFrom(const Map& from) {
   sections_.MergeFrom(from.sections_);
   crosswalks_.MergeFrom(from.crosswalks_);
   junctions_.MergeFrom(from.junctions_);
-  parkingspaces_.MergeFrom(from.parkingspaces_);
   stoplines_.MergeFrom(from.stoplines_);
   speedbumps_.MergeFrom(from.speedbumps_);
   poles_.MergeFrom(from.poles_);
   boards_.MergeFrom(from.boards_);
   zones_.MergeFrom(from.zones_);
+  lane_markings_.MergeFrom(from.lane_markings_);
   traffic_lights_.MergeFrom(from.traffic_lights_);
   traffic_signs_.MergeFrom(from.traffic_signs_);
-  maptiles_.MergeFrom(from.maptiles_);
+  parking_spaces_.MergeFrom(from.parking_spaces_);
+  borders_.MergeFrom(from.borders_);
+  tiles_.MergeFrom(from.tiles_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_header()) {
       mutable_header()->::hdmap_proto::Header::MergeFrom(from.header());
@@ -1283,15 +1368,17 @@ bool Map::IsInitialized() const {
   if (!::google::protobuf::internal::AllAreInitialized(this->sections())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->crosswalks())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->junctions())) return false;
-  if (!::google::protobuf::internal::AllAreInitialized(this->parkingspaces())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->stoplines())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->speedbumps())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->poles())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->boards())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->zones())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->lane_markings())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->traffic_lights())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->traffic_signs())) return false;
-  if (!::google::protobuf::internal::AllAreInitialized(this->maptiles())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->parking_spaces())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->borders())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->tiles())) return false;
   return true;
 }
 
@@ -1301,15 +1388,17 @@ void Map::Swap(Map* other) {
     sections_.Swap(&other->sections_);
     crosswalks_.Swap(&other->crosswalks_);
     junctions_.Swap(&other->junctions_);
-    parkingspaces_.Swap(&other->parkingspaces_);
     stoplines_.Swap(&other->stoplines_);
     speedbumps_.Swap(&other->speedbumps_);
     poles_.Swap(&other->poles_);
     boards_.Swap(&other->boards_);
     zones_.Swap(&other->zones_);
+    lane_markings_.Swap(&other->lane_markings_);
     traffic_lights_.Swap(&other->traffic_lights_);
     traffic_signs_.Swap(&other->traffic_signs_);
-    maptiles_.Swap(&other->maptiles_);
+    parking_spaces_.Swap(&other->parking_spaces_);
+    borders_.Swap(&other->borders_);
+    tiles_.Swap(&other->tiles_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

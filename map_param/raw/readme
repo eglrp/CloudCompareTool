@@ -1,0 +1,26 @@
+link_id: different class link
+indices: one class link
+
+map
+|--header
+|--sections
+|--|--id/tile_ids
+|--|--|--id
+|--|--|--name
+|--|--refline/borders/lanes
+|--|--|--id/tile_ids
+|--|--|--|--id
+|--|--|--|--name
+!--|--|--lines
+|--|--|--|--points/pred_points/succ_points
+|--|--|--|--|--x
+|--|--|--|--|--y
+|--|--|--|--|--z
+|--|--|--|--width
+|--|--|--lane_markings
+|--|--|--traffic_signs
+|--|--|--traffic_lights
+|--|--|--pred_indices/succ_indices
+|--|--parking_spaces
+|--|--|--parking_slots
+    

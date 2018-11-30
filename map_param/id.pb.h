@@ -185,43 +185,43 @@ class Idx : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required uint64 x_idx = 1;
-  inline bool has_x_idx() const;
-  inline void clear_x_idx();
-  static const int kXIdxFieldNumber = 1;
-  inline ::google::protobuf::uint64 x_idx() const;
-  inline void set_x_idx(::google::protobuf::uint64 value);
+  // required uint64 x = 1;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 1;
+  inline ::google::protobuf::uint64 x() const;
+  inline void set_x(::google::protobuf::uint64 value);
 
-  // required uint64 y_idx = 2;
-  inline bool has_y_idx() const;
-  inline void clear_y_idx();
-  static const int kYIdxFieldNumber = 2;
-  inline ::google::protobuf::uint64 y_idx() const;
-  inline void set_y_idx(::google::protobuf::uint64 value);
+  // required uint64 y = 2;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 2;
+  inline ::google::protobuf::uint64 y() const;
+  inline void set_y(::google::protobuf::uint64 value);
 
-  // required uint64 z_idx = 3;
-  inline bool has_z_idx() const;
-  inline void clear_z_idx();
-  static const int kZIdxFieldNumber = 3;
-  inline ::google::protobuf::uint64 z_idx() const;
-  inline void set_z_idx(::google::protobuf::uint64 value);
+  // required uint64 z = 3;
+  inline bool has_z() const;
+  inline void clear_z();
+  static const int kZFieldNumber = 3;
+  inline ::google::protobuf::uint64 z() const;
+  inline void set_z(::google::protobuf::uint64 value);
 
   // @@protoc_insertion_point(class_scope:hdmap_proto.Idx)
  private:
-  inline void set_has_x_idx();
-  inline void clear_has_x_idx();
-  inline void set_has_y_idx();
-  inline void clear_has_y_idx();
-  inline void set_has_z_idx();
-  inline void clear_has_z_idx();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_z();
+  inline void clear_has_z();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::uint64 x_idx_;
-  ::google::protobuf::uint64 y_idx_;
-  ::google::protobuf::uint64 z_idx_;
+  ::google::protobuf::uint64 x_;
+  ::google::protobuf::uint64 y_;
+  ::google::protobuf::uint64 z_;
   friend void  protobuf_AddDesc_id_2eproto();
   friend void protobuf_AssignDesc_id_2eproto();
   friend void protobuf_ShutdownFile_id_2eproto();
@@ -340,76 +340,76 @@ inline void Id::set_allocated_name(::std::string* name) {
 
 // Idx
 
-// required uint64 x_idx = 1;
-inline bool Idx::has_x_idx() const {
+// required uint64 x = 1;
+inline bool Idx::has_x() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Idx::set_has_x_idx() {
+inline void Idx::set_has_x() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Idx::clear_has_x_idx() {
+inline void Idx::clear_has_x() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Idx::clear_x_idx() {
-  x_idx_ = GOOGLE_ULONGLONG(0);
-  clear_has_x_idx();
+inline void Idx::clear_x() {
+  x_ = GOOGLE_ULONGLONG(0);
+  clear_has_x();
 }
-inline ::google::protobuf::uint64 Idx::x_idx() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Idx.x_idx)
-  return x_idx_;
+inline ::google::protobuf::uint64 Idx::x() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Idx.x)
+  return x_;
 }
-inline void Idx::set_x_idx(::google::protobuf::uint64 value) {
-  set_has_x_idx();
-  x_idx_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Idx.x_idx)
+inline void Idx::set_x(::google::protobuf::uint64 value) {
+  set_has_x();
+  x_ = value;
+  // @@protoc_insertion_point(field_set:hdmap_proto.Idx.x)
 }
 
-// required uint64 y_idx = 2;
-inline bool Idx::has_y_idx() const {
+// required uint64 y = 2;
+inline bool Idx::has_y() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Idx::set_has_y_idx() {
+inline void Idx::set_has_y() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Idx::clear_has_y_idx() {
+inline void Idx::clear_has_y() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Idx::clear_y_idx() {
-  y_idx_ = GOOGLE_ULONGLONG(0);
-  clear_has_y_idx();
+inline void Idx::clear_y() {
+  y_ = GOOGLE_ULONGLONG(0);
+  clear_has_y();
 }
-inline ::google::protobuf::uint64 Idx::y_idx() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Idx.y_idx)
-  return y_idx_;
+inline ::google::protobuf::uint64 Idx::y() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Idx.y)
+  return y_;
 }
-inline void Idx::set_y_idx(::google::protobuf::uint64 value) {
-  set_has_y_idx();
-  y_idx_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Idx.y_idx)
+inline void Idx::set_y(::google::protobuf::uint64 value) {
+  set_has_y();
+  y_ = value;
+  // @@protoc_insertion_point(field_set:hdmap_proto.Idx.y)
 }
 
-// required uint64 z_idx = 3;
-inline bool Idx::has_z_idx() const {
+// required uint64 z = 3;
+inline bool Idx::has_z() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Idx::set_has_z_idx() {
+inline void Idx::set_has_z() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Idx::clear_has_z_idx() {
+inline void Idx::clear_has_z() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Idx::clear_z_idx() {
-  z_idx_ = GOOGLE_ULONGLONG(0);
-  clear_has_z_idx();
+inline void Idx::clear_z() {
+  z_ = GOOGLE_ULONGLONG(0);
+  clear_has_z();
 }
-inline ::google::protobuf::uint64 Idx::z_idx() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Idx.z_idx)
-  return z_idx_;
+inline ::google::protobuf::uint64 Idx::z() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Idx.z)
+  return z_;
 }
-inline void Idx::set_z_idx(::google::protobuf::uint64 value) {
-  set_has_z_idx();
-  z_idx_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Idx.z_idx)
+inline void Idx::set_z(::google::protobuf::uint64 value) {
+  set_has_z();
+  z_ = value;
+  // @@protoc_insertion_point(field_set:hdmap_proto.Idx.z)
 }
 
 

@@ -54,9 +54,9 @@ void protobuf_AssignDesc_id_2eproto() {
       sizeof(Id));
   Idx_descriptor_ = file->message_type(1);
   static const int Idx_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Idx, x_idx_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Idx, y_idx_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Idx, z_idx_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Idx, x_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Idx, y_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Idx, z_),
   };
   Idx_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -104,8 +104,8 @@ void protobuf_AddDesc_id_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\010id.proto\022\013hdmap_proto\"\036\n\002Id\022\n\n\002id\030\001 \002("
-    "\004\022\014\n\004name\030\002 \001(\t\"2\n\003Idx\022\r\n\005x_idx\030\001 \002(\004\022\r\n"
-    "\005y_idx\030\002 \002(\004\022\r\n\005z_idx\030\003 \002(\004", 107);
+    "\004\022\014\n\004name\030\002 \001(\t\"&\n\003Idx\022\t\n\001x\030\001 \002(\004\022\t\n\001y\030\002"
+    " \002(\004\022\t\n\001z\030\003 \002(\004", 95);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "id.proto", &protobuf_RegisterTypes);
   Id::default_instance_ = new Id();
@@ -410,9 +410,9 @@ void Id::Swap(Id* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Idx::kXIdxFieldNumber;
-const int Idx::kYIdxFieldNumber;
-const int Idx::kZIdxFieldNumber;
+const int Idx::kXFieldNumber;
+const int Idx::kYFieldNumber;
+const int Idx::kZFieldNumber;
 #endif  // !_MSC_VER
 
 Idx::Idx()
@@ -433,9 +433,9 @@ Idx::Idx(const Idx& from)
 
 void Idx::SharedCtor() {
   _cached_size_ = 0;
-  x_idx_ = GOOGLE_ULONGLONG(0);
-  y_idx_ = GOOGLE_ULONGLONG(0);
-  z_idx_ = GOOGLE_ULONGLONG(0);
+  x_ = GOOGLE_ULONGLONG(0);
+  y_ = GOOGLE_ULONGLONG(0);
+  z_ = GOOGLE_ULONGLONG(0);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -481,7 +481,7 @@ void Idx::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  ZR_(x_idx_, z_idx_);
+  ZR_(x_, z_);
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -500,43 +500,43 @@ bool Idx::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required uint64 x_idx = 1;
+      // required uint64 x = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &x_idx_)));
-          set_has_x_idx();
+                 input, &x_)));
+          set_has_x();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_y_idx;
+        if (input->ExpectTag(16)) goto parse_y;
         break;
       }
 
-      // required uint64 y_idx = 2;
+      // required uint64 y = 2;
       case 2: {
         if (tag == 16) {
-         parse_y_idx:
+         parse_y:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &y_idx_)));
-          set_has_y_idx();
+                 input, &y_)));
+          set_has_y();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_z_idx;
+        if (input->ExpectTag(24)) goto parse_z;
         break;
       }
 
-      // required uint64 z_idx = 3;
+      // required uint64 z = 3;
       case 3: {
         if (tag == 24) {
-         parse_z_idx:
+         parse_z:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &z_idx_)));
-          set_has_z_idx();
+                 input, &z_)));
+          set_has_z();
         } else {
           goto handle_unusual;
         }
@@ -569,19 +569,19 @@ failure:
 void Idx::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:hdmap_proto.Idx)
-  // required uint64 x_idx = 1;
-  if (has_x_idx()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->x_idx(), output);
+  // required uint64 x = 1;
+  if (has_x()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->x(), output);
   }
 
-  // required uint64 y_idx = 2;
-  if (has_y_idx()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->y_idx(), output);
+  // required uint64 y = 2;
+  if (has_y()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->y(), output);
   }
 
-  // required uint64 z_idx = 3;
-  if (has_z_idx()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->z_idx(), output);
+  // required uint64 z = 3;
+  if (has_z()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->z(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -594,19 +594,19 @@ void Idx::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Idx::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:hdmap_proto.Idx)
-  // required uint64 x_idx = 1;
-  if (has_x_idx()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->x_idx(), target);
+  // required uint64 x = 1;
+  if (has_x()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->x(), target);
   }
 
-  // required uint64 y_idx = 2;
-  if (has_y_idx()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(2, this->y_idx(), target);
+  // required uint64 y = 2;
+  if (has_y()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(2, this->y(), target);
   }
 
-  // required uint64 z_idx = 3;
-  if (has_z_idx()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(3, this->z_idx(), target);
+  // required uint64 z = 3;
+  if (has_z()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(3, this->z(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -621,25 +621,25 @@ int Idx::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required uint64 x_idx = 1;
-    if (has_x_idx()) {
+    // required uint64 x = 1;
+    if (has_x()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt64Size(
-          this->x_idx());
+          this->x());
     }
 
-    // required uint64 y_idx = 2;
-    if (has_y_idx()) {
+    // required uint64 y = 2;
+    if (has_y()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt64Size(
-          this->y_idx());
+          this->y());
     }
 
-    // required uint64 z_idx = 3;
-    if (has_z_idx()) {
+    // required uint64 z = 3;
+    if (has_z()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt64Size(
-          this->z_idx());
+          this->z());
     }
 
   }
@@ -669,14 +669,14 @@ void Idx::MergeFrom(const ::google::protobuf::Message& from) {
 void Idx::MergeFrom(const Idx& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_x_idx()) {
-      set_x_idx(from.x_idx());
+    if (from.has_x()) {
+      set_x(from.x());
     }
-    if (from.has_y_idx()) {
-      set_y_idx(from.y_idx());
+    if (from.has_y()) {
+      set_y(from.y());
     }
-    if (from.has_z_idx()) {
-      set_z_idx(from.z_idx());
+    if (from.has_z()) {
+      set_z(from.z());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -702,9 +702,9 @@ bool Idx::IsInitialized() const {
 
 void Idx::Swap(Idx* other) {
   if (other != this) {
-    std::swap(x_idx_, other->x_idx_);
-    std::swap(y_idx_, other->y_idx_);
-    std::swap(z_idx_, other->z_idx_);
+    std::swap(x_, other->x_);
+    std::swap(y_, other->y_);
+    std::swap(z_, other->z_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

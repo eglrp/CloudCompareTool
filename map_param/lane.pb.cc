@@ -23,8 +23,9 @@ namespace {
 const ::google::protobuf::Descriptor* Lane_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Lane_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* Lane_LaneType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* Lane_LaneFunction_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* Lane_LaneDirection_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* Lane_LaneStyle_descriptor_ = NULL;
 
 }  // namespace
 
@@ -39,15 +40,15 @@ void protobuf_AssignDesc_lane_2eproto() {
   static const int Lane_offsets_[11] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, function_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, direction_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, controls_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, attrs_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, style_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, lines_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, lane_markings_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, traffic_lights_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, traffic_signs_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, predecessor_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, successor_ids_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, pred_indices_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Lane, succ_indices_),
   };
   Lane_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -60,8 +61,9 @@ void protobuf_AssignDesc_lane_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Lane));
-  Lane_LaneType_descriptor_ = Lane_descriptor_->enum_type(0);
+  Lane_LaneFunction_descriptor_ = Lane_descriptor_->enum_type(0);
   Lane_LaneDirection_descriptor_ = Lane_descriptor_->enum_type(1);
+  Lane_LaneStyle_descriptor_ = Lane_descriptor_->enum_type(2);
 }
 
 namespace {
@@ -92,30 +94,34 @@ void protobuf_AddDesc_lane_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::hdmap_proto::protobuf_AddDesc_id_2eproto();
-  ::hdmap_proto::protobuf_AddDesc_attribute_2eproto();
   ::hdmap_proto::protobuf_AddDesc_geometry_2eproto();
   ::hdmap_proto::protobuf_AddDesc_lane_5fmarking_2eproto();
   ::hdmap_proto::protobuf_AddDesc_traffic_5flight_2eproto();
   ::hdmap_proto::protobuf_AddDesc_traffic_5fsign_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\nlane.proto\022\013hdmap_proto\032\010id.proto\032\017att"
-    "ribute.proto\032\016geometry.proto\032\022lane_marki"
-    "ng.proto\032\023traffic_light.proto\032\022traffic_s"
-    "ign.proto\"\311\004\n\004Lane\022\033\n\002id\030\001 \002(\0132\017.hdmap_p"
-    "roto.Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdmap_proto."
-    "Id\022(\n\004type\030\004 \002(\0162\032.hdmap_proto.Lane.Lane"
-    "Type\0222\n\tdirection\030\005 \001(\0162\037.hdmap_proto.La"
-    "ne.LaneDirection\022+\n\010controls\030\006 \003(\0132\031.hdm"
-    "ap_proto.CurveControl\022%\n\005attrs\030\007 \003(\0132\026.h"
-    "dmap_proto.CurveAttr\022/\n\rlane_markings\030\010 "
-    "\003(\0132\030.hdmap_proto.LaneMarking\0221\n\016traffic"
-    "_lights\030\t \003(\0132\031.hdmap_proto.TrafficLight"
-    "\022/\n\rtraffic_signs\030\n \003(\0132\030.hdmap_proto.Tr"
-    "afficSign\022\027\n\017predecessor_ids\030\024 \003(\004\022\025\n\rsu"
-    "ccessor_ids\030\025 \003(\004\"M\n\010LaneType\022\010\n\004NONE\020\000\022"
-    "\020\n\014CITY_DRIVING\020\001\022\n\n\006BIKING\020\002\022\014\n\010SIDEWAL"
-    "K\020\003\022\013\n\007PARKING\020\004\";\n\rLaneDirection\022\013\n\007FOR"
-    "WARD\020\001\022\014\n\010BACKWARD\020\002\022\017\n\013BIDIRECTION\020\003", 717);
+    "\n\nlane.proto\022\013hdmap_proto\032\010id.proto\032\016geo"
+    "metry.proto\032\022lane_marking.proto\032\023traffic"
+    "_light.proto\032\022traffic_sign.proto\"\213\006\n\004Lan"
+    "e\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto.Id\022!\n\010tile_i"
+    "ds\030\002 \003(\0132\017.hdmap_proto.Id\0220\n\010function\030\004 "
+    "\001(\0162\036.hdmap_proto.Lane.LaneFunction\0222\n\td"
+    "irection\030\005 \001(\0162\037.hdmap_proto.Lane.LaneDi"
+    "rection\022*\n\005style\030\006 \001(\0162\033.hdmap_proto.Lan"
+    "e.LaneStyle\022%\n\005lines\030\007 \003(\0132\026.hdmap_proto"
+    ".CurveLine\022/\n\rlane_markings\030\010 \003(\0132\030.hdma"
+    "p_proto.LaneMarking\0221\n\016traffic_lights\030\t "
+    "\003(\0132\031.hdmap_proto.TrafficLight\022/\n\rtraffi"
+    "c_signs\030\n \003(\0132\030.hdmap_proto.TrafficSign\022"
+    "\024\n\014pred_indices\030\024 \003(\r\022\024\n\014succ_indices\030\025 "
+    "\003(\r\"Q\n\014LaneFunction\022\010\n\004NONE\020\000\022\020\n\014CITY_DR"
+    "IVING\020\001\022\n\n\006BIKING\020\002\022\014\n\010SIDEWALK\020\003\022\013\n\007PAR"
+    "KING\020\004\";\n\rLaneDirection\022\013\n\007FORWARD\020\001\022\014\n\010"
+    "BACKWARD\020\002\022\017\n\013BIDIRECTION\020\003\"\270\001\n\tLaneStyl"
+    "e\022\013\n\007UNKNOWN\020\000\022\026\n\022DOTTED_YELLOW_LINE\020\001\022\027"
+    "\n\023DOTTED_YELLOW_BLANK\020\002\022\025\n\021DOTTED_WHITE_"
+    "LINE\020\003\022\026\n\022DOTTED_WHITE_BLANK\020\004\022\020\n\014SOLID_"
+    "YELLOW\020\005\022\017\n\013SOLID_WHITE\020\006\022\021\n\rDOUBLE_YELL"
+    "OW\020\007\022\010\n\004CURB\020\010", 894);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "lane.proto", &protobuf_RegisterTypes);
   Lane::default_instance_ = new Lane();
@@ -132,11 +138,11 @@ struct StaticDescriptorInitializer_lane_2eproto {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* Lane_LaneType_descriptor() {
+const ::google::protobuf::EnumDescriptor* Lane_LaneFunction_descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Lane_LaneType_descriptor_;
+  return Lane_LaneFunction_descriptor_;
 }
-bool Lane_LaneType_IsValid(int value) {
+bool Lane_LaneFunction_IsValid(int value) {
   switch(value) {
     case 0:
     case 1:
@@ -150,14 +156,14 @@ bool Lane_LaneType_IsValid(int value) {
 }
 
 #ifndef _MSC_VER
-const Lane_LaneType Lane::NONE;
-const Lane_LaneType Lane::CITY_DRIVING;
-const Lane_LaneType Lane::BIKING;
-const Lane_LaneType Lane::SIDEWALK;
-const Lane_LaneType Lane::PARKING;
-const Lane_LaneType Lane::LaneType_MIN;
-const Lane_LaneType Lane::LaneType_MAX;
-const int Lane::LaneType_ARRAYSIZE;
+const Lane_LaneFunction Lane::NONE;
+const Lane_LaneFunction Lane::CITY_DRIVING;
+const Lane_LaneFunction Lane::BIKING;
+const Lane_LaneFunction Lane::SIDEWALK;
+const Lane_LaneFunction Lane::PARKING;
+const Lane_LaneFunction Lane::LaneFunction_MIN;
+const Lane_LaneFunction Lane::LaneFunction_MAX;
+const int Lane::LaneFunction_ARRAYSIZE;
 #endif  // _MSC_VER
 const ::google::protobuf::EnumDescriptor* Lane_LaneDirection_descriptor() {
   protobuf_AssignDescriptorsOnce();
@@ -182,18 +188,53 @@ const Lane_LaneDirection Lane::LaneDirection_MIN;
 const Lane_LaneDirection Lane::LaneDirection_MAX;
 const int Lane::LaneDirection_ARRAYSIZE;
 #endif  // _MSC_VER
+const ::google::protobuf::EnumDescriptor* Lane_LaneStyle_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Lane_LaneStyle_descriptor_;
+}
+bool Lane_LaneStyle_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const Lane_LaneStyle Lane::UNKNOWN;
+const Lane_LaneStyle Lane::DOTTED_YELLOW_LINE;
+const Lane_LaneStyle Lane::DOTTED_YELLOW_BLANK;
+const Lane_LaneStyle Lane::DOTTED_WHITE_LINE;
+const Lane_LaneStyle Lane::DOTTED_WHITE_BLANK;
+const Lane_LaneStyle Lane::SOLID_YELLOW;
+const Lane_LaneStyle Lane::SOLID_WHITE;
+const Lane_LaneStyle Lane::DOUBLE_YELLOW;
+const Lane_LaneStyle Lane::CURB;
+const Lane_LaneStyle Lane::LaneStyle_MIN;
+const Lane_LaneStyle Lane::LaneStyle_MAX;
+const int Lane::LaneStyle_ARRAYSIZE;
+#endif  // _MSC_VER
 #ifndef _MSC_VER
 const int Lane::kIdFieldNumber;
 const int Lane::kTileIdsFieldNumber;
-const int Lane::kTypeFieldNumber;
+const int Lane::kFunctionFieldNumber;
 const int Lane::kDirectionFieldNumber;
-const int Lane::kControlsFieldNumber;
-const int Lane::kAttrsFieldNumber;
+const int Lane::kStyleFieldNumber;
+const int Lane::kLinesFieldNumber;
 const int Lane::kLaneMarkingsFieldNumber;
 const int Lane::kTrafficLightsFieldNumber;
 const int Lane::kTrafficSignsFieldNumber;
-const int Lane::kPredecessorIdsFieldNumber;
-const int Lane::kSuccessorIdsFieldNumber;
+const int Lane::kPredIndicesFieldNumber;
+const int Lane::kSuccIndicesFieldNumber;
 #endif  // !_MSC_VER
 
 Lane::Lane()
@@ -216,8 +257,9 @@ Lane::Lane(const Lane& from)
 void Lane::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
-  type_ = 0;
+  function_ = 0;
   direction_ = 1;
+  style_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -254,21 +296,21 @@ Lane* Lane::New() const {
 }
 
 void Lane::Clear() {
-  if (_has_bits_[0 / 32] & 13) {
+  if (_has_bits_[0 / 32] & 29) {
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
     }
-    type_ = 0;
+    function_ = 0;
     direction_ = 1;
+    style_ = 0;
   }
   tile_ids_.Clear();
-  controls_.Clear();
-  attrs_.Clear();
+  lines_.Clear();
   lane_markings_.Clear();
   traffic_lights_.Clear();
   traffic_signs_.Clear();
-  predecessor_ids_.Clear();
-  successor_ids_.Clear();
+  pred_indices_.Clear();
+  succ_indices_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -305,20 +347,20 @@ bool Lane::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(32)) goto parse_type;
+        if (input->ExpectTag(32)) goto parse_function;
         break;
       }
 
-      // required .hdmap_proto.Lane.LaneType type = 4;
+      // optional .hdmap_proto.Lane.LaneFunction function = 4;
       case 4: {
         if (tag == 32) {
-         parse_type:
+         parse_function:
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::hdmap_proto::Lane_LaneType_IsValid(value)) {
-            set_type(static_cast< ::hdmap_proto::Lane_LaneType >(value));
+          if (::hdmap_proto::Lane_LaneFunction_IsValid(value)) {
+            set_function(static_cast< ::hdmap_proto::Lane_LaneFunction >(value));
           } else {
             mutable_unknown_fields()->AddVarint(4, value);
           }
@@ -345,34 +387,40 @@ bool Lane::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_controls;
+        if (input->ExpectTag(48)) goto parse_style;
         break;
       }
 
-      // repeated .hdmap_proto.CurveControl controls = 6;
+      // optional .hdmap_proto.Lane.LaneStyle style = 6;
       case 6: {
-        if (tag == 50) {
-         parse_controls:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_controls()));
+        if (tag == 48) {
+         parse_style:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::hdmap_proto::Lane_LaneStyle_IsValid(value)) {
+            set_style(static_cast< ::hdmap_proto::Lane_LaneStyle >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(6, value);
+          }
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_controls;
-        if (input->ExpectTag(58)) goto parse_attrs;
+        if (input->ExpectTag(58)) goto parse_lines;
         break;
       }
 
-      // repeated .hdmap_proto.CurveAttr attrs = 7;
+      // repeated .hdmap_proto.CurveLine lines = 7;
       case 7: {
         if (tag == 58) {
-         parse_attrs:
+         parse_lines:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_attrs()));
+                input, add_lines()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(58)) goto parse_attrs;
+        if (input->ExpectTag(58)) goto parse_lines;
         if (input->ExpectTag(66)) goto parse_lane_markings;
         break;
       }
@@ -415,44 +463,44 @@ bool Lane::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(82)) goto parse_traffic_signs;
-        if (input->ExpectTag(160)) goto parse_predecessor_ids;
+        if (input->ExpectTag(160)) goto parse_pred_indices;
         break;
       }
 
-      // repeated uint64 predecessor_ids = 20;
+      // repeated uint32 pred_indices = 20;
       case 20: {
         if (tag == 160) {
-         parse_predecessor_ids:
+         parse_pred_indices:
           DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 2, 160, input, this->mutable_predecessor_ids())));
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 2, 160, input, this->mutable_pred_indices())));
         } else if (tag == 162) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, this->mutable_predecessor_ids())));
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_pred_indices())));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(160)) goto parse_predecessor_ids;
-        if (input->ExpectTag(168)) goto parse_successor_ids;
+        if (input->ExpectTag(160)) goto parse_pred_indices;
+        if (input->ExpectTag(168)) goto parse_succ_indices;
         break;
       }
 
-      // repeated uint64 successor_ids = 21;
+      // repeated uint32 succ_indices = 21;
       case 21: {
         if (tag == 168) {
-         parse_successor_ids:
+         parse_succ_indices:
           DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 2, 168, input, this->mutable_successor_ids())));
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 2, 168, input, this->mutable_succ_indices())));
         } else if (tag == 170) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, this->mutable_successor_ids())));
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_succ_indices())));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(168)) goto parse_successor_ids;
+        if (input->ExpectTag(168)) goto parse_succ_indices;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -494,10 +542,10 @@ void Lane::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // required .hdmap_proto.Lane.LaneType type = 4;
-  if (has_type()) {
+  // optional .hdmap_proto.Lane.LaneFunction function = 4;
+  if (has_function()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      4, this->type(), output);
+      4, this->function(), output);
   }
 
   // optional .hdmap_proto.Lane.LaneDirection direction = 5;
@@ -506,16 +554,16 @@ void Lane::SerializeWithCachedSizes(
       5, this->direction(), output);
   }
 
-  // repeated .hdmap_proto.CurveControl controls = 6;
-  for (int i = 0; i < this->controls_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, this->controls(i), output);
+  // optional .hdmap_proto.Lane.LaneStyle style = 6;
+  if (has_style()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      6, this->style(), output);
   }
 
-  // repeated .hdmap_proto.CurveAttr attrs = 7;
-  for (int i = 0; i < this->attrs_size(); i++) {
+  // repeated .hdmap_proto.CurveLine lines = 7;
+  for (int i = 0; i < this->lines_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      7, this->attrs(i), output);
+      7, this->lines(i), output);
   }
 
   // repeated .hdmap_proto.LaneMarking lane_markings = 8;
@@ -536,16 +584,16 @@ void Lane::SerializeWithCachedSizes(
       10, this->traffic_signs(i), output);
   }
 
-  // repeated uint64 predecessor_ids = 20;
-  for (int i = 0; i < this->predecessor_ids_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(
-      20, this->predecessor_ids(i), output);
+  // repeated uint32 pred_indices = 20;
+  for (int i = 0; i < this->pred_indices_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      20, this->pred_indices(i), output);
   }
 
-  // repeated uint64 successor_ids = 21;
-  for (int i = 0; i < this->successor_ids_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(
-      21, this->successor_ids(i), output);
+  // repeated uint32 succ_indices = 21;
+  for (int i = 0; i < this->succ_indices_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      21, this->succ_indices(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -572,10 +620,10 @@ void Lane::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // required .hdmap_proto.Lane.LaneType type = 4;
-  if (has_type()) {
+  // optional .hdmap_proto.Lane.LaneFunction function = 4;
+  if (has_function()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      4, this->type(), target);
+      4, this->function(), target);
   }
 
   // optional .hdmap_proto.Lane.LaneDirection direction = 5;
@@ -584,18 +632,17 @@ void Lane::SerializeWithCachedSizes(
       5, this->direction(), target);
   }
 
-  // repeated .hdmap_proto.CurveControl controls = 6;
-  for (int i = 0; i < this->controls_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        6, this->controls(i), target);
+  // optional .hdmap_proto.Lane.LaneStyle style = 6;
+  if (has_style()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      6, this->style(), target);
   }
 
-  // repeated .hdmap_proto.CurveAttr attrs = 7;
-  for (int i = 0; i < this->attrs_size(); i++) {
+  // repeated .hdmap_proto.CurveLine lines = 7;
+  for (int i = 0; i < this->lines_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        7, this->attrs(i), target);
+        7, this->lines(i), target);
   }
 
   // repeated .hdmap_proto.LaneMarking lane_markings = 8;
@@ -619,16 +666,16 @@ void Lane::SerializeWithCachedSizes(
         10, this->traffic_signs(i), target);
   }
 
-  // repeated uint64 predecessor_ids = 20;
-  for (int i = 0; i < this->predecessor_ids_size(); i++) {
+  // repeated uint32 pred_indices = 20;
+  for (int i = 0; i < this->pred_indices_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteUInt64ToArray(20, this->predecessor_ids(i), target);
+      WriteUInt32ToArray(20, this->pred_indices(i), target);
   }
 
-  // repeated uint64 successor_ids = 21;
-  for (int i = 0; i < this->successor_ids_size(); i++) {
+  // repeated uint32 succ_indices = 21;
+  for (int i = 0; i < this->succ_indices_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteUInt64ToArray(21, this->successor_ids(i), target);
+      WriteUInt32ToArray(21, this->succ_indices(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -650,16 +697,22 @@ int Lane::ByteSize() const {
           this->id());
     }
 
-    // required .hdmap_proto.Lane.LaneType type = 4;
-    if (has_type()) {
+    // optional .hdmap_proto.Lane.LaneFunction function = 4;
+    if (has_function()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->function());
     }
 
     // optional .hdmap_proto.Lane.LaneDirection direction = 5;
     if (has_direction()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->direction());
+    }
+
+    // optional .hdmap_proto.Lane.LaneStyle style = 6;
+    if (has_style()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->style());
     }
 
   }
@@ -671,20 +724,12 @@ int Lane::ByteSize() const {
         this->tile_ids(i));
   }
 
-  // repeated .hdmap_proto.CurveControl controls = 6;
-  total_size += 1 * this->controls_size();
-  for (int i = 0; i < this->controls_size(); i++) {
+  // repeated .hdmap_proto.CurveLine lines = 7;
+  total_size += 1 * this->lines_size();
+  for (int i = 0; i < this->lines_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->controls(i));
-  }
-
-  // repeated .hdmap_proto.CurveAttr attrs = 7;
-  total_size += 1 * this->attrs_size();
-  for (int i = 0; i < this->attrs_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->attrs(i));
+        this->lines(i));
   }
 
   // repeated .hdmap_proto.LaneMarking lane_markings = 8;
@@ -711,24 +756,24 @@ int Lane::ByteSize() const {
         this->traffic_signs(i));
   }
 
-  // repeated uint64 predecessor_ids = 20;
+  // repeated uint32 pred_indices = 20;
   {
     int data_size = 0;
-    for (int i = 0; i < this->predecessor_ids_size(); i++) {
+    for (int i = 0; i < this->pred_indices_size(); i++) {
       data_size += ::google::protobuf::internal::WireFormatLite::
-        UInt64Size(this->predecessor_ids(i));
+        UInt32Size(this->pred_indices(i));
     }
-    total_size += 2 * this->predecessor_ids_size() + data_size;
+    total_size += 2 * this->pred_indices_size() + data_size;
   }
 
-  // repeated uint64 successor_ids = 21;
+  // repeated uint32 succ_indices = 21;
   {
     int data_size = 0;
-    for (int i = 0; i < this->successor_ids_size(); i++) {
+    for (int i = 0; i < this->succ_indices_size(); i++) {
       data_size += ::google::protobuf::internal::WireFormatLite::
-        UInt64Size(this->successor_ids(i));
+        UInt32Size(this->succ_indices(i));
     }
-    total_size += 2 * this->successor_ids_size() + data_size;
+    total_size += 2 * this->succ_indices_size() + data_size;
   }
 
   if (!unknown_fields().empty()) {
@@ -757,22 +802,24 @@ void Lane::MergeFrom(const ::google::protobuf::Message& from) {
 void Lane::MergeFrom(const Lane& from) {
   GOOGLE_CHECK_NE(&from, this);
   tile_ids_.MergeFrom(from.tile_ids_);
-  controls_.MergeFrom(from.controls_);
-  attrs_.MergeFrom(from.attrs_);
+  lines_.MergeFrom(from.lines_);
   lane_markings_.MergeFrom(from.lane_markings_);
   traffic_lights_.MergeFrom(from.traffic_lights_);
   traffic_signs_.MergeFrom(from.traffic_signs_);
-  predecessor_ids_.MergeFrom(from.predecessor_ids_);
-  successor_ids_.MergeFrom(from.successor_ids_);
+  pred_indices_.MergeFrom(from.pred_indices_);
+  succ_indices_.MergeFrom(from.succ_indices_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
-    if (from.has_type()) {
-      set_type(from.type());
+    if (from.has_function()) {
+      set_function(from.function());
     }
     if (from.has_direction()) {
       set_direction(from.direction());
+    }
+    if (from.has_style()) {
+      set_style(from.style());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -791,14 +838,13 @@ void Lane::CopyFrom(const Lane& from) {
 }
 
 bool Lane::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000005) != 0x00000005) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   if (has_id()) {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_ids())) return false;
-  if (!::google::protobuf::internal::AllAreInitialized(this->controls())) return false;
-  if (!::google::protobuf::internal::AllAreInitialized(this->attrs())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->lines())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->lane_markings())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->traffic_lights())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->traffic_signs())) return false;
@@ -809,15 +855,15 @@ void Lane::Swap(Lane* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    std::swap(type_, other->type_);
+    std::swap(function_, other->function_);
     std::swap(direction_, other->direction_);
-    controls_.Swap(&other->controls_);
-    attrs_.Swap(&other->attrs_);
+    std::swap(style_, other->style_);
+    lines_.Swap(&other->lines_);
     lane_markings_.Swap(&other->lane_markings_);
     traffic_lights_.Swap(&other->traffic_lights_);
     traffic_signs_.Swap(&other->traffic_signs_);
-    predecessor_ids_.Swap(&other->predecessor_ids_);
-    successor_ids_.Swap(&other->successor_ids_);
+    pred_indices_.Swap(&other->pred_indices_);
+    succ_indices_.Swap(&other->succ_indices_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -1,0 +1,15 @@
+syntax = "proto2";                                                                 
+                                                                                   
+package hdmap_proto;                                                               
+                                                                                   
+import "id.proto";                                                                 
+import "geometry.proto";                                                           
+import "object.proto";
+
+message ParkingSpace {                                                             
+  required Id id = 1;                                                              
+  repeated Id tile_ids = 2;                                                        
+                                                                                   
+  repeated ParkingSlot parking_slots = 4;                                           
+  repeated Id link_ids = 5;                                                        
+} 

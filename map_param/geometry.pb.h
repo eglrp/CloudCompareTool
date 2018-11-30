@@ -24,7 +24,6 @@
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/unknown_field_set.h>
-#include "id.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace hdmap_proto {
@@ -34,29 +33,22 @@ void  protobuf_AddDesc_geometry_2eproto();
 void protobuf_AssignDesc_geometry_2eproto();
 void protobuf_ShutdownFile_geometry_2eproto();
 
-class Point;
-class Normal;
-class LineSegment;
+class Vector3d;
 class Cylinder;
 class Circle;
-class PolyLine;
-class Rect;
-class Cube;
+class CurveLine;
 class Polygon;
-class CurveControl;
-class Curve;
-class ParkingSlot;
 
 // ===================================================================
 
-class Point : public ::google::protobuf::Message {
+class Vector3d : public ::google::protobuf::Message {
  public:
-  Point();
-  virtual ~Point();
+  Vector3d();
+  virtual ~Vector3d();
 
-  Point(const Point& from);
+  Vector3d(const Vector3d& from);
 
-  inline Point& operator=(const Point& from) {
+  inline Vector3d& operator=(const Vector3d& from) {
     CopyFrom(from);
     return *this;
   }
@@ -70,17 +62,17 @@ class Point : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Point& default_instance();
+  static const Vector3d& default_instance();
 
-  void Swap(Point* other);
+  void Swap(Vector3d* other);
 
   // implements Message ----------------------------------------------
 
-  Point* New() const;
+  Vector3d* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Point& from);
-  void MergeFrom(const Point& from);
+  void CopyFrom(const Vector3d& from);
+  void MergeFrom(const Vector3d& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -123,7 +115,7 @@ class Point : public ::google::protobuf::Message {
   inline double z() const;
   inline void set_z(double value);
 
-  // @@protoc_insertion_point(class_scope:hdmap_proto.Point)
+  // @@protoc_insertion_point(class_scope:hdmap_proto.Vector3d)
  private:
   inline void set_has_x();
   inline void clear_has_x();
@@ -144,199 +136,7 @@ class Point : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_geometry_2eproto();
 
   void InitAsDefaultInstance();
-  static Point* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class Normal : public ::google::protobuf::Message {
- public:
-  Normal();
-  virtual ~Normal();
-
-  Normal(const Normal& from);
-
-  inline Normal& operator=(const Normal& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Normal& default_instance();
-
-  void Swap(Normal* other);
-
-  // implements Message ----------------------------------------------
-
-  Normal* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Normal& from);
-  void MergeFrom(const Normal& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // required float x = 1;
-  inline bool has_x() const;
-  inline void clear_x();
-  static const int kXFieldNumber = 1;
-  inline float x() const;
-  inline void set_x(float value);
-
-  // required float y = 2;
-  inline bool has_y() const;
-  inline void clear_y();
-  static const int kYFieldNumber = 2;
-  inline float y() const;
-  inline void set_y(float value);
-
-  // required float z = 3;
-  inline bool has_z() const;
-  inline void clear_z();
-  static const int kZFieldNumber = 3;
-  inline float z() const;
-  inline void set_z(float value);
-
-  // @@protoc_insertion_point(class_scope:hdmap_proto.Normal)
- private:
-  inline void set_has_x();
-  inline void clear_has_x();
-  inline void set_has_y();
-  inline void clear_has_y();
-  inline void set_has_z();
-  inline void clear_has_z();
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  float x_;
-  float y_;
-  float z_;
-  friend void  protobuf_AddDesc_geometry_2eproto();
-  friend void protobuf_AssignDesc_geometry_2eproto();
-  friend void protobuf_ShutdownFile_geometry_2eproto();
-
-  void InitAsDefaultInstance();
-  static Normal* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class LineSegment : public ::google::protobuf::Message {
- public:
-  LineSegment();
-  virtual ~LineSegment();
-
-  LineSegment(const LineSegment& from);
-
-  inline LineSegment& operator=(const LineSegment& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const LineSegment& default_instance();
-
-  void Swap(LineSegment* other);
-
-  // implements Message ----------------------------------------------
-
-  LineSegment* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const LineSegment& from);
-  void MergeFrom(const LineSegment& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // required .hdmap_proto.Point start = 1;
-  inline bool has_start() const;
-  inline void clear_start();
-  static const int kStartFieldNumber = 1;
-  inline const ::hdmap_proto::Point& start() const;
-  inline ::hdmap_proto::Point* mutable_start();
-  inline ::hdmap_proto::Point* release_start();
-  inline void set_allocated_start(::hdmap_proto::Point* start);
-
-  // required .hdmap_proto.Point end = 2;
-  inline bool has_end() const;
-  inline void clear_end();
-  static const int kEndFieldNumber = 2;
-  inline const ::hdmap_proto::Point& end() const;
-  inline ::hdmap_proto::Point* mutable_end();
-  inline ::hdmap_proto::Point* release_end();
-  inline void set_allocated_end(::hdmap_proto::Point* end);
-
-  // @@protoc_insertion_point(class_scope:hdmap_proto.LineSegment)
- private:
-  inline void set_has_start();
-  inline void clear_has_start();
-  inline void set_has_end();
-  inline void clear_has_end();
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  ::hdmap_proto::Point* start_;
-  ::hdmap_proto::Point* end_;
-  friend void  protobuf_AddDesc_geometry_2eproto();
-  friend void protobuf_AssignDesc_geometry_2eproto();
-  friend void protobuf_ShutdownFile_geometry_2eproto();
-
-  void InitAsDefaultInstance();
-  static LineSegment* default_instance_;
+  static Vector3d* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -393,26 +193,51 @@ class Cylinder : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .hdmap_proto.LineSegment line = 1;
-  inline bool has_line() const;
-  inline void clear_line();
-  static const int kLineFieldNumber = 1;
-  inline const ::hdmap_proto::LineSegment& line() const;
-  inline ::hdmap_proto::LineSegment* mutable_line();
-  inline ::hdmap_proto::LineSegment* release_line();
-  inline void set_allocated_line(::hdmap_proto::LineSegment* line);
+  // repeated .hdmap_proto.Vector3d points = 1;
+  inline int points_size() const;
+  inline void clear_points();
+  static const int kPointsFieldNumber = 1;
+  inline const ::hdmap_proto::Vector3d& points(int index) const;
+  inline ::hdmap_proto::Vector3d* mutable_points(int index);
+  inline ::hdmap_proto::Vector3d* add_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+      points() const;
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+      mutable_points();
 
-  // required float radius = 2;
+  // repeated .hdmap_proto.Vector3d pred_points = 2;
+  inline int pred_points_size() const;
+  inline void clear_pred_points();
+  static const int kPredPointsFieldNumber = 2;
+  inline const ::hdmap_proto::Vector3d& pred_points(int index) const;
+  inline ::hdmap_proto::Vector3d* mutable_pred_points(int index);
+  inline ::hdmap_proto::Vector3d* add_pred_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+      pred_points() const;
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+      mutable_pred_points();
+
+  // repeated .hdmap_proto.Vector3d succ_points = 3;
+  inline int succ_points_size() const;
+  inline void clear_succ_points();
+  static const int kSuccPointsFieldNumber = 3;
+  inline const ::hdmap_proto::Vector3d& succ_points(int index) const;
+  inline ::hdmap_proto::Vector3d* mutable_succ_points(int index);
+  inline ::hdmap_proto::Vector3d* add_succ_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+      succ_points() const;
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+      mutable_succ_points();
+
+  // optional float radius = 4;
   inline bool has_radius() const;
   inline void clear_radius();
-  static const int kRadiusFieldNumber = 2;
+  static const int kRadiusFieldNumber = 4;
   inline float radius() const;
   inline void set_radius(float value);
 
   // @@protoc_insertion_point(class_scope:hdmap_proto.Cylinder)
  private:
-  inline void set_has_line();
-  inline void clear_has_line();
   inline void set_has_radius();
   inline void clear_has_radius();
 
@@ -420,7 +245,9 @@ class Cylinder : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::hdmap_proto::LineSegment* line_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d > points_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d > pred_points_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d > succ_points_;
   float radius_;
   friend void  protobuf_AddDesc_geometry_2eproto();
   friend void protobuf_AssignDesc_geometry_2eproto();
@@ -484,23 +311,23 @@ class Circle : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .hdmap_proto.Point center = 1;
+  // required .hdmap_proto.Vector3d center = 1;
   inline bool has_center() const;
   inline void clear_center();
   static const int kCenterFieldNumber = 1;
-  inline const ::hdmap_proto::Point& center() const;
-  inline ::hdmap_proto::Point* mutable_center();
-  inline ::hdmap_proto::Point* release_center();
-  inline void set_allocated_center(::hdmap_proto::Point* center);
+  inline const ::hdmap_proto::Vector3d& center() const;
+  inline ::hdmap_proto::Vector3d* mutable_center();
+  inline ::hdmap_proto::Vector3d* release_center();
+  inline void set_allocated_center(::hdmap_proto::Vector3d* center);
 
-  // required .hdmap_proto.Normal normal = 2;
+  // required .hdmap_proto.Vector3d normal = 2;
   inline bool has_normal() const;
   inline void clear_normal();
   static const int kNormalFieldNumber = 2;
-  inline const ::hdmap_proto::Normal& normal() const;
-  inline ::hdmap_proto::Normal* mutable_normal();
-  inline ::hdmap_proto::Normal* release_normal();
-  inline void set_allocated_normal(::hdmap_proto::Normal* normal);
+  inline const ::hdmap_proto::Vector3d& normal() const;
+  inline ::hdmap_proto::Vector3d* mutable_normal();
+  inline ::hdmap_proto::Vector3d* release_normal();
+  inline void set_allocated_normal(::hdmap_proto::Vector3d* normal);
 
   // required float radius = 3;
   inline bool has_radius() const;
@@ -522,8 +349,8 @@ class Circle : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::hdmap_proto::Point* center_;
-  ::hdmap_proto::Normal* normal_;
+  ::hdmap_proto::Vector3d* center_;
+  ::hdmap_proto::Vector3d* normal_;
   float radius_;
   friend void  protobuf_AddDesc_geometry_2eproto();
   friend void protobuf_AssignDesc_geometry_2eproto();
@@ -534,14 +361,14 @@ class Circle : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class PolyLine : public ::google::protobuf::Message {
+class CurveLine : public ::google::protobuf::Message {
  public:
-  PolyLine();
-  virtual ~PolyLine();
+  CurveLine();
+  virtual ~CurveLine();
 
-  PolyLine(const PolyLine& from);
+  CurveLine(const CurveLine& from);
 
-  inline PolyLine& operator=(const PolyLine& from) {
+  inline CurveLine& operator=(const CurveLine& from) {
     CopyFrom(from);
     return *this;
   }
@@ -555,17 +382,17 @@ class PolyLine : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const PolyLine& default_instance();
+  static const CurveLine& default_instance();
 
-  void Swap(PolyLine* other);
+  void Swap(CurveLine* other);
 
   // implements Message ----------------------------------------------
 
-  PolyLine* New() const;
+  CurveLine* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const PolyLine& from);
-  void MergeFrom(const PolyLine& from);
+  void CopyFrom(const CurveLine& from);
+  void MergeFrom(const CurveLine& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -587,196 +414,68 @@ class PolyLine : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .hdmap_proto.Point points = 1;
+  // repeated .hdmap_proto.Vector3d points = 1;
   inline int points_size() const;
   inline void clear_points();
   static const int kPointsFieldNumber = 1;
-  inline const ::hdmap_proto::Point& points(int index) const;
-  inline ::hdmap_proto::Point* mutable_points(int index);
-  inline ::hdmap_proto::Point* add_points();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
+  inline const ::hdmap_proto::Vector3d& points(int index) const;
+  inline ::hdmap_proto::Vector3d* mutable_points(int index);
+  inline ::hdmap_proto::Vector3d* add_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
       points() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
       mutable_points();
 
-  // @@protoc_insertion_point(class_scope:hdmap_proto.PolyLine)
+  // repeated .hdmap_proto.Vector3d pred_points = 2;
+  inline int pred_points_size() const;
+  inline void clear_pred_points();
+  static const int kPredPointsFieldNumber = 2;
+  inline const ::hdmap_proto::Vector3d& pred_points(int index) const;
+  inline ::hdmap_proto::Vector3d* mutable_pred_points(int index);
+  inline ::hdmap_proto::Vector3d* add_pred_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+      pred_points() const;
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+      mutable_pred_points();
+
+  // repeated .hdmap_proto.Vector3d succ_points = 3;
+  inline int succ_points_size() const;
+  inline void clear_succ_points();
+  static const int kSuccPointsFieldNumber = 3;
+  inline const ::hdmap_proto::Vector3d& succ_points(int index) const;
+  inline ::hdmap_proto::Vector3d* mutable_succ_points(int index);
+  inline ::hdmap_proto::Vector3d* add_succ_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+      succ_points() const;
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+      mutable_succ_points();
+
+  // optional float width = 4;
+  inline bool has_width() const;
+  inline void clear_width();
+  static const int kWidthFieldNumber = 4;
+  inline float width() const;
+  inline void set_width(float value);
+
+  // @@protoc_insertion_point(class_scope:hdmap_proto.CurveLine)
  private:
+  inline void set_has_width();
+  inline void clear_has_width();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point > points_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d > points_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d > pred_points_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d > succ_points_;
+  float width_;
   friend void  protobuf_AddDesc_geometry_2eproto();
   friend void protobuf_AssignDesc_geometry_2eproto();
   friend void protobuf_ShutdownFile_geometry_2eproto();
 
   void InitAsDefaultInstance();
-  static PolyLine* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class Rect : public ::google::protobuf::Message {
- public:
-  Rect();
-  virtual ~Rect();
-
-  Rect(const Rect& from);
-
-  inline Rect& operator=(const Rect& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Rect& default_instance();
-
-  void Swap(Rect* other);
-
-  // implements Message ----------------------------------------------
-
-  Rect* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Rect& from);
-  void MergeFrom(const Rect& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // repeated .hdmap_proto.Point points = 1;
-  inline int points_size() const;
-  inline void clear_points();
-  static const int kPointsFieldNumber = 1;
-  inline const ::hdmap_proto::Point& points(int index) const;
-  inline ::hdmap_proto::Point* mutable_points(int index);
-  inline ::hdmap_proto::Point* add_points();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
-      points() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
-      mutable_points();
-
-  // @@protoc_insertion_point(class_scope:hdmap_proto.Rect)
- private:
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point > points_;
-  friend void  protobuf_AddDesc_geometry_2eproto();
-  friend void protobuf_AssignDesc_geometry_2eproto();
-  friend void protobuf_ShutdownFile_geometry_2eproto();
-
-  void InitAsDefaultInstance();
-  static Rect* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class Cube : public ::google::protobuf::Message {
- public:
-  Cube();
-  virtual ~Cube();
-
-  Cube(const Cube& from);
-
-  inline Cube& operator=(const Cube& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Cube& default_instance();
-
-  void Swap(Cube* other);
-
-  // implements Message ----------------------------------------------
-
-  Cube* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Cube& from);
-  void MergeFrom(const Cube& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // repeated .hdmap_proto.Point points = 1;
-  inline int points_size() const;
-  inline void clear_points();
-  static const int kPointsFieldNumber = 1;
-  inline const ::hdmap_proto::Point& points(int index) const;
-  inline ::hdmap_proto::Point* mutable_points(int index);
-  inline ::hdmap_proto::Point* add_points();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
-      points() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
-      mutable_points();
-
-  // @@protoc_insertion_point(class_scope:hdmap_proto.Cube)
- private:
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point > points_;
-  friend void  protobuf_AddDesc_geometry_2eproto();
-  friend void protobuf_AssignDesc_geometry_2eproto();
-  friend void protobuf_ShutdownFile_geometry_2eproto();
-
-  void InitAsDefaultInstance();
-  static Cube* default_instance_;
+  static CurveLine* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -833,26 +532,36 @@ class Polygon : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .hdmap_proto.Point points = 1;
+  // repeated .hdmap_proto.Vector3d points = 1;
   inline int points_size() const;
   inline void clear_points();
   static const int kPointsFieldNumber = 1;
-  inline const ::hdmap_proto::Point& points(int index) const;
-  inline ::hdmap_proto::Point* mutable_points(int index);
-  inline ::hdmap_proto::Point* add_points();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
+  inline const ::hdmap_proto::Vector3d& points(int index) const;
+  inline ::hdmap_proto::Vector3d* mutable_points(int index);
+  inline ::hdmap_proto::Vector3d* add_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
       points() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
       mutable_points();
+
+  // optional float width = 2;
+  inline bool has_width() const;
+  inline void clear_width();
+  static const int kWidthFieldNumber = 2;
+  inline float width() const;
+  inline void set_width(float value);
 
   // @@protoc_insertion_point(class_scope:hdmap_proto.Polygon)
  private:
+  inline void set_has_width();
+  inline void clear_has_width();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point > points_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d > points_;
+  float width_;
   friend void  protobuf_AddDesc_geometry_2eproto();
   friend void protobuf_AssignDesc_geometry_2eproto();
   friend void protobuf_ShutdownFile_geometry_2eproto();
@@ -860,594 +569,188 @@ class Polygon : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static Polygon* default_instance_;
 };
-// -------------------------------------------------------------------
-
-class CurveControl : public ::google::protobuf::Message {
- public:
-  CurveControl();
-  virtual ~CurveControl();
-
-  CurveControl(const CurveControl& from);
-
-  inline CurveControl& operator=(const CurveControl& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const CurveControl& default_instance();
-
-  void Swap(CurveControl* other);
-
-  // implements Message ----------------------------------------------
-
-  CurveControl* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const CurveControl& from);
-  void MergeFrom(const CurveControl& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // required .hdmap_proto.Point point = 1;
-  inline bool has_point() const;
-  inline void clear_point();
-  static const int kPointFieldNumber = 1;
-  inline const ::hdmap_proto::Point& point() const;
-  inline ::hdmap_proto::Point* mutable_point();
-  inline ::hdmap_proto::Point* release_point();
-  inline void set_allocated_point(::hdmap_proto::Point* point);
-
-  // required .hdmap_proto.Point pre_point = 2;
-  inline bool has_pre_point() const;
-  inline void clear_pre_point();
-  static const int kPrePointFieldNumber = 2;
-  inline const ::hdmap_proto::Point& pre_point() const;
-  inline ::hdmap_proto::Point* mutable_pre_point();
-  inline ::hdmap_proto::Point* release_pre_point();
-  inline void set_allocated_pre_point(::hdmap_proto::Point* pre_point);
-
-  // required .hdmap_proto.Point suc_point = 3;
-  inline bool has_suc_point() const;
-  inline void clear_suc_point();
-  static const int kSucPointFieldNumber = 3;
-  inline const ::hdmap_proto::Point& suc_point() const;
-  inline ::hdmap_proto::Point* mutable_suc_point();
-  inline ::hdmap_proto::Point* release_suc_point();
-  inline void set_allocated_suc_point(::hdmap_proto::Point* suc_point);
-
-  // @@protoc_insertion_point(class_scope:hdmap_proto.CurveControl)
- private:
-  inline void set_has_point();
-  inline void clear_has_point();
-  inline void set_has_pre_point();
-  inline void clear_has_pre_point();
-  inline void set_has_suc_point();
-  inline void clear_has_suc_point();
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  ::hdmap_proto::Point* point_;
-  ::hdmap_proto::Point* pre_point_;
-  ::hdmap_proto::Point* suc_point_;
-  friend void  protobuf_AddDesc_geometry_2eproto();
-  friend void protobuf_AssignDesc_geometry_2eproto();
-  friend void protobuf_ShutdownFile_geometry_2eproto();
-
-  void InitAsDefaultInstance();
-  static CurveControl* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class Curve : public ::google::protobuf::Message {
- public:
-  Curve();
-  virtual ~Curve();
-
-  Curve(const Curve& from);
-
-  inline Curve& operator=(const Curve& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Curve& default_instance();
-
-  void Swap(Curve* other);
-
-  // implements Message ----------------------------------------------
-
-  Curve* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Curve& from);
-  void MergeFrom(const Curve& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // repeated .hdmap_proto.CurveControl controls = 1;
-  inline int controls_size() const;
-  inline void clear_controls();
-  static const int kControlsFieldNumber = 1;
-  inline const ::hdmap_proto::CurveControl& controls(int index) const;
-  inline ::hdmap_proto::CurveControl* mutable_controls(int index);
-  inline ::hdmap_proto::CurveControl* add_controls();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >&
-      controls() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >*
-      mutable_controls();
-
-  // @@protoc_insertion_point(class_scope:hdmap_proto.Curve)
- private:
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl > controls_;
-  friend void  protobuf_AddDesc_geometry_2eproto();
-  friend void protobuf_AssignDesc_geometry_2eproto();
-  friend void protobuf_ShutdownFile_geometry_2eproto();
-
-  void InitAsDefaultInstance();
-  static Curve* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class ParkingSlot : public ::google::protobuf::Message {
- public:
-  ParkingSlot();
-  virtual ~ParkingSlot();
-
-  ParkingSlot(const ParkingSlot& from);
-
-  inline ParkingSlot& operator=(const ParkingSlot& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const ParkingSlot& default_instance();
-
-  void Swap(ParkingSlot* other);
-
-  // implements Message ----------------------------------------------
-
-  ParkingSlot* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const ParkingSlot& from);
-  void MergeFrom(const ParkingSlot& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // required .hdmap_proto.Id id = 1;
-  inline bool has_id() const;
-  inline void clear_id();
-  static const int kIdFieldNumber = 1;
-  inline const ::hdmap_proto::Id& id() const;
-  inline ::hdmap_proto::Id* mutable_id();
-  inline ::hdmap_proto::Id* release_id();
-  inline void set_allocated_id(::hdmap_proto::Id* id);
-
-  // required .hdmap_proto.Polygon polygon = 2;
-  inline bool has_polygon() const;
-  inline void clear_polygon();
-  static const int kPolygonFieldNumber = 2;
-  inline const ::hdmap_proto::Polygon& polygon() const;
-  inline ::hdmap_proto::Polygon* mutable_polygon();
-  inline ::hdmap_proto::Polygon* release_polygon();
-  inline void set_allocated_polygon(::hdmap_proto::Polygon* polygon);
-
-  // repeated .hdmap_proto.Id link_ids = 3;
-  inline int link_ids_size() const;
-  inline void clear_link_ids();
-  static const int kLinkIdsFieldNumber = 3;
-  inline const ::hdmap_proto::Id& link_ids(int index) const;
-  inline ::hdmap_proto::Id* mutable_link_ids(int index);
-  inline ::hdmap_proto::Id* add_link_ids();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id >&
-      link_ids() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id >*
-      mutable_link_ids();
-
-  // @@protoc_insertion_point(class_scope:hdmap_proto.ParkingSlot)
- private:
-  inline void set_has_id();
-  inline void clear_has_id();
-  inline void set_has_polygon();
-  inline void clear_has_polygon();
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  ::hdmap_proto::Id* id_;
-  ::hdmap_proto::Polygon* polygon_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id > link_ids_;
-  friend void  protobuf_AddDesc_geometry_2eproto();
-  friend void protobuf_AssignDesc_geometry_2eproto();
-  friend void protobuf_ShutdownFile_geometry_2eproto();
-
-  void InitAsDefaultInstance();
-  static ParkingSlot* default_instance_;
-};
 // ===================================================================
 
 
 // ===================================================================
 
-// Point
+// Vector3d
 
 // required double x = 1;
-inline bool Point::has_x() const {
+inline bool Vector3d::has_x() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Point::set_has_x() {
+inline void Vector3d::set_has_x() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Point::clear_has_x() {
+inline void Vector3d::clear_has_x() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Point::clear_x() {
+inline void Vector3d::clear_x() {
   x_ = 0;
   clear_has_x();
 }
-inline double Point::x() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Point.x)
+inline double Vector3d::x() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Vector3d.x)
   return x_;
 }
-inline void Point::set_x(double value) {
+inline void Vector3d::set_x(double value) {
   set_has_x();
   x_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Point.x)
+  // @@protoc_insertion_point(field_set:hdmap_proto.Vector3d.x)
 }
 
 // required double y = 2;
-inline bool Point::has_y() const {
+inline bool Vector3d::has_y() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Point::set_has_y() {
+inline void Vector3d::set_has_y() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Point::clear_has_y() {
+inline void Vector3d::clear_has_y() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Point::clear_y() {
+inline void Vector3d::clear_y() {
   y_ = 0;
   clear_has_y();
 }
-inline double Point::y() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Point.y)
+inline double Vector3d::y() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Vector3d.y)
   return y_;
 }
-inline void Point::set_y(double value) {
+inline void Vector3d::set_y(double value) {
   set_has_y();
   y_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Point.y)
+  // @@protoc_insertion_point(field_set:hdmap_proto.Vector3d.y)
 }
 
 // required double z = 3;
-inline bool Point::has_z() const {
+inline bool Vector3d::has_z() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Point::set_has_z() {
+inline void Vector3d::set_has_z() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Point::clear_has_z() {
+inline void Vector3d::clear_has_z() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Point::clear_z() {
+inline void Vector3d::clear_z() {
   z_ = 0;
   clear_has_z();
 }
-inline double Point::z() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Point.z)
+inline double Vector3d::z() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Vector3d.z)
   return z_;
 }
-inline void Point::set_z(double value) {
+inline void Vector3d::set_z(double value) {
   set_has_z();
   z_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Point.z)
-}
-
-// -------------------------------------------------------------------
-
-// Normal
-
-// required float x = 1;
-inline bool Normal::has_x() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void Normal::set_has_x() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void Normal::clear_has_x() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void Normal::clear_x() {
-  x_ = 0;
-  clear_has_x();
-}
-inline float Normal::x() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Normal.x)
-  return x_;
-}
-inline void Normal::set_x(float value) {
-  set_has_x();
-  x_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Normal.x)
-}
-
-// required float y = 2;
-inline bool Normal::has_y() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void Normal::set_has_y() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void Normal::clear_has_y() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void Normal::clear_y() {
-  y_ = 0;
-  clear_has_y();
-}
-inline float Normal::y() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Normal.y)
-  return y_;
-}
-inline void Normal::set_y(float value) {
-  set_has_y();
-  y_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Normal.y)
-}
-
-// required float z = 3;
-inline bool Normal::has_z() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void Normal::set_has_z() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void Normal::clear_has_z() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void Normal::clear_z() {
-  z_ = 0;
-  clear_has_z();
-}
-inline float Normal::z() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Normal.z)
-  return z_;
-}
-inline void Normal::set_z(float value) {
-  set_has_z();
-  z_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Normal.z)
-}
-
-// -------------------------------------------------------------------
-
-// LineSegment
-
-// required .hdmap_proto.Point start = 1;
-inline bool LineSegment::has_start() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void LineSegment::set_has_start() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void LineSegment::clear_has_start() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void LineSegment::clear_start() {
-  if (start_ != NULL) start_->::hdmap_proto::Point::Clear();
-  clear_has_start();
-}
-inline const ::hdmap_proto::Point& LineSegment::start() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.LineSegment.start)
-  return start_ != NULL ? *start_ : *default_instance_->start_;
-}
-inline ::hdmap_proto::Point* LineSegment::mutable_start() {
-  set_has_start();
-  if (start_ == NULL) start_ = new ::hdmap_proto::Point;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.LineSegment.start)
-  return start_;
-}
-inline ::hdmap_proto::Point* LineSegment::release_start() {
-  clear_has_start();
-  ::hdmap_proto::Point* temp = start_;
-  start_ = NULL;
-  return temp;
-}
-inline void LineSegment::set_allocated_start(::hdmap_proto::Point* start) {
-  delete start_;
-  start_ = start;
-  if (start) {
-    set_has_start();
-  } else {
-    clear_has_start();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.LineSegment.start)
-}
-
-// required .hdmap_proto.Point end = 2;
-inline bool LineSegment::has_end() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void LineSegment::set_has_end() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void LineSegment::clear_has_end() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void LineSegment::clear_end() {
-  if (end_ != NULL) end_->::hdmap_proto::Point::Clear();
-  clear_has_end();
-}
-inline const ::hdmap_proto::Point& LineSegment::end() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.LineSegment.end)
-  return end_ != NULL ? *end_ : *default_instance_->end_;
-}
-inline ::hdmap_proto::Point* LineSegment::mutable_end() {
-  set_has_end();
-  if (end_ == NULL) end_ = new ::hdmap_proto::Point;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.LineSegment.end)
-  return end_;
-}
-inline ::hdmap_proto::Point* LineSegment::release_end() {
-  clear_has_end();
-  ::hdmap_proto::Point* temp = end_;
-  end_ = NULL;
-  return temp;
-}
-inline void LineSegment::set_allocated_end(::hdmap_proto::Point* end) {
-  delete end_;
-  end_ = end;
-  if (end) {
-    set_has_end();
-  } else {
-    clear_has_end();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.LineSegment.end)
+  // @@protoc_insertion_point(field_set:hdmap_proto.Vector3d.z)
 }
 
 // -------------------------------------------------------------------
 
 // Cylinder
 
-// required .hdmap_proto.LineSegment line = 1;
-inline bool Cylinder::has_line() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+// repeated .hdmap_proto.Vector3d points = 1;
+inline int Cylinder::points_size() const {
+  return points_.size();
 }
-inline void Cylinder::set_has_line() {
-  _has_bits_[0] |= 0x00000001u;
+inline void Cylinder::clear_points() {
+  points_.Clear();
 }
-inline void Cylinder::clear_has_line() {
-  _has_bits_[0] &= ~0x00000001u;
+inline const ::hdmap_proto::Vector3d& Cylinder::points(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Cylinder.points)
+  return points_.Get(index);
 }
-inline void Cylinder::clear_line() {
-  if (line_ != NULL) line_->::hdmap_proto::LineSegment::Clear();
-  clear_has_line();
+inline ::hdmap_proto::Vector3d* Cylinder::mutable_points(int index) {
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.Cylinder.points)
+  return points_.Mutable(index);
 }
-inline const ::hdmap_proto::LineSegment& Cylinder::line() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Cylinder.line)
-  return line_ != NULL ? *line_ : *default_instance_->line_;
+inline ::hdmap_proto::Vector3d* Cylinder::add_points() {
+  // @@protoc_insertion_point(field_add:hdmap_proto.Cylinder.points)
+  return points_.Add();
 }
-inline ::hdmap_proto::LineSegment* Cylinder::mutable_line() {
-  set_has_line();
-  if (line_ == NULL) line_ = new ::hdmap_proto::LineSegment;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.Cylinder.line)
-  return line_;
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+Cylinder::points() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.Cylinder.points)
+  return points_;
 }
-inline ::hdmap_proto::LineSegment* Cylinder::release_line() {
-  clear_has_line();
-  ::hdmap_proto::LineSegment* temp = line_;
-  line_ = NULL;
-  return temp;
-}
-inline void Cylinder::set_allocated_line(::hdmap_proto::LineSegment* line) {
-  delete line_;
-  line_ = line;
-  if (line) {
-    set_has_line();
-  } else {
-    clear_has_line();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.Cylinder.line)
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+Cylinder::mutable_points() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Cylinder.points)
+  return &points_;
 }
 
-// required float radius = 2;
+// repeated .hdmap_proto.Vector3d pred_points = 2;
+inline int Cylinder::pred_points_size() const {
+  return pred_points_.size();
+}
+inline void Cylinder::clear_pred_points() {
+  pred_points_.Clear();
+}
+inline const ::hdmap_proto::Vector3d& Cylinder::pred_points(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Cylinder.pred_points)
+  return pred_points_.Get(index);
+}
+inline ::hdmap_proto::Vector3d* Cylinder::mutable_pred_points(int index) {
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.Cylinder.pred_points)
+  return pred_points_.Mutable(index);
+}
+inline ::hdmap_proto::Vector3d* Cylinder::add_pred_points() {
+  // @@protoc_insertion_point(field_add:hdmap_proto.Cylinder.pred_points)
+  return pred_points_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+Cylinder::pred_points() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.Cylinder.pred_points)
+  return pred_points_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+Cylinder::mutable_pred_points() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Cylinder.pred_points)
+  return &pred_points_;
+}
+
+// repeated .hdmap_proto.Vector3d succ_points = 3;
+inline int Cylinder::succ_points_size() const {
+  return succ_points_.size();
+}
+inline void Cylinder::clear_succ_points() {
+  succ_points_.Clear();
+}
+inline const ::hdmap_proto::Vector3d& Cylinder::succ_points(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Cylinder.succ_points)
+  return succ_points_.Get(index);
+}
+inline ::hdmap_proto::Vector3d* Cylinder::mutable_succ_points(int index) {
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.Cylinder.succ_points)
+  return succ_points_.Mutable(index);
+}
+inline ::hdmap_proto::Vector3d* Cylinder::add_succ_points() {
+  // @@protoc_insertion_point(field_add:hdmap_proto.Cylinder.succ_points)
+  return succ_points_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+Cylinder::succ_points() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.Cylinder.succ_points)
+  return succ_points_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+Cylinder::mutable_succ_points() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Cylinder.succ_points)
+  return &succ_points_;
+}
+
+// optional float radius = 4;
 inline bool Cylinder::has_radius() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void Cylinder::set_has_radius() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void Cylinder::clear_has_radius() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void Cylinder::clear_radius() {
   radius_ = 0;
@@ -1467,7 +770,7 @@ inline void Cylinder::set_radius(float value) {
 
 // Circle
 
-// required .hdmap_proto.Point center = 1;
+// required .hdmap_proto.Vector3d center = 1;
 inline bool Circle::has_center() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -1478,26 +781,26 @@ inline void Circle::clear_has_center() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void Circle::clear_center() {
-  if (center_ != NULL) center_->::hdmap_proto::Point::Clear();
+  if (center_ != NULL) center_->::hdmap_proto::Vector3d::Clear();
   clear_has_center();
 }
-inline const ::hdmap_proto::Point& Circle::center() const {
+inline const ::hdmap_proto::Vector3d& Circle::center() const {
   // @@protoc_insertion_point(field_get:hdmap_proto.Circle.center)
   return center_ != NULL ? *center_ : *default_instance_->center_;
 }
-inline ::hdmap_proto::Point* Circle::mutable_center() {
+inline ::hdmap_proto::Vector3d* Circle::mutable_center() {
   set_has_center();
-  if (center_ == NULL) center_ = new ::hdmap_proto::Point;
+  if (center_ == NULL) center_ = new ::hdmap_proto::Vector3d;
   // @@protoc_insertion_point(field_mutable:hdmap_proto.Circle.center)
   return center_;
 }
-inline ::hdmap_proto::Point* Circle::release_center() {
+inline ::hdmap_proto::Vector3d* Circle::release_center() {
   clear_has_center();
-  ::hdmap_proto::Point* temp = center_;
+  ::hdmap_proto::Vector3d* temp = center_;
   center_ = NULL;
   return temp;
 }
-inline void Circle::set_allocated_center(::hdmap_proto::Point* center) {
+inline void Circle::set_allocated_center(::hdmap_proto::Vector3d* center) {
   delete center_;
   center_ = center;
   if (center) {
@@ -1508,7 +811,7 @@ inline void Circle::set_allocated_center(::hdmap_proto::Point* center) {
   // @@protoc_insertion_point(field_set_allocated:hdmap_proto.Circle.center)
 }
 
-// required .hdmap_proto.Normal normal = 2;
+// required .hdmap_proto.Vector3d normal = 2;
 inline bool Circle::has_normal() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -1519,26 +822,26 @@ inline void Circle::clear_has_normal() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void Circle::clear_normal() {
-  if (normal_ != NULL) normal_->::hdmap_proto::Normal::Clear();
+  if (normal_ != NULL) normal_->::hdmap_proto::Vector3d::Clear();
   clear_has_normal();
 }
-inline const ::hdmap_proto::Normal& Circle::normal() const {
+inline const ::hdmap_proto::Vector3d& Circle::normal() const {
   // @@protoc_insertion_point(field_get:hdmap_proto.Circle.normal)
   return normal_ != NULL ? *normal_ : *default_instance_->normal_;
 }
-inline ::hdmap_proto::Normal* Circle::mutable_normal() {
+inline ::hdmap_proto::Vector3d* Circle::mutable_normal() {
   set_has_normal();
-  if (normal_ == NULL) normal_ = new ::hdmap_proto::Normal;
+  if (normal_ == NULL) normal_ = new ::hdmap_proto::Vector3d;
   // @@protoc_insertion_point(field_mutable:hdmap_proto.Circle.normal)
   return normal_;
 }
-inline ::hdmap_proto::Normal* Circle::release_normal() {
+inline ::hdmap_proto::Vector3d* Circle::release_normal() {
   clear_has_normal();
-  ::hdmap_proto::Normal* temp = normal_;
+  ::hdmap_proto::Vector3d* temp = normal_;
   normal_ = NULL;
   return temp;
 }
-inline void Circle::set_allocated_normal(::hdmap_proto::Normal* normal) {
+inline void Circle::set_allocated_normal(::hdmap_proto::Vector3d* normal) {
   delete normal_;
   normal_ = normal;
   if (normal) {
@@ -1575,415 +878,178 @@ inline void Circle::set_radius(float value) {
 
 // -------------------------------------------------------------------
 
-// PolyLine
+// CurveLine
 
-// repeated .hdmap_proto.Point points = 1;
-inline int PolyLine::points_size() const {
+// repeated .hdmap_proto.Vector3d points = 1;
+inline int CurveLine::points_size() const {
   return points_.size();
 }
-inline void PolyLine::clear_points() {
+inline void CurveLine::clear_points() {
   points_.Clear();
 }
-inline const ::hdmap_proto::Point& PolyLine::points(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.PolyLine.points)
+inline const ::hdmap_proto::Vector3d& CurveLine::points(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.CurveLine.points)
   return points_.Get(index);
 }
-inline ::hdmap_proto::Point* PolyLine::mutable_points(int index) {
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.PolyLine.points)
+inline ::hdmap_proto::Vector3d* CurveLine::mutable_points(int index) {
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.CurveLine.points)
   return points_.Mutable(index);
 }
-inline ::hdmap_proto::Point* PolyLine::add_points() {
-  // @@protoc_insertion_point(field_add:hdmap_proto.PolyLine.points)
+inline ::hdmap_proto::Vector3d* CurveLine::add_points() {
+  // @@protoc_insertion_point(field_add:hdmap_proto.CurveLine.points)
   return points_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
-PolyLine::points() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.PolyLine.points)
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+CurveLine::points() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.CurveLine.points)
   return points_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
-PolyLine::mutable_points() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.PolyLine.points)
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+CurveLine::mutable_points() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.CurveLine.points)
   return &points_;
 }
 
-// -------------------------------------------------------------------
-
-// Rect
-
-// repeated .hdmap_proto.Point points = 1;
-inline int Rect::points_size() const {
-  return points_.size();
+// repeated .hdmap_proto.Vector3d pred_points = 2;
+inline int CurveLine::pred_points_size() const {
+  return pred_points_.size();
 }
-inline void Rect::clear_points() {
-  points_.Clear();
+inline void CurveLine::clear_pred_points() {
+  pred_points_.Clear();
 }
-inline const ::hdmap_proto::Point& Rect::points(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Rect.points)
-  return points_.Get(index);
+inline const ::hdmap_proto::Vector3d& CurveLine::pred_points(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.CurveLine.pred_points)
+  return pred_points_.Get(index);
 }
-inline ::hdmap_proto::Point* Rect::mutable_points(int index) {
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.Rect.points)
-  return points_.Mutable(index);
+inline ::hdmap_proto::Vector3d* CurveLine::mutable_pred_points(int index) {
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.CurveLine.pred_points)
+  return pred_points_.Mutable(index);
 }
-inline ::hdmap_proto::Point* Rect::add_points() {
-  // @@protoc_insertion_point(field_add:hdmap_proto.Rect.points)
-  return points_.Add();
+inline ::hdmap_proto::Vector3d* CurveLine::add_pred_points() {
+  // @@protoc_insertion_point(field_add:hdmap_proto.CurveLine.pred_points)
+  return pred_points_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
-Rect::points() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.Rect.points)
-  return points_;
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+CurveLine::pred_points() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.CurveLine.pred_points)
+  return pred_points_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
-Rect::mutable_points() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Rect.points)
-  return &points_;
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+CurveLine::mutable_pred_points() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.CurveLine.pred_points)
+  return &pred_points_;
 }
 
-// -------------------------------------------------------------------
+// repeated .hdmap_proto.Vector3d succ_points = 3;
+inline int CurveLine::succ_points_size() const {
+  return succ_points_.size();
+}
+inline void CurveLine::clear_succ_points() {
+  succ_points_.Clear();
+}
+inline const ::hdmap_proto::Vector3d& CurveLine::succ_points(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.CurveLine.succ_points)
+  return succ_points_.Get(index);
+}
+inline ::hdmap_proto::Vector3d* CurveLine::mutable_succ_points(int index) {
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.CurveLine.succ_points)
+  return succ_points_.Mutable(index);
+}
+inline ::hdmap_proto::Vector3d* CurveLine::add_succ_points() {
+  // @@protoc_insertion_point(field_add:hdmap_proto.CurveLine.succ_points)
+  return succ_points_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
+CurveLine::succ_points() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.CurveLine.succ_points)
+  return succ_points_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
+CurveLine::mutable_succ_points() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.CurveLine.succ_points)
+  return &succ_points_;
+}
 
-// Cube
-
-// repeated .hdmap_proto.Point points = 1;
-inline int Cube::points_size() const {
-  return points_.size();
+// optional float width = 4;
+inline bool CurveLine::has_width() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void Cube::clear_points() {
-  points_.Clear();
+inline void CurveLine::set_has_width() {
+  _has_bits_[0] |= 0x00000008u;
 }
-inline const ::hdmap_proto::Point& Cube::points(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Cube.points)
-  return points_.Get(index);
+inline void CurveLine::clear_has_width() {
+  _has_bits_[0] &= ~0x00000008u;
 }
-inline ::hdmap_proto::Point* Cube::mutable_points(int index) {
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.Cube.points)
-  return points_.Mutable(index);
+inline void CurveLine::clear_width() {
+  width_ = 0;
+  clear_has_width();
 }
-inline ::hdmap_proto::Point* Cube::add_points() {
-  // @@protoc_insertion_point(field_add:hdmap_proto.Cube.points)
-  return points_.Add();
+inline float CurveLine::width() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.CurveLine.width)
+  return width_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
-Cube::points() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.Cube.points)
-  return points_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
-Cube::mutable_points() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Cube.points)
-  return &points_;
+inline void CurveLine::set_width(float value) {
+  set_has_width();
+  width_ = value;
+  // @@protoc_insertion_point(field_set:hdmap_proto.CurveLine.width)
 }
 
 // -------------------------------------------------------------------
 
 // Polygon
 
-// repeated .hdmap_proto.Point points = 1;
+// repeated .hdmap_proto.Vector3d points = 1;
 inline int Polygon::points_size() const {
   return points_.size();
 }
 inline void Polygon::clear_points() {
   points_.Clear();
 }
-inline const ::hdmap_proto::Point& Polygon::points(int index) const {
+inline const ::hdmap_proto::Vector3d& Polygon::points(int index) const {
   // @@protoc_insertion_point(field_get:hdmap_proto.Polygon.points)
   return points_.Get(index);
 }
-inline ::hdmap_proto::Point* Polygon::mutable_points(int index) {
+inline ::hdmap_proto::Vector3d* Polygon::mutable_points(int index) {
   // @@protoc_insertion_point(field_mutable:hdmap_proto.Polygon.points)
   return points_.Mutable(index);
 }
-inline ::hdmap_proto::Point* Polygon::add_points() {
+inline ::hdmap_proto::Vector3d* Polygon::add_points() {
   // @@protoc_insertion_point(field_add:hdmap_proto.Polygon.points)
   return points_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >&
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >&
 Polygon::points() const {
   // @@protoc_insertion_point(field_list:hdmap_proto.Polygon.points)
   return points_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Point >*
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Vector3d >*
 Polygon::mutable_points() {
   // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Polygon.points)
   return &points_;
 }
 
-// -------------------------------------------------------------------
-
-// CurveControl
-
-// required .hdmap_proto.Point point = 1;
-inline bool CurveControl::has_point() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void CurveControl::set_has_point() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void CurveControl::clear_has_point() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void CurveControl::clear_point() {
-  if (point_ != NULL) point_->::hdmap_proto::Point::Clear();
-  clear_has_point();
-}
-inline const ::hdmap_proto::Point& CurveControl::point() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.CurveControl.point)
-  return point_ != NULL ? *point_ : *default_instance_->point_;
-}
-inline ::hdmap_proto::Point* CurveControl::mutable_point() {
-  set_has_point();
-  if (point_ == NULL) point_ = new ::hdmap_proto::Point;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.CurveControl.point)
-  return point_;
-}
-inline ::hdmap_proto::Point* CurveControl::release_point() {
-  clear_has_point();
-  ::hdmap_proto::Point* temp = point_;
-  point_ = NULL;
-  return temp;
-}
-inline void CurveControl::set_allocated_point(::hdmap_proto::Point* point) {
-  delete point_;
-  point_ = point;
-  if (point) {
-    set_has_point();
-  } else {
-    clear_has_point();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.CurveControl.point)
-}
-
-// required .hdmap_proto.Point pre_point = 2;
-inline bool CurveControl::has_pre_point() const {
+// optional float width = 2;
+inline bool Polygon::has_width() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void CurveControl::set_has_pre_point() {
+inline void Polygon::set_has_width() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void CurveControl::clear_has_pre_point() {
+inline void Polygon::clear_has_width() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void CurveControl::clear_pre_point() {
-  if (pre_point_ != NULL) pre_point_->::hdmap_proto::Point::Clear();
-  clear_has_pre_point();
+inline void Polygon::clear_width() {
+  width_ = 0;
+  clear_has_width();
 }
-inline const ::hdmap_proto::Point& CurveControl::pre_point() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.CurveControl.pre_point)
-  return pre_point_ != NULL ? *pre_point_ : *default_instance_->pre_point_;
+inline float Polygon::width() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Polygon.width)
+  return width_;
 }
-inline ::hdmap_proto::Point* CurveControl::mutable_pre_point() {
-  set_has_pre_point();
-  if (pre_point_ == NULL) pre_point_ = new ::hdmap_proto::Point;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.CurveControl.pre_point)
-  return pre_point_;
-}
-inline ::hdmap_proto::Point* CurveControl::release_pre_point() {
-  clear_has_pre_point();
-  ::hdmap_proto::Point* temp = pre_point_;
-  pre_point_ = NULL;
-  return temp;
-}
-inline void CurveControl::set_allocated_pre_point(::hdmap_proto::Point* pre_point) {
-  delete pre_point_;
-  pre_point_ = pre_point;
-  if (pre_point) {
-    set_has_pre_point();
-  } else {
-    clear_has_pre_point();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.CurveControl.pre_point)
-}
-
-// required .hdmap_proto.Point suc_point = 3;
-inline bool CurveControl::has_suc_point() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void CurveControl::set_has_suc_point() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void CurveControl::clear_has_suc_point() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void CurveControl::clear_suc_point() {
-  if (suc_point_ != NULL) suc_point_->::hdmap_proto::Point::Clear();
-  clear_has_suc_point();
-}
-inline const ::hdmap_proto::Point& CurveControl::suc_point() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.CurveControl.suc_point)
-  return suc_point_ != NULL ? *suc_point_ : *default_instance_->suc_point_;
-}
-inline ::hdmap_proto::Point* CurveControl::mutable_suc_point() {
-  set_has_suc_point();
-  if (suc_point_ == NULL) suc_point_ = new ::hdmap_proto::Point;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.CurveControl.suc_point)
-  return suc_point_;
-}
-inline ::hdmap_proto::Point* CurveControl::release_suc_point() {
-  clear_has_suc_point();
-  ::hdmap_proto::Point* temp = suc_point_;
-  suc_point_ = NULL;
-  return temp;
-}
-inline void CurveControl::set_allocated_suc_point(::hdmap_proto::Point* suc_point) {
-  delete suc_point_;
-  suc_point_ = suc_point;
-  if (suc_point) {
-    set_has_suc_point();
-  } else {
-    clear_has_suc_point();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.CurveControl.suc_point)
-}
-
-// -------------------------------------------------------------------
-
-// Curve
-
-// repeated .hdmap_proto.CurveControl controls = 1;
-inline int Curve::controls_size() const {
-  return controls_.size();
-}
-inline void Curve::clear_controls() {
-  controls_.Clear();
-}
-inline const ::hdmap_proto::CurveControl& Curve::controls(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Curve.controls)
-  return controls_.Get(index);
-}
-inline ::hdmap_proto::CurveControl* Curve::mutable_controls(int index) {
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.Curve.controls)
-  return controls_.Mutable(index);
-}
-inline ::hdmap_proto::CurveControl* Curve::add_controls() {
-  // @@protoc_insertion_point(field_add:hdmap_proto.Curve.controls)
-  return controls_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >&
-Curve::controls() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.Curve.controls)
-  return controls_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >*
-Curve::mutable_controls() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Curve.controls)
-  return &controls_;
-}
-
-// -------------------------------------------------------------------
-
-// ParkingSlot
-
-// required .hdmap_proto.Id id = 1;
-inline bool ParkingSlot::has_id() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void ParkingSlot::set_has_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void ParkingSlot::clear_has_id() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void ParkingSlot::clear_id() {
-  if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
-  clear_has_id();
-}
-inline const ::hdmap_proto::Id& ParkingSlot::id() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.ParkingSlot.id)
-  return id_ != NULL ? *id_ : *default_instance_->id_;
-}
-inline ::hdmap_proto::Id* ParkingSlot::mutable_id() {
-  set_has_id();
-  if (id_ == NULL) id_ = new ::hdmap_proto::Id;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.ParkingSlot.id)
-  return id_;
-}
-inline ::hdmap_proto::Id* ParkingSlot::release_id() {
-  clear_has_id();
-  ::hdmap_proto::Id* temp = id_;
-  id_ = NULL;
-  return temp;
-}
-inline void ParkingSlot::set_allocated_id(::hdmap_proto::Id* id) {
-  delete id_;
-  id_ = id;
-  if (id) {
-    set_has_id();
-  } else {
-    clear_has_id();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.ParkingSlot.id)
-}
-
-// required .hdmap_proto.Polygon polygon = 2;
-inline bool ParkingSlot::has_polygon() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void ParkingSlot::set_has_polygon() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void ParkingSlot::clear_has_polygon() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void ParkingSlot::clear_polygon() {
-  if (polygon_ != NULL) polygon_->::hdmap_proto::Polygon::Clear();
-  clear_has_polygon();
-}
-inline const ::hdmap_proto::Polygon& ParkingSlot::polygon() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.ParkingSlot.polygon)
-  return polygon_ != NULL ? *polygon_ : *default_instance_->polygon_;
-}
-inline ::hdmap_proto::Polygon* ParkingSlot::mutable_polygon() {
-  set_has_polygon();
-  if (polygon_ == NULL) polygon_ = new ::hdmap_proto::Polygon;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.ParkingSlot.polygon)
-  return polygon_;
-}
-inline ::hdmap_proto::Polygon* ParkingSlot::release_polygon() {
-  clear_has_polygon();
-  ::hdmap_proto::Polygon* temp = polygon_;
-  polygon_ = NULL;
-  return temp;
-}
-inline void ParkingSlot::set_allocated_polygon(::hdmap_proto::Polygon* polygon) {
-  delete polygon_;
-  polygon_ = polygon;
-  if (polygon) {
-    set_has_polygon();
-  } else {
-    clear_has_polygon();
-  }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.ParkingSlot.polygon)
-}
-
-// repeated .hdmap_proto.Id link_ids = 3;
-inline int ParkingSlot::link_ids_size() const {
-  return link_ids_.size();
-}
-inline void ParkingSlot::clear_link_ids() {
-  link_ids_.Clear();
-}
-inline const ::hdmap_proto::Id& ParkingSlot::link_ids(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.ParkingSlot.link_ids)
-  return link_ids_.Get(index);
-}
-inline ::hdmap_proto::Id* ParkingSlot::mutable_link_ids(int index) {
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.ParkingSlot.link_ids)
-  return link_ids_.Mutable(index);
-}
-inline ::hdmap_proto::Id* ParkingSlot::add_link_ids() {
-  // @@protoc_insertion_point(field_add:hdmap_proto.ParkingSlot.link_ids)
-  return link_ids_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id >&
-ParkingSlot::link_ids() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.ParkingSlot.link_ids)
-  return link_ids_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id >*
-ParkingSlot::mutable_link_ids() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.ParkingSlot.link_ids)
-  return &link_ids_;
+inline void Polygon::set_width(float value) {
+  set_has_width();
+  width_ = value;
+  // @@protoc_insertion_point(field_set:hdmap_proto.Polygon.width)
 }
 
 

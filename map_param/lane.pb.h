@@ -26,7 +26,6 @@
 #include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 #include "id.pb.h"
-#include "attribute.pb.h"
 #include "geometry.pb.h"
 #include "lane_marking.pb.h"
 #include "traffic_light.pb.h"
@@ -42,27 +41,27 @@ void protobuf_ShutdownFile_lane_2eproto();
 
 class Lane;
 
-enum Lane_LaneType {
-  Lane_LaneType_NONE = 0,
-  Lane_LaneType_CITY_DRIVING = 1,
-  Lane_LaneType_BIKING = 2,
-  Lane_LaneType_SIDEWALK = 3,
-  Lane_LaneType_PARKING = 4
+enum Lane_LaneFunction {
+  Lane_LaneFunction_NONE = 0,
+  Lane_LaneFunction_CITY_DRIVING = 1,
+  Lane_LaneFunction_BIKING = 2,
+  Lane_LaneFunction_SIDEWALK = 3,
+  Lane_LaneFunction_PARKING = 4
 };
-bool Lane_LaneType_IsValid(int value);
-const Lane_LaneType Lane_LaneType_LaneType_MIN = Lane_LaneType_NONE;
-const Lane_LaneType Lane_LaneType_LaneType_MAX = Lane_LaneType_PARKING;
-const int Lane_LaneType_LaneType_ARRAYSIZE = Lane_LaneType_LaneType_MAX + 1;
+bool Lane_LaneFunction_IsValid(int value);
+const Lane_LaneFunction Lane_LaneFunction_LaneFunction_MIN = Lane_LaneFunction_NONE;
+const Lane_LaneFunction Lane_LaneFunction_LaneFunction_MAX = Lane_LaneFunction_PARKING;
+const int Lane_LaneFunction_LaneFunction_ARRAYSIZE = Lane_LaneFunction_LaneFunction_MAX + 1;
 
-const ::google::protobuf::EnumDescriptor* Lane_LaneType_descriptor();
-inline const ::std::string& Lane_LaneType_Name(Lane_LaneType value) {
+const ::google::protobuf::EnumDescriptor* Lane_LaneFunction_descriptor();
+inline const ::std::string& Lane_LaneFunction_Name(Lane_LaneFunction value) {
   return ::google::protobuf::internal::NameOfEnum(
-    Lane_LaneType_descriptor(), value);
+    Lane_LaneFunction_descriptor(), value);
 }
-inline bool Lane_LaneType_Parse(
-    const ::std::string& name, Lane_LaneType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<Lane_LaneType>(
-    Lane_LaneType_descriptor(), name, value);
+inline bool Lane_LaneFunction_Parse(
+    const ::std::string& name, Lane_LaneFunction* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<Lane_LaneFunction>(
+    Lane_LaneFunction_descriptor(), name, value);
 }
 enum Lane_LaneDirection {
   Lane_LaneDirection_FORWARD = 1,
@@ -83,6 +82,32 @@ inline bool Lane_LaneDirection_Parse(
     const ::std::string& name, Lane_LaneDirection* value) {
   return ::google::protobuf::internal::ParseNamedEnum<Lane_LaneDirection>(
     Lane_LaneDirection_descriptor(), name, value);
+}
+enum Lane_LaneStyle {
+  Lane_LaneStyle_UNKNOWN = 0,
+  Lane_LaneStyle_DOTTED_YELLOW_LINE = 1,
+  Lane_LaneStyle_DOTTED_YELLOW_BLANK = 2,
+  Lane_LaneStyle_DOTTED_WHITE_LINE = 3,
+  Lane_LaneStyle_DOTTED_WHITE_BLANK = 4,
+  Lane_LaneStyle_SOLID_YELLOW = 5,
+  Lane_LaneStyle_SOLID_WHITE = 6,
+  Lane_LaneStyle_DOUBLE_YELLOW = 7,
+  Lane_LaneStyle_CURB = 8
+};
+bool Lane_LaneStyle_IsValid(int value);
+const Lane_LaneStyle Lane_LaneStyle_LaneStyle_MIN = Lane_LaneStyle_UNKNOWN;
+const Lane_LaneStyle Lane_LaneStyle_LaneStyle_MAX = Lane_LaneStyle_CURB;
+const int Lane_LaneStyle_LaneStyle_ARRAYSIZE = Lane_LaneStyle_LaneStyle_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* Lane_LaneStyle_descriptor();
+inline const ::std::string& Lane_LaneStyle_Name(Lane_LaneStyle value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    Lane_LaneStyle_descriptor(), value);
+}
+inline bool Lane_LaneStyle_Parse(
+    const ::std::string& name, Lane_LaneStyle* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<Lane_LaneStyle>(
+    Lane_LaneStyle_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -137,31 +162,31 @@ class Lane : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef Lane_LaneType LaneType;
-  static const LaneType NONE = Lane_LaneType_NONE;
-  static const LaneType CITY_DRIVING = Lane_LaneType_CITY_DRIVING;
-  static const LaneType BIKING = Lane_LaneType_BIKING;
-  static const LaneType SIDEWALK = Lane_LaneType_SIDEWALK;
-  static const LaneType PARKING = Lane_LaneType_PARKING;
-  static inline bool LaneType_IsValid(int value) {
-    return Lane_LaneType_IsValid(value);
+  typedef Lane_LaneFunction LaneFunction;
+  static const LaneFunction NONE = Lane_LaneFunction_NONE;
+  static const LaneFunction CITY_DRIVING = Lane_LaneFunction_CITY_DRIVING;
+  static const LaneFunction BIKING = Lane_LaneFunction_BIKING;
+  static const LaneFunction SIDEWALK = Lane_LaneFunction_SIDEWALK;
+  static const LaneFunction PARKING = Lane_LaneFunction_PARKING;
+  static inline bool LaneFunction_IsValid(int value) {
+    return Lane_LaneFunction_IsValid(value);
   }
-  static const LaneType LaneType_MIN =
-    Lane_LaneType_LaneType_MIN;
-  static const LaneType LaneType_MAX =
-    Lane_LaneType_LaneType_MAX;
-  static const int LaneType_ARRAYSIZE =
-    Lane_LaneType_LaneType_ARRAYSIZE;
+  static const LaneFunction LaneFunction_MIN =
+    Lane_LaneFunction_LaneFunction_MIN;
+  static const LaneFunction LaneFunction_MAX =
+    Lane_LaneFunction_LaneFunction_MAX;
+  static const int LaneFunction_ARRAYSIZE =
+    Lane_LaneFunction_LaneFunction_ARRAYSIZE;
   static inline const ::google::protobuf::EnumDescriptor*
-  LaneType_descriptor() {
-    return Lane_LaneType_descriptor();
+  LaneFunction_descriptor() {
+    return Lane_LaneFunction_descriptor();
   }
-  static inline const ::std::string& LaneType_Name(LaneType value) {
-    return Lane_LaneType_Name(value);
+  static inline const ::std::string& LaneFunction_Name(LaneFunction value) {
+    return Lane_LaneFunction_Name(value);
   }
-  static inline bool LaneType_Parse(const ::std::string& name,
-      LaneType* value) {
-    return Lane_LaneType_Parse(name, value);
+  static inline bool LaneFunction_Parse(const ::std::string& name,
+      LaneFunction* value) {
+    return Lane_LaneFunction_Parse(name, value);
   }
 
   typedef Lane_LaneDirection LaneDirection;
@@ -189,6 +214,37 @@ class Lane : public ::google::protobuf::Message {
     return Lane_LaneDirection_Parse(name, value);
   }
 
+  typedef Lane_LaneStyle LaneStyle;
+  static const LaneStyle UNKNOWN = Lane_LaneStyle_UNKNOWN;
+  static const LaneStyle DOTTED_YELLOW_LINE = Lane_LaneStyle_DOTTED_YELLOW_LINE;
+  static const LaneStyle DOTTED_YELLOW_BLANK = Lane_LaneStyle_DOTTED_YELLOW_BLANK;
+  static const LaneStyle DOTTED_WHITE_LINE = Lane_LaneStyle_DOTTED_WHITE_LINE;
+  static const LaneStyle DOTTED_WHITE_BLANK = Lane_LaneStyle_DOTTED_WHITE_BLANK;
+  static const LaneStyle SOLID_YELLOW = Lane_LaneStyle_SOLID_YELLOW;
+  static const LaneStyle SOLID_WHITE = Lane_LaneStyle_SOLID_WHITE;
+  static const LaneStyle DOUBLE_YELLOW = Lane_LaneStyle_DOUBLE_YELLOW;
+  static const LaneStyle CURB = Lane_LaneStyle_CURB;
+  static inline bool LaneStyle_IsValid(int value) {
+    return Lane_LaneStyle_IsValid(value);
+  }
+  static const LaneStyle LaneStyle_MIN =
+    Lane_LaneStyle_LaneStyle_MIN;
+  static const LaneStyle LaneStyle_MAX =
+    Lane_LaneStyle_LaneStyle_MAX;
+  static const int LaneStyle_ARRAYSIZE =
+    Lane_LaneStyle_LaneStyle_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  LaneStyle_descriptor() {
+    return Lane_LaneStyle_descriptor();
+  }
+  static inline const ::std::string& LaneStyle_Name(LaneStyle value) {
+    return Lane_LaneStyle_Name(value);
+  }
+  static inline bool LaneStyle_Parse(const ::std::string& name,
+      LaneStyle* value) {
+    return Lane_LaneStyle_Parse(name, value);
+  }
+
   // accessors -------------------------------------------------------
 
   // required .hdmap_proto.Id id = 1;
@@ -212,12 +268,12 @@ class Lane : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id >*
       mutable_tile_ids();
 
-  // required .hdmap_proto.Lane.LaneType type = 4;
-  inline bool has_type() const;
-  inline void clear_type();
-  static const int kTypeFieldNumber = 4;
-  inline ::hdmap_proto::Lane_LaneType type() const;
-  inline void set_type(::hdmap_proto::Lane_LaneType value);
+  // optional .hdmap_proto.Lane.LaneFunction function = 4;
+  inline bool has_function() const;
+  inline void clear_function();
+  static const int kFunctionFieldNumber = 4;
+  inline ::hdmap_proto::Lane_LaneFunction function() const;
+  inline void set_function(::hdmap_proto::Lane_LaneFunction value);
 
   // optional .hdmap_proto.Lane.LaneDirection direction = 5;
   inline bool has_direction() const;
@@ -226,29 +282,24 @@ class Lane : public ::google::protobuf::Message {
   inline ::hdmap_proto::Lane_LaneDirection direction() const;
   inline void set_direction(::hdmap_proto::Lane_LaneDirection value);
 
-  // repeated .hdmap_proto.CurveControl controls = 6;
-  inline int controls_size() const;
-  inline void clear_controls();
-  static const int kControlsFieldNumber = 6;
-  inline const ::hdmap_proto::CurveControl& controls(int index) const;
-  inline ::hdmap_proto::CurveControl* mutable_controls(int index);
-  inline ::hdmap_proto::CurveControl* add_controls();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >&
-      controls() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >*
-      mutable_controls();
+  // optional .hdmap_proto.Lane.LaneStyle style = 6;
+  inline bool has_style() const;
+  inline void clear_style();
+  static const int kStyleFieldNumber = 6;
+  inline ::hdmap_proto::Lane_LaneStyle style() const;
+  inline void set_style(::hdmap_proto::Lane_LaneStyle value);
 
-  // repeated .hdmap_proto.CurveAttr attrs = 7;
-  inline int attrs_size() const;
-  inline void clear_attrs();
-  static const int kAttrsFieldNumber = 7;
-  inline const ::hdmap_proto::CurveAttr& attrs(int index) const;
-  inline ::hdmap_proto::CurveAttr* mutable_attrs(int index);
-  inline ::hdmap_proto::CurveAttr* add_attrs();
-  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveAttr >&
-      attrs() const;
-  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveAttr >*
-      mutable_attrs();
+  // repeated .hdmap_proto.CurveLine lines = 7;
+  inline int lines_size() const;
+  inline void clear_lines();
+  static const int kLinesFieldNumber = 7;
+  inline const ::hdmap_proto::CurveLine& lines(int index) const;
+  inline ::hdmap_proto::CurveLine* mutable_lines(int index);
+  inline ::hdmap_proto::CurveLine* add_lines();
+  inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveLine >&
+      lines() const;
+  inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveLine >*
+      mutable_lines();
 
   // repeated .hdmap_proto.LaneMarking lane_markings = 8;
   inline int lane_markings_size() const;
@@ -286,38 +337,40 @@ class Lane : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::TrafficSign >*
       mutable_traffic_signs();
 
-  // repeated uint64 predecessor_ids = 20;
-  inline int predecessor_ids_size() const;
-  inline void clear_predecessor_ids();
-  static const int kPredecessorIdsFieldNumber = 20;
-  inline ::google::protobuf::uint64 predecessor_ids(int index) const;
-  inline void set_predecessor_ids(int index, ::google::protobuf::uint64 value);
-  inline void add_predecessor_ids(::google::protobuf::uint64 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-      predecessor_ids() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-      mutable_predecessor_ids();
+  // repeated uint32 pred_indices = 20;
+  inline int pred_indices_size() const;
+  inline void clear_pred_indices();
+  static const int kPredIndicesFieldNumber = 20;
+  inline ::google::protobuf::uint32 pred_indices(int index) const;
+  inline void set_pred_indices(int index, ::google::protobuf::uint32 value);
+  inline void add_pred_indices(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      pred_indices() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_pred_indices();
 
-  // repeated uint64 successor_ids = 21;
-  inline int successor_ids_size() const;
-  inline void clear_successor_ids();
-  static const int kSuccessorIdsFieldNumber = 21;
-  inline ::google::protobuf::uint64 successor_ids(int index) const;
-  inline void set_successor_ids(int index, ::google::protobuf::uint64 value);
-  inline void add_successor_ids(::google::protobuf::uint64 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-      successor_ids() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-      mutable_successor_ids();
+  // repeated uint32 succ_indices = 21;
+  inline int succ_indices_size() const;
+  inline void clear_succ_indices();
+  static const int kSuccIndicesFieldNumber = 21;
+  inline ::google::protobuf::uint32 succ_indices(int index) const;
+  inline void set_succ_indices(int index, ::google::protobuf::uint32 value);
+  inline void add_succ_indices(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      succ_indices() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_succ_indices();
 
   // @@protoc_insertion_point(class_scope:hdmap_proto.Lane)
  private:
   inline void set_has_id();
   inline void clear_has_id();
-  inline void set_has_type();
-  inline void clear_has_type();
+  inline void set_has_function();
+  inline void clear_has_function();
   inline void set_has_direction();
   inline void clear_has_direction();
+  inline void set_has_style();
+  inline void clear_has_style();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -325,15 +378,15 @@ class Lane : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::hdmap_proto::Id* id_;
   ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id > tile_ids_;
-  int type_;
+  int function_;
   int direction_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl > controls_;
-  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveAttr > attrs_;
+  ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveLine > lines_;
   ::google::protobuf::RepeatedPtrField< ::hdmap_proto::LaneMarking > lane_markings_;
   ::google::protobuf::RepeatedPtrField< ::hdmap_proto::TrafficLight > traffic_lights_;
   ::google::protobuf::RepeatedPtrField< ::hdmap_proto::TrafficSign > traffic_signs_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > predecessor_ids_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > successor_ids_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > pred_indices_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > succ_indices_;
+  int style_;
   friend void  protobuf_AddDesc_lane_2eproto();
   friend void protobuf_AssignDesc_lane_2eproto();
   friend void protobuf_ShutdownFile_lane_2eproto();
@@ -419,29 +472,29 @@ Lane::mutable_tile_ids() {
   return &tile_ids_;
 }
 
-// required .hdmap_proto.Lane.LaneType type = 4;
-inline bool Lane::has_type() const {
+// optional .hdmap_proto.Lane.LaneFunction function = 4;
+inline bool Lane::has_function() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Lane::set_has_type() {
+inline void Lane::set_has_function() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Lane::clear_has_type() {
+inline void Lane::clear_has_function() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Lane::clear_type() {
-  type_ = 0;
-  clear_has_type();
+inline void Lane::clear_function() {
+  function_ = 0;
+  clear_has_function();
 }
-inline ::hdmap_proto::Lane_LaneType Lane::type() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.type)
-  return static_cast< ::hdmap_proto::Lane_LaneType >(type_);
+inline ::hdmap_proto::Lane_LaneFunction Lane::function() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.function)
+  return static_cast< ::hdmap_proto::Lane_LaneFunction >(function_);
 }
-inline void Lane::set_type(::hdmap_proto::Lane_LaneType value) {
-  assert(::hdmap_proto::Lane_LaneType_IsValid(value));
-  set_has_type();
-  type_ = value;
-  // @@protoc_insertion_point(field_set:hdmap_proto.Lane.type)
+inline void Lane::set_function(::hdmap_proto::Lane_LaneFunction value) {
+  assert(::hdmap_proto::Lane_LaneFunction_IsValid(value));
+  set_has_function();
+  function_ = value;
+  // @@protoc_insertion_point(field_set:hdmap_proto.Lane.function)
 }
 
 // optional .hdmap_proto.Lane.LaneDirection direction = 5;
@@ -469,64 +522,59 @@ inline void Lane::set_direction(::hdmap_proto::Lane_LaneDirection value) {
   // @@protoc_insertion_point(field_set:hdmap_proto.Lane.direction)
 }
 
-// repeated .hdmap_proto.CurveControl controls = 6;
-inline int Lane::controls_size() const {
-  return controls_.size();
+// optional .hdmap_proto.Lane.LaneStyle style = 6;
+inline bool Lane::has_style() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void Lane::clear_controls() {
-  controls_.Clear();
+inline void Lane::set_has_style() {
+  _has_bits_[0] |= 0x00000010u;
 }
-inline const ::hdmap_proto::CurveControl& Lane::controls(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.controls)
-  return controls_.Get(index);
+inline void Lane::clear_has_style() {
+  _has_bits_[0] &= ~0x00000010u;
 }
-inline ::hdmap_proto::CurveControl* Lane::mutable_controls(int index) {
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.Lane.controls)
-  return controls_.Mutable(index);
+inline void Lane::clear_style() {
+  style_ = 0;
+  clear_has_style();
 }
-inline ::hdmap_proto::CurveControl* Lane::add_controls() {
-  // @@protoc_insertion_point(field_add:hdmap_proto.Lane.controls)
-  return controls_.Add();
+inline ::hdmap_proto::Lane_LaneStyle Lane::style() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.style)
+  return static_cast< ::hdmap_proto::Lane_LaneStyle >(style_);
 }
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >&
-Lane::controls() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.Lane.controls)
-  return controls_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveControl >*
-Lane::mutable_controls() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Lane.controls)
-  return &controls_;
+inline void Lane::set_style(::hdmap_proto::Lane_LaneStyle value) {
+  assert(::hdmap_proto::Lane_LaneStyle_IsValid(value));
+  set_has_style();
+  style_ = value;
+  // @@protoc_insertion_point(field_set:hdmap_proto.Lane.style)
 }
 
-// repeated .hdmap_proto.CurveAttr attrs = 7;
-inline int Lane::attrs_size() const {
-  return attrs_.size();
+// repeated .hdmap_proto.CurveLine lines = 7;
+inline int Lane::lines_size() const {
+  return lines_.size();
 }
-inline void Lane::clear_attrs() {
-  attrs_.Clear();
+inline void Lane::clear_lines() {
+  lines_.Clear();
 }
-inline const ::hdmap_proto::CurveAttr& Lane::attrs(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.attrs)
-  return attrs_.Get(index);
+inline const ::hdmap_proto::CurveLine& Lane::lines(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.lines)
+  return lines_.Get(index);
 }
-inline ::hdmap_proto::CurveAttr* Lane::mutable_attrs(int index) {
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.Lane.attrs)
-  return attrs_.Mutable(index);
+inline ::hdmap_proto::CurveLine* Lane::mutable_lines(int index) {
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.Lane.lines)
+  return lines_.Mutable(index);
 }
-inline ::hdmap_proto::CurveAttr* Lane::add_attrs() {
-  // @@protoc_insertion_point(field_add:hdmap_proto.Lane.attrs)
-  return attrs_.Add();
+inline ::hdmap_proto::CurveLine* Lane::add_lines() {
+  // @@protoc_insertion_point(field_add:hdmap_proto.Lane.lines)
+  return lines_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveAttr >&
-Lane::attrs() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.Lane.attrs)
-  return attrs_;
+inline const ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveLine >&
+Lane::lines() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.Lane.lines)
+  return lines_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveAttr >*
-Lane::mutable_attrs() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Lane.attrs)
-  return &attrs_;
+inline ::google::protobuf::RepeatedPtrField< ::hdmap_proto::CurveLine >*
+Lane::mutable_lines() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Lane.lines)
+  return &lines_;
 }
 
 // repeated .hdmap_proto.LaneMarking lane_markings = 8;
@@ -619,64 +667,64 @@ Lane::mutable_traffic_signs() {
   return &traffic_signs_;
 }
 
-// repeated uint64 predecessor_ids = 20;
-inline int Lane::predecessor_ids_size() const {
-  return predecessor_ids_.size();
+// repeated uint32 pred_indices = 20;
+inline int Lane::pred_indices_size() const {
+  return pred_indices_.size();
 }
-inline void Lane::clear_predecessor_ids() {
-  predecessor_ids_.Clear();
+inline void Lane::clear_pred_indices() {
+  pred_indices_.Clear();
 }
-inline ::google::protobuf::uint64 Lane::predecessor_ids(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.predecessor_ids)
-  return predecessor_ids_.Get(index);
+inline ::google::protobuf::uint32 Lane::pred_indices(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.pred_indices)
+  return pred_indices_.Get(index);
 }
-inline void Lane::set_predecessor_ids(int index, ::google::protobuf::uint64 value) {
-  predecessor_ids_.Set(index, value);
-  // @@protoc_insertion_point(field_set:hdmap_proto.Lane.predecessor_ids)
+inline void Lane::set_pred_indices(int index, ::google::protobuf::uint32 value) {
+  pred_indices_.Set(index, value);
+  // @@protoc_insertion_point(field_set:hdmap_proto.Lane.pred_indices)
 }
-inline void Lane::add_predecessor_ids(::google::protobuf::uint64 value) {
-  predecessor_ids_.Add(value);
-  // @@protoc_insertion_point(field_add:hdmap_proto.Lane.predecessor_ids)
+inline void Lane::add_pred_indices(::google::protobuf::uint32 value) {
+  pred_indices_.Add(value);
+  // @@protoc_insertion_point(field_add:hdmap_proto.Lane.pred_indices)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-Lane::predecessor_ids() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.Lane.predecessor_ids)
-  return predecessor_ids_;
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Lane::pred_indices() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.Lane.pred_indices)
+  return pred_indices_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-Lane::mutable_predecessor_ids() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Lane.predecessor_ids)
-  return &predecessor_ids_;
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Lane::mutable_pred_indices() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Lane.pred_indices)
+  return &pred_indices_;
 }
 
-// repeated uint64 successor_ids = 21;
-inline int Lane::successor_ids_size() const {
-  return successor_ids_.size();
+// repeated uint32 succ_indices = 21;
+inline int Lane::succ_indices_size() const {
+  return succ_indices_.size();
 }
-inline void Lane::clear_successor_ids() {
-  successor_ids_.Clear();
+inline void Lane::clear_succ_indices() {
+  succ_indices_.Clear();
 }
-inline ::google::protobuf::uint64 Lane::successor_ids(int index) const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.successor_ids)
-  return successor_ids_.Get(index);
+inline ::google::protobuf::uint32 Lane::succ_indices(int index) const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.Lane.succ_indices)
+  return succ_indices_.Get(index);
 }
-inline void Lane::set_successor_ids(int index, ::google::protobuf::uint64 value) {
-  successor_ids_.Set(index, value);
-  // @@protoc_insertion_point(field_set:hdmap_proto.Lane.successor_ids)
+inline void Lane::set_succ_indices(int index, ::google::protobuf::uint32 value) {
+  succ_indices_.Set(index, value);
+  // @@protoc_insertion_point(field_set:hdmap_proto.Lane.succ_indices)
 }
-inline void Lane::add_successor_ids(::google::protobuf::uint64 value) {
-  successor_ids_.Add(value);
-  // @@protoc_insertion_point(field_add:hdmap_proto.Lane.successor_ids)
+inline void Lane::add_succ_indices(::google::protobuf::uint32 value) {
+  succ_indices_.Add(value);
+  // @@protoc_insertion_point(field_add:hdmap_proto.Lane.succ_indices)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-Lane::successor_ids() const {
-  // @@protoc_insertion_point(field_list:hdmap_proto.Lane.successor_ids)
-  return successor_ids_;
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Lane::succ_indices() const {
+  // @@protoc_insertion_point(field_list:hdmap_proto.Lane.succ_indices)
+  return succ_indices_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-Lane::mutable_successor_ids() {
-  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Lane.successor_ids)
-  return &successor_ids_;
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Lane::mutable_succ_indices() {
+  // @@protoc_insertion_point(field_mutable_list:hdmap_proto.Lane.succ_indices)
+  return &succ_indices_;
 }
 
 
@@ -688,15 +736,20 @@ Lane::mutable_successor_ids() {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::hdmap_proto::Lane_LaneType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::hdmap_proto::Lane_LaneFunction> : ::google::protobuf::internal::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::hdmap_proto::Lane_LaneType>() {
-  return ::hdmap_proto::Lane_LaneType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::hdmap_proto::Lane_LaneFunction>() {
+  return ::hdmap_proto::Lane_LaneFunction_descriptor();
 }
 template <> struct is_proto_enum< ::hdmap_proto::Lane_LaneDirection> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::hdmap_proto::Lane_LaneDirection>() {
   return ::hdmap_proto::Lane_LaneDirection_descriptor();
+}
+template <> struct is_proto_enum< ::hdmap_proto::Lane_LaneStyle> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::hdmap_proto::Lane_LaneStyle>() {
+  return ::hdmap_proto::Lane_LaneStyle_descriptor();
 }
 
 }  // namespace google

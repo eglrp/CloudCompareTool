@@ -190,14 +190,14 @@ class LaneMarking : public ::google::protobuf::Message {
   inline ::hdmap_proto::LaneMarking_Type type() const;
   inline void set_type(::hdmap_proto::LaneMarking_Type value);
 
-  // required .hdmap_proto.Polygon polygon = 4;
-  inline bool has_polygon() const;
-  inline void clear_polygon();
-  static const int kPolygonFieldNumber = 4;
-  inline const ::hdmap_proto::Polygon& polygon() const;
-  inline ::hdmap_proto::Polygon* mutable_polygon();
-  inline ::hdmap_proto::Polygon* release_polygon();
-  inline void set_allocated_polygon(::hdmap_proto::Polygon* polygon);
+  // required .hdmap_proto.Polygon border = 4;
+  inline bool has_border() const;
+  inline void clear_border();
+  static const int kBorderFieldNumber = 4;
+  inline const ::hdmap_proto::Polygon& border() const;
+  inline ::hdmap_proto::Polygon* mutable_border();
+  inline ::hdmap_proto::Polygon* release_border();
+  inline void set_allocated_border(::hdmap_proto::Polygon* border);
 
   // optional float value = 5;
   inline bool has_value() const;
@@ -224,8 +224,8 @@ class LaneMarking : public ::google::protobuf::Message {
   inline void clear_has_id();
   inline void set_has_type();
   inline void clear_has_type();
-  inline void set_has_polygon();
-  inline void clear_has_polygon();
+  inline void set_has_border();
+  inline void clear_has_border();
   inline void set_has_value();
   inline void clear_has_value();
 
@@ -235,7 +235,7 @@ class LaneMarking : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::hdmap_proto::Id* id_;
   ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id > tile_ids_;
-  ::hdmap_proto::Polygon* polygon_;
+  ::hdmap_proto::Polygon* border_;
   int type_;
   float value_;
   ::google::protobuf::RepeatedPtrField< ::hdmap_proto::Id > link_ids_;
@@ -349,45 +349,45 @@ inline void LaneMarking::set_type(::hdmap_proto::LaneMarking_Type value) {
   // @@protoc_insertion_point(field_set:hdmap_proto.LaneMarking.type)
 }
 
-// required .hdmap_proto.Polygon polygon = 4;
-inline bool LaneMarking::has_polygon() const {
+// required .hdmap_proto.Polygon border = 4;
+inline bool LaneMarking::has_border() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void LaneMarking::set_has_polygon() {
+inline void LaneMarking::set_has_border() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void LaneMarking::clear_has_polygon() {
+inline void LaneMarking::clear_has_border() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void LaneMarking::clear_polygon() {
-  if (polygon_ != NULL) polygon_->::hdmap_proto::Polygon::Clear();
-  clear_has_polygon();
+inline void LaneMarking::clear_border() {
+  if (border_ != NULL) border_->::hdmap_proto::Polygon::Clear();
+  clear_has_border();
 }
-inline const ::hdmap_proto::Polygon& LaneMarking::polygon() const {
-  // @@protoc_insertion_point(field_get:hdmap_proto.LaneMarking.polygon)
-  return polygon_ != NULL ? *polygon_ : *default_instance_->polygon_;
+inline const ::hdmap_proto::Polygon& LaneMarking::border() const {
+  // @@protoc_insertion_point(field_get:hdmap_proto.LaneMarking.border)
+  return border_ != NULL ? *border_ : *default_instance_->border_;
 }
-inline ::hdmap_proto::Polygon* LaneMarking::mutable_polygon() {
-  set_has_polygon();
-  if (polygon_ == NULL) polygon_ = new ::hdmap_proto::Polygon;
-  // @@protoc_insertion_point(field_mutable:hdmap_proto.LaneMarking.polygon)
-  return polygon_;
+inline ::hdmap_proto::Polygon* LaneMarking::mutable_border() {
+  set_has_border();
+  if (border_ == NULL) border_ = new ::hdmap_proto::Polygon;
+  // @@protoc_insertion_point(field_mutable:hdmap_proto.LaneMarking.border)
+  return border_;
 }
-inline ::hdmap_proto::Polygon* LaneMarking::release_polygon() {
-  clear_has_polygon();
-  ::hdmap_proto::Polygon* temp = polygon_;
-  polygon_ = NULL;
+inline ::hdmap_proto::Polygon* LaneMarking::release_border() {
+  clear_has_border();
+  ::hdmap_proto::Polygon* temp = border_;
+  border_ = NULL;
   return temp;
 }
-inline void LaneMarking::set_allocated_polygon(::hdmap_proto::Polygon* polygon) {
-  delete polygon_;
-  polygon_ = polygon;
-  if (polygon) {
-    set_has_polygon();
+inline void LaneMarking::set_allocated_border(::hdmap_proto::Polygon* border) {
+  delete border_;
+  border_ = border;
+  if (border) {
+    set_has_border();
   } else {
-    clear_has_polygon();
+    clear_has_border();
   }
-  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.LaneMarking.polygon)
+  // @@protoc_insertion_point(field_set_allocated:hdmap_proto.LaneMarking.border)
 }
 
 // optional float value = 5;

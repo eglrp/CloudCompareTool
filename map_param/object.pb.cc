@@ -38,9 +38,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Zone_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Zone_reflection_ = NULL;
-const ::google::protobuf::Descriptor* ParkingSpace_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* ParkingSlot_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  ParkingSpace_reflection_ = NULL;
+  ParkingSlot_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Junction_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Junction_reflection_ = NULL;
@@ -58,7 +58,7 @@ void protobuf_AssignDesc_object_2eproto() {
   static const int StopLine_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StopLine, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StopLine, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StopLine, polygon_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StopLine, border_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StopLine, link_ids_),
   };
   StopLine_reflection_ =
@@ -76,7 +76,7 @@ void protobuf_AssignDesc_object_2eproto() {
   static const int SpeedBump_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpeedBump, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpeedBump, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpeedBump, polygon_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpeedBump, border_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpeedBump, height_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpeedBump, link_ids_),
   };
@@ -92,10 +92,11 @@ void protobuf_AssignDesc_object_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SpeedBump));
   Pole_descriptor_ = file->message_type(2);
-  static const int Pole_offsets_[3] = {
+  static const int Pole_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Pole, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Pole, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Pole, cylinder_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Pole, body_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Pole, link_ids_),
   };
   Pole_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -109,10 +110,11 @@ void protobuf_AssignDesc_object_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Pole));
   Board_descriptor_ = file->message_type(3);
-  static const int Board_offsets_[3] = {
+  static const int Board_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Board, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Board, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Board, polygon_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Board, border_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Board, link_ids_),
   };
   Board_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -126,12 +128,11 @@ void protobuf_AssignDesc_object_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Board));
   CrossWalk_descriptor_ = file->message_type(4);
-  static const int CrossWalk_offsets_[6] = {
+  static const int CrossWalk_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CrossWalk, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CrossWalk, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CrossWalk, name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CrossWalk, border_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CrossWalk, lines_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CrossWalk, child_borders_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CrossWalk, link_ids_),
   };
   CrossWalk_reflection_ =
@@ -163,29 +164,29 @@ void protobuf_AssignDesc_object_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Zone));
-  ParkingSpace_descriptor_ = file->message_type(6);
-  static const int ParkingSpace_offsets_[4] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSpace, id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSpace, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSpace, parkingslots_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSpace, link_ids_),
+  ParkingSlot_descriptor_ = file->message_type(6);
+  static const int ParkingSlot_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSlot, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSlot, tile_ids_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSlot, border_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSlot, link_ids_),
   };
-  ParkingSpace_reflection_ =
+  ParkingSlot_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      ParkingSpace_descriptor_,
-      ParkingSpace::default_instance_,
-      ParkingSpace_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSpace, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSpace, _unknown_fields_),
+      ParkingSlot_descriptor_,
+      ParkingSlot::default_instance_,
+      ParkingSlot_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSlot, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ParkingSlot, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(ParkingSpace));
+      sizeof(ParkingSlot));
   Junction_descriptor_ = file->message_type(7);
   static const int Junction_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Junction, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Junction, tile_ids_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Junction, polygon_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Junction, border_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Junction, link_ids_),
   };
   Junction_reflection_ =
@@ -224,7 +225,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Zone_descriptor_, &Zone::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    ParkingSpace_descriptor_, &ParkingSpace::default_instance());
+    ParkingSlot_descriptor_, &ParkingSlot::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Junction_descriptor_, &Junction::default_instance());
 }
@@ -244,8 +245,8 @@ void protobuf_ShutdownFile_object_2eproto() {
   delete CrossWalk_reflection_;
   delete Zone::default_instance_;
   delete Zone_reflection_;
-  delete ParkingSpace::default_instance_;
-  delete ParkingSpace_reflection_;
+  delete ParkingSlot::default_instance_;
+  delete ParkingSlot_reflection_;
   delete Junction::default_instance_;
   delete Junction_reflection_;
 }
@@ -260,37 +261,38 @@ void protobuf_AddDesc_object_2eproto() {
   ::hdmap_proto::protobuf_AddDesc_geometry_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\014object.proto\022\013hdmap_proto\032\010id.proto\032\016g"
-    "eometry.proto\"\224\001\n\010StopLine\022\033\n\002id\030\001 \002(\0132\017"
+    "eometry.proto\"\223\001\n\010StopLine\022\033\n\002id\030\001 \002(\0132\017"
     ".hdmap_proto.Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdma"
-    "p_proto.Id\022%\n\007polygon\030\004 \002(\0132\024.hdmap_prot"
+    "p_proto.Id\022$\n\006border\030\004 \002(\0132\024.hdmap_proto"
+    ".Polygon\022!\n\010link_ids\030\005 \003(\0132\017.hdmap_proto"
+    ".Id\"\244\001\n\tSpeedBump\022\033\n\002id\030\001 \002(\0132\017.hdmap_pr"
+    "oto.Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdmap_proto.I"
+    "d\022$\n\006border\030\004 \002(\0132\024.hdmap_proto.Polygon\022"
+    "\016\n\006height\030\005 \002(\002\022!\n\010link_ids\030\006 \003(\0132\017.hdma"
+    "p_proto.Id\"\216\001\n\004Pole\022\033\n\002id\030\001 \002(\0132\017.hdmap_"
+    "proto.Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdmap_proto"
+    ".Id\022#\n\004body\030\004 \002(\0132\025.hdmap_proto.Cylinder"
+    "\022!\n\010link_ids\030\005 \003(\0132\017.hdmap_proto.Id\"\220\001\n\005"
+    "Board\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto.Id\022!\n\010ti"
+    "le_ids\030\002 \003(\0132\017.hdmap_proto.Id\022$\n\006border\030"
+    "\004 \002(\0132\024.hdmap_proto.Polygon\022!\n\010link_ids\030"
+    "\005 \003(\0132\017.hdmap_proto.Id\"\301\001\n\tCrossWalk\022\033\n\002"
+    "id\030\001 \002(\0132\017.hdmap_proto.Id\022!\n\010tile_ids\030\002 "
+    "\003(\0132\017.hdmap_proto.Id\022$\n\006border\030\004 \002(\0132\024.h"
+    "dmap_proto.Polygon\022+\n\rchild_borders\030\005 \003("
+    "\0132\024.hdmap_proto.Polygon\022!\n\010link_ids\030\006 \003("
+    "\0132\017.hdmap_proto.Id\"\217\001\n\004Zone\022\033\n\002id\030\001 \002(\0132"
+    "\017.hdmap_proto.Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdm"
+    "ap_proto.Id\022$\n\006border\030\004 \002(\0132\024.hdmap_prot"
     "o.Polygon\022!\n\010link_ids\030\005 \003(\0132\017.hdmap_prot"
-    "o.Id\"\245\001\n\tSpeedBump\022\033\n\002id\030\001 \002(\0132\017.hdmap_p"
-    "roto.Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdmap_proto."
-    "Id\022%\n\007polygon\030\004 \002(\0132\024.hdmap_proto.Polygo"
-    "n\022\016\n\006height\030\005 \002(\002\022!\n\010link_ids\030\006 \003(\0132\017.hd"
-    "map_proto.Id\"o\n\004Pole\022\033\n\002id\030\001 \002(\0132\017.hdmap"
+    "o.Id\"\226\001\n\013ParkingSlot\022\033\n\002id\030\001 \002(\0132\017.hdmap"
     "_proto.Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdmap_prot"
-    "o.Id\022\'\n\010cylinder\030\003 \002(\0132\025.hdmap_proto.Cyl"
-    "inder\"n\n\005Board\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto"
-    ".Id\022!\n\010tile_ids\030\002 \003(\0132\017.hdmap_proto.Id\022%"
-    "\n\007polygon\030\003 \002(\0132\024.hdmap_proto.Polygon\"\307\001"
-    "\n\tCrossWalk\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto.Id"
-    "\022!\n\010tile_ids\030\002 \003(\0132\017.hdmap_proto.Id\022\014\n\004n"
-    "ame\030\003 \001(\t\022$\n\006border\030\004 \002(\0132\024.hdmap_proto."
-    "Polygon\022#\n\005lines\030\005 \003(\0132\024.hdmap_proto.Pol"
-    "ygon\022!\n\010link_ids\030\006 \003(\0132\017.hdmap_proto.Id\""
-    "\217\001\n\004Zone\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto.Id\022!\n"
-    "\010tile_ids\030\002 \003(\0132\017.hdmap_proto.Id\022$\n\006bord"
-    "er\030\003 \002(\0132\024.hdmap_proto.Polygon\022!\n\010link_i"
-    "ds\030\004 \003(\0132\017.hdmap_proto.Id\"\241\001\n\014ParkingSpa"
-    "ce\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto.Id\022!\n\010tile_"
-    "ids\030\002 \003(\0132\017.hdmap_proto.Id\022.\n\014parkingslo"
-    "ts\030\003 \003(\0132\030.hdmap_proto.ParkingSlot\022!\n\010li"
-    "nk_ids\030\004 \003(\0132\017.hdmap_proto.Id\"\224\001\n\010Juncti"
-    "on\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto.Id\022!\n\010tile_"
-    "ids\030\002 \003(\0132\017.hdmap_proto.Id\022%\n\007polygon\030\004 "
-    "\002(\0132\024.hdmap_proto.Polygon\022!\n\010link_ids\030\005 "
-    "\003(\0132\017.hdmap_proto.Id", 1260);
+    "o.Id\022$\n\006border\030\004 \002(\0132\024.hdmap_proto.Polyg"
+    "on\022!\n\010link_ids\030\005 \003(\0132\017.hdmap_proto.Id\"\223\001"
+    "\n\010Junction\022\033\n\002id\030\001 \002(\0132\017.hdmap_proto.Id\022"
+    "!\n\010tile_ids\030\002 \003(\0132\017.hdmap_proto.Id\022$\n\006bo"
+    "rder\030\004 \002(\0132\024.hdmap_proto.Polygon\022!\n\010link"
+    "_ids\030\005 \003(\0132\017.hdmap_proto.Id", 1307);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "object.proto", &protobuf_RegisterTypes);
   StopLine::default_instance_ = new StopLine();
@@ -299,7 +301,7 @@ void protobuf_AddDesc_object_2eproto() {
   Board::default_instance_ = new Board();
   CrossWalk::default_instance_ = new CrossWalk();
   Zone::default_instance_ = new Zone();
-  ParkingSpace::default_instance_ = new ParkingSpace();
+  ParkingSlot::default_instance_ = new ParkingSlot();
   Junction::default_instance_ = new Junction();
   StopLine::default_instance_->InitAsDefaultInstance();
   SpeedBump::default_instance_->InitAsDefaultInstance();
@@ -307,7 +309,7 @@ void protobuf_AddDesc_object_2eproto() {
   Board::default_instance_->InitAsDefaultInstance();
   CrossWalk::default_instance_->InitAsDefaultInstance();
   Zone::default_instance_->InitAsDefaultInstance();
-  ParkingSpace::default_instance_->InitAsDefaultInstance();
+  ParkingSlot::default_instance_->InitAsDefaultInstance();
   Junction::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_object_2eproto);
 }
@@ -324,7 +326,7 @@ struct StaticDescriptorInitializer_object_2eproto {
 #ifndef _MSC_VER
 const int StopLine::kIdFieldNumber;
 const int StopLine::kTileIdsFieldNumber;
-const int StopLine::kPolygonFieldNumber;
+const int StopLine::kBorderFieldNumber;
 const int StopLine::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
 
@@ -336,7 +338,7 @@ StopLine::StopLine()
 
 void StopLine::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
-  polygon_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
+  border_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
 }
 
 StopLine::StopLine(const StopLine& from)
@@ -349,7 +351,7 @@ StopLine::StopLine(const StopLine& from)
 void StopLine::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
-  polygon_ = NULL;
+  border_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -361,7 +363,7 @@ StopLine::~StopLine() {
 void StopLine::SharedDtor() {
   if (this != default_instance_) {
     delete id_;
-    delete polygon_;
+    delete border_;
   }
 }
 
@@ -391,8 +393,8 @@ void StopLine::Clear() {
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
     }
-    if (has_polygon()) {
-      if (polygon_ != NULL) polygon_->::hdmap_proto::Polygon::Clear();
+    if (has_border()) {
+      if (border_ != NULL) border_->::hdmap_proto::Polygon::Clear();
     }
   }
   tile_ids_.Clear();
@@ -433,16 +435,16 @@ bool StopLine::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(34)) goto parse_polygon;
+        if (input->ExpectTag(34)) goto parse_border;
         break;
       }
 
-      // required .hdmap_proto.Polygon polygon = 4;
+      // required .hdmap_proto.Polygon border = 4;
       case 4: {
         if (tag == 34) {
-         parse_polygon:
+         parse_border:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_polygon()));
+               input, mutable_border()));
         } else {
           goto handle_unusual;
         }
@@ -501,10 +503,10 @@ void StopLine::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // required .hdmap_proto.Polygon polygon = 4;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->polygon(), output);
+      4, this->border(), output);
   }
 
   // repeated .hdmap_proto.Id link_ids = 5;
@@ -537,11 +539,11 @@ void StopLine::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // required .hdmap_proto.Polygon polygon = 4;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->polygon(), target);
+        4, this->border(), target);
   }
 
   // repeated .hdmap_proto.Id link_ids = 5;
@@ -570,11 +572,11 @@ int StopLine::ByteSize() const {
           this->id());
     }
 
-    // required .hdmap_proto.Polygon polygon = 4;
-    if (has_polygon()) {
+    // required .hdmap_proto.Polygon border = 4;
+    if (has_border()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->polygon());
+          this->border());
     }
 
   }
@@ -625,8 +627,8 @@ void StopLine::MergeFrom(const StopLine& from) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
-    if (from.has_polygon()) {
-      mutable_polygon()->::hdmap_proto::Polygon::MergeFrom(from.polygon());
+    if (from.has_border()) {
+      mutable_border()->::hdmap_proto::Polygon::MergeFrom(from.border());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -651,8 +653,8 @@ bool StopLine::IsInitialized() const {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_ids())) return false;
-  if (has_polygon()) {
-    if (!this->polygon().IsInitialized()) return false;
+  if (has_border()) {
+    if (!this->border().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;
@@ -662,7 +664,7 @@ void StopLine::Swap(StopLine* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    std::swap(polygon_, other->polygon_);
+    std::swap(border_, other->border_);
     link_ids_.Swap(&other->link_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -684,7 +686,7 @@ void StopLine::Swap(StopLine* other) {
 #ifndef _MSC_VER
 const int SpeedBump::kIdFieldNumber;
 const int SpeedBump::kTileIdsFieldNumber;
-const int SpeedBump::kPolygonFieldNumber;
+const int SpeedBump::kBorderFieldNumber;
 const int SpeedBump::kHeightFieldNumber;
 const int SpeedBump::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
@@ -697,7 +699,7 @@ SpeedBump::SpeedBump()
 
 void SpeedBump::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
-  polygon_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
+  border_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
 }
 
 SpeedBump::SpeedBump(const SpeedBump& from)
@@ -710,7 +712,7 @@ SpeedBump::SpeedBump(const SpeedBump& from)
 void SpeedBump::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
-  polygon_ = NULL;
+  border_ = NULL;
   height_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -723,7 +725,7 @@ SpeedBump::~SpeedBump() {
 void SpeedBump::SharedDtor() {
   if (this != default_instance_) {
     delete id_;
-    delete polygon_;
+    delete border_;
   }
 }
 
@@ -753,8 +755,8 @@ void SpeedBump::Clear() {
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
     }
-    if (has_polygon()) {
-      if (polygon_ != NULL) polygon_->::hdmap_proto::Polygon::Clear();
+    if (has_border()) {
+      if (border_ != NULL) border_->::hdmap_proto::Polygon::Clear();
     }
     height_ = 0;
   }
@@ -796,16 +798,16 @@ bool SpeedBump::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(34)) goto parse_polygon;
+        if (input->ExpectTag(34)) goto parse_border;
         break;
       }
 
-      // required .hdmap_proto.Polygon polygon = 4;
+      // required .hdmap_proto.Polygon border = 4;
       case 4: {
         if (tag == 34) {
-         parse_polygon:
+         parse_border:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_polygon()));
+               input, mutable_border()));
         } else {
           goto handle_unusual;
         }
@@ -879,10 +881,10 @@ void SpeedBump::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // required .hdmap_proto.Polygon polygon = 4;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->polygon(), output);
+      4, this->border(), output);
   }
 
   // required float height = 5;
@@ -920,11 +922,11 @@ void SpeedBump::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // required .hdmap_proto.Polygon polygon = 4;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->polygon(), target);
+        4, this->border(), target);
   }
 
   // required float height = 5;
@@ -958,11 +960,11 @@ int SpeedBump::ByteSize() const {
           this->id());
     }
 
-    // required .hdmap_proto.Polygon polygon = 4;
-    if (has_polygon()) {
+    // required .hdmap_proto.Polygon border = 4;
+    if (has_border()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->polygon());
+          this->border());
     }
 
     // required float height = 5;
@@ -1018,8 +1020,8 @@ void SpeedBump::MergeFrom(const SpeedBump& from) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
-    if (from.has_polygon()) {
-      mutable_polygon()->::hdmap_proto::Polygon::MergeFrom(from.polygon());
+    if (from.has_border()) {
+      mutable_border()->::hdmap_proto::Polygon::MergeFrom(from.border());
     }
     if (from.has_height()) {
       set_height(from.height());
@@ -1047,8 +1049,8 @@ bool SpeedBump::IsInitialized() const {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_ids())) return false;
-  if (has_polygon()) {
-    if (!this->polygon().IsInitialized()) return false;
+  if (has_border()) {
+    if (!this->border().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;
@@ -1058,7 +1060,7 @@ void SpeedBump::Swap(SpeedBump* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    std::swap(polygon_, other->polygon_);
+    std::swap(border_, other->border_);
     std::swap(height_, other->height_);
     link_ids_.Swap(&other->link_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
@@ -1081,7 +1083,8 @@ void SpeedBump::Swap(SpeedBump* other) {
 #ifndef _MSC_VER
 const int Pole::kIdFieldNumber;
 const int Pole::kTileIdsFieldNumber;
-const int Pole::kCylinderFieldNumber;
+const int Pole::kBodyFieldNumber;
+const int Pole::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
 
 Pole::Pole()
@@ -1092,7 +1095,7 @@ Pole::Pole()
 
 void Pole::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
-  cylinder_ = const_cast< ::hdmap_proto::Cylinder*>(&::hdmap_proto::Cylinder::default_instance());
+  body_ = const_cast< ::hdmap_proto::Cylinder*>(&::hdmap_proto::Cylinder::default_instance());
 }
 
 Pole::Pole(const Pole& from)
@@ -1105,7 +1108,7 @@ Pole::Pole(const Pole& from)
 void Pole::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
-  cylinder_ = NULL;
+  body_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1117,7 +1120,7 @@ Pole::~Pole() {
 void Pole::SharedDtor() {
   if (this != default_instance_) {
     delete id_;
-    delete cylinder_;
+    delete body_;
   }
 }
 
@@ -1147,11 +1150,12 @@ void Pole::Clear() {
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
     }
-    if (has_cylinder()) {
-      if (cylinder_ != NULL) cylinder_->::hdmap_proto::Cylinder::Clear();
+    if (has_body()) {
+      if (body_ != NULL) body_->::hdmap_proto::Cylinder::Clear();
     }
   }
   tile_ids_.Clear();
+  link_ids_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1188,19 +1192,33 @@ bool Pole::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(26)) goto parse_cylinder;
+        if (input->ExpectTag(34)) goto parse_body;
         break;
       }
 
-      // required .hdmap_proto.Cylinder cylinder = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_cylinder:
+      // required .hdmap_proto.Cylinder body = 4;
+      case 4: {
+        if (tag == 34) {
+         parse_body:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_cylinder()));
+               input, mutable_body()));
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(42)) goto parse_link_ids;
+        break;
+      }
+
+      // repeated .hdmap_proto.Id link_ids = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_link_ids:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_link_ids()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_link_ids;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1242,10 +1260,16 @@ void Pole::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // required .hdmap_proto.Cylinder cylinder = 3;
-  if (has_cylinder()) {
+  // required .hdmap_proto.Cylinder body = 4;
+  if (has_body()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->cylinder(), output);
+      4, this->body(), output);
+  }
+
+  // repeated .hdmap_proto.Id link_ids = 5;
+  for (int i = 0; i < this->link_ids_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->link_ids(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -1272,11 +1296,18 @@ void Pole::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // required .hdmap_proto.Cylinder cylinder = 3;
-  if (has_cylinder()) {
+  // required .hdmap_proto.Cylinder body = 4;
+  if (has_body()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        3, this->cylinder(), target);
+        4, this->body(), target);
+  }
+
+  // repeated .hdmap_proto.Id link_ids = 5;
+  for (int i = 0; i < this->link_ids_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->link_ids(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1298,11 +1329,11 @@ int Pole::ByteSize() const {
           this->id());
     }
 
-    // required .hdmap_proto.Cylinder cylinder = 3;
-    if (has_cylinder()) {
+    // required .hdmap_proto.Cylinder body = 4;
+    if (has_body()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->cylinder());
+          this->body());
     }
 
   }
@@ -1312,6 +1343,14 @@ int Pole::ByteSize() const {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->tile_ids(i));
+  }
+
+  // repeated .hdmap_proto.Id link_ids = 5;
+  total_size += 1 * this->link_ids_size();
+  for (int i = 0; i < this->link_ids_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->link_ids(i));
   }
 
   if (!unknown_fields().empty()) {
@@ -1340,12 +1379,13 @@ void Pole::MergeFrom(const ::google::protobuf::Message& from) {
 void Pole::MergeFrom(const Pole& from) {
   GOOGLE_CHECK_NE(&from, this);
   tile_ids_.MergeFrom(from.tile_ids_);
+  link_ids_.MergeFrom(from.link_ids_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
-    if (from.has_cylinder()) {
-      mutable_cylinder()->::hdmap_proto::Cylinder::MergeFrom(from.cylinder());
+    if (from.has_body()) {
+      mutable_body()->::hdmap_proto::Cylinder::MergeFrom(from.body());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -1370,9 +1410,10 @@ bool Pole::IsInitialized() const {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_ids())) return false;
-  if (has_cylinder()) {
-    if (!this->cylinder().IsInitialized()) return false;
+  if (has_body()) {
+    if (!this->body().IsInitialized()) return false;
   }
+  if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;
 }
 
@@ -1380,7 +1421,8 @@ void Pole::Swap(Pole* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    std::swap(cylinder_, other->cylinder_);
+    std::swap(body_, other->body_);
+    link_ids_.Swap(&other->link_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -1401,7 +1443,8 @@ void Pole::Swap(Pole* other) {
 #ifndef _MSC_VER
 const int Board::kIdFieldNumber;
 const int Board::kTileIdsFieldNumber;
-const int Board::kPolygonFieldNumber;
+const int Board::kBorderFieldNumber;
+const int Board::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
 
 Board::Board()
@@ -1412,7 +1455,7 @@ Board::Board()
 
 void Board::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
-  polygon_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
+  border_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
 }
 
 Board::Board(const Board& from)
@@ -1425,7 +1468,7 @@ Board::Board(const Board& from)
 void Board::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
-  polygon_ = NULL;
+  border_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1437,7 +1480,7 @@ Board::~Board() {
 void Board::SharedDtor() {
   if (this != default_instance_) {
     delete id_;
-    delete polygon_;
+    delete border_;
   }
 }
 
@@ -1467,11 +1510,12 @@ void Board::Clear() {
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
     }
-    if (has_polygon()) {
-      if (polygon_ != NULL) polygon_->::hdmap_proto::Polygon::Clear();
+    if (has_border()) {
+      if (border_ != NULL) border_->::hdmap_proto::Polygon::Clear();
     }
   }
   tile_ids_.Clear();
+  link_ids_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1508,19 +1552,33 @@ bool Board::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(26)) goto parse_polygon;
+        if (input->ExpectTag(34)) goto parse_border;
         break;
       }
 
-      // required .hdmap_proto.Polygon polygon = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_polygon:
+      // required .hdmap_proto.Polygon border = 4;
+      case 4: {
+        if (tag == 34) {
+         parse_border:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_polygon()));
+               input, mutable_border()));
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(42)) goto parse_link_ids;
+        break;
+      }
+
+      // repeated .hdmap_proto.Id link_ids = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_link_ids:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_link_ids()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_link_ids;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1562,10 +1620,16 @@ void Board::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // required .hdmap_proto.Polygon polygon = 3;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->polygon(), output);
+      4, this->border(), output);
+  }
+
+  // repeated .hdmap_proto.Id link_ids = 5;
+  for (int i = 0; i < this->link_ids_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->link_ids(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -1592,11 +1656,18 @@ void Board::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // required .hdmap_proto.Polygon polygon = 3;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        3, this->polygon(), target);
+        4, this->border(), target);
+  }
+
+  // repeated .hdmap_proto.Id link_ids = 5;
+  for (int i = 0; i < this->link_ids_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->link_ids(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1618,11 +1689,11 @@ int Board::ByteSize() const {
           this->id());
     }
 
-    // required .hdmap_proto.Polygon polygon = 3;
-    if (has_polygon()) {
+    // required .hdmap_proto.Polygon border = 4;
+    if (has_border()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->polygon());
+          this->border());
     }
 
   }
@@ -1632,6 +1703,14 @@ int Board::ByteSize() const {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->tile_ids(i));
+  }
+
+  // repeated .hdmap_proto.Id link_ids = 5;
+  total_size += 1 * this->link_ids_size();
+  for (int i = 0; i < this->link_ids_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->link_ids(i));
   }
 
   if (!unknown_fields().empty()) {
@@ -1660,12 +1739,13 @@ void Board::MergeFrom(const ::google::protobuf::Message& from) {
 void Board::MergeFrom(const Board& from) {
   GOOGLE_CHECK_NE(&from, this);
   tile_ids_.MergeFrom(from.tile_ids_);
+  link_ids_.MergeFrom(from.link_ids_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
-    if (from.has_polygon()) {
-      mutable_polygon()->::hdmap_proto::Polygon::MergeFrom(from.polygon());
+    if (from.has_border()) {
+      mutable_border()->::hdmap_proto::Polygon::MergeFrom(from.border());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -1690,9 +1770,10 @@ bool Board::IsInitialized() const {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_ids())) return false;
-  if (has_polygon()) {
-    if (!this->polygon().IsInitialized()) return false;
+  if (has_border()) {
+    if (!this->border().IsInitialized()) return false;
   }
+  if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;
 }
 
@@ -1700,7 +1781,8 @@ void Board::Swap(Board* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    std::swap(polygon_, other->polygon_);
+    std::swap(border_, other->border_);
+    link_ids_.Swap(&other->link_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -1721,9 +1803,8 @@ void Board::Swap(Board* other) {
 #ifndef _MSC_VER
 const int CrossWalk::kIdFieldNumber;
 const int CrossWalk::kTileIdsFieldNumber;
-const int CrossWalk::kNameFieldNumber;
 const int CrossWalk::kBorderFieldNumber;
-const int CrossWalk::kLinesFieldNumber;
+const int CrossWalk::kChildBordersFieldNumber;
 const int CrossWalk::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
 
@@ -1746,10 +1827,8 @@ CrossWalk::CrossWalk(const CrossWalk& from)
 }
 
 void CrossWalk::SharedCtor() {
-  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   id_ = NULL;
-  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   border_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -1760,9 +1839,6 @@ CrossWalk::~CrossWalk() {
 }
 
 void CrossWalk::SharedDtor() {
-  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete name_;
-  }
   if (this != default_instance_) {
     delete id_;
     delete border_;
@@ -1791,21 +1867,16 @@ CrossWalk* CrossWalk::New() const {
 }
 
 void CrossWalk::Clear() {
-  if (_has_bits_[0 / 32] & 13) {
+  if (_has_bits_[0 / 32] & 5) {
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
-    }
-    if (has_name()) {
-      if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-        name_->clear();
-      }
     }
     if (has_border()) {
       if (border_ != NULL) border_->::hdmap_proto::Polygon::Clear();
     }
   }
   tile_ids_.Clear();
-  lines_.Clear();
+  child_borders_.Clear();
   link_ids_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -1843,23 +1914,6 @@ bool CrossWalk::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(26)) goto parse_name;
-        break;
-      }
-
-      // optional string name = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_name:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_name()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->name().data(), this->name().length(),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "name");
-        } else {
-          goto handle_unusual;
-        }
         if (input->ExpectTag(34)) goto parse_border;
         break;
       }
@@ -1873,20 +1927,20 @@ bool CrossWalk::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_lines;
+        if (input->ExpectTag(42)) goto parse_child_borders;
         break;
       }
 
-      // repeated .hdmap_proto.Polygon lines = 5;
+      // repeated .hdmap_proto.Polygon child_borders = 5;
       case 5: {
         if (tag == 42) {
-         parse_lines:
+         parse_child_borders:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_lines()));
+                input, add_child_borders()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_lines;
+        if (input->ExpectTag(42)) goto parse_child_borders;
         if (input->ExpectTag(50)) goto parse_link_ids;
         break;
       }
@@ -1942,26 +1996,16 @@ void CrossWalk::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // optional string name = 3;
-  if (has_name()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->name().data(), this->name().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->name(), output);
-  }
-
   // required .hdmap_proto.Polygon border = 4;
   if (has_border()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       4, this->border(), output);
   }
 
-  // repeated .hdmap_proto.Polygon lines = 5;
-  for (int i = 0; i < this->lines_size(); i++) {
+  // repeated .hdmap_proto.Polygon child_borders = 5;
+  for (int i = 0; i < this->child_borders_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->lines(i), output);
+      5, this->child_borders(i), output);
   }
 
   // repeated .hdmap_proto.Id link_ids = 6;
@@ -1994,17 +2038,6 @@ void CrossWalk::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // optional string name = 3;
-  if (has_name()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->name().data(), this->name().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "name");
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->name(), target);
-  }
-
   // required .hdmap_proto.Polygon border = 4;
   if (has_border()) {
     target = ::google::protobuf::internal::WireFormatLite::
@@ -2012,11 +2045,11 @@ void CrossWalk::SerializeWithCachedSizes(
         4, this->border(), target);
   }
 
-  // repeated .hdmap_proto.Polygon lines = 5;
-  for (int i = 0; i < this->lines_size(); i++) {
+  // repeated .hdmap_proto.Polygon child_borders = 5;
+  for (int i = 0; i < this->child_borders_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        5, this->lines(i), target);
+        5, this->child_borders(i), target);
   }
 
   // repeated .hdmap_proto.Id link_ids = 6;
@@ -2045,13 +2078,6 @@ int CrossWalk::ByteSize() const {
           this->id());
     }
 
-    // optional string name = 3;
-    if (has_name()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->name());
-    }
-
     // required .hdmap_proto.Polygon border = 4;
     if (has_border()) {
       total_size += 1 +
@@ -2068,12 +2094,12 @@ int CrossWalk::ByteSize() const {
         this->tile_ids(i));
   }
 
-  // repeated .hdmap_proto.Polygon lines = 5;
-  total_size += 1 * this->lines_size();
-  for (int i = 0; i < this->lines_size(); i++) {
+  // repeated .hdmap_proto.Polygon child_borders = 5;
+  total_size += 1 * this->child_borders_size();
+  for (int i = 0; i < this->child_borders_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->lines(i));
+        this->child_borders(i));
   }
 
   // repeated .hdmap_proto.Id link_ids = 6;
@@ -2110,14 +2136,11 @@ void CrossWalk::MergeFrom(const ::google::protobuf::Message& from) {
 void CrossWalk::MergeFrom(const CrossWalk& from) {
   GOOGLE_CHECK_NE(&from, this);
   tile_ids_.MergeFrom(from.tile_ids_);
-  lines_.MergeFrom(from.lines_);
+  child_borders_.MergeFrom(from.child_borders_);
   link_ids_.MergeFrom(from.link_ids_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
-    }
-    if (from.has_name()) {
-      set_name(from.name());
     }
     if (from.has_border()) {
       mutable_border()->::hdmap_proto::Polygon::MergeFrom(from.border());
@@ -2139,7 +2162,7 @@ void CrossWalk::CopyFrom(const CrossWalk& from) {
 }
 
 bool CrossWalk::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000009) != 0x00000009) return false;
+  if ((_has_bits_[0] & 0x00000005) != 0x00000005) return false;
 
   if (has_id()) {
     if (!this->id().IsInitialized()) return false;
@@ -2148,7 +2171,7 @@ bool CrossWalk::IsInitialized() const {
   if (has_border()) {
     if (!this->border().IsInitialized()) return false;
   }
-  if (!::google::protobuf::internal::AllAreInitialized(this->lines())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->child_borders())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;
 }
@@ -2157,9 +2180,8 @@ void CrossWalk::Swap(CrossWalk* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    std::swap(name_, other->name_);
     std::swap(border_, other->border_);
-    lines_.Swap(&other->lines_);
+    child_borders_.Swap(&other->child_borders_);
     link_ids_.Swap(&other->link_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -2290,33 +2312,33 @@ bool Zone::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(26)) goto parse_border;
+        if (input->ExpectTag(34)) goto parse_border;
         break;
       }
 
-      // required .hdmap_proto.Polygon border = 3;
-      case 3: {
-        if (tag == 26) {
+      // required .hdmap_proto.Polygon border = 4;
+      case 4: {
+        if (tag == 34) {
          parse_border:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_border()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_link_ids;
+        if (input->ExpectTag(42)) goto parse_link_ids;
         break;
       }
 
-      // repeated .hdmap_proto.Id link_ids = 4;
-      case 4: {
-        if (tag == 34) {
+      // repeated .hdmap_proto.Id link_ids = 5;
+      case 5: {
+        if (tag == 42) {
          parse_link_ids:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_link_ids()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_link_ids;
+        if (input->ExpectTag(42)) goto parse_link_ids;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2358,16 +2380,16 @@ void Zone::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // required .hdmap_proto.Polygon border = 3;
+  // required .hdmap_proto.Polygon border = 4;
   if (has_border()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->border(), output);
+      4, this->border(), output);
   }
 
-  // repeated .hdmap_proto.Id link_ids = 4;
+  // repeated .hdmap_proto.Id link_ids = 5;
   for (int i = 0; i < this->link_ids_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->link_ids(i), output);
+      5, this->link_ids(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -2394,18 +2416,18 @@ void Zone::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // required .hdmap_proto.Polygon border = 3;
+  // required .hdmap_proto.Polygon border = 4;
   if (has_border()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        3, this->border(), target);
+        4, this->border(), target);
   }
 
-  // repeated .hdmap_proto.Id link_ids = 4;
+  // repeated .hdmap_proto.Id link_ids = 5;
   for (int i = 0; i < this->link_ids_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->link_ids(i), target);
+        5, this->link_ids(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2427,7 +2449,7 @@ int Zone::ByteSize() const {
           this->id());
     }
 
-    // required .hdmap_proto.Polygon border = 3;
+    // required .hdmap_proto.Polygon border = 4;
     if (has_border()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -2443,7 +2465,7 @@ int Zone::ByteSize() const {
         this->tile_ids(i));
   }
 
-  // repeated .hdmap_proto.Id link_ids = 4;
+  // repeated .hdmap_proto.Id link_ids = 5;
   total_size += 1 * this->link_ids_size();
   for (int i = 0; i < this->link_ids_size(); i++) {
     total_size +=
@@ -2539,83 +2561,90 @@ void Zone::Swap(Zone* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int ParkingSpace::kIdFieldNumber;
-const int ParkingSpace::kTileIdsFieldNumber;
-const int ParkingSpace::kParkingslotsFieldNumber;
-const int ParkingSpace::kLinkIdsFieldNumber;
+const int ParkingSlot::kIdFieldNumber;
+const int ParkingSlot::kTileIdsFieldNumber;
+const int ParkingSlot::kBorderFieldNumber;
+const int ParkingSlot::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
 
-ParkingSpace::ParkingSpace()
+ParkingSlot::ParkingSlot()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(constructor:hdmap_proto.ParkingSlot)
 }
 
-void ParkingSpace::InitAsDefaultInstance() {
+void ParkingSlot::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
+  border_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
 }
 
-ParkingSpace::ParkingSpace(const ParkingSpace& from)
+ParkingSlot::ParkingSlot(const ParkingSlot& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(copy_constructor:hdmap_proto.ParkingSlot)
 }
 
-void ParkingSpace::SharedCtor() {
+void ParkingSlot::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
+  border_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-ParkingSpace::~ParkingSpace() {
-  // @@protoc_insertion_point(destructor:hdmap_proto.ParkingSpace)
+ParkingSlot::~ParkingSlot() {
+  // @@protoc_insertion_point(destructor:hdmap_proto.ParkingSlot)
   SharedDtor();
 }
 
-void ParkingSpace::SharedDtor() {
+void ParkingSlot::SharedDtor() {
   if (this != default_instance_) {
     delete id_;
+    delete border_;
   }
 }
 
-void ParkingSpace::SetCachedSize(int size) const {
+void ParkingSlot::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* ParkingSpace::descriptor() {
+const ::google::protobuf::Descriptor* ParkingSlot::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return ParkingSpace_descriptor_;
+  return ParkingSlot_descriptor_;
 }
 
-const ParkingSpace& ParkingSpace::default_instance() {
+const ParkingSlot& ParkingSlot::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_object_2eproto();
   return *default_instance_;
 }
 
-ParkingSpace* ParkingSpace::default_instance_ = NULL;
+ParkingSlot* ParkingSlot::default_instance_ = NULL;
 
-ParkingSpace* ParkingSpace::New() const {
-  return new ParkingSpace;
+ParkingSlot* ParkingSlot::New() const {
+  return new ParkingSlot;
 }
 
-void ParkingSpace::Clear() {
-  if (has_id()) {
-    if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
+void ParkingSlot::Clear() {
+  if (_has_bits_[0 / 32] & 5) {
+    if (has_id()) {
+      if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
+    }
+    if (has_border()) {
+      if (border_ != NULL) border_->::hdmap_proto::Polygon::Clear();
+    }
   }
   tile_ids_.Clear();
-  parkingslots_.Clear();
   link_ids_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool ParkingSpace::MergePartialFromCodedStream(
+bool ParkingSlot::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(parse_start:hdmap_proto.ParkingSlot)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -2643,34 +2672,33 @@ bool ParkingSpace::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(26)) goto parse_parkingslots;
+        if (input->ExpectTag(34)) goto parse_border;
         break;
       }
 
-      // repeated .hdmap_proto.ParkingSlot parkingslots = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_parkingslots:
+      // required .hdmap_proto.Polygon border = 4;
+      case 4: {
+        if (tag == 34) {
+         parse_border:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_parkingslots()));
+               input, mutable_border()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(26)) goto parse_parkingslots;
-        if (input->ExpectTag(34)) goto parse_link_ids;
+        if (input->ExpectTag(42)) goto parse_link_ids;
         break;
       }
 
-      // repeated .hdmap_proto.Id link_ids = 4;
-      case 4: {
-        if (tag == 34) {
+      // repeated .hdmap_proto.Id link_ids = 5;
+      case 5: {
+        if (tag == 42) {
          parse_link_ids:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_link_ids()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_link_ids;
+        if (input->ExpectTag(42)) goto parse_link_ids;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2689,17 +2717,17 @@ bool ParkingSpace::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(parse_success:hdmap_proto.ParkingSlot)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(parse_failure:hdmap_proto.ParkingSlot)
   return false;
 #undef DO_
 }
 
-void ParkingSpace::SerializeWithCachedSizes(
+void ParkingSlot::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(serialize_start:hdmap_proto.ParkingSlot)
   // required .hdmap_proto.Id id = 1;
   if (has_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
@@ -2712,28 +2740,28 @@ void ParkingSpace::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // repeated .hdmap_proto.ParkingSlot parkingslots = 3;
-  for (int i = 0; i < this->parkingslots_size(); i++) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->parkingslots(i), output);
+      4, this->border(), output);
   }
 
-  // repeated .hdmap_proto.Id link_ids = 4;
+  // repeated .hdmap_proto.Id link_ids = 5;
   for (int i = 0; i < this->link_ids_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->link_ids(i), output);
+      5, this->link_ids(i), output);
   }
 
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(serialize_end:hdmap_proto.ParkingSlot)
 }
 
-::google::protobuf::uint8* ParkingSpace::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* ParkingSlot::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(serialize_to_array_start:hdmap_proto.ParkingSlot)
   // required .hdmap_proto.Id id = 1;
   if (has_id()) {
     target = ::google::protobuf::internal::WireFormatLite::
@@ -2748,29 +2776,29 @@ void ParkingSpace::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // repeated .hdmap_proto.ParkingSlot parkingslots = 3;
-  for (int i = 0; i < this->parkingslots_size(); i++) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        3, this->parkingslots(i), target);
+        4, this->border(), target);
   }
 
-  // repeated .hdmap_proto.Id link_ids = 4;
+  // repeated .hdmap_proto.Id link_ids = 5;
   for (int i = 0; i < this->link_ids_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->link_ids(i), target);
+        5, this->link_ids(i), target);
   }
 
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:hdmap_proto.ParkingSpace)
+  // @@protoc_insertion_point(serialize_to_array_end:hdmap_proto.ParkingSlot)
   return target;
 }
 
-int ParkingSpace::ByteSize() const {
+int ParkingSlot::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -2779,6 +2807,13 @@ int ParkingSpace::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->id());
+    }
+
+    // required .hdmap_proto.Polygon border = 4;
+    if (has_border()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->border());
     }
 
   }
@@ -2790,15 +2825,7 @@ int ParkingSpace::ByteSize() const {
         this->tile_ids(i));
   }
 
-  // repeated .hdmap_proto.ParkingSlot parkingslots = 3;
-  total_size += 1 * this->parkingslots_size();
-  for (int i = 0; i < this->parkingslots_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->parkingslots(i));
-  }
-
-  // repeated .hdmap_proto.Id link_ids = 4;
+  // repeated .hdmap_proto.Id link_ids = 5;
   total_size += 1 * this->link_ids_size();
   for (int i = 0; i < this->link_ids_size(); i++) {
     total_size +=
@@ -2817,10 +2844,10 @@ int ParkingSpace::ByteSize() const {
   return total_size;
 }
 
-void ParkingSpace::MergeFrom(const ::google::protobuf::Message& from) {
+void ParkingSlot::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const ParkingSpace* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const ParkingSpace*>(
+  const ParkingSlot* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ParkingSlot*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -2829,48 +2856,52 @@ void ParkingSpace::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void ParkingSpace::MergeFrom(const ParkingSpace& from) {
+void ParkingSlot::MergeFrom(const ParkingSlot& from) {
   GOOGLE_CHECK_NE(&from, this);
   tile_ids_.MergeFrom(from.tile_ids_);
-  parkingslots_.MergeFrom(from.parkingslots_);
   link_ids_.MergeFrom(from.link_ids_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
+    if (from.has_border()) {
+      mutable_border()->::hdmap_proto::Polygon::MergeFrom(from.border());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void ParkingSpace::CopyFrom(const ::google::protobuf::Message& from) {
+void ParkingSlot::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void ParkingSpace::CopyFrom(const ParkingSpace& from) {
+void ParkingSlot::CopyFrom(const ParkingSlot& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ParkingSpace::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+bool ParkingSlot::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000005) != 0x00000005) return false;
 
   if (has_id()) {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_ids())) return false;
-  if (!::google::protobuf::internal::AllAreInitialized(this->parkingslots())) return false;
+  if (has_border()) {
+    if (!this->border().IsInitialized()) return false;
+  }
   if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;
 }
 
-void ParkingSpace::Swap(ParkingSpace* other) {
+void ParkingSlot::Swap(ParkingSlot* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    parkingslots_.Swap(&other->parkingslots_);
+    std::swap(border_, other->border_);
     link_ids_.Swap(&other->link_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -2878,11 +2909,11 @@ void ParkingSpace::Swap(ParkingSpace* other) {
   }
 }
 
-::google::protobuf::Metadata ParkingSpace::GetMetadata() const {
+::google::protobuf::Metadata ParkingSlot::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = ParkingSpace_descriptor_;
-  metadata.reflection = ParkingSpace_reflection_;
+  metadata.descriptor = ParkingSlot_descriptor_;
+  metadata.reflection = ParkingSlot_reflection_;
   return metadata;
 }
 
@@ -2892,7 +2923,7 @@ void ParkingSpace::Swap(ParkingSpace* other) {
 #ifndef _MSC_VER
 const int Junction::kIdFieldNumber;
 const int Junction::kTileIdsFieldNumber;
-const int Junction::kPolygonFieldNumber;
+const int Junction::kBorderFieldNumber;
 const int Junction::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
 
@@ -2904,7 +2935,7 @@ Junction::Junction()
 
 void Junction::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
-  polygon_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
+  border_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
 }
 
 Junction::Junction(const Junction& from)
@@ -2917,7 +2948,7 @@ Junction::Junction(const Junction& from)
 void Junction::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
-  polygon_ = NULL;
+  border_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2929,7 +2960,7 @@ Junction::~Junction() {
 void Junction::SharedDtor() {
   if (this != default_instance_) {
     delete id_;
-    delete polygon_;
+    delete border_;
   }
 }
 
@@ -2959,8 +2990,8 @@ void Junction::Clear() {
     if (has_id()) {
       if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
     }
-    if (has_polygon()) {
-      if (polygon_ != NULL) polygon_->::hdmap_proto::Polygon::Clear();
+    if (has_border()) {
+      if (border_ != NULL) border_->::hdmap_proto::Polygon::Clear();
     }
   }
   tile_ids_.Clear();
@@ -3001,16 +3032,16 @@ bool Junction::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_tile_ids;
-        if (input->ExpectTag(34)) goto parse_polygon;
+        if (input->ExpectTag(34)) goto parse_border;
         break;
       }
 
-      // required .hdmap_proto.Polygon polygon = 4;
+      // required .hdmap_proto.Polygon border = 4;
       case 4: {
         if (tag == 34) {
-         parse_polygon:
+         parse_border:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_polygon()));
+               input, mutable_border()));
         } else {
           goto handle_unusual;
         }
@@ -3069,10 +3100,10 @@ void Junction::SerializeWithCachedSizes(
       2, this->tile_ids(i), output);
   }
 
-  // required .hdmap_proto.Polygon polygon = 4;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->polygon(), output);
+      4, this->border(), output);
   }
 
   // repeated .hdmap_proto.Id link_ids = 5;
@@ -3105,11 +3136,11 @@ void Junction::SerializeWithCachedSizes(
         2, this->tile_ids(i), target);
   }
 
-  // required .hdmap_proto.Polygon polygon = 4;
-  if (has_polygon()) {
+  // required .hdmap_proto.Polygon border = 4;
+  if (has_border()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->polygon(), target);
+        4, this->border(), target);
   }
 
   // repeated .hdmap_proto.Id link_ids = 5;
@@ -3138,11 +3169,11 @@ int Junction::ByteSize() const {
           this->id());
     }
 
-    // required .hdmap_proto.Polygon polygon = 4;
-    if (has_polygon()) {
+    // required .hdmap_proto.Polygon border = 4;
+    if (has_border()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->polygon());
+          this->border());
     }
 
   }
@@ -3193,8 +3224,8 @@ void Junction::MergeFrom(const Junction& from) {
     if (from.has_id()) {
       mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
-    if (from.has_polygon()) {
-      mutable_polygon()->::hdmap_proto::Polygon::MergeFrom(from.polygon());
+    if (from.has_border()) {
+      mutable_border()->::hdmap_proto::Polygon::MergeFrom(from.border());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -3219,8 +3250,8 @@ bool Junction::IsInitialized() const {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_ids())) return false;
-  if (has_polygon()) {
-    if (!this->polygon().IsInitialized()) return false;
+  if (has_border()) {
+    if (!this->border().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;
@@ -3230,7 +3261,7 @@ void Junction::Swap(Junction* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     tile_ids_.Swap(&other->tile_ids_);
-    std::swap(polygon_, other->polygon_);
+    std::swap(border_, other->border_);
     link_ids_.Swap(&other->link_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

@@ -3,7 +3,6 @@ syntax = "proto2";
 package hdmap_proto;
 
 import "id.proto";
-import "attribute.proto";
 import "geometry.proto";
 import "lane_marking.proto";
 import "traffic_light.proto";
@@ -13,14 +12,14 @@ message Lane {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  enum LaneType {
+  enum LaneFunction {
     NONE = 0;
     CITY_DRIVING = 1;
     BIKING = 2;
     SIDEWALK = 3;
     PARKING = 4;
   };
-  required LaneType type = 4;
+  optional LaneFunction function = 4;
 
   enum LaneDirection {
     FORWARD = 1;
@@ -29,13 +28,25 @@ message Lane {
   }
   optional LaneDirection direction = 5;
 
-  repeated CurveControl controls = 6;
-  repeated CurveAttr attrs = 7;
+  enum LaneStyle {                                                                      
+    UNKNOWN = 0;                                                                   
+    DOTTED_YELLOW_LINE = 1;                                                        
+    DOTTED_YELLOW_BLANK = 2;                                                       
+    DOTTED_WHITE_LINE = 3;                                                         
+    DOTTED_WHITE_BLANK = 4;                                                        
+    SOLID_YELLOW = 5;                                                              
+    SOLID_WHITE = 6;                                                               
+    DOUBLE_YELLOW = 7;                                                             
+    CURB = 8;                                                                      
+  }
+  optional LaneStyle style = 6;
+
+  repeated CurveLine lines = 7;
 
   repeated LaneMarking lane_markings = 8;
   repeated TrafficLight traffic_lights = 9;
   repeated TrafficSign traffic_signs = 10;
 
-  repeated uint64 predecessor_ids = 20;
-  repeated uint64 successor_ids = 21;
+  repeated uint32 pred_indices = 20;
+  repeated uint32 succ_indices = 21;
 }

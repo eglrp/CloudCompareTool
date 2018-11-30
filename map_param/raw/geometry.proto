@@ -1,65 +1,39 @@
 syntax = "proto2";
 
 package hdmap_proto;
-import "id.proto";
 
-message Point {
+message Vector3d {
   required double x = 1;
   required double y = 2;
   required double z = 3;
 }
 
-message Normal {
-  required float x = 1;
-  required float y = 2;
-  required float z = 3;
-}
-
-message LineSegment {
-  required Point start = 1;
-  required Point end = 2;
-}
-
 message Cylinder {
-  required LineSegment line = 1;
-  required float radius = 2;
+  repeated Vector3d points = 1;
+  repeated Vector3d pred_points = 2;
+  repeated Vector3d succ_points = 3;
+  optional float radius = 4;
 }
 
 message Circle {
-  required Point center = 1;
-  required Normal normal = 2;
+  required Vector3d center = 1;
+  required Vector3d normal = 2;
   required float radius = 3;
 }
 
-message PolyLine {
-  repeated Point points = 1;
-}
-
-message Rect {
-  repeated Point points = 1;
-}
-
-message Cube {
-  repeated Point points = 1;
+// cubic bezier curve
+message CurveLine {
+  // control points, index (0 -> n-1)
+  repeated Vector3d points = 1;
+  // pred points, index 0 not used 
+  repeated Vector3d pred_points = 2;
+  // succ points, index n-1 not used;
+  repeated Vector3d succ_points = 3;
+  optional float width = 4;
 }
 
 message Polygon {
-  repeated Point points = 1;
+  repeated Vector3d points = 1;
+  optional float width = 2;
 }
 
-message CurveControl {
-  required Point point = 1;
-  required Point pre_point = 2;
-  required Point suc_point = 3;
-}
-
-message Curve {
-  repeated CurveControl controls = 1;
-}
-
-
-message ParkingSlot {
-  required Id id = 1;
-  required Polygon polygon = 2;
-  repeated Id link_ids = 3;
-}

@@ -7,15 +7,16 @@ import "lane_marking.proto";
 import "traffic_sign.proto";
 import "traffic_light.proto";
 import "lane.proto";
+import "parking_space.proto";
 import "section.proto";
 
 package hdmap_proto;
 
 message Tile {
-  required Id tile_id = 1;
+  required Id id = 1;
   required Idx idx = 2;
   
-  required Point min_point = 4;
+  required Vector3d min_point = 4;
 
   enum TileRange {
     T0 = 40;                            //m
@@ -25,7 +26,7 @@ message Tile {
   }
   required TileRange range = 5;         // different layer
 
-  repeated Id childs = 6;
+  repeated Id childs = 6;               // 4 tree
 
   repeated Id crosswalk_ids = 10;
   repeated Id junction_ids = 11;
@@ -44,5 +45,6 @@ message Tile {
   repeated Id lane_marking_ids = 21;
   repeated Id traffic_light_ids = 22;
   repeated Id traffic_sign_ids = 23;
-  repeated Id sections_ids = 24;
+  repeated Id parking_space_ids = 24;
+  repeated Id sections_ids = 25;
 }

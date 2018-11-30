@@ -9,7 +9,7 @@ message StopLine {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  required Polygon polygon = 4;
+  required Polygon border = 4;
   repeated Id link_ids = 5;
 }
 
@@ -17,57 +17,60 @@ message SpeedBump {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  required Polygon polygon = 4;
+  required Polygon border = 4;
   required float height = 5;
   repeated Id link_ids = 6;
 }
 
+// pole; accesspole
 message Pole {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  required Cylinder cylinder = 3;
+  required Cylinder body = 4;
+  repeated Id link_ids = 5;
 }
 
+// other trafficsign
 message Board {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  required Polygon polygon = 3;
+  required Polygon border = 4;
+  repeated Id link_ids = 5;
 }
 
 message CrossWalk {
   required Id id = 1;
   repeated Id tile_ids = 2;
-  optional string name = 3;
 
   required Polygon border = 4;
-  repeated Polygon lines = 5;
+  repeated Polygon child_borders = 5;
   repeated Id link_ids = 6;
 }
 
+// other lanemarking
 message Zone {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  required Polygon border = 3;
-  repeated Id link_ids = 4;
+  required Polygon border = 4;
+  repeated Id link_ids = 5;
 }
 
-message ParkingSpace {
+message ParkingSlot {
   required Id id = 1;
   repeated Id tile_ids = 2;
-  repeated ParkingSlot parkingslots = 3;
-  repeated Id link_ids = 4;
 
-  //  required Polygon polygon = 4;
+  required Polygon border = 4;
+  repeated Id link_ids = 5;
 }
 
 message Junction {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  required Polygon polygon = 4;
+  required Polygon border = 4;
   repeated Id link_ids = 5;
 }
 

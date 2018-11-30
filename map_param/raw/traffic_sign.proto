@@ -145,10 +145,8 @@ message TrafficSign {
 
   optional TrafficSignType type = 4;
   oneof geometry {
-    Circle circle = 5;
-    Rect rect = 6;
-    Cube cube = 7;
-    Polygon polygon = 8;
+    Circle cborder = 5;
+    Polygon pborder = 6;
   }
   optional float value = 9;
   repeated Id link_ids = 10;

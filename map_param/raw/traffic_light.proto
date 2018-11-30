@@ -22,8 +22,8 @@ message TrafficLight {
 
   optional TrafficLightType type = 3;
   oneof geometry {
-    Circle circle = 4;
-    Rect rect = 5;
+    Circle cborder = 4;
+    Polygon pborder = 5;
   }
 
   enum TrafficLightState {

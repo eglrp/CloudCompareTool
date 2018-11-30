@@ -24,8 +24,8 @@ const ::google::protobuf::Descriptor* TrafficLight_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   TrafficLight_reflection_ = NULL;
 struct TrafficLightOneofInstance {
-  const ::hdmap_proto::Circle* circle_;
-  const ::hdmap_proto::Rect* rect_;
+  const ::hdmap_proto::Circle* cborder_;
+  const ::hdmap_proto::Polygon* pborder_;
 }* TrafficLight_default_oneof_instance_ = NULL;
 const ::google::protobuf::EnumDescriptor* TrafficLight_TrafficLightType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* TrafficLight_TrafficLightState_descriptor_ = NULL;
@@ -44,8 +44,8 @@ void protobuf_AssignDesc_traffic_5flight_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficLight, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficLight, tile_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficLight, type_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficLight_default_oneof_instance_, circle_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficLight_default_oneof_instance_, rect_),
+    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficLight_default_oneof_instance_, cborder_),
+    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TrafficLight_default_oneof_instance_, pborder_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficLight, state_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficLight, link_ids_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrafficLight, geometry_),
@@ -99,19 +99,20 @@ void protobuf_AddDesc_traffic_5flight_2eproto() {
   ::hdmap_proto::protobuf_AddDesc_geometry_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\023traffic_light.proto\022\013hdmap_proto\032\010id.p"
-    "roto\032\016geometry.proto\"\357\003\n\014TrafficLight\022\033\n"
+    "roto\032\016geometry.proto\"\366\003\n\014TrafficLight\022\033\n"
     "\002id\030\001 \002(\0132\017.hdmap_proto.Id\022 \n\007tile_id\030\002 "
     "\003(\0132\017.hdmap_proto.Id\0228\n\004type\030\003 \001(\0162*.hdm"
-    "ap_proto.TrafficLight.TrafficLightType\022%"
-    "\n\006circle\030\004 \001(\0132\023.hdmap_proto.CircleH\000\022!\n"
-    "\004rect\030\005 \001(\0132\021.hdmap_proto.RectH\000\022:\n\005stat"
-    "e\030\006 \001(\0162+.hdmap_proto.TrafficLight.Traff"
-    "icLightState\022!\n\010link_ids\030\007 \003(\0132\017.hdmap_p"
-    "roto.Id\"e\n\020TrafficLightType\022\010\n\004NONE\020\000\022\n\n"
-    "\006CIRCLE\020\001\022\t\n\005CROSS\020\002\022\016\n\nPEDESTRIAN\020\003\022\013\n\007"
-    "BICYCLE\020\004\022\t\n\005ARROW\020\005\022\010\n\004TIME\020\006\"J\n\021Traffi"
-    "cLightState\022\013\n\007UNKNOWN\020\000\022\007\n\003RED\020\001\022\t\n\005GRE"
-    "EN\020\002\022\010\n\004BLUE\020\003\022\n\n\006YELLOW\020\004B\n\n\010geometry", 558);
+    "ap_proto.TrafficLight.TrafficLightType\022&"
+    "\n\007cborder\030\004 \001(\0132\023.hdmap_proto.CircleH\000\022\'"
+    "\n\007pborder\030\005 \001(\0132\024.hdmap_proto.PolygonH\000\022"
+    ":\n\005state\030\006 \001(\0162+.hdmap_proto.TrafficLigh"
+    "t.TrafficLightState\022!\n\010link_ids\030\007 \003(\0132\017."
+    "hdmap_proto.Id\"e\n\020TrafficLightType\022\010\n\004NO"
+    "NE\020\000\022\n\n\006CIRCLE\020\001\022\t\n\005CROSS\020\002\022\016\n\nPEDESTRIA"
+    "N\020\003\022\013\n\007BICYCLE\020\004\022\t\n\005ARROW\020\005\022\010\n\004TIME\020\006\"J\n"
+    "\021TrafficLightState\022\013\n\007UNKNOWN\020\000\022\007\n\003RED\020\001"
+    "\022\t\n\005GREEN\020\002\022\010\n\004BLUE\020\003\022\n\n\006YELLOW\020\004B\n\n\010geo"
+    "metry", 565);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "traffic_light.proto", &protobuf_RegisterTypes);
   TrafficLight::default_instance_ = new TrafficLight();
@@ -191,8 +192,8 @@ const int TrafficLight::TrafficLightState_ARRAYSIZE;
 const int TrafficLight::kIdFieldNumber;
 const int TrafficLight::kTileIdFieldNumber;
 const int TrafficLight::kTypeFieldNumber;
-const int TrafficLight::kCircleFieldNumber;
-const int TrafficLight::kRectFieldNumber;
+const int TrafficLight::kCborderFieldNumber;
+const int TrafficLight::kPborderFieldNumber;
 const int TrafficLight::kStateFieldNumber;
 const int TrafficLight::kLinkIdsFieldNumber;
 #endif  // !_MSC_VER
@@ -205,8 +206,8 @@ TrafficLight::TrafficLight()
 
 void TrafficLight::InitAsDefaultInstance() {
   id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
-  TrafficLight_default_oneof_instance_->circle_ = const_cast< ::hdmap_proto::Circle*>(&::hdmap_proto::Circle::default_instance());
-  TrafficLight_default_oneof_instance_->rect_ = const_cast< ::hdmap_proto::Rect*>(&::hdmap_proto::Rect::default_instance());
+  TrafficLight_default_oneof_instance_->cborder_ = const_cast< ::hdmap_proto::Circle*>(&::hdmap_proto::Circle::default_instance());
+  TrafficLight_default_oneof_instance_->pborder_ = const_cast< ::hdmap_proto::Polygon*>(&::hdmap_proto::Polygon::default_instance());
 }
 
 TrafficLight::TrafficLight(const TrafficLight& from)
@@ -262,12 +263,12 @@ TrafficLight* TrafficLight::New() const {
 
 void TrafficLight::clear_geometry() {
   switch(geometry_case()) {
-    case kCircle: {
-      delete geometry_.circle_;
+    case kCborder: {
+      delete geometry_.cborder_;
       break;
     }
-    case kRect: {
-      delete geometry_.rect_;
+    case kPborder: {
+      delete geometry_.pborder_;
       break;
     }
     case GEOMETRY_NOT_SET: {
@@ -358,29 +359,29 @@ bool TrafficLight::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_circle;
+        if (input->ExpectTag(34)) goto parse_cborder;
         break;
       }
 
-      // optional .hdmap_proto.Circle circle = 4;
+      // optional .hdmap_proto.Circle cborder = 4;
       case 4: {
         if (tag == 34) {
-         parse_circle:
+         parse_cborder:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_circle()));
+               input, mutable_cborder()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_rect;
+        if (input->ExpectTag(42)) goto parse_pborder;
         break;
       }
 
-      // optional .hdmap_proto.Rect rect = 5;
+      // optional .hdmap_proto.Polygon pborder = 5;
       case 5: {
         if (tag == 42) {
-         parse_rect:
+         parse_pborder:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_rect()));
+               input, mutable_pborder()));
         } else {
           goto handle_unusual;
         }
@@ -465,16 +466,16 @@ void TrafficLight::SerializeWithCachedSizes(
       3, this->type(), output);
   }
 
-  // optional .hdmap_proto.Circle circle = 4;
-  if (has_circle()) {
+  // optional .hdmap_proto.Circle cborder = 4;
+  if (has_cborder()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->circle(), output);
+      4, this->cborder(), output);
   }
 
-  // optional .hdmap_proto.Rect rect = 5;
-  if (has_rect()) {
+  // optional .hdmap_proto.Polygon pborder = 5;
+  if (has_pborder()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->rect(), output);
+      5, this->pborder(), output);
   }
 
   // optional .hdmap_proto.TrafficLight.TrafficLightState state = 6;
@@ -519,18 +520,18 @@ void TrafficLight::SerializeWithCachedSizes(
       3, this->type(), target);
   }
 
-  // optional .hdmap_proto.Circle circle = 4;
-  if (has_circle()) {
+  // optional .hdmap_proto.Circle cborder = 4;
+  if (has_cborder()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->circle(), target);
+        4, this->cborder(), target);
   }
 
-  // optional .hdmap_proto.Rect rect = 5;
-  if (has_rect()) {
+  // optional .hdmap_proto.Polygon pborder = 5;
+  if (has_pborder()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        5, this->rect(), target);
+        5, this->pborder(), target);
   }
 
   // optional .hdmap_proto.TrafficLight.TrafficLightState state = 6;
@@ -595,18 +596,18 @@ int TrafficLight::ByteSize() const {
   }
 
   switch (geometry_case()) {
-    // optional .hdmap_proto.Circle circle = 4;
-    case kCircle: {
+    // optional .hdmap_proto.Circle cborder = 4;
+    case kCborder: {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->circle());
+          this->cborder());
       break;
     }
-    // optional .hdmap_proto.Rect rect = 5;
-    case kRect: {
+    // optional .hdmap_proto.Polygon pborder = 5;
+    case kPborder: {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->rect());
+          this->pborder());
       break;
     }
     case GEOMETRY_NOT_SET: {
@@ -641,12 +642,12 @@ void TrafficLight::MergeFrom(const TrafficLight& from) {
   tile_id_.MergeFrom(from.tile_id_);
   link_ids_.MergeFrom(from.link_ids_);
   switch (from.geometry_case()) {
-    case kCircle: {
-      mutable_circle()->::hdmap_proto::Circle::MergeFrom(from.circle());
+    case kCborder: {
+      mutable_cborder()->::hdmap_proto::Circle::MergeFrom(from.cborder());
       break;
     }
-    case kRect: {
-      mutable_rect()->::hdmap_proto::Rect::MergeFrom(from.rect());
+    case kPborder: {
+      mutable_pborder()->::hdmap_proto::Polygon::MergeFrom(from.pborder());
       break;
     }
     case GEOMETRY_NOT_SET: {
@@ -686,11 +687,11 @@ bool TrafficLight::IsInitialized() const {
     if (!this->id().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->tile_id())) return false;
-  if (has_circle()) {
-    if (!this->circle().IsInitialized()) return false;
+  if (has_cborder()) {
+    if (!this->cborder().IsInitialized()) return false;
   }
-  if (has_rect()) {
-    if (!this->rect().IsInitialized()) return false;
+  if (has_pborder()) {
+    if (!this->pborder().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->link_ids())) return false;
   return true;

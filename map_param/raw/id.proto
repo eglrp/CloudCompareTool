@@ -8,7 +8,7 @@ message Id {
 }
 
 message Idx {
-  required uint64 x_idx = 1;
-  required uint64 y_idx = 2;
-  required uint64 z_idx = 3;
+  required uint64 x = 1;
+  required uint64 y = 2;
+  required uint64 z = 3;
 }

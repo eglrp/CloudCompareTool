@@ -2,12 +2,12 @@ syntax = "proto2";
 
 import "id.proto";
 import "geometry.proto";
-import "attribute.proto";
 import "object.proto";
 import "lane_marking.proto";
 import "traffic_sign.proto";
 import "traffic_light.proto";
 import "lane.proto";
+import "parking_space.proto";
 
 package hdmap_proto;
 
@@ -16,17 +16,19 @@ message Section {
   required Id id = 1;
   repeated Id tile_ids = 2;
 
-  repeated Lane refline = 3;
-  repeated Lane lanes = 4;
-  repeated StopLine stoplines = 5;
-  repeated SpeedBump speedbumps = 6;
-  repeated Pole poles = 7;
-  repeated Board boards = 8;
-  repeated Zone zones = 9;
-  repeated LaneMarking lane_markings = 10;
-  repeated TrafficLight traffic_lights = 11;
-  repeated TrafficSign traffic_signs = 12;
+  optional Lane refline = 3;
+  repeated Lane borders = 4;
+  repeated Lane lanes = 5;
+  repeated StopLine stoplines = 6;
+  repeated SpeedBump speedbumps = 7;
+  repeated Pole poles = 8;
+  repeated Board boards = 9;
+  repeated Zone zones = 10;
+  repeated LaneMarking lane_markings = 11;
+  repeated TrafficLight traffic_lights = 12;
+  repeated TrafficSign traffic_signs = 13;
+  repeated ParkingSpace parking_spaces = 14;
 
-  repeated uint64 pred_ids = 13;
-  repeated uint64 succ_ids = 14;
+  repeated uint32 pred_indices = 20;
+  repeated uint32 succ_indices = 21;
 }

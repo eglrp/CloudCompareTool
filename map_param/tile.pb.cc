@@ -35,8 +35,8 @@ void protobuf_AssignDesc_tile_2eproto() {
       "tile.proto");
   GOOGLE_CHECK(file != NULL);
   Tile_descriptor_ = file->message_type(0);
-  static const int Tile_offsets_[20] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, tile_id_),
+  static const int Tile_offsets_[21] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, idx_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, min_point_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, range_),
@@ -55,6 +55,7 @@ void protobuf_AssignDesc_tile_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, lane_marking_ids_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, traffic_light_ids_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, traffic_sign_ids_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, parking_space_ids_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tile, sections_ids_),
   };
   Tile_reflection_ =
@@ -105,33 +106,35 @@ void protobuf_AddDesc_tile_2eproto() {
   ::hdmap_proto::protobuf_AddDesc_traffic_5fsign_2eproto();
   ::hdmap_proto::protobuf_AddDesc_traffic_5flight_2eproto();
   ::hdmap_proto::protobuf_AddDesc_lane_2eproto();
+  ::hdmap_proto::protobuf_AddDesc_parking_5fspace_2eproto();
   ::hdmap_proto::protobuf_AddDesc_section_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\ntile.proto\022\013hdmap_proto\032\010id.proto\032\016geo"
     "metry.proto\032\014object.proto\032\022lane_marking."
     "proto\032\022traffic_sign.proto\032\023traffic_light"
-    ".proto\032\nlane.proto\032\rsection.proto\"\265\006\n\004Ti"
-    "le\022 \n\007tile_id\030\001 \002(\0132\017.hdmap_proto.Id\022\035\n\003"
-    "idx\030\002 \002(\0132\020.hdmap_proto.Idx\022%\n\tmin_point"
-    "\030\004 \002(\0132\022.hdmap_proto.Point\022*\n\005range\030\005 \002("
-    "\0162\033.hdmap_proto.Tile.TileRange\022\037\n\006childs"
-    "\030\006 \003(\0132\017.hdmap_proto.Id\022&\n\rcrosswalk_ids"
-    "\030\n \003(\0132\017.hdmap_proto.Id\022%\n\014junction_ids\030"
-    "\013 \003(\0132\017.hdmap_proto.Id\022)\n\020parkingspace_i"
-    "ds\030\014 \003(\0132\017.hdmap_proto.Id\022$\n\013section_ids"
-    "\030\r \003(\0132\017.hdmap_proto.Id\022$\n\013refline_ids\030\016"
-    " \003(\0132\017.hdmap_proto.Id\022!\n\010lane_ids\030\017 \003(\0132"
-    "\017.hdmap_proto.Id\022%\n\014stopline_ids\030\020 \003(\0132\017"
-    ".hdmap_proto.Id\022&\n\rspeedbump_ids\030\021 \003(\0132\017"
-    ".hdmap_proto.Id\022!\n\010pole_ids\030\022 \003(\0132\017.hdma"
-    "p_proto.Id\022\"\n\tboard_ids\030\023 \003(\0132\017.hdmap_pr"
-    "oto.Id\022!\n\010zone_ids\030\024 \003(\0132\017.hdmap_proto.I"
-    "d\022)\n\020lane_marking_ids\030\025 \003(\0132\017.hdmap_prot"
-    "o.Id\022*\n\021traffic_light_ids\030\026 \003(\0132\017.hdmap_"
-    "proto.Id\022)\n\020traffic_sign_ids\030\027 \003(\0132\017.hdm"
-    "ap_proto.Id\022%\n\014sections_ids\030\030 \003(\0132\017.hdma"
-    "p_proto.Id\"-\n\tTileRange\022\006\n\002T0\020(\022\006\n\002T1\020P\022"
-    "\007\n\002T2\020\240\001\022\007\n\002T3\020\300\002", 977);
+    ".proto\032\nlane.proto\032\023parking_space.proto\032"
+    "\rsection.proto\"\337\006\n\004Tile\022\033\n\002id\030\001 \002(\0132\017.hd"
+    "map_proto.Id\022\035\n\003idx\030\002 \002(\0132\020.hdmap_proto."
+    "Idx\022(\n\tmin_point\030\004 \002(\0132\025.hdmap_proto.Vec"
+    "tor3d\022*\n\005range\030\005 \002(\0162\033.hdmap_proto.Tile."
+    "TileRange\022\037\n\006childs\030\006 \003(\0132\017.hdmap_proto."
+    "Id\022&\n\rcrosswalk_ids\030\n \003(\0132\017.hdmap_proto."
+    "Id\022%\n\014junction_ids\030\013 \003(\0132\017.hdmap_proto.I"
+    "d\022)\n\020parkingspace_ids\030\014 \003(\0132\017.hdmap_prot"
+    "o.Id\022$\n\013section_ids\030\r \003(\0132\017.hdmap_proto."
+    "Id\022$\n\013refline_ids\030\016 \003(\0132\017.hdmap_proto.Id"
+    "\022!\n\010lane_ids\030\017 \003(\0132\017.hdmap_proto.Id\022%\n\014s"
+    "topline_ids\030\020 \003(\0132\017.hdmap_proto.Id\022&\n\rsp"
+    "eedbump_ids\030\021 \003(\0132\017.hdmap_proto.Id\022!\n\010po"
+    "le_ids\030\022 \003(\0132\017.hdmap_proto.Id\022\"\n\tboard_i"
+    "ds\030\023 \003(\0132\017.hdmap_proto.Id\022!\n\010zone_ids\030\024 "
+    "\003(\0132\017.hdmap_proto.Id\022)\n\020lane_marking_ids"
+    "\030\025 \003(\0132\017.hdmap_proto.Id\022*\n\021traffic_light"
+    "_ids\030\026 \003(\0132\017.hdmap_proto.Id\022)\n\020traffic_s"
+    "ign_ids\030\027 \003(\0132\017.hdmap_proto.Id\022*\n\021parkin"
+    "g_space_ids\030\030 \003(\0132\017.hdmap_proto.Id\022%\n\014se"
+    "ctions_ids\030\031 \003(\0132\017.hdmap_proto.Id\"-\n\tTil"
+    "eRange\022\006\n\002T0\020(\022\006\n\002T1\020P\022\007\n\002T2\020\240\001\022\007\n\002T3\020\300\002", 1040);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "tile.proto", &protobuf_RegisterTypes);
   Tile::default_instance_ = new Tile();
@@ -174,7 +177,7 @@ const Tile_TileRange Tile::TileRange_MAX;
 const int Tile::TileRange_ARRAYSIZE;
 #endif  // _MSC_VER
 #ifndef _MSC_VER
-const int Tile::kTileIdFieldNumber;
+const int Tile::kIdFieldNumber;
 const int Tile::kIdxFieldNumber;
 const int Tile::kMinPointFieldNumber;
 const int Tile::kRangeFieldNumber;
@@ -193,6 +196,7 @@ const int Tile::kZoneIdsFieldNumber;
 const int Tile::kLaneMarkingIdsFieldNumber;
 const int Tile::kTrafficLightIdsFieldNumber;
 const int Tile::kTrafficSignIdsFieldNumber;
+const int Tile::kParkingSpaceIdsFieldNumber;
 const int Tile::kSectionsIdsFieldNumber;
 #endif  // !_MSC_VER
 
@@ -203,9 +207,9 @@ Tile::Tile()
 }
 
 void Tile::InitAsDefaultInstance() {
-  tile_id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
+  id_ = const_cast< ::hdmap_proto::Id*>(&::hdmap_proto::Id::default_instance());
   idx_ = const_cast< ::hdmap_proto::Idx*>(&::hdmap_proto::Idx::default_instance());
-  min_point_ = const_cast< ::hdmap_proto::Point*>(&::hdmap_proto::Point::default_instance());
+  min_point_ = const_cast< ::hdmap_proto::Vector3d*>(&::hdmap_proto::Vector3d::default_instance());
 }
 
 Tile::Tile(const Tile& from)
@@ -217,7 +221,7 @@ Tile::Tile(const Tile& from)
 
 void Tile::SharedCtor() {
   _cached_size_ = 0;
-  tile_id_ = NULL;
+  id_ = NULL;
   idx_ = NULL;
   min_point_ = NULL;
   range_ = 40;
@@ -231,7 +235,7 @@ Tile::~Tile() {
 
 void Tile::SharedDtor() {
   if (this != default_instance_) {
-    delete tile_id_;
+    delete id_;
     delete idx_;
     delete min_point_;
   }
@@ -260,14 +264,14 @@ Tile* Tile::New() const {
 
 void Tile::Clear() {
   if (_has_bits_[0 / 32] & 15) {
-    if (has_tile_id()) {
-      if (tile_id_ != NULL) tile_id_->::hdmap_proto::Id::Clear();
+    if (has_id()) {
+      if (id_ != NULL) id_->::hdmap_proto::Id::Clear();
     }
     if (has_idx()) {
       if (idx_ != NULL) idx_->::hdmap_proto::Idx::Clear();
     }
     if (has_min_point()) {
-      if (min_point_ != NULL) min_point_->::hdmap_proto::Point::Clear();
+      if (min_point_ != NULL) min_point_->::hdmap_proto::Vector3d::Clear();
     }
     range_ = 40;
   }
@@ -286,6 +290,7 @@ void Tile::Clear() {
   lane_marking_ids_.Clear();
   traffic_light_ids_.Clear();
   traffic_sign_ids_.Clear();
+  parking_space_ids_.Clear();
   sections_ids_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -301,11 +306,11 @@ bool Tile::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .hdmap_proto.Id tile_id = 1;
+      // required .hdmap_proto.Id id = 1;
       case 1: {
         if (tag == 10) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_tile_id()));
+               input, mutable_id()));
         } else {
           goto handle_unusual;
         }
@@ -326,7 +331,7 @@ bool Tile::MergePartialFromCodedStream(
         break;
       }
 
-      // required .hdmap_proto.Point min_point = 4;
+      // required .hdmap_proto.Vector3d min_point = 4;
       case 4: {
         if (tag == 34) {
          parse_min_point:
@@ -565,20 +570,34 @@ bool Tile::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(186)) goto parse_traffic_sign_ids;
-        if (input->ExpectTag(194)) goto parse_sections_ids;
+        if (input->ExpectTag(194)) goto parse_parking_space_ids;
         break;
       }
 
-      // repeated .hdmap_proto.Id sections_ids = 24;
+      // repeated .hdmap_proto.Id parking_space_ids = 24;
       case 24: {
         if (tag == 194) {
+         parse_parking_space_ids:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_parking_space_ids()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(194)) goto parse_parking_space_ids;
+        if (input->ExpectTag(202)) goto parse_sections_ids;
+        break;
+      }
+
+      // repeated .hdmap_proto.Id sections_ids = 25;
+      case 25: {
+        if (tag == 202) {
          parse_sections_ids:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_sections_ids()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(194)) goto parse_sections_ids;
+        if (input->ExpectTag(202)) goto parse_sections_ids;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -608,10 +627,10 @@ failure:
 void Tile::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:hdmap_proto.Tile)
-  // required .hdmap_proto.Id tile_id = 1;
-  if (has_tile_id()) {
+  // required .hdmap_proto.Id id = 1;
+  if (has_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->tile_id(), output);
+      1, this->id(), output);
   }
 
   // required .hdmap_proto.Idx idx = 2;
@@ -620,7 +639,7 @@ void Tile::SerializeWithCachedSizes(
       2, this->idx(), output);
   }
 
-  // required .hdmap_proto.Point min_point = 4;
+  // required .hdmap_proto.Vector3d min_point = 4;
   if (has_min_point()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       4, this->min_point(), output);
@@ -722,10 +741,16 @@ void Tile::SerializeWithCachedSizes(
       23, this->traffic_sign_ids(i), output);
   }
 
-  // repeated .hdmap_proto.Id sections_ids = 24;
+  // repeated .hdmap_proto.Id parking_space_ids = 24;
+  for (int i = 0; i < this->parking_space_ids_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      24, this->parking_space_ids(i), output);
+  }
+
+  // repeated .hdmap_proto.Id sections_ids = 25;
   for (int i = 0; i < this->sections_ids_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      24, this->sections_ids(i), output);
+      25, this->sections_ids(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -738,11 +763,11 @@ void Tile::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Tile::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:hdmap_proto.Tile)
-  // required .hdmap_proto.Id tile_id = 1;
-  if (has_tile_id()) {
+  // required .hdmap_proto.Id id = 1;
+  if (has_id()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        1, this->tile_id(), target);
+        1, this->id(), target);
   }
 
   // required .hdmap_proto.Idx idx = 2;
@@ -752,7 +777,7 @@ void Tile::SerializeWithCachedSizes(
         2, this->idx(), target);
   }
 
-  // required .hdmap_proto.Point min_point = 4;
+  // required .hdmap_proto.Vector3d min_point = 4;
   if (has_min_point()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -870,11 +895,18 @@ void Tile::SerializeWithCachedSizes(
         23, this->traffic_sign_ids(i), target);
   }
 
-  // repeated .hdmap_proto.Id sections_ids = 24;
+  // repeated .hdmap_proto.Id parking_space_ids = 24;
+  for (int i = 0; i < this->parking_space_ids_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        24, this->parking_space_ids(i), target);
+  }
+
+  // repeated .hdmap_proto.Id sections_ids = 25;
   for (int i = 0; i < this->sections_ids_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        24, this->sections_ids(i), target);
+        25, this->sections_ids(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -889,11 +921,11 @@ int Tile::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .hdmap_proto.Id tile_id = 1;
-    if (has_tile_id()) {
+    // required .hdmap_proto.Id id = 1;
+    if (has_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->tile_id());
+          this->id());
     }
 
     // required .hdmap_proto.Idx idx = 2;
@@ -903,7 +935,7 @@ int Tile::ByteSize() const {
           this->idx());
     }
 
-    // required .hdmap_proto.Point min_point = 4;
+    // required .hdmap_proto.Vector3d min_point = 4;
     if (has_min_point()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -1037,7 +1069,15 @@ int Tile::ByteSize() const {
         this->traffic_sign_ids(i));
   }
 
-  // repeated .hdmap_proto.Id sections_ids = 24;
+  // repeated .hdmap_proto.Id parking_space_ids = 24;
+  total_size += 2 * this->parking_space_ids_size();
+  for (int i = 0; i < this->parking_space_ids_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->parking_space_ids(i));
+  }
+
+  // repeated .hdmap_proto.Id sections_ids = 25;
   total_size += 2 * this->sections_ids_size();
   for (int i = 0; i < this->sections_ids_size(); i++) {
     total_size +=
@@ -1085,16 +1125,17 @@ void Tile::MergeFrom(const Tile& from) {
   lane_marking_ids_.MergeFrom(from.lane_marking_ids_);
   traffic_light_ids_.MergeFrom(from.traffic_light_ids_);
   traffic_sign_ids_.MergeFrom(from.traffic_sign_ids_);
+  parking_space_ids_.MergeFrom(from.parking_space_ids_);
   sections_ids_.MergeFrom(from.sections_ids_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_tile_id()) {
-      mutable_tile_id()->::hdmap_proto::Id::MergeFrom(from.tile_id());
+    if (from.has_id()) {
+      mutable_id()->::hdmap_proto::Id::MergeFrom(from.id());
     }
     if (from.has_idx()) {
       mutable_idx()->::hdmap_proto::Idx::MergeFrom(from.idx());
     }
     if (from.has_min_point()) {
-      mutable_min_point()->::hdmap_proto::Point::MergeFrom(from.min_point());
+      mutable_min_point()->::hdmap_proto::Vector3d::MergeFrom(from.min_point());
     }
     if (from.has_range()) {
       set_range(from.range());
@@ -1118,8 +1159,8 @@ void Tile::CopyFrom(const Tile& from) {
 bool Tile::IsInitialized() const {
   if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
 
-  if (has_tile_id()) {
-    if (!this->tile_id().IsInitialized()) return false;
+  if (has_id()) {
+    if (!this->id().IsInitialized()) return false;
   }
   if (has_idx()) {
     if (!this->idx().IsInitialized()) return false;
@@ -1142,13 +1183,14 @@ bool Tile::IsInitialized() const {
   if (!::google::protobuf::internal::AllAreInitialized(this->lane_marking_ids())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->traffic_light_ids())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->traffic_sign_ids())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->parking_space_ids())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->sections_ids())) return false;
   return true;
 }
 
 void Tile::Swap(Tile* other) {
   if (other != this) {
-    std::swap(tile_id_, other->tile_id_);
+    std::swap(id_, other->id_);
     std::swap(idx_, other->idx_);
     std::swap(min_point_, other->min_point_);
     std::swap(range_, other->range_);
@@ -1167,6 +1209,7 @@ void Tile::Swap(Tile* other) {
     lane_marking_ids_.Swap(&other->lane_marking_ids_);
     traffic_light_ids_.Swap(&other->traffic_light_ids_);
     traffic_sign_ids_.Swap(&other->traffic_sign_ids_);
+    parking_space_ids_.Swap(&other->parking_space_ids_);
     sections_ids_.Swap(&other->sections_ids_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
