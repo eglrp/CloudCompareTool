@@ -47,22 +47,22 @@ bool dpxProtobufWriter::addRefLaneInfo(ccHObject* pRefLineSet,hdmap_proto::Lane*
 	//id 必须添加
 	hdmap_proto::Id* id = pRefLane->mutable_id();
 	pRefLane->set_function(hdmap_proto::Lane_LaneFunction_CITY_DRIVING);
-	id->set_id(nID);
+	id->set_id(0);
 	id->set_name("refLane_Ids");
-	int  nHeadID = MapCommon::GetRefLinePreID(pDPXRefLine);
-	int  nSucID = MapCommon::GetRefLineSucID(pDPXRefLine);
-	if(nHeadID>-1)
-		pRefLane->add_predecessor_ids(nHeadID);
-	if(nSucID>-1)
-		pRefLane->add_successor_ids(nSucID);
 
-	int nPtCount = pDPXRefLine->size();
-	ccLine2ProtoLane(pDPXRefLine,pRefLane);
+	//每个线段转换后添加到Section
+	vector<ccPolyline*> vecLines = MapCommon::getLinesFromLineSet(pRefLineSet);
+	for(int i = 0;i<vecLines.size();i++)
+	{
+		ccPolyline* pLine = vecLines[i];
+		hdmap_proto::CurveLine* pCurveLine = pRefLane->add_lines();
+		ccLine2ProtoCurveLine(pLine,pCurveLine);
+	}
 
 	return true;
 }
 
-bool dpxProtobufWriter::addRoadLaneInfo(ccPolyline* pDPXRoadLine,hdmap_proto::Lane* pRoadLane,int nID)
+bool dpxProtobufWriter::addRoadLaneInfo(ccHObject* pRoadLineSet,hdmap_proto::Lane* pRoadLane,int nID)
 {
 	//id 必须添加
 	hdmap_proto::Id* id = pRoadLane->mutable_id();
@@ -70,25 +70,35 @@ bool dpxProtobufWriter::addRoadLaneInfo(ccPolyline* pDPXRoadLine,hdmap_proto::La
 	id->set_id(nID);
 	id->set_name("roadLane_ids");
 
-	int nPtCount = pDPXRoadLine->size();
-	ccLine2ProtoLane(pDPXRoadLine,pRoadLane);
+	ccLine2ProtoCurveLine(pRoadLineSet,pRoadLane);
 
 	return true;
 }
 
-void dpxProtobufWriter::ccLine2ProtoLane(ccPolyline* pCCLine,hdmap_proto::Lane* pProtoLane)
+void dpxProtobufWriter::ccLine2ProtoCurveLine(ccPolyline* pCCLine,hdmap_proto::CurveLine* pCurveLine)
 {
-//	int nPtCount = pCCLine->size();
-//	for(int iPt = 0;iPt < nPtCount;iPt++)
-//	{
+	if(pCurveLine==nullptr)
+		return;
+	int nPtCount = pCCLine->size();
+	for(int iPt = 0;iPt < nPtCount;iPt++)
+	{
+		hdmap_proto::Vector3d* pProtoPt =  pCurveLine->add_points();
+		const CCVector3* pCCpt = pCCLine->getPoint(iPt);
+		pProtoPt->set_x(pCCpt->x);
+		pProtoPt->set_y(pCCpt->y);
+		pProtoPt->set_z(pCCpt->z);
+
+		//------------------------old------------------------//
+
 //		hdmap_proto::Vector3d* pPt = new hdmap_proto::Vector3d();
 //		hdmap_proto::Vector3d* pPrePt = new hdmap_proto::Vector3d();
 //		hdmap_proto::Vector3d* pSucPt = new hdmap_proto::Vector3d();
 //		//pRefLine坐标构造prefLane
-//		hdmap_proto::CurveControl* pControl = pProtoLane->add_controls();
+
+//		hdmap_proto::CurveControl* pControl = pCurveLine->add_controls();
 //		const CCVector3* pt1 = pCCLine->getPoint(iPt);
 //		createPtotoPt(*pt1,pPt);
-//
+
 //		if(iPt==0) //首点
 //		{
 //			const CCVector3* pt2 = pCCLine->getPoint(iPt+1);
@@ -119,7 +129,7 @@ void dpxProtobufWriter::ccLine2ProtoLane(ccPolyline* pCCLine,hdmap_proto::Lane* 
 //			pControl->set_allocated_pre_point(pPrePt);
 //			pControl->set_allocated_suc_point(pSucPt);
 //		}
-//	}
+	}
 }
 
 //CCVector3 dpxProtobufWriter::getCtrlPercentPt(CCVector3 pt1,CCVector3 pt2)
@@ -474,9 +484,17 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			id->set_id(nSectionID);
 			id->set_name("Section_ids");
 		}
+
 		//add  refLineSet
 		hdmap_proto::Lane* pRefLane = pSection->mutable_refline();
 		addRefLaneInfo(pRefLineSetObj,pRefLane); //add Lane info
+
+		int  nHeadID = MapCommon::GetRefLinePreID(pSectionObj);
+		int  nSucID = MapCommon::GetRefLineSucID(pSectionObj);
+		if(nHeadID>-1)
+			pSection->add_pred_indices(nHeadID);
+		if(nSucID>-1)
+			pSection->add_succ_indices(nSucID);
 
 		//----------------------------------------//
 		int nRoadID = 0;
@@ -495,6 +513,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			if(!pUnknownObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
 				continue;
 
+			ccPolyline* pUnknownLine = ccHObjectCaster::ToPolyline(pUnknownObj);
 			dpxObjectType eType = dpxObjectType(pUnknownObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
 			if(eType==eObj_RoadLineSet)
 			{
@@ -505,7 +524,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_RoadStopLine)
 			{
-				if(!pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
+				if(pUnknownLine==nullptr || !pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
 					continue;
 
 				QString strUID = pUnknownLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
@@ -533,7 +552,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_TrafficLight_pole) //红绿灯柱子 圆柱体
 			{
-				if(pUnknownLine->size()<3)
+				if(pUnknownLine==nullptr || pUnknownLine->size()<3)
 					continue;
 				if(!pUnknownLine->hasMetaData(DPX_RADIUS))
 					continue;
@@ -547,7 +566,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_TrafficLight) //面
 			{
-				if(!pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
+				if(pUnknownLine==nullptr || !pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
 					continue;
 
 				QString strUID = pUnknownLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
@@ -574,7 +593,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_TrafficSign)
 			{
-				if(!pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
+				if(pUnknownLine==nullptr || !pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
 					continue;
 				QString strUID = pUnknownLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
 				ccHObject::Container vecHObjs;
@@ -599,7 +618,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_SpeedBump)
 			{
-				if(!pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
+				if(pUnknownLine==nullptr || !pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
 					continue;
 				QString strUID = pUnknownLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
 				ccHObject::Container vecHObjs;
@@ -624,7 +643,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_Board)
 			{
-				if(!pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
+				if(pUnknownLine==nullptr || !pUnknownLine->hasMetaData(DPX_RELATED_PLANE_UID))
 					continue;
 				QString strUID = pUnknownLine->getMetaData(DPX_RELATED_PLANE_UID).toString();
 				ccHObject::Container vecHObjs;
@@ -649,6 +668,8 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 			}
 			else if(eType==eObj_LaneMarking)
 			{
+				if(pUnknownLine==nullptr)
+					continue;
 				nLanemarking++;
 				hdmap_proto::LaneMarking* pLaneMarking = pSection->add_lane_markings();
 				addLanemarkingInfo(pUnknownLine,pLaneMarking,nLanemarking);

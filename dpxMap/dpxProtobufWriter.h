@@ -32,7 +32,7 @@ protected:
 	bool OutPutOtherAll(dpxMap* pMap,hdmap_proto::Map* protoMap);
 //
 private:
-	bool addRefLaneInfo(ccHObject* pRefLineSet,hdmap_proto::Lane* pRefLane)
+	bool addRefLaneInfo(ccHObject* pRefLineSet,hdmap_proto::Lane* pRefLane);
 	bool addRoadLaneInfo(ccPolyline* pDPXRoadLine,hdmap_proto::Lane* pRoadLane,int nID);
 
 	bool addStopLineInfo(ccPlane* pPlane,hdmap_proto::StopLine* pStopLine,int nID);
@@ -54,7 +54,7 @@ private:
 
 	bool getRelatedPlaneBorderPts(ccPolyline* pLine,vector<CCVector3>& vecBorderPts);
 //
-	void ccLine2ProtoLane(ccPolyline* pCCLine,hdmap_proto::Lane* pProtoLane);
+	void dpxProtobufWriter::ccLine2ProtoCurveLine(ccPolyline* pCCLine,hdmap_proto::CurveLine* pProtoLane);
 //	void createPtotoPt(CCVector3 ccPt,hdmap_proto::Vector3d* pProtpPt);
 //
 //	//Ctrl比率的点

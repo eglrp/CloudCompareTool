@@ -75,22 +75,22 @@ double  DisTance(CCVector3 pt1,CCVector3 pt2)
 }
 
 //前JuncitonID
-int  GetRefLinePreID(ccPolyline* pDPXRefLine)
+int  GetRefLinePreID(ccHObject* pSectionObj)
 {
-	if(pDPXRefLine==nullptr)
+	if(pSectionObj==nullptr)
 		return -1;
-	if(pDPXRefLine->hasMetaData(HEAD_JUNCTION_UID))
+	if(pSectionObj->hasMetaData(HEAD_JUNCTION_UID))
 		return -1;
-	return pDPXRefLine->getMetaData(HEAD_JUNCTION_UID).toInt();
+	return pSectionObj->getMetaData(HEAD_JUNCTION_UID).toInt();
 }
 //后JuncitonID
-int  GetRefLineSucID(ccPolyline* pDPXRefLine)
+int  GetRefLineSucID(ccHObject* pSectionObj)
 {
-	if(pDPXRefLine==nullptr)
+	if(pSectionObj==nullptr)
 		return -1;
-	if(pDPXRefLine->hasMetaData(TAIL_JUNCTION_UID))
+	if(pSectionObj->hasMetaData(TAIL_JUNCTION_UID))
 		return -1;
-	return pDPXRefLine->getMetaData(TAIL_JUNCTION_UID).toInt();
+	return pSectionObj->getMetaData(TAIL_JUNCTION_UID).toInt();
 }
 
 vector<int>  GetRelatedRefID(ccPolyline* pJunctionLine)

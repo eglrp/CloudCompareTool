@@ -22,9 +22,9 @@ namespace  MapCommon
 	double  DPX_MAP_API DisTance(CCVector3 pt1,CCVector3 pt2);
 
 	//前JuncitonID
-	int  DPX_MAP_API GetRefLinePreID(ccPolyline* pDPXRefLine);
+	int  DPX_MAP_API GetRefLinePreID(ccHObject* pSectionObj);
 	//后JuncitonID
-	int  DPX_MAP_API GetRefLineSucID(ccPolyline* pDPXRefLine);
+	int  DPX_MAP_API GetRefLineSucID(ccHObject* pSectionObj);
 
 	vector<int> DPX_MAP_API GetRelatedRefID(ccPolyline* pJunctionLine);
 
