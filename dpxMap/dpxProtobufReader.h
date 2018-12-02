@@ -24,19 +24,16 @@ public:
 	virtual bool ImportMap(dpxMap* pMap,const QString& strImportFile);
 protected:
 	//输出Section信息
-//	bool OutPutSection(hdmap_proto::Section* pSection,dpxMap* pMap);
+	bool OutPutSection(hdmap_proto::Section* pSection,dpxMap* pMap);
 //	//输出其余信息
-//	bool ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap);
+	bool ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap);
 	//CrossWalks斑马线
 	bool AddCrossWalks(hdmap_proto::Map& protoMap,ccHObject* pFatherObj);
 //	//Junction路口
-//	bool AddJunctions(hdmap_proto::Map& protoMap,ccHObject* pFatherObj);
+	bool AddJunctions(hdmap_proto::Map& protoMap,ccHObject* pFatherObj);
 //	//停车位
 	bool AddParkingSpace(hdmap_proto::Map& protoMap,ccHObject* pFatherObj);
-//	//设置refLine的几何和属性信息
-//	bool AddRefLineInfor(hdmap_proto::Lane* reflane,ccPointCloud* p3DVertices,ccPolyline* pCCRefLine);
-//	//添加RoadLines
-//	bool AddRoadLines(hdmap_proto::Section* pSection,ccHObject* pFatherObj);
+
 //	//添加StopLines
 	bool AddStopLineInfor(hdmap_proto::StopLine* pStopLine,ccPointCloud* p3DVertices,ccPolyline* pCCStopLine);
 	//添加Poles
@@ -53,8 +50,7 @@ private:
 	bool CreateBorderLine(hdmap_proto::Polygon* pPolygon,ccPointCloud* p3DVertices,ccPolyline* pBorderLine);
 	void getRDisPt(CCVector3 ptFirst,CCVector3 ptSecond,double dDis,CCVector3& RDisPt);//求取圆柱曲面上一个点
 //	//把ProtoLane的控制点信息转成CCLine
-//	bool ProtoLane2CCLine(hdmap_proto::Lane* pLane,ccPointCloud* p3DVertices,ccPolyline* pLine);
-//	bool ConfimObjType(ccPolyline* pLine,dpxObjectType eType);
+	bool ProtoLane2CCLine(hdmap_proto::CurveLine* pCurveLine,ccPointCloud* p3DVertices,ccPolyline* pLine);
 };
 
 #endif

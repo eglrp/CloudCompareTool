@@ -53,7 +53,7 @@ void dpxCylinderTool::toolActivated()
 		if(pLine==nullptr)
 			break;
 
-        ccHObject* pSection = MapCommon::getRelatedSection(pLine);
+        ccHObject* pSection = dpxMapCommonFunc::getRelatedSection(pLine);
         if(pSection==nullptr)
 			break;
 

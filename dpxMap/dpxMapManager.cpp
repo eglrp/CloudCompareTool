@@ -182,7 +182,7 @@ bool dpxMapManager::AutoCreateJunction(dpxMap* pMap)
 		if(pDPXRefLine==0)
 			continue;
 
-		if(!MapCommon::ConfimObjType(pDPXRefLine,eObj_RoadRefLine)) //如果是refLine
+		if(!dpxMapCommonFunc::ConfimObjType(pDPXRefLine,eObj_RoadRefLine)) //如果是refLine
 			continue;
 
 		if(!pDPXRefLine->hasMetaData(DPX_UID))
@@ -205,7 +205,7 @@ bool dpxMapManager::AutoCreateJunction(dpxMap* pMap)
 	}
 
 	ccLog::Warning("refInfos Size = " + QString::number(refInfos.size()));
-	MapCommon::CreateJunction(pMap,refInfos,0.5,10);
+	dpxMapCommonFunc::CreateJunction(pMap,refInfos,0.5,10);
 }
 
 

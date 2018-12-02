@@ -1,6 +1,6 @@
 
 #include "dpxMapCommonFunc.h"
-namespace MapCommon {
+namespace dpxMapCommonFunc {
 
 bool ConfimObjType(ccHObject* pHObject,dpxObjectType eType)
 {
@@ -260,7 +260,7 @@ vector<ccHObject*> GetRefLineSets(dpxMap* pMap)
 		if(!pSection->hasMetaData(DPX_UID))
 			continue;
 
-		ccHObject* pRefLineSet = MapCommon::getRefLineSet(pSection);
+		ccHObject* pRefLineSet = dpxMapCommonFunc::getRefLineSet(pSection);
 		if(pRefLineSet==nullptr)
 			continue;
 
@@ -598,12 +598,12 @@ bool splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,vector<ccPolyline*
 	int nPtSize = pTargetLine->size();
     if(nPtSize<3) //将该线段删除
 		return false;
-	vector<CCVector3>  vecPts =  MapCommon::GetAllPoints(pTargetLine);
+	vector<CCVector3>  vecPts =  dpxMapCommonFunc::GetAllPoints(pTargetLine);
     if(nDeleteSegmetIndex==0)//删除首段——删除首个点
     {
 		vector<CCVector3> vecPt1 = vecPts;
 		vecPt1.erase(vecPt1.begin()+0);
-		ccPolyline* pLine = MapCommon::CreatLineFromPts(vecPt1);
+		ccPolyline* pLine = dpxMapCommonFunc::CreatLineFromPts(vecPt1);
 		if(pLine != nullptr)
 			vecResult.push_back(pLine);
     }
@@ -611,7 +611,7 @@ bool splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,vector<ccPolyline*
 	{
 		vector<CCVector3> vecPt2 = vecPts;
 		vecPt2.erase(vecPt2.begin()+vecPt2.size()-1);
-		ccPolyline* pLine = MapCommon::CreatLineFromPts(vecPt2);
+		ccPolyline* pLine = dpxMapCommonFunc::CreatLineFromPts(vecPt2);
 		if(pLine != nullptr)
 			vecResult.push_back(pLine);
 	}
@@ -629,8 +629,8 @@ bool splitLine(ccPolyline* pTargetLine,int nDeleteSegmetIndex,vector<ccPolyline*
 			vecPt2.push_back(vecPts[j]);
         }
 
-        ccPolyline* pLine1 = MapCommon::CreatLineFromPts(vecPt1);
-		ccPolyline* pLine2 = MapCommon::CreatLineFromPts(vecPt2);
+        ccPolyline* pLine1 = dpxMapCommonFunc::CreatLineFromPts(vecPt1);
+		ccPolyline* pLine2 = dpxMapCommonFunc::CreatLineFromPts(vecPt2);
 		if(pLine1 != nullptr)
 			vecResult.push_back(pLine1);
 		if(pLine2 != nullptr)

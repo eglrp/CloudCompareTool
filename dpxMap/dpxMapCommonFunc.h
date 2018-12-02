@@ -13,7 +13,7 @@
 #include <ccHObjectCaster.h>
 #include "dpxGeoEngine.h"
 
-namespace  MapCommon
+namespace  dpxMapCommonFunc
 {
 	//创建连接Junction
 	bool DPX_MAP_API CreateJunction(dpxMap* pMap,vector<refLineInfo> &refInfos,double dMinDis,double dMaxDis);

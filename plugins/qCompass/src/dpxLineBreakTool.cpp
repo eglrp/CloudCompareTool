@@ -78,8 +78,8 @@ void dpxLineBreakTool::onMouseLeftClick(int x,int y)
 	if(dDistance>SNAP_TOL_VALUE)  //删除线段，直线一分为二
 		return;
 
-	ccHObject* pLineSet = MapCommon::getRelatedLineSet(pLine);
-	ccHObject* pSection = MapCommon::getRelatedSection(pLine);
+	ccHObject* pLineSet = dpxMapCommonFunc::getRelatedLineSet(pLine);
+	ccHObject* pSection = dpxMapCommonFunc::getRelatedSection(pLine);
 	if(pLineSet == nullptr || pSection == nullptr)
 		return;
 
@@ -87,10 +87,10 @@ void dpxLineBreakTool::onMouseLeftClick(int x,int y)
 	dpxSelectionManager::Instance()->ClearSelection();
 
 	vector<ccPolyline*> vecSplitLines;
-	if(!MapCommon::splitLine(pLine,nSegNum,vecSplitLines))
+	if(!dpxMapCommonFunc::splitLine(pLine,nSegNum,vecSplitLines))
 		return;
 
-	vector<ccPolyline*> vecLines = MapCommon::getLinesFromLineSet(pLineSet);
+	vector<ccPolyline*> vecLines = dpxMapCommonFunc::getLinesFromLineSet(pLineSet);
 	ccLog::Warning("old Line size ====:"+QString::number(vecLines.size()));
 	vector<ccPolyline*> vecNewLines;
 	for(int i = 0 ;i < vecLines.size();i++)
@@ -101,12 +101,12 @@ void dpxLineBreakTool::onMouseLeftClick(int x,int y)
 		}
 		else //其余段保留
 		{
-			ccPolyline* pNewLine = MapCommon::CopyNewLine(vecLines[i]);
+			ccPolyline* pNewLine = dpxMapCommonFunc::CopyNewLine(vecLines[i]);
 			vecNewLines.push_back(pNewLine);
 		}
 	}
-	bool bIsRefLine = MapCommon::ConfimObjType(pLine,eObj_RoadRefLine);
-    ccHObject* pNewLineSet = MapCommon::CreateRoadLine(vecNewLines,bIsRefLine);
+	bool bIsRefLine = dpxMapCommonFunc::ConfimObjType(pLine,eObj_RoadRefLine);
+    ccHObject* pNewLineSet = dpxMapCommonFunc::CreateRoadLine(vecNewLines,bIsRefLine);
 
     //移除旧的LineSet 添加新的折线
     pSection->removeChild(pLineSet);
@@ -143,8 +143,8 @@ void dpxLineBreakTool::onMouseRightClick(int x,int y)
 	ccPolyline* pLine = nearestInfo.m_pLine;
 	if(pLine==nullptr || pLine==0)
 		return;
-	bool bRefLine = MapCommon::ConfimObjType(pLine,eObj_RoadRefLine);
-	bool bRoadLine = MapCommon::ConfimObjType(pLine,eObj_RoadLine);
+	bool bRefLine = dpxMapCommonFunc::ConfimObjType(pLine,eObj_RoadRefLine);
+	bool bRoadLine = dpxMapCommonFunc::ConfimObjType(pLine,eObj_RoadLine);
 	if(!bRefLine && !bRoadLine) //只能给RoadLine和RefLine加点
 		return;
 
@@ -204,10 +204,10 @@ void dpxLineBreakTool::onMouseReleaseEvent(int x,int y)
 	m_bMoveNode = false;
 	pLine->invalidateBoundingBox();
 	//更新符号线的几何
-	ccHObject* pLineSet = MapCommon::getRelatedLineSet(pLine);
+	ccHObject* pLineSet = dpxMapCommonFunc::getRelatedLineSet(pLine);
 	if(pLineSet!=nullptr)
 	{
-		MapCommon::UpdateSymbolLine(pLineSet);//更新LineSet中的符号线
+		dpxMapCommonFunc::UpdateSymbolLine(pLineSet);//更新LineSet中的符号线
 	}
 
 	m_polyTip->setEnabled(false);

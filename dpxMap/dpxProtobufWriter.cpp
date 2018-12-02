@@ -51,7 +51,7 @@ bool dpxProtobufWriter::addRefLaneInfo(ccHObject* pRefLineSet,hdmap_proto::Lane*
 	id->set_name("refLane_Ids");
 
 	//每个线段转换后添加到Section
-	vector<ccPolyline*> vecLines = MapCommon::getLinesFromLineSet(pRefLineSet);
+	vector<ccPolyline*> vecLines = dpxMapCommonFunc::getLinesFromLineSet(pRefLineSet);
 	for(int i = 0;i<vecLines.size();i++)
 	{
 		ccPolyline* pLine = vecLines[i];
@@ -70,8 +70,14 @@ bool dpxProtobufWriter::addRoadLaneInfo(ccHObject* pRoadLineSet,hdmap_proto::Lan
 	id->set_id(nID);
 	id->set_name("roadLane_ids");
 
-	ccLine2ProtoCurveLine(pRoadLineSet,pRoadLane);
-
+	//每个线段转换后添加到Section
+	vector<ccPolyline*> vecLines = dpxMapCommonFunc::getLinesFromLineSet(pRoadLineSet);
+	for(int i = 0;i<vecLines.size();i++)
+	{
+		ccPolyline* pLine = vecLines[i];
+		hdmap_proto::CurveLine* pCurveLine = pRoadLane->add_lines();
+		ccLine2ProtoCurveLine(pLine,pCurveLine);
+	}
 	return true;
 }
 
@@ -141,15 +147,7 @@ void dpxProtobufWriter::ccLine2ProtoCurveLine(ccPolyline* pCCLine,hdmap_proto::C
 //	TargetPt.z = pt1.z + DPX_CTRL_PERCENT * Normal.z;
 //	return TargetPt;
 //}
-//
-//void dpxProtobufWriter::createPtotoPt(CCVector3 ccPt,hdmap_proto::Vector3d* pProtpPt)
-//{
-//	if(pProtpPt==nullptr)
-//		return;
-//	pProtpPt->set_x(ccPt.x);
-//	pProtpPt->set_y(ccPt.y);
-//	pProtpPt->set_z(ccPt.z);
-//}
+
 
 
 bool dpxProtobufWriter::addStopLineInfo(ccPlane* pPlane,hdmap_proto::StopLine* pStopLine,int nID)
@@ -407,7 +405,7 @@ bool dpxProtobufWriter::addJunctionInfo(ccPolyline* pDPXine,hdmap_proto::Junctio
 		points->set_z(vecPonPts[j].z);
 	}
 
-	vector<int>  vecIDs =  MapCommon::GetRelatedRefID(pDPXine);
+	vector<int>  vecIDs =  dpxMapCommonFunc::GetRelatedRefID(pDPXine);
 	for(int i=0;i<vecIDs.size();i++)
 	{
 		hdmap_proto::Id* pIds = pJunction->add_link_ids();
@@ -467,14 +465,14 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 		if(pSectionObj==nullptr)
 			continue;
 
-		if(!MapCommon::ConfimObjType(pSectionObj,eObj_Section)) //如果是refLine
+		if(!dpxMapCommonFunc::ConfimObjType(pSectionObj,eObj_Section)) //如果是refLine
 			continue;
 
 		hdmap_proto::Section* pSection = protoMap->add_sections();
 		if(pSection==nullptr)
 			continue;
 
-		ccHObject* pRefLineSetObj = MapCommon::getRefLineSet(pSectionObj);
+		ccHObject* pRefLineSetObj = dpxMapCommonFunc::getRefLineSet(pSectionObj);
 		if(pRefLineSetObj==nullptr)
 			continue;
 
@@ -489,8 +487,8 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 		hdmap_proto::Lane* pRefLane = pSection->mutable_refline();
 		addRefLaneInfo(pRefLineSetObj,pRefLane); //add Lane info
 
-		int  nHeadID = MapCommon::GetRefLinePreID(pSectionObj);
-		int  nSucID = MapCommon::GetRefLineSucID(pSectionObj);
+		int  nHeadID = dpxMapCommonFunc::GetRefLinePreID(pSectionObj);
+		int  nSucID = dpxMapCommonFunc::GetRefLineSucID(pSectionObj);
 		if(nHeadID>-1)
 			pSection->add_pred_indices(nHeadID);
 		if(nSucID>-1)

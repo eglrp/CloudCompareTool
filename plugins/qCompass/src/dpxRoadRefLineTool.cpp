@@ -50,17 +50,17 @@ void dpxRoadRefLineTool::onMouseRightClick(int x,int y)
 		else
 		{
 			vector<ccPolyline*> vecRefLine;
-			ccPolyline* pCopyLine = MapCommon::CopyNewLine(m_poly3D);
+			ccPolyline* pCopyLine = dpxMapCommonFunc::CopyNewLine(m_poly3D);
 			vecRefLine.push_back(pCopyLine);
 
-			ccHObject* pSection = MapCommon::CreateSection(vecRefLine);
+			ccHObject* pSection = dpxMapCommonFunc::CreateSection(vecRefLine);
 
-			int nID = MapCommon::getMaxSectionID();
+			int nID = dpxMapCommonFunc::getMaxSectionID();
 			pSection->setMetaData(DPX_UID,nID+1); //标ID
 			pSection->setDisplay(m_window); //just in case
 
 			//RefLines
-			vector<ccHObject*> vecRefLines = MapCommon::getRefLines(pSection);
+			vector<ccHObject*> vecRefLines = dpxMapCommonFunc::getRefLines(pSection);
 
 			dpxSelectionManager::Instance()->AddObject2Selection(vecRefLines);
 			dpxSelectionManager::Instance()->redrawSelectionSet();

@@ -28,162 +28,199 @@ bool dpxProtobufReader::ImportMap(dpxMap* pMap,const QString& strImportFile)
 	hdmap_proto::Map protoMap;
 	hdmap_op::MapIO mapIO(protoMap);
 	mapIO.readTextFileToProtobufMap(strFileName);
-	////hdmap_proto::Map  protoMap = mapIO.getHDmap();
 
-//	//-----------------2:Section--------------------------
-//	int nSectionSize = protoMap.sections_size();
-//	ccLog::Warning("section number =" + QString::number(nSectionSize));
-//	for(int i= 0;i<nSectionSize;i++)
-//	{
-//		hdmap_proto::Section* pSection =  protoMap.mutable_sections(i);
-//		OutPutSection(pSection,pMap);
-//	}
-//
-//	//----------------3:OutPut independence---------------
-//	ImportOtherAll(protoMap,pMap);
+	//-----------------2:Section--------------------------
+	int nSectionSize = protoMap.sections_size();
+	ccLog::Warning("section number =" + QString::number(nSectionSize));
+	for(int i= 0;i<nSectionSize;i++)
+	{
+		hdmap_proto::Section* pSection =  protoMap.mutable_sections(i);
+		OutPutSection(pSection,pMap);
+	}
+
+	//----------------3:OutPut independence---------------
+	ImportOtherAll(protoMap,pMap);
 	return true;
 }
 
 
-//bool dpxProtobufReader::OutPutSection(hdmap_proto::Section* pSection,dpxMap* pMap)
-//{
-//	if(pSection==nullptr || pMap==nullptr)
-//		return false;
-//
-//	dpxLayer* pRoadLyr = pMap->getRoadLyr();
-//	if(pRoadLyr==nullptr)
-//		return false;
-//
-//	int nRefSize = pSection->refline_size();
-//	if(nRefSize!=1)
-//		return false;
-//
-//	//RefLine
-//	hdmap_proto::Lane* reflane = pSection->mutable_refline(0);
-//	if(reflane==nullptr)
-//		return false;
-//	int nControlSize = reflane->controls_size();
-//	if(nControlSize<1)
-//		return false;
-//
-//	//--------------RefLine-----------------------//
-//	ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//	ccPolyline* pCCRefLine  = new ccPolyline(p3DVertices);
-//
-//	if(!AddRefLineInfor(reflane,p3DVertices,pCCRefLine))
-//		return false;
-//
-//	//--------------RoadLine-----------------------//
-//	AddRoadLines(pSection,pCCRefLine);
-//
-//	//---------------StopLane----------------------//
-//	int nStopLaneSize = pSection->stoplines_size();
-//	for(int i =0;i<nStopLaneSize;i++)
-//	{
-//		hdmap_proto::StopLine* pStopLine = pSection->mutable_stoplines(i);
-//		if(pStopLine==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pCCStopLine  = new ccPolyline(p3DVertices);
-//		if(!AddStopLineInfor(pStopLine,p3DVertices,pCCStopLine))
-//			continue;
-//		pCCRefLine->addChild(pCCStopLine);
-//	}
-//
-//	//--------------Poles-----------------------//
-//	int nSize = pSection->poles_size();
-//	for(int i =0;i<nSize;i++)
-//	{
-//		hdmap_proto::Pole* pPole = pSection->mutable_poles(i);
-//		if(pPole==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pCCPoleLine  = new ccPolyline(p3DVertices);
-//		if(!AddPoleInfor(pPole,p3DVertices,pCCPoleLine))
-//			continue;
-//		pCCRefLine->addChild(pCCPoleLine);
-//	}
-//
-//	//---------------------
-//	int ntlSize = pSection->traffic_lights_size();
-//	for(int i =0;i<ntlSize;i++)
-//	{
-//		hdmap_proto::TrafficLight* ptrafficLight = pSection->mutable_traffic_lights(i);
-//		if(ptrafficLight==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//		if(!AddtrafficLightInfor(ptrafficLight,p3DVertices,pCCPlaneLine))
-//			continue;
-//		pCCRefLine->addChild(pCCPlaneLine);
-//	}
-//
-//	int nSignlSize = pSection->traffic_signs_size();
-//	for(int i =0;i<nSignlSize;i++)
-//	{
-//		hdmap_proto::TrafficSign* ptrafficSign = pSection->mutable_traffic_signs(i);
-//		if(ptrafficSign==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//		if(!AddtrafficSignInfor(ptrafficSign,p3DVertices,pCCPlaneLine))
-//			continue;
-//		pCCRefLine->addChild(pCCPlaneLine);
-//	}
-//	//Speedbump
-//	int nSpeedbumpSize = pSection->speedbumps_size();
-//	for(int i =0;i<nSpeedbumpSize;i++)
-//	{
-//		hdmap_proto::SpeedBump* pSpeedBump = pSection->mutable_speedbumps(i);
-//		if(pSpeedBump==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//		if(!AddSpeedbumpInfor(pSpeedBump,p3DVertices,pCCPlaneLine))
-//			continue;
-//		pCCRefLine->addChild(pCCPlaneLine);
-//	}
-//
-//	//Board
-//	int nBoardSize = pSection->boards_size();
-//	for(int i =0;i<nBoardSize;i++)
-//	{
-//		hdmap_proto::Board* pBoard = pSection->mutable_boards(i);
-//		if(pBoard==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//		if(!AddBoardInfor(pBoard,p3DVertices,pCCPlaneLine))
-//			continue;
-//		pCCRefLine->addChild(pCCPlaneLine);
-//	}
-//
-//	//lane_markings
-//	int nLaneMarkingSize = pSection->lane_markings_size();
-//	for(int i =0;i<nLaneMarkingSize;i++)
-//	{
-//		hdmap_proto::LaneMarking* pLaneMarking = pSection->mutable_lane_markings(i);
-//		if(pLaneMarking==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//		if(!AddLaneMarkingInfor(pLaneMarking,p3DVertices,pCCPlaneLine))
-//			continue;
-//		pCCPlaneLine->setName("LaneMarking");
-//		pCCRefLine->addChild(pCCPlaneLine);
-//	}
-//
-//	//Add refLine
-//	pRoadLyr->AddFeature(pCCRefLine);
-//	return true;
-//}
+bool dpxProtobufReader::OutPutSection(hdmap_proto::Section* pSection,dpxMap* pMap)
+{
+	if(pSection==nullptr || pMap==nullptr)
+		return false;
+
+	dpxLayer* pRoadLyr = pMap->getRoadLyr();
+	if(pRoadLyr==nullptr)
+		return false;
+
+	//----------------------refLine------------------
+	if(!pSection->has_refline())
+		return false;
+	//RefLine
+	hdmap_proto::Lane* reflane = pSection->mutable_refline();
+	if(reflane==nullptr)
+		return false;
+	int nCurveLineSize = reflane->lines_size();
+	vector<ccPolyline*> vecRefLines;
+	for(int i =0;i<nCurveLineSize;i++)
+	{
+		 hdmap_proto::CurveLine* pCurveLine = reflane->mutable_lines(i);
+		 ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		 ccPolyline* pCCRefLine  = new ccPolyline(p3DVertices);
+
+		 if(!ProtoLane2CCLine(pCurveLine,p3DVertices,pCCRefLine))
+			continue;
+		vecRefLines.push_back(pCCRefLine);
+	}
+
+	ccHObject* pSectionObj = dpxMapCommonFunc::CreateSection(vecRefLines);
+	if(pSectionObj==nullptr)
+		return false;
+
+	int nPreSize = pSection->pred_indices_size();
+	if(nPreSize>0)
+	{
+		int nPreID = pSection->pred_indices(0);
+		pSectionObj->setMetaData(HEAD_JUNCTION_UID,nPreID);
+	}
+	int nSucID = pSection->succ_indices_size();
+	if(nSucID>0)
+	{
+		int nSucID = reflane->succ_indices(0);
+		pSectionObj->setMetaData(TAIL_JUNCTION_UID,nSucID);
+	}
+
+	pRoadLyr->AddFeature(pSectionObj);
+
+	//---------------------------------------------------------
+
+	//----------------------RoadLane------------------------
+	int nCommonLaneSize =  pSection->lanes_size();
+	for(int i = 0;i<nCommonLaneSize;i++)
+	{
+		hdmap_proto::Lane* pCommonLane =  pSection->mutable_lanes(i);
+		int nCurveLineSize = pCommonLane->lines_size();
+		vector<ccPolyline*> vecRoadLines;
+		for(int i =0;i<nCurveLineSize;i++)
+		{
+			hdmap_proto::CurveLine* pCurveLine = pCommonLane->mutable_lines(i);
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pRoadLine  = new ccPolyline(p3DVertices);
+
+			if(!ProtoLane2CCLine(pCurveLine,p3DVertices,pRoadLine))
+				continue;
+			vecRoadLines.push_back(pRoadLine);
+		}
+		ccHObject* pRoadLineSet = dpxMapCommonFunc::CreateRoadLine(vecRoadLines,false);
+		if(pRoadLineSet!=nullptr)
+			pSectionObj->addChild(pRoadLineSet);
+	}
+
+	//---------------StopLane----------------------//
+	int nStopLaneSize = pSection->stoplines_size();
+	for(int i =0;i<nStopLaneSize;i++)
+	{
+		hdmap_proto::StopLine* pStopLine = pSection->mutable_stoplines(i);
+		if(pStopLine==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pCCStopLine  = new ccPolyline(p3DVertices);
+		if(!AddStopLineInfor(pStopLine,p3DVertices,pCCStopLine))
+			continue;
+		pSectionObj->addChild(pCCStopLine);
+	}
+
+	//--------------Poles-----------------------//
+	int nSize = pSection->poles_size();
+	for(int i =0;i<nSize;i++)
+	{
+		hdmap_proto::Pole* pPole = pSection->mutable_poles(i);
+		if(pPole==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pCCPoleLine  = new ccPolyline(p3DVertices);
+		if(!AddPoleInfor(pPole,p3DVertices,pCCPoleLine))
+			continue;
+		pSectionObj->addChild(pCCPoleLine);
+	}
+
+	//---------------------
+	int ntlSize = pSection->traffic_lights_size();
+	for(int i =0;i<ntlSize;i++)
+	{
+		hdmap_proto::TrafficLight* ptrafficLight = pSection->mutable_traffic_lights(i);
+		if(ptrafficLight==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+		if(!AddtrafficLightInfor(ptrafficLight,p3DVertices,pCCPlaneLine))
+			continue;
+		pSectionObj->addChild(pCCPlaneLine);
+	}
+
+	int nSignlSize = pSection->traffic_signs_size();
+	for(int i =0;i<nSignlSize;i++)
+	{
+		hdmap_proto::TrafficSign* ptrafficSign = pSection->mutable_traffic_signs(i);
+		if(ptrafficSign==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+		if(!AddtrafficSignInfor(ptrafficSign,p3DVertices,pCCPlaneLine))
+			continue;
+		pSectionObj->addChild(pCCPlaneLine);
+	}
+	//Speedbump
+	int nSpeedbumpSize = pSection->speedbumps_size();
+	for(int i =0;i<nSpeedbumpSize;i++)
+	{
+		hdmap_proto::SpeedBump* pSpeedBump = pSection->mutable_speedbumps(i);
+		if(pSpeedBump==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+		if(!AddSpeedbumpInfor(pSpeedBump,p3DVertices,pCCPlaneLine))
+			continue;
+		pSectionObj->addChild(pCCPlaneLine);
+	}
+
+	//Board
+	int nBoardSize = pSection->boards_size();
+	for(int i =0;i<nBoardSize;i++)
+	{
+		hdmap_proto::Board* pBoard = pSection->mutable_boards(i);
+		if(pBoard==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+		if(!AddBoardInfor(pBoard,p3DVertices,pCCPlaneLine))
+			continue;
+		pSectionObj->addChild(pCCPlaneLine);
+	}
+
+	//lane_markings
+	int nLaneMarkingSize = pSection->lane_markings_size();
+	for(int i =0;i<nLaneMarkingSize;i++)
+	{
+		hdmap_proto::LaneMarking* pLaneMarking = pSection->mutable_lane_markings(i);
+		if(pLaneMarking==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+		if(!AddLaneMarkingInfor(pLaneMarking,p3DVertices,pCCPlaneLine))
+			continue;
+		pCCPlaneLine->setName("LaneMarking");
+		pSectionObj->addChild(pCCPlaneLine);
+	}
+	return true;
+}
 
 bool dpxProtobufReader::AddLaneMarkingInfor(hdmap_proto::LaneMarking* pLaneMarking,ccPointCloud* p3DVertices,ccPolyline* pCCLine)
 {
@@ -291,130 +328,130 @@ bool dpxProtobufReader::AddtrafficLightInfor(hdmap_proto::TrafficLight*ptrafficL
 	return true;
 }
 
-////输出其余信息
-//bool dpxProtobufReader::ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap)
-//{
-//	if(pMap==nullptr)
-//		return false;
-//	//stopLines
-//	dpxLayer* pStopLineLyr = pMap->getStopLineLyr();
-//	if(pStopLineLyr!=nullptr)
-//	{
-//		int nStopLineSize = protoMap.stoplines_size();
-//		for(int i = 0;i<nStopLineSize;i++)
-//		{
-//			ccHObject* pStopLineRootObj = pStopLineLyr->getRootData();
-//			hdmap_proto::StopLine* pStopLine = protoMap.mutable_stoplines(i);
-//			if(pStopLine==nullptr)
-//				continue;
-//
-//			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//			ccPolyline* pCCStopLine  = new ccPolyline(p3DVertices);
-//			if(!AddStopLineInfor(pStopLine,p3DVertices,pCCStopLine))
-//				continue;
-//			pStopLineRootObj->addChild(pCCStopLine);
-//		}
-//	}
-//
-//	//CrossWalks
-//	dpxLayer* pCrossLyr = pMap->getCrossWalkLyr();
-//	if(pCrossLyr!=nullptr)
-//	{
-//		ccHObject* pCWRootObj = pCrossLyr->getRootData();
-//		AddCrossWalks(protoMap,pCWRootObj);
-//	}
-//
-//	//Lights  Pole
-//	dpxLayer* pLightLyr = pMap->getTrafficLightLyr();
-//	if(pLightLyr!=nullptr)
-//	{
-//		ccHObject* pLRootObj = pLightLyr->getRootData();
-//		//--------------Poles-----------------------//
-//		int nSize = protoMap.poles_size();
-//		for(int i =0;i<nSize;i++)
-//		{
-//			hdmap_proto::Pole* pPole = protoMap.mutable_poles(i);
-//			if(pPole==nullptr)
-//				continue;
-//
-//			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//			ccPolyline* pCCPoleLine  = new ccPolyline(p3DVertices);
-//			if(!AddPoleInfor(pPole,p3DVertices,pCCPoleLine))
-//				continue;
-//			pLRootObj->addChild(pCCPoleLine);
-//		}
-//	}
-//
-//	//trafficSign  面状指示牌
-//	dpxLayer* pIndicatorLry = pMap->getTrafficSignLyr();
-//	if(pIndicatorLry!=nullptr)
-//	{
-//		ccHObject* pLRootObj = pIndicatorLry->getRootData();
-//
-//		int nSignlSize = protoMap.traffic_signs_size();
-//		for(int i =0;i<nSignlSize;i++)
-//		{
-//			hdmap_proto::TrafficSign* ptrafficSign = protoMap.mutable_traffic_signs(i);
-//			if(ptrafficSign==nullptr)
-//				continue;
-//
-//			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//			if(!AddtrafficSignInfor(ptrafficSign,p3DVertices,pCCPlaneLine))
-//				continue;
-//			pLRootObj->addChild(pCCPlaneLine);
-//		}
-//	}
-//	//trafficSign  面状指示牌
-//	dpxLayer* pSpeedbumpsLry = pMap->getSpeedbumpsLyr();
-//	if(pSpeedbumpsLry!=nullptr)
-//	{
-//		ccHObject* pRootObj = pSpeedbumpsLry->getRootData();
-//		//Speedbump
-//		int nSpeedbumpSize = protoMap.speedbumps_size();
-//		for(int i =0;i<nSpeedbumpSize;i++)
-//		{
-//			hdmap_proto::SpeedBump* pSpeedBump = protoMap.mutable_speedbumps(i);
-//			if(pSpeedBump==nullptr)
-//				continue;
-//
-//			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//			if(!AddSpeedbumpInfor(pSpeedBump,p3DVertices,pCCPlaneLine))
-//				continue;
-//			pRootObj->addChild(pCCPlaneLine);
-//		}
-//	}
-//
-//	dpxLayer* pBoardLry = pMap->getBoardLyr();
-//	if(pBoardLry!=nullptr)
-//	{
-//		ccHObject* pRootObj = pBoardLry->getRootData();
-//		int nBoardSize = protoMap.boards_size();
-//		for(int i =0;i<nBoardSize;i++)
-//		{
-//			hdmap_proto::Board* pBoard = protoMap.mutable_boards(i);
-//			if(pBoard==nullptr)
-//				continue;
-//
-//			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
-//			if(!AddBoardInfor(pBoard,p3DVertices,pCCPlaneLine))
-//				continue;
-//			pRootObj->addChild(pCCPlaneLine);
-//		}
-//	}
-//
-//	//ParkingSpace
-//	dpxLayer* pParkingSpaceLyr = pMap->getParkingSpaceLyr();
-//	if(pParkingSpaceLyr!=nullptr)
-//	{
-//		ccHObject* pRootObj = pParkingSpaceLyr->getRootData();
-//		AddParkingSpace(protoMap,pRootObj);
-//	}
-//
-//	return 	true;
-//}
+//输出其余信息
+bool dpxProtobufReader::ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap)
+{
+	if(pMap==nullptr)
+		return false;
+	//stopLines
+	dpxLayer* pStopLineLyr = pMap->getStopLineLyr();
+	if(pStopLineLyr!=nullptr)
+	{
+		int nStopLineSize = protoMap.stoplines_size();
+		for(int i = 0;i<nStopLineSize;i++)
+		{
+			ccHObject* pStopLineRootObj = pStopLineLyr->getRootData();
+			hdmap_proto::StopLine* pStopLine = protoMap.mutable_stoplines(i);
+			if(pStopLine==nullptr)
+				continue;
+
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pCCStopLine  = new ccPolyline(p3DVertices);
+			if(!AddStopLineInfor(pStopLine,p3DVertices,pCCStopLine))
+				continue;
+			pStopLineRootObj->addChild(pCCStopLine);
+		}
+	}
+
+	//CrossWalks
+	dpxLayer* pCrossLyr = pMap->getCrossWalkLyr();
+	if(pCrossLyr!=nullptr)
+	{
+		ccHObject* pCWRootObj = pCrossLyr->getRootData();
+		AddCrossWalks(protoMap,pCWRootObj);
+	}
+
+	//Lights  Pole
+	dpxLayer* pLightLyr = pMap->getTrafficLightLyr();
+	if(pLightLyr!=nullptr)
+	{
+		ccHObject* pLRootObj = pLightLyr->getRootData();
+		//--------------Poles-----------------------//
+		int nSize = protoMap.poles_size();
+		for(int i =0;i<nSize;i++)
+		{
+			hdmap_proto::Pole* pPole = protoMap.mutable_poles(i);
+			if(pPole==nullptr)
+				continue;
+
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pCCPoleLine  = new ccPolyline(p3DVertices);
+			if(!AddPoleInfor(pPole,p3DVertices,pCCPoleLine))
+				continue;
+			pLRootObj->addChild(pCCPoleLine);
+		}
+	}
+
+	//trafficSign  面状指示牌
+	dpxLayer* pIndicatorLry = pMap->getTrafficSignLyr();
+	if(pIndicatorLry!=nullptr)
+	{
+		ccHObject* pLRootObj = pIndicatorLry->getRootData();
+
+		int nSignlSize = protoMap.traffic_signs_size();
+		for(int i =0;i<nSignlSize;i++)
+		{
+			hdmap_proto::TrafficSign* ptrafficSign = protoMap.mutable_traffic_signs(i);
+			if(ptrafficSign==nullptr)
+				continue;
+
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+			if(!AddtrafficSignInfor(ptrafficSign,p3DVertices,pCCPlaneLine))
+				continue;
+			pLRootObj->addChild(pCCPlaneLine);
+		}
+	}
+	//trafficSign  面状指示牌
+	dpxLayer* pSpeedbumpsLry = pMap->getSpeedbumpsLyr();
+	if(pSpeedbumpsLry!=nullptr)
+	{
+		ccHObject* pRootObj = pSpeedbumpsLry->getRootData();
+		//Speedbump
+		int nSpeedbumpSize = protoMap.speedbumps_size();
+		for(int i =0;i<nSpeedbumpSize;i++)
+		{
+			hdmap_proto::SpeedBump* pSpeedBump = protoMap.mutable_speedbumps(i);
+			if(pSpeedBump==nullptr)
+				continue;
+
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+			if(!AddSpeedbumpInfor(pSpeedBump,p3DVertices,pCCPlaneLine))
+				continue;
+			pRootObj->addChild(pCCPlaneLine);
+		}
+	}
+
+	dpxLayer* pBoardLry = pMap->getBoardLyr();
+	if(pBoardLry!=nullptr)
+	{
+		ccHObject* pRootObj = pBoardLry->getRootData();
+		int nBoardSize = protoMap.boards_size();
+		for(int i =0;i<nBoardSize;i++)
+		{
+			hdmap_proto::Board* pBoard = protoMap.mutable_boards(i);
+			if(pBoard==nullptr)
+				continue;
+
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+			if(!AddBoardInfor(pBoard,p3DVertices,pCCPlaneLine))
+				continue;
+			pRootObj->addChild(pCCPlaneLine);
+		}
+	}
+
+	//ParkingSpace
+	dpxLayer* pParkingSpaceLyr = pMap->getParkingSpaceLyr();
+	if(pParkingSpaceLyr!=nullptr)
+	{
+		ccHObject* pRootObj = pParkingSpaceLyr->getRootData();
+		AddParkingSpace(protoMap,pRootObj);
+	}
+
+	return 	true;
+}
 
 bool dpxProtobufReader::AddParkingSpace(hdmap_proto::Map& protoMap,ccHObject* pFatherObj)
 {
@@ -494,52 +531,52 @@ bool dpxProtobufReader::AddCrossWalks(hdmap_proto::Map& protoMap,ccHObject* pFat
 	return true;
 }
 
-////Junction
-//bool dpxProtobufReader::AddJunctions(hdmap_proto::Map& protoMap,ccHObject* pFatherObj)
-//{
-//	int nJunctions = protoMap.junctions_size();
-//	for(int i = 0;i<nJunctions;i++)
-//	{
-//		hdmap_proto::Junction* pJunction = protoMap.mutable_junctions(i);
-//		if(pJunction==nullptr)
-//			continue;
-//
-//		if(!pJunction->has_polygon())
-//			continue;
-//
-//		if(!pJunction->has_id())
-//			continue;
-//
-//		hdmap_proto::Polygon* pPolygon = pJunction->mutable_polygon();
-//		if(pPolygon==nullptr)
-//			continue;
-//
-//		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
-//		ccPolyline* pBorderLine  = new ccPolyline(p3DVertices);
-//		if(!CreateBorderLine(pPolygon,p3DVertices,pBorderLine))
-//			continue;
-//		pBorderLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_Junction); //地物类型
-//		pBorderLine->setName("Junction");
-//		pBorderLine->setColor(ccColor::green);
-//
-//		//ID
-//		int nUID = pJunction->mutable_id()->id();
-//		pBorderLine->setMetaData(DPX_UID,nUID);
-//
-//		//related vecRefIDs
-//		int nLinkSize = pJunction->link_ids_size();
-//		vector<int> vecLinkIDs;
-//		for(int i=0;i<nLinkSize;i++)
-//		{
-//			hdmap_proto::Id  ID = pJunction->link_ids(i);
-//			vecLinkIDs.push_back(ID.id());
-//		}
-//		pBorderLine->setMetaData(RELATED_REFLINE_UID,MapCommon::getRefIDValue(vecLinkIDs));
-//		pFatherObj->addChild(pBorderLine);
-//	}
-//
-//	return true;
-//}
+//Junction
+bool dpxProtobufReader::AddJunctions(hdmap_proto::Map& protoMap,ccHObject* pFatherObj)
+{
+	int nJunctions = protoMap.junctions_size();
+	for(int i = 0;i<nJunctions;i++)
+	{
+		hdmap_proto::Junction* pJunction = protoMap.mutable_junctions(i);
+		if(pJunction==nullptr)
+			continue;
+
+		if(!pJunction->has_border())
+			continue;
+
+		if(!pJunction->has_id())
+			continue;
+
+		hdmap_proto::Polygon* pPolygon = pJunction->mutable_border();
+		if(pPolygon==nullptr)
+			continue;
+
+		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+		ccPolyline* pBorderLine  = new ccPolyline(p3DVertices);
+		if(!CreateBorderLine(pPolygon,p3DVertices,pBorderLine))
+			continue;
+		pBorderLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_Junction); //地物类型
+		pBorderLine->setName("Junction");
+		pBorderLine->setColor(ccColor::green);
+
+		//ID
+		int nUID = pJunction->mutable_id()->id();
+		pBorderLine->setMetaData(DPX_UID,nUID);
+
+		//related vecRefIDs
+		int nLinkSize = pJunction->link_ids_size();
+		vector<int> vecLinkIDs;
+		for(int i=0;i<nLinkSize;i++)
+		{
+			hdmap_proto::Id  ID = pJunction->link_ids(i);
+			vecLinkIDs.push_back(ID.id());
+		}
+		pBorderLine->setMetaData(RELATED_REFLINE_UID,dpxMapCommonFunc::getRefIDValue(vecLinkIDs));
+		pFatherObj->addChild(pBorderLine);
+	}
+
+	return true;
+}
 
 
 bool dpxProtobufReader::CreateBorderLine(hdmap_proto::Polygon* pPolygon,ccPointCloud* p3DVertices,ccPolyline* pBorderLine)
@@ -729,100 +766,26 @@ bool dpxProtobufReader::AddStopLineInfor(hdmap_proto::StopLine* pStopLine,ccPoin
 	return true;
 }
 
+ bool dpxProtobufReader::ProtoLane2CCLine(hdmap_proto::CurveLine* pCurveLine,ccPointCloud* p3DVertices,ccPolyline* pLine)
+ {
+	int nPtSize = pCurveLine->points_size();
+	if(nPtSize<1)
+		return false;
 
-//bool dpxProtobufReader::AddRoadLines(hdmap_proto::Section* pSection,ccHObject* pFatherObj)
-//{
-//	if(pSection==nullptr || pFatherObj==nullptr)
-//		return false;
-//	//RoadLane
-//	ccPointCloud* pRoad3DVertices =nullptr ;
-//	ccPolyline* pCCRoadLine =nullptr ;
-//	int nLaneSize = pSection->lanes_size();
-//	for(int i =0;i<nLaneSize;i++)
-//	{
-//		hdmap_proto::Lane* pRoadlane = pSection->mutable_lanes(i);
-//		if(pRoadlane==nullptr)
-//			continue;
-//		pRoad3DVertices = new ccPointCloud("Vertices");
-//		pCCRoadLine  = new ccPolyline(pRoad3DVertices);
-//
-//		ProtoLane2CCLine(pRoadlane,pRoad3DVertices,pCCRoadLine);
-//		ccColor::Rgb roadLineColor ROAD_LINE_COLOR; //宏定义颜色
-//		pCCRoadLine->setTempColor(roadLineColor);
-//		pCCRoadLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadLine); //记录要素类型为refLine
-//		pCCRoadLine->setName("roadLine");
-//
-//		pFatherObj->addChild(pCCRoadLine);
-//	}
-//}
-//
-//bool dpxProtobufReader::AddRefLineInfor(hdmap_proto::Lane* reflane,ccPointCloud* p3DVertices,ccPolyline* pCCRefLine)
-//{
-//	if(!ProtoLane2CCLine(reflane,p3DVertices,pCCRefLine))
-//		return false;
-//
-//	hdmap_proto::Id protoId = reflane->id();
-//	int nID = protoId.id();
-//	ccColor::Rgb refLineColor REF_LINE_COLOR; //宏定义颜色
-//	pCCRefLine->setTempColor(refLineColor);
-//	pCCRefLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_RoadRefLine); //记录要素类型为refLine
-//	pCCRefLine->setMetaData(DPX_UID,nID);
-//	pCCRefLine->setName("refLine_"+ QString::number(nID));
-//
-//	int nPreSize = reflane->predecessor_ids_size();
-//	if(nPreSize==1)
-//	{
-//		int nPreID = reflane->predecessor_ids(0);
-//		pCCRefLine->setMetaData(HEAD_JUNCTION_UID,nPreID);
-//	}
-//
-//	int nSucID = reflane->successor_ids_size();
-//	if(nSucID==1)
-//	{
-//		int nSucID = reflane->successor_ids(0);
-//		pCCRefLine->setMetaData(TAIL_JUNCTION_UID,nSucID);
-//	}
-//
-//	return true;
-//}
-//
-// bool dpxProtobufReader::ProtoLane2CCLine(hdmap_proto::Lane* pLane,ccPointCloud* p3DVertices,ccPolyline* pLine)
-// {
-//	int nControlSize = pLane->controls_size();
-//	if(nControlSize<1)
-//		return false;
-//
-//	p3DVertices->reserve(nControlSize+1);
-//	pLine->reserve(nControlSize+2);
-//
-//	for(int i = 0;i < nControlSize; i++)
-//	{
-//		hdmap_proto::CurveControl* pControl = pLane->mutable_controls(i);
-//		hdmap_proto::Vector3d  protoPt = pControl->point();
-//
-//		CCVector3 ccPt;
-//		ccPt.x = protoPt.x();
-//		ccPt.y = protoPt.y();
-//		ccPt.z = protoPt.z();
-//		p3DVertices->addPoint(ccPt);
-//		pLine->addPointIndex(i);
-//	}
-//	return true;
-// }
-//
-//
-//bool dpxProtobufReader::ConfimObjType(ccPolyline* pLine,dpxObjectType eType)
-//{
-//	if(pLine == nullptr)
-//		return false;
-//
-//	bool bHasObjType = pLine->hasMetaData(DPX_OBJECT_TYPE_NAME);
-//	if(!bHasObjType)
-//		return false;
-//
-//	dpxObjectType tempType = dpxObjectType(pLine->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
-//	if(tempType==eType)
-//		return true;
-//
-//	return false;
-//}
+	p3DVertices->reserve(nPtSize+1);
+	pLine->reserve(nPtSize+2);
+
+	for(int i = 0;i < nPtSize; i++)
+	{
+		hdmap_proto::Vector3d protoPt = pCurveLine->points(i);
+
+		CCVector3 ccPt;
+		ccPt.x = protoPt.x();
+		ccPt.y = protoPt.y();
+		ccPt.z = protoPt.z();
+		p3DVertices->addPoint(ccPt);
+		pLine->addPointIndex(i);
+	}
+	return true;
+ }
+
