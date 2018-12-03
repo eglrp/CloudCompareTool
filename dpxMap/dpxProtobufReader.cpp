@@ -25,9 +25,10 @@ bool dpxProtobufReader::ImportMap(dpxMap* pMap,const QString& strImportFile)
 		return false;
 	std::string strFileName = strImportFile.toStdString();
 	//----------------1:mapHeader-------------------------
-	hdmap_proto::Map protoMap;
-	hdmap_op::MapIO mapIO(protoMap);
+	hdmap_proto::Map tempMap;
+	hdmap_op::MapIO mapIO(tempMap);
 	mapIO.readTextFileToProtobufMap(strFileName);
+	hdmap_proto::Map protoMap = mapIO.getptotoMap();
 
 	//-----------------2:Section--------------------------
 	int nSectionSize = protoMap.sections_size();
@@ -83,15 +84,14 @@ bool dpxProtobufReader::OutPutSection(hdmap_proto::Section* pSection,dpxMap* pMa
 		int nPreID = pSection->pred_indices(0);
 		pSectionObj->setMetaData(HEAD_JUNCTION_UID,nPreID);
 	}
-	int nSucID = pSection->succ_indices_size();
-	if(nSucID>0)
+	int nSucSize = pSection->succ_indices_size();
+	if(nSucSize>0)
 	{
 		int nSucID = reflane->succ_indices(0);
 		pSectionObj->setMetaData(TAIL_JUNCTION_UID,nSucID);
 	}
 
 	pRoadLyr->AddFeature(pSectionObj);
-
 	//---------------------------------------------------------
 
 	//----------------------RoadLane------------------------

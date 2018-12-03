@@ -518,7 +518,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 				//road
 				nRoadID ++;//从1开始
 				hdmap_proto::Lane* pRoadLane = pSection->add_lanes();
-				addRoadLaneInfo(pUnknownLine,pRoadLane,nRoadID);
+				addRoadLaneInfo(pUnknownObj,pRoadLane,nRoadID); //改成Obj
 			}
 			else if(eType==eObj_RoadStopLine)
 			{

@@ -20,13 +20,14 @@ public:
   MapIO() {}
   MapIO(hdmap_proto::Map &map) : map_(map) {}
 
-  bool readTextFileToProtobufMap(std::string &file_path);  
-  bool saveProtobufMapToTextFile(std::string &save_path); 
+  bool readTextFileToProtobufMap(std::string &file_path);
+  bool saveProtobufMapToTextFile(std::string &save_path);
 
   bool readBinaryFileToProtobufMap(std::string &file_path);
   bool saveProtobufMapToBinaryFile(std::string &save_path);
 
   std::string toString();
+  hdmap_proto::Map getptotoMap() {return map_;}
 private:
   hdmap_proto::Map map_;
 };

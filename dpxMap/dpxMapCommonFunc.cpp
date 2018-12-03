@@ -79,7 +79,7 @@ int  GetRefLinePreID(ccHObject* pSectionObj)
 {
 	if(pSectionObj==nullptr)
 		return -1;
-	if(pSectionObj->hasMetaData(HEAD_JUNCTION_UID))
+	if(!pSectionObj->hasMetaData(HEAD_JUNCTION_UID))
 		return -1;
 	return pSectionObj->getMetaData(HEAD_JUNCTION_UID).toInt();
 }
@@ -88,7 +88,7 @@ int  GetRefLineSucID(ccHObject* pSectionObj)
 {
 	if(pSectionObj==nullptr)
 		return -1;
-	if(pSectionObj->hasMetaData(TAIL_JUNCTION_UID))
+	if(!pSectionObj->hasMetaData(TAIL_JUNCTION_UID))
 		return -1;
 	return pSectionObj->getMetaData(TAIL_JUNCTION_UID).toInt();
 }
