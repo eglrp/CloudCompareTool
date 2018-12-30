@@ -50,6 +50,10 @@ bool dpxProtobufReader::OutPutSection(hdmap_proto::Section* pSection,dpxMap* pMa
 	if(pSection==nullptr || pMap==nullptr)
 		return false;
 
+	if(!pSection->has_id())
+		return false;
+	int nSectionID = pSection->id().id();
+
 	dpxLayer* pRoadLyr = pMap->getRoadLyr();
 	if(pRoadLyr==nullptr)
 		return false;
@@ -74,9 +78,14 @@ bool dpxProtobufReader::OutPutSection(hdmap_proto::Section* pSection,dpxMap* pMa
 		vecRefLines.push_back(pCCRefLine);
 	}
 
+	//SectionObj
 	ccHObject* pSectionObj = dpxMapCommonFunc::CreateSection(vecRefLines);
 	if(pSectionObj==nullptr)
 		return false;
+	//设置名称
+	QString strName = "Section_" + QString::number(nSectionID);
+	pSectionObj->setMetaData(DPX_UID,nSectionID);
+	pSectionObj->setName(strName);
 
 	int nPreSize = pSection->pred_indices_size();
 	if(nPreSize>0)
@@ -361,11 +370,11 @@ bool dpxProtobufReader::ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap)
 		AddCrossWalks(protoMap,pCWRootObj);
 	}
 
-	//Lights  Pole
-	dpxLayer* pLightLyr = pMap->getTrafficLightLyr();
-	if(pLightLyr!=nullptr)
+	// Pole
+	dpxLayer* pPoleLyr = pMap->getPoleLyr();
+	if(pPoleLyr!=nullptr)
 	{
-		ccHObject* pLRootObj = pLightLyr->getRootData();
+		ccHObject* pLRootObj = pPoleLyr->getRootData();
 		//--------------Poles-----------------------//
 		int nSize = protoMap.poles_size();
 		for(int i =0;i<nSize;i++)
@@ -382,6 +391,27 @@ bool dpxProtobufReader::ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap)
 		}
 	}
 
+	//Traffic Lights
+	dpxLayer* pTrafficLightLyr = pMap->getTrafficLightLyr();
+	if(pTrafficLightLyr!=nullptr)
+	{
+		ccHObject* pLRootObj = pTrafficLightLyr->getRootData();
+		//--------------Poles-----------------------//
+		int nLightSize = protoMap.traffic_lights_size();
+		for(int i =0;i<nLightSize;i++)
+		{
+			hdmap_proto::TrafficLight* pLight = protoMap.mutable_traffic_lights(i);
+			if(pLight==nullptr)
+				continue;
+
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pCCPoleLine  = new ccPolyline(p3DVertices);
+			if(!AddtrafficLightInfor(pLight,p3DVertices,pCCPoleLine))
+				continue;
+			pLRootObj->addChild(pCCPoleLine);
+		}
+	}
+
 	//trafficSign  面状指示牌
 	dpxLayer* pIndicatorLry = pMap->getTrafficSignLyr();
 	if(pIndicatorLry!=nullptr)
@@ -389,19 +419,37 @@ bool dpxProtobufReader::ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap)
 		ccHObject* pLRootObj = pIndicatorLry->getRootData();
 
 		int nSignlSize = protoMap.traffic_signs_size();
+		std::set<double>  setDouble;
 		for(int i =0;i<nSignlSize;i++)
 		{
 			hdmap_proto::TrafficSign* ptrafficSign = protoMap.mutable_traffic_signs(i);
 			if(ptrafficSign==nullptr)
 				continue;
+			//-------------------------临时-----------------------//
+			hdmap_proto::Polygon* pPolygon = ptrafficSign->mutable_pborder();
+			if(pPolygon==nullptr)
+				continue;
+			int nBorderSize = pPolygon->points_size();
+			if(nBorderSize<1)
+				continue;
 
+			hdmap_proto::Vector3d ptVec = pPolygon->points(0);
+			double  dX = ptVec.x();
+			if(setDouble.find(dX) == setDouble.end())
+					setDouble.insert(dX);
+			else
+				continue;
+			//-------------------------临时-----------------------//
 			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
 			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
 			if(!AddtrafficSignInfor(ptrafficSign,p3DVertices,pCCPlaneLine))
 				continue;
 			pLRootObj->addChild(pCCPlaneLine);
 		}
+			cout << "TOtal Count" << endl;
+			cout <<  QString::number(setDouble.size()).toStdString() <<endl;
 	}
+
 	//trafficSign  面状指示牌
 	dpxLayer* pSpeedbumpsLry = pMap->getSpeedbumpsLyr();
 	if(pSpeedbumpsLry!=nullptr)
@@ -448,6 +496,35 @@ bool dpxProtobufReader::ImportOtherAll(hdmap_proto::Map& protoMap,dpxMap* pMap)
 	{
 		ccHObject* pRootObj = pParkingSpaceLyr->getRootData();
 		AddParkingSpace(protoMap,pRootObj);
+	}
+
+	//lane_markings
+	dpxLayer* pLaneMarkingLyr = pMap->getLaneMarkingLyr();
+	if(pLaneMarkingLyr!=nullptr)
+	{
+		ccHObject* pRootObj = pLaneMarkingLyr->getRootData();
+		int nLaneMarkingSize = protoMap.lane_markings_size();
+		for(int i =0;i<nLaneMarkingSize;i++)
+		{
+			hdmap_proto::LaneMarking* pLaneMarking = protoMap.mutable_lane_markings(i);
+			if(pLaneMarking==nullptr)
+				continue;
+
+			ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
+			ccPolyline* pCCPlaneLine  = new ccPolyline(p3DVertices);
+			if(!AddLaneMarkingInfor(pLaneMarking,p3DVertices,pCCPlaneLine))
+				continue;
+			pCCPlaneLine->setName("LaneMarking");
+			pRootObj->addChild(pCCPlaneLine);
+		}
+	}
+
+	//Junction
+	dpxLayer* pJunctionLyr = pMap->getJunctionLyr();
+	if(pJunctionLyr!=nullptr)
+	{
+		ccHObject* pRootObj = pJunctionLyr->getRootData();
+		AddJunctions(protoMap,pRootObj);
 	}
 
 	return 	true;
@@ -505,7 +582,7 @@ bool dpxProtobufReader::AddCrossWalks(hdmap_proto::Map& protoMap,ccHObject* pFat
 		ccPointCloud* p3DVertices = new ccPointCloud("Vertices");
 		ccPolyline* pBorderLine  = new ccPolyline(p3DVertices);
 		pBorderLine->setName("CrossWalk Line");
-		if(!CreateBorderLine(pPolygon,p3DVertices,pBorderLine))
+		if(!CreateBorderLine(pPolygon,p3DVertices,pBorderLine,false))
 			continue;
 		pBorderLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_CrossWalkLine); //地物类型
 
@@ -579,7 +656,7 @@ bool dpxProtobufReader::AddJunctions(hdmap_proto::Map& protoMap,ccHObject* pFath
 }
 
 
-bool dpxProtobufReader::CreateBorderLine(hdmap_proto::Polygon* pPolygon,ccPointCloud* p3DVertices,ccPolyline* pBorderLine)
+bool dpxProtobufReader::CreateBorderLine(hdmap_proto::Polygon* pPolygon,ccPointCloud* p3DVertices,ccPolyline* pBorderLine,bool bShowInnerPolygon/*=true*/)
 {
 	if(pPolygon==nullptr || p3DVertices==nullptr || pBorderLine==nullptr)
 		return false;
@@ -604,7 +681,7 @@ bool dpxProtobufReader::CreateBorderLine(hdmap_proto::Polygon* pPolygon,ccPointC
 	if(pBorderPlane==nullptr)
 		return false;
 	QString strRelateID = QUuid::createUuid().toString();
-	pBorderPlane->setVisible(true);
+	pBorderPlane->setVisible(bShowInnerPolygon);
 	pBorderPlane->setSelectionBehavior(ccHObject::SELECTION_IGNORED);
 	pBorderPlane->setMetaData(DPX_RELATED_PLANE_UID,strRelateID);
 
@@ -668,7 +745,7 @@ bool dpxProtobufReader::AddPoleInfor(hdmap_proto::Pole* pPole,ccPointCloud* p3DV
 	pBorderLine->setName("CylinderLine_"+sCurrentTime);
 	pBorderLine->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
 	pBorderLine->setMetaData(DPX_RADIUS,QString::number(dRadius));
-	pBorderLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_TrafficLight_pole); //地物类型
+	pBorderLine->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_Pole); //地物类型
 
 	ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
 	pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
@@ -680,7 +757,7 @@ bool dpxProtobufReader::AddPoleInfor(hdmap_proto::Pole* pPole,ccPointCloud* p3DV
 
 void dpxProtobufReader::getRDisPt(CCVector3 ptFirst,CCVector3 ptSecond,double dDis,CCVector3& RDisPt)
 {
-	 if(ptFirst.x==ptSecond.x && ptSecond.y==ptSecond.y)
+	 if(ptFirst.x==ptSecond.x && ptFirst.y==ptSecond.y)
 	 {
 		CCVector3 vec(0,0,1);
 		RDisPt = ptSecond+dDis*vec;
@@ -699,7 +776,7 @@ void dpxProtobufReader::getRDisPt(CCVector3 ptFirst,CCVector3 ptSecond,double dD
 
 		RDisPt.y = Ybc + ptSecond.y;
 		RDisPt.x = -Yab/Xab * Ybc + ptSecond.x;
-		RDisPt.z = RDisPt.z;
+		RDisPt.z = ptSecond.z;
 	 }
 	return ;
 }

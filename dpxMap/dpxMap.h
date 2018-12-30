@@ -32,6 +32,7 @@ public:
 public:
 	//--------HDmap特定图层的获取------
 	dpxLayer* getRoadLyr();
+	dpxLayer* getPoleLyr();
 	dpxLayer* getTrafficLightLyr();
 	dpxLayer* getTrafficSignLyr();
 	dpxLayer* getOtherLry();

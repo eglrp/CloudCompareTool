@@ -2,6 +2,14 @@ cmake_minimum_required(VERSION 3.0)
 
 project( CloudCompare VERSION 2.9.0 )
 
+#requires PCL 2018-12-26
+find_package(PCL REQUIRED)
+include_directories( ${PCL_INCLUDE_DIRS} )
+link_directories( ${PCL_LIBRARY_DIRS} )
+add_definitions( ${PCL_DEFINITIONS} )
+
+
+
 include_directories( ${CC_FBO_LIB_SOURCE_DIR}/include )
 include_directories( ${CC_CORE_LIB_SOURCE_DIR}/include )
 include_directories( ${DPX_MAP_LIB_SOURCE_DIR} ) #by duans
@@ -63,7 +71,7 @@ target_link_libraries( ${PROJECT_NAME} QCC_DB_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_IO_LIB )
 target_link_libraries( ${PROJECT_NAME} QCC_GL_LIB )
 target_link_libraries( ${PROJECT_NAME} qcustomplot )
-
+target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})#加上PCL库的链接
 # Qt
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL PrintSupport)
 if (WIN32)

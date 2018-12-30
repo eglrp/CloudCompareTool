@@ -43,7 +43,7 @@ private:
 	bool addSpeedBumpInfo(ccPlane* pPlane,hdmap_proto::SpeedBump* pSpeedBump,int nID);
 	bool addBoardInfo(ccPlane* pPlane,hdmap_proto::Board* pBoard,int nID);
 
-	bool addLanemarkingInfo(ccPolyline* pPolygonLine,hdmap_proto::LaneMarking* pLaneMarking,int nID);
+	bool addLaneMarkingInfo(ccPolyline* pPolygonLine,hdmap_proto::LaneMarking* pLaneMarking,int nID);
 //
 	bool addParkingSpaceInfo(ccPolyline* pDPXLine,hdmap_proto::ParkingSpace* pParkingSpace,int nID);
 //	//斑马线信息

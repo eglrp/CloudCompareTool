@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include "dpxMapDefine.h"
 #include "dpxMapCommonFunc.h"
-
+#include <ccGLMatrixTpl.h>
 dpxProtobufWriter::dpxProtobufWriter()
 {
 }
@@ -180,18 +180,42 @@ bool dpxProtobufWriter::addPoleInfo(ccPolyline* pDPXLine,hdmap_proto::Pole* pPol
 	id->set_id(nID);
 	id->set_name("Pole_ids");
 
-	hdmap_proto::Cylinder* pCylinder = pPole->mutable_body();
-	pCylinder->set_radius(fRadius);
+	if(1)  //old
+	{
+		hdmap_proto::Cylinder* pCylinder = pPole->mutable_body();
+		pCylinder->set_radius(fRadius);
 
-	hdmap_proto::Vector3d* pStart =pCylinder->add_points();
-	pStart->set_x(ccFirst->x);
-	pStart->set_y(ccFirst->y);
-	pStart->set_z(ccFirst->z);
+		hdmap_proto::Vector3d* pStart =pCylinder->add_points();
+		pStart->set_x(ccFirst->x);
+		pStart->set_y(ccFirst->y);
+		pStart->set_z(ccFirst->z);
 
-	hdmap_proto::Vector3d* pEnd =pCylinder->add_points();
-	pEnd->set_x(ccSecond->x);
-	pEnd->set_y(ccSecond->y);
-	pEnd->set_z(ccSecond->z);
+		hdmap_proto::Vector3d* pEnd =pCylinder->add_points();
+		pEnd->set_x(ccSecond->x);
+		pEnd->set_y(ccSecond->y);
+		pEnd->set_z(ccSecond->z);
+	}
+	else //new modefy  把柱子调整成竖直的，垂直地面
+	{
+		hdmap_proto::Cylinder* pCylinder = pPole->mutable_body();
+		pCylinder->set_radius(0.15);
+
+		double dDisX =  ccFirst->x-ccSecond->x;
+		double dDisY =  ccFirst->y-ccSecond->y;
+		double dDisZ =  ccFirst->z-ccSecond->z;
+		double dHeight = sqrt( dDisX * dDisX + dDisY * dDisY + dDisZ * dDisZ);
+		CCVector3 PtMiddle((ccFirst->x+ccSecond->x)/2,(ccFirst->y+ccSecond->y)/2,(ccFirst->z+ccSecond->z)/2);
+
+		hdmap_proto::Vector3d* pStart =pCylinder->add_points();
+		pStart->set_x(PtMiddle.x);
+		pStart->set_y(PtMiddle.y);
+		pStart->set_z(PtMiddle.z+dHeight/2);
+
+		hdmap_proto::Vector3d* pEnd =pCylinder->add_points();
+		pEnd->set_x(PtMiddle.x);
+		pEnd->set_y(PtMiddle.y);
+		pEnd->set_z(PtMiddle.z-dHeight/2);
+	}
 
 	return true;
 }
@@ -205,17 +229,144 @@ bool dpxProtobufWriter::addOfficLightInfo(ccPlane* pPlane,hdmap_proto::TrafficLi
 
 	CCVector3 vecNormal = pPlane->getNormal();
 	vector<CCVector3> vecPts = pPlane->get4CornerPts();
+
+//	CCVector3 vbefore = vecNormal;
+//	CCVector3 vafter(vecNormal.x, vecNormal.y,0);
+//	ccGLMatrix transM1 = ccGLMatrix::FromToRotation(dpxMapCommonFunc::NormalVec(vbefore),dpxMapCommonFunc::NormalVec(vafter));
+//
+//	double dXSum1= 0,dYSum1 = 0,dZSum1 = 0;
+//	double dXSum2= 0,dYSum2 = 0,dZSum2 = 0;
+//	int nPtSize = vecPts.size();
+//	if(nPtSize<1)
+//		return false;
+//	vector<CCVector3> vecNewPts;
+//	for(int i = 0;i<vecPts.size();i++)
+//	{
+//		dXSum1 += vecPts[i].x;
+//		dYSum1 += vecPts[i].y;
+//		dZSum1 += vecPts[i].z;
+//
+//		CCVector3 newPt = transM1 * vecPts[i];
+//		dXSum2 += newPt.x;
+//		dYSum2 += newPt.y;
+//		dZSum2 += newPt.z;
+//
+//		vecNewPts.push_back(newPt);
+//	}
+//
+//	//只做平移
+//	ccGLMatrix transM2;
+//	CCVector3 vecCerter1(dXSum1/nPtSize,dYSum1/nPtSize,dZSum1/nPtSize);
+//	CCVector3 vecCerter2(dXSum2/nPtSize,dYSum2/nPtSize,dZSum2/nPtSize);
+//
+//	CCVector3 vecTrans2(vecCerter1.x-vecCerter2.x,vecCerter1.y-vecCerter2.y,vecCerter1.z-vecCerter2.z);
+//	transM2.setTranslation(vecTrans2);
+//
+// 	for(int i = 0;i<vecNewPts.size();i++)
+//	{
+//		hdmap_proto::Vector3d* pPt = pPolygon->add_points();
+//		CCVector3 newPt = transM2 * vecNewPts[i];
+//		pPt->set_x(newPt.x);
+//		pPt->set_y(newPt.y);
+//		pPt->set_z(newPt.z);
+//	}
+
+//-------------------------------------//
+    double m1 = 10000000.0;
+    double m2 = 10000000.0;
+    CCVector3 pt1,pt2;
+    double dXSum = 0,dYSum = 0,dZSum = 0;
+    double dXSum2= 0,dYSum2 = 0,dZSum2 = 0;
+    int nPtSize = vecPts.size();
+
+    for(int i = 0;i<nPtSize;i++)
+    {
+		 if(m1 > vecPts[i].z)
+		 {
+			m2 = m1;
+			pt2 = pt1;
+            m1 = vecPts[i].z;
+            pt1 = vecPts[i];
+		 }
+		 else if(m2 > vecPts[i].z)
+		 {
+			 m2 = vecPts[i].z;
+			 pt2 = vecPts[i];
+		 }
+		 dXSum += vecPts[i].x;
+		 dYSum += vecPts[i].y;
+		 dZSum += vecPts[i].z;
+    }
+
+    CCVector3 vBefor = pt2 - pt1;
+    bool bNeedModefy = true;
+    if(abs(vBefor.z)<0.05)
+		bNeedModefy =false;
+
+    CCVector3 vAfter = CCVector3(vBefor.x,vBefor.y,0);
+    vBefor = dpxMapCommonFunc::NormalVec(vBefor);
+    vAfter = dpxMapCommonFunc::NormalVec(vAfter);
+
+    CCVector3 vAxis = vBefor.cross(vAfter);
+    double dAngle = dpxMapCommonFunc::rotationAngle(vBefor,vAfter);
+
+    CCVector3 vecTrans(0,0,0);
+    ccGLMatrix transMatrix;
+    transMatrix.initFromParameters(dAngle,vAxis,vecTrans);
+
+    vector<CCVector3> vecNewPts;
 	for(int i = 0;i<vecPts.size();i++)
 	{
-		hdmap_proto::Vector3d* pPt = pPolygon->add_points();
-		pPt->set_x(vecPts[i].x);
-		pPt->set_y(vecPts[i].y);
-		pPt->set_z(vecPts[i].z);
+		CCVector3 newPt = transMatrix * vecPts[i];
+		vecNewPts.push_back(newPt);
+		dXSum2 += newPt.x;
+		dYSum2 += newPt.y;
+		dZSum2 += newPt.z;
 	}
+	//只做平移
+	ccGLMatrix transM2;
+	CCVector3 vecCerter1(dXSum/nPtSize,dYSum/nPtSize,dZSum/nPtSize);
+	CCVector3 vecCerter2(dXSum2/nPtSize,dYSum2/nPtSize,dZSum2/nPtSize);
+
+	CCVector3 vecTrans2(vecCerter1.x-vecCerter2.x,vecCerter1.y-vecCerter2.y,vecCerter1.z-vecCerter2.z);
+	transM2.setTranslation(vecTrans2);
+
+
+	if(0/*bNeedModefy*/) //需要校正
+	{
+		for(int i = 0;i<vecNewPts.size();i++)
+		{
+			hdmap_proto::Vector3d* pPt = pPolygon->add_points();
+			CCVector3 newPt = transM2 * vecNewPts[i];
+			pPt->set_x(newPt.x);
+			pPt->set_y(newPt.y);
+			pPt->set_z(newPt.z);
+		}
+	}
+	else //不需要校正
+	{
+		//----------------------------无校正版本--------------------------//
+		for(int i = 0;i<vecPts.size();i++)
+		{
+			hdmap_proto::Vector3d* pPt = pPolygon->add_points();
+			pPt->set_x(vecPts[i].x);
+			pPt->set_y(vecPts[i].y);
+			pPt->set_z(vecPts[i].z);
+		}
+	}
+
+
+//	for(int i = 0;i<vecPts.size();i++)
+//	{
+//		hdmap_proto::Vector3d* pPt = pPolygon->add_points();
+//		pPt->set_x(vecPts[i].x);
+//		pPt->set_y(vecPts[i].y);
+//		pPt->set_z(vecPts[i].z);
+//	}
 	 return true;
 }
 
-bool dpxProtobufWriter::addLanemarkingInfo(ccPolyline* pPolygonLine,hdmap_proto::LaneMarking* pLaneMarking,int nID)
+bool dpxProtobufWriter::addLaneMarkingInfo(ccPolyline* pPolygonLine,hdmap_proto::LaneMarking* pLaneMarking,int nID)
 {
 	if(pPolygonLine==nullptr || pLaneMarking ==nullptr)
 		return false;
@@ -280,19 +431,140 @@ bool dpxProtobufWriter::addOfficSignInfo(ccPlane* pPlane,hdmap_proto::TrafficSig
 	hdmap_proto::Id* id = pTrafficSign->mutable_id();
 	id->set_id(nID);
 	id->set_name("TrafficSign_ids");
-	if(!pTrafficSign->has_pborder())
-		return false;
-	hdmap_proto::Polygon* pPolygon = pTrafficSign->mutable_pborder();
 
+	hdmap_proto::Polygon* pPolygon = pTrafficSign->mutable_pborder();
 	CCVector3 vecNormal = pPlane->getNormal();
 	vector<CCVector3> vecPts = pPlane->get4CornerPts();
+
+//	//Add TransForm  把牌子变成竖直的
+//	CCVector3 vbefore = vecNormal;
+//	CCVector3 vafter(vecNormal.x, vecNormal.y,0);
+//	ccGLMatrix transM1 = ccGLMatrix::FromToRotation(dpxMapCommonFunc::NormalVec(vbefore),dpxMapCommonFunc::NormalVec(vafter));
+//
+//	double dXSum1= 0,dYSum1 = 0,dZSum1 = 0;
+//	double dXSum2= 0,dYSum2 = 0,dZSum2 = 0;
+//	int nPtSize = vecPts.size();
+//	if(nPtSize<1)
+//		return false;
+//	vector<CCVector3> vecNewPts;
+//	for(int i = 0;i<vecPts.size();i++)
+//	{
+//		dXSum1 += vecPts[i].x;
+//		dYSum1 += vecPts[i].y;
+//		dZSum1 += vecPts[i].z;
+//
+//		CCVector3 newPt = transM1 * vecPts[i];
+//		dXSum2 += newPt.x;
+//		dYSum2 += newPt.y;
+//		dZSum2 += newPt.z;
+//
+//		vecNewPts.push_back(newPt);
+//	}
+//
+//	//只做平移
+//	ccGLMatrix transM2;
+//	CCVector3 vecCerter1(dXSum1/nPtSize,dYSum1/nPtSize,dZSum1/nPtSize);
+//	CCVector3 vecCerter2(dXSum2/nPtSize,dYSum2/nPtSize,dZSum2/nPtSize);
+//
+//	CCVector3 vecTrans2(vecCerter1.x-vecCerter2.x,vecCerter1.y-vecCerter2.y,vecCerter1.z-vecCerter2.z);
+//	transM2.setTranslation(vecTrans2);
+//
+// 	for(int i = 0;i<vecNewPts.size();i++)
+//	{
+//		hdmap_proto::Vector3d* pPt = pPolygon->add_points();
+//
+//		CCVector3 newPt = transM2 * vecNewPts[i];
+//		pPt->set_x(newPt.x);
+//		pPt->set_y(newPt.y);
+//		pPt->set_z(newPt.z);
+//	}
+
+//-------------------------------------//
+    double m1 = 10000000.0;
+    double m2 = 10000000.0;
+    CCVector3 pt1,pt2;
+    double dXSum = 0,dYSum = 0,dZSum = 0;
+    double dXSum2= 0,dYSum2 = 0,dZSum2 = 0;
+    int nPtSize = vecPts.size();
+
+    for(int i = 0;i<nPtSize;i++)
+    {
+		 if(m1 > vecPts[i].z)
+		 {
+			m2 = m1;
+			pt2 = pt1;
+            m1 = vecPts[i].z;
+            pt1 = vecPts[i];
+		 }
+		 else if(m2 > vecPts[i].z)
+		 {
+			 m2 = vecPts[i].z;
+			 pt2 = vecPts[i];
+		 }
+		 dXSum += vecPts[i].x;
+		 dYSum += vecPts[i].y;
+		 dZSum += vecPts[i].z;
+    }
+
+
+
+    CCVector3 vBefor = pt2 - pt1;
+    bool bNeedModefy = true;
+    if(abs(vBefor.z)<0.05)
+		bNeedModefy =false;
+
+    CCVector3 vAfter = CCVector3(vBefor.x,vBefor.y,0);
+    vBefor = dpxMapCommonFunc::NormalVec(vBefor);
+    vAfter = dpxMapCommonFunc::NormalVec(vAfter);
+
+    CCVector3 vAxis = vBefor.cross(vAfter);
+    double dAngle = dpxMapCommonFunc::rotationAngle(vBefor,vAfter);
+
+    CCVector3 vecTrans(0,0,0);
+    ccGLMatrix transMatrix;
+    transMatrix.initFromParameters(dAngle,vAxis,vecTrans);
+
+    vector<CCVector3> vecNewPts;
 	for(int i = 0;i<vecPts.size();i++)
 	{
-		hdmap_proto::Vector3d* pPt = pPolygon->add_points();
-		pPt->set_x(vecPts[i].x);
-		pPt->set_y(vecPts[i].y);
-		pPt->set_z(vecPts[i].z);
+		CCVector3 newPt = transMatrix * vecPts[i];
+		vecNewPts.push_back(newPt);
+		dXSum2 += newPt.x;
+		dYSum2 += newPt.y;
+		dZSum2 += newPt.z;
 	}
+	//只做平移
+	ccGLMatrix transM2;
+	CCVector3 vecCerter1(dXSum/nPtSize,dYSum/nPtSize,dZSum/nPtSize);
+	CCVector3 vecCerter2(dXSum2/nPtSize,dYSum2/nPtSize,dZSum2/nPtSize);
+
+	CCVector3 vecTrans2(vecCerter1.x-vecCerter2.x,vecCerter1.y-vecCerter2.y,vecCerter1.z-vecCerter2.z);
+	transM2.setTranslation(vecTrans2);
+
+
+	if(0 /*bNeedModefy*/) //需要校正
+	{
+		for(int i = 0;i<vecNewPts.size();i++)
+		{
+			hdmap_proto::Vector3d* pPt = pPolygon->add_points();
+			CCVector3 newPt = transM2 * vecNewPts[i];
+			pPt->set_x(newPt.x);
+			pPt->set_y(newPt.y);
+			pPt->set_z(newPt.z);
+		}
+	}
+	else //不需要校正
+	{
+		//----------------------------无校正版本--------------------------//
+		for(int i = 0;i<vecPts.size();i++)
+		{
+			hdmap_proto::Vector3d* pPt = pPolygon->add_points();
+			pPt->set_x(vecPts[i].x);
+			pPt->set_y(vecPts[i].y);
+			pPt->set_z(vecPts[i].z);
+		}
+	}
+
     return true;
 }
 
@@ -337,6 +609,9 @@ bool dpxProtobufWriter::addParkingSpaceInfo(ccPolyline* pDPXLine,hdmap_proto::Pa
 
 bool dpxProtobufWriter::addCrossWalkInfo(ccPolyline* pDPXLine,hdmap_proto::CrossWalk* pCrossWalk,int nID)
 {
+	bool bModefyZ = true;
+	double dSumZ = 0.0;
+
 	if(pDPXLine==nullptr || pCrossWalk==nullptr)
 		return false;
 
@@ -356,8 +631,10 @@ bool dpxProtobufWriter::addCrossWalkInfo(ccPolyline* pDPXLine,hdmap_proto::Cross
 		points->set_x(vecBorderPts[i].x);
 		points->set_y(vecBorderPts[i].y);
 		points->set_z(vecBorderPts[i].z);
+		dSumZ += vecBorderPts[i].z;
 	}
 
+	double dMeanZ =  dSumZ*1.0/vecBorderPts.size();
 	//Line
 	ccHObject::Container vecHObjs;
 	pDPXLine->filterChildren(vecHObjs,false,CC_TYPES::POLY_LINE);
@@ -377,6 +654,10 @@ bool dpxProtobufWriter::addCrossWalkInfo(ccPolyline* pDPXLine,hdmap_proto::Cross
 			points->set_x(vecPonPts[j].x);
 			points->set_y(vecPonPts[j].y);
 			points->set_z(vecPonPts[j].z);
+			if(bModefyZ)
+			{
+				points->set_z(dMeanZ);
+			}
 		}
 	}
 	return true;
@@ -458,7 +739,6 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 	if(pRootData==nullptr)
 		return false;
 	int nSectionSize = pRootData->getChildrenNumber();
-	int nSectionID = -1;
 	for(int i =0;i < nSectionSize;i++)
 	{
 		ccHObject* pSectionObj = pRootData->getChild(i);
@@ -476,7 +756,11 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 		if(pRefLineSetObj==nullptr)
 			continue;
 
-		nSectionID++;
+		//找到ID
+		if(!pSectionObj->hasMetaData(DPX_UID))
+			continue;
+
+		int nSectionID = pSectionObj->getMetaData(DPX_UID).toInt();
 		{ 	//id 必须添加
 			hdmap_proto::Id* id = pSection->mutable_id();
 			id->set_id(nSectionID);
@@ -548,7 +832,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 					}
 				}
 			}
-			else if(eType==eObj_TrafficLight_pole) //红绿灯柱子 圆柱体
+			else if(eType==eObj_Pole) //红绿灯柱子 圆柱体
 			{
 				if(pUnknownLine==nullptr || pUnknownLine->size()<3)
 					continue;
@@ -670,7 +954,7 @@ bool dpxProtobufWriter::OutPutSection(dpxMap* pMap,hdmap_proto::Map* protoMap)
 					continue;
 				nLanemarking++;
 				hdmap_proto::LaneMarking* pLaneMarking = pSection->add_lane_markings();
-				addLanemarkingInfo(pUnknownLine,pLaneMarking,nLanemarking);
+				addLaneMarkingInfo(pUnknownLine,pLaneMarking,nLanemarking);
 			}
 		}
 	}
@@ -690,6 +974,7 @@ bool dpxProtobufWriter::OutPutOtherAll(dpxMap* pMap,hdmap_proto::Map* protoMap)
 	int nSpeedBumpID = -1;
 	int nBorderID = -1;
 	int nParkingSpace = -1;
+	int nLanemarking = -1;
 
 	for(int i = 0;i<pVecLyrs.size();i++)
 	{
@@ -741,7 +1026,7 @@ bool dpxProtobufWriter::OutPutOtherAll(dpxMap* pMap,hdmap_proto::Map* protoMap)
 				hdmap_proto::CrossWalk* pCrossWalk = protoMap->add_crosswalks();
 				addCrossWalkInfo(pUnknownLine,pCrossWalk,nCrossWalkID);
 			}
-			else if(eType==eObj_TrafficLight_pole) //红绿灯柱子 圆柱体
+			else if(eType==eObj_Pole) //红绿灯柱子 圆柱体
 			{
 				if(pUnknownLine->size()<3)
 					continue;
@@ -863,6 +1148,12 @@ bool dpxProtobufWriter::OutPutOtherAll(dpxMap* pMap,hdmap_proto::Map* protoMap)
 					continue;
 				hdmap_proto::Junction* pJunction = protoMap->add_junctions();
 				addJunctionInfo(pUnknownLine,pJunction);
+			}
+			else if(eType==eObj_LaneMarking)
+			{
+				nLanemarking++;
+				hdmap_proto::LaneMarking* pLaneMarking = protoMap->add_lane_markings();
+				addLaneMarkingInfo(pUnknownLine,pLaneMarking,nLanemarking);
 			}
 		}
 	}

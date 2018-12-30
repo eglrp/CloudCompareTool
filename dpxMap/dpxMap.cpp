@@ -114,6 +114,13 @@ dpxLayer* dpxMap::getRoadLyr()
 {
 	return getLyrFormType(eOT_Road);
 }
+
+//杆子
+dpxLayer* dpxMap::getPoleLyr()
+{
+	return getLyrFormType(eOT_Pole);
+}
+
 //路灯层
 dpxLayer* dpxMap::getTrafficLightLyr()
 {

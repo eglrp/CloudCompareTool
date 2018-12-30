@@ -3,22 +3,21 @@
 
 //qCC_db
 #include <ccHObject.h>
-
+#include <ccGLWindow.h>
 //Qt
 #include <QSet>
+using  namespace std;
 #include "ui_VisibleSettingDlg.h"
 
 class ccPolyline;
 class ccPointCloud;
-class ccGLWindow;
 
 struct VSparam
 {
 	int  m_nHideOrShow; //0:hide;1:show
 	bool m_bSetScalar;
 	QString m_strScalar;
-	double m_dLowScalar;
-	double m_dHighScalar;
+	vector<int>  m_vecScalar;
 
 	bool m_bSetDim;
 	unsigned char m_Dim;
@@ -30,8 +29,6 @@ struct VSparam
 
 		m_bSetScalar = false;
 		m_strScalar = "";
-		m_dLowScalar = -99999999;
-		m_dHighScalar = 99999999;
 
 		m_bSetDim = false;
 		m_Dim = 2;
@@ -53,6 +50,8 @@ public:
 public:
 	bool setSelectEntitys(ccHObject::Container selectedEntities);
 	VSparam getParams();
+
+	bool IsInRange(vector<int> vecRange,float Value);
 
 public slots:
 	void slotCBoxChanged();

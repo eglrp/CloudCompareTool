@@ -47,7 +47,7 @@ protected:
 	bool AddLaneMarkingInfor(hdmap_proto::LaneMarking* pLaneMarking,ccPointCloud* p3DVertices,ccPolyline* pCCLine);
 private:
 
-	bool CreateBorderLine(hdmap_proto::Polygon* pPolygon,ccPointCloud* p3DVertices,ccPolyline* pBorderLine);
+	bool CreateBorderLine(hdmap_proto::Polygon* pPolygon,ccPointCloud* p3DVertices,ccPolyline* pBorderLine,bool bShowInnerPolygon=true);
 	void getRDisPt(CCVector3 ptFirst,CCVector3 ptSecond,double dDis,CCVector3& RDisPt);//求取圆柱曲面上一个点
 //	//把ProtoLane的控制点信息转成CCLine
 	bool ProtoLane2CCLine(hdmap_proto::CurveLine* pCurveLine,ccPointCloud* p3DVertices,ccPolyline* pLine);

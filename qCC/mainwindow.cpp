@@ -109,6 +109,7 @@
 #include "ccVolumeCalcTool.h"
 #include "ccWaveformDialog.h"
 #include "dpxVisibleSetting.h"
+#include "dpxAutoCreateMapSetting.h"
 
 //other
 #include "ccCropTool.h"
@@ -731,6 +732,8 @@ void MainWindow::connectActions()
 
 	//visiable setting
 	connect(m_UI->actionVisibleSetting,	&QAction::triggered, this, &MainWindow::doActionVisibleSettingDialog);
+	connect(m_UI->actionAutoCreateMap,	&QAction::triggered, this, &MainWindow::doActionAutoCreatMap);
+
 	connect(m_UI->actionDataPretreatment,	&QAction::triggered, this, &MainWindow::doActionDataPretreat);
 
 }
@@ -10390,6 +10393,17 @@ void MainWindow::doActionVisibleSettingDialog()
     if(dlg.exec()!=QDialog::Accepted)
 		return;
 }
+
+void MainWindow::doActionAutoCreatMap()
+{
+	dpxAutoCreateMapSetting dlg(MainWindow::GetActiveGLWindow(),this);
+    dlg.setSelectEntitys(m_selectedEntities);
+    ccGLWindow* pGLWindow = getActiveGLWindow();
+    dlg.setActiveGLWindow(pGLWindow);
+    if(dlg.exec()!=QDialog::Accepted)
+		return;
+}
+
 
 void MainWindow::doActionDataPretreat()
 {

@@ -671,6 +671,7 @@ QTreeView::branch:open:has-children:has-siblings  {
    <addaction name="separator"/>
    <addaction name="actionDataPretreatment"/>
    <addaction name="actionVisibleSetting"/>
+   <addaction name="actionAutoCreateMap"/>
    <addaction name="actionPointPicking"/>
    <addaction name="actionPointListPicking"/>
    <addaction name="actionTracePolyline"/>
@@ -3004,6 +3005,18 @@ QTreeView::branch:open:has-children:has-siblings  {
    </property>
    <property name="toolTip">
     <string>dataPretreatment</string>
+   </property>
+  </action>
+  <action name="actionAutoCreateMap">
+   <property name="icon">
+    <iconset resource="../icones.qrc">
+     <normaloff>:/CC/images/AutoMap.png</normaloff>:/CC/images/AutoMap.png</iconset>
+   </property>
+   <property name="text">
+    <string>AutoCreateMap</string>
+   </property>
+   <property name="toolTip">
+    <string>Auto CreateMap</string>
    </property>
   </action>
  </widget>

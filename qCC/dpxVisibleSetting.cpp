@@ -26,12 +26,12 @@ dpxVisibleSetting:: dpxVisibleSetting(ccGLWindow* associatedWin,QWidget* parent/
 
 	//
 	ui.comboBox_Scalar->setEnabled(false);
-	ui.sBox_lowScalar->setEnabled(false);
-	ui.sBox_HighScalar->setEnabled(false);
+	ui.lineEdit_Scalar->setEnabled(false);
 
 	ui.comboBox_Dim->setEnabled(false);
 	ui.sBox_LowDim->setEnabled(false);
 	ui.sBox_HighDim->setEnabled(false);
+
 	connect(ui.cBox_Scalar,SIGNAL(clicked()),this,SLOT(slotCBoxChanged()));
 	connect(ui.cBox_Dim,SIGNAL(clicked()),this,SLOT(slotCBoxChanged()));
 }
@@ -46,8 +46,7 @@ void dpxVisibleSetting::slotCBoxChanged()
 	bool bCBoxDim = ui.cBox_Dim->isChecked();
 
 	ui.comboBox_Scalar->setEnabled(bCBoxScalar);
-	ui.sBox_lowScalar->setEnabled(bCBoxScalar);
-	ui.sBox_HighScalar->setEnabled(bCBoxScalar);
+	ui.lineEdit_Scalar->setEnabled(bCBoxScalar);
 
 	ui.comboBox_Dim->setEnabled(bCBoxDim);
 	ui.sBox_LowDim->setEnabled(bCBoxDim);
@@ -131,8 +130,15 @@ VSparam dpxVisibleSetting::getParams()
 	//Label
 	Param.m_bSetScalar = ui.cBox_Scalar->isChecked();   //refLine
 	Param.m_strScalar = ui.comboBox_Scalar->currentText();
-    Param.m_dLowScalar = ui.sBox_lowScalar->text().toDouble();
-    Param.m_dHighScalar = ui.sBox_HighScalar->text().toDouble();
+    QString strScalarTxt = ui.lineEdit_Scalar->text();
+    strScalarTxt.replace('；',';');
+    strScalarTxt.replace('，',';');
+    strScalarTxt.replace(',',';');
+    QStringList strList = strScalarTxt.split(';',QString::SkipEmptyParts);
+    for(int i =0;i<strList.size();i++)
+	{
+		Param.m_vecScalar.push_back(strList.at(i).toInt());
+	}
 
     return Param;
 }
@@ -187,12 +193,12 @@ void dpxVisibleSetting::accept()
 			}
 
 			//条件2 Saclar过滤
-			if(param.m_bSetScalar && bCloud)
+			if(param.m_bSetScalar && bCloud) //label筛选
 			{
 				if(nScalarIndex>-1 && nScalarIndex < nScalarCount)
 				{
 					ScalarType dValue  = ccloud->getPointScalarValueV2(nScalarIndex,i);
-					if( dValue<=param.m_dHighScalar && dValue>=param.m_dLowScalar)
+					if(IsInRange(param.m_vecScalar,dValue))
 					{
 						visibilityArray->setValue(i,visibilityState); //POINT_HIDDEN : POINT_VISIBLE
 						bPtChanged = true;
@@ -209,6 +215,17 @@ void dpxVisibleSetting::accept()
 
 	reject();
 }
+
+bool dpxVisibleSetting::IsInRange(vector<int> vecRange,float Value)
+{
+	for(int i = 0;i<vecRange.size();i++)
+	{
+		if(vecRange[i]==Value)
+			return true;
+	}
+	return false;
+}
+
 
 void dpxVisibleSetting::reject()
 {

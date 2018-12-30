@@ -116,10 +116,10 @@ QString getRefIDValue(const vector<int>& vecRefIDs)
     QString strValue = "";
     for(int i =0;i<vecRefIDs.size();i++)
     {
-		if(i==0)
+		if(i == 0)
 			strValue = QString::number(vecRefIDs[i]);
 		else
-			strValue = strValue+";"+QString::number(vecRefIDs[i]);
+			strValue = strValue + ";" + QString::number(vecRefIDs[i]);
     }
 	return strValue;
 }
@@ -704,6 +704,58 @@ bool UpdateSymbolLine(ccHObject* pLineSet)
 		SymbolLine->setDisplay(vecLines[0]->getDisplay());
 		pLineSet->addChild(SymbolLine);//RefLine
 	}
+}
+
+
+//向量转成标准向量
+CCVector3 NormalVec(CCVector3 vec3)
+{
+	CCVector3 vResult;
+	double length = NormalizeValue(vec3);
+	// check length of axis vector
+	if (length < 0.0000001)
+		return vResult;
+
+	// normalize axis vector
+	double f = 1.0 / length;
+	vResult.x = f * vec3[0];
+	vResult.y = f * vec3[1];
+	vResult.z = f * vec3[2];
+
+	return vResult;
+}
+
+//求向量的模
+double NormalizeValue(CCVector3 v)
+{
+    return sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] );
+}
+
+//求取旋转向量
+CCVector3 rotationAxis(CCVector3 befor, CCVector3 after)
+{
+    CCVector3 vRotation;
+    vRotation[0] = befor[1] * after[2] - befor[2] * after[1];
+    vRotation[1] = befor[2] * after[0] - befor[0] * after[2];
+    vRotation[2] = befor[0] * after[1] - befor[1] * after[0];
+
+    return vRotation;
+}
+
+//求取旋转角度
+double rotationAngle(CCVector3 befor, CCVector3 after)
+{
+    double Dot = befor[0] * after[0] + befor[1] * after[1] + befor[2] * after[2];
+	double Before = sqrt(befor[0] * befor[0] + befor[1] * befor[1] + befor[2] *befor[2]);
+	double After = sqrt(after[0] * after[0] + after[1] * after[1] + after[2] * after[2]);
+
+	double dCosValue = Dot/Before/After;
+	if(dCosValue<-1)
+		dCosValue = -1;
+	if(dCosValue>1)
+		dCosValue = 1;
+
+    return acos(dCosValue);
 }
 
 

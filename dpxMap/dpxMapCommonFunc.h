@@ -21,6 +21,11 @@ namespace  dpxMapCommonFunc
 	//两点的距离
 	double  DPX_MAP_API DisTance(CCVector3 pt1,CCVector3 pt2);
 
+	//求向量的模
+	double DPX_MAP_API NormalizeValue(CCVector3 v);
+	//转化为单位向量
+	CCVector3 DPX_MAP_API NormalVec(CCVector3 v);
+
 	//前JuncitonID
 	int  DPX_MAP_API GetRefLinePreID(ccHObject* pSectionObj);
 	//后JuncitonID
@@ -69,6 +74,10 @@ namespace  dpxMapCommonFunc
 
 	//更新LineSet中的符号线
 	bool DPX_MAP_API UpdateSymbolLine(ccHObject* pLineSet);
+
+	//求取旋转轴与选择角度
+	CCVector3 DPX_MAP_API rotationAxis(CCVector3 befor, CCVector3 after);
+	double DPX_MAP_API rotationAngle(CCVector3 befor, CCVector3 after);
 };
 
 

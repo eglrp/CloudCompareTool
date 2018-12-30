@@ -10,7 +10,8 @@
 	dpxGeoEngine* engineName = dpxGeoEngine::Instance();\
 
 #define HDMAP_NAME 				"HD_Map"			//地图名称
-#define ROAD_LAYER_NAME 		"HD_SectionHub" 			//道路
+#define ROAD_LAYER_NAME 		"HD_SectionHub" 	//道路
+#define POLE_LAYER_NAME 		"HD_Pole" 			//柱子
 #define LIGHT_LAYER_NAME 		"HD_Light"		   	//路灯
 #define INDICATOR_LAYER_NAME 	"HD_Indicator"  	//指示牌
 #define CROSS_WALK_LAYER_NAME 	"HD_CrossWalk"  	//斑马线
@@ -52,6 +53,7 @@ enum DPX_MAP_API dpxLayerType
 
 	//具体类型
 	eOT_Road,			//道路
+	eOT_Pole,			//杆子
 	eOT_TrafficLight,	//路灯
 	eOT_TrafficSign,  	//指示牌
 	eOT_LaneMarking,	//路面标识
@@ -61,6 +63,7 @@ enum DPX_MAP_API dpxLayerType
 	eOT_ParkingSpace,	//停车位
 	eOT_Board,			//其它边界
 	eOT_Junction,		//连接
+
 	eOT_Other   		//其它
 	//补充..
 };
@@ -74,8 +77,7 @@ enum DPX_MAP_API dpxObjectType
 	eObj_RoadStopLine,		//停止线
 	eObj_CrossWalkLine,		//斑马线
 
-	//红绿灯柱子
-	eObj_TrafficLight_pole,	//红绿灯柱子
+	eObj_Pole,				//杆子
 
 	//面状指示牌
 	eObj_TrafficLight,		//红绿灯牌

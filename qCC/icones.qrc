@@ -168,6 +168,7 @@
     <file>images/LaneMarkingIcon.png</file>
     <file>images/Junction.png</file>
     <file>images/Cut.png</file>
+    <file>images/AutoMap.png</file>
   </qresource>
   <qresource prefix="/CC/Icons">
     <file>images/icon/cc_viewer_icon_16.png</file>

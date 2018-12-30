@@ -42,6 +42,7 @@ dpxMap* dpxMapManager::createHDMap()
 {
 	vector<QString> vecLryNames;
 	vecLryNames.push_back(ROAD_LAYER_NAME); 		//道路
+	vecLryNames.push_back(POLE_LAYER_NAME);			//杆子
 	vecLryNames.push_back(LIGHT_LAYER_NAME); 		//路灯
 	vecLryNames.push_back(INDICATOR_LAYER_NAME);	//指示牌
 	vecLryNames.push_back(CROSS_WALK_LAYER_NAME);	//斑马线
@@ -57,7 +58,11 @@ dpxMap* dpxMapManager::createHDMap()
 	dpxLayer* pRoadLry = new dpxLayer(ROAD_LAYER_NAME);
 	pRoadLry->SetType(eOT_Road);
 
-	//路灯杆层
+	//杆子
+	dpxLayer* pPoleLry = new dpxLayer(POLE_LAYER_NAME);
+	pPoleLry->SetType(eOT_Pole);
+
+	//路灯
 	dpxLayer* pLightLry = new dpxLayer(LIGHT_LAYER_NAME);
 	pLightLry->SetType(eOT_TrafficLight);
 
@@ -94,6 +99,7 @@ dpxMap* dpxMapManager::createHDMap()
 
 	//地图添加图层
 	pMap->AddLayer(pRoadLry);
+	pMap->AddLayer(pPoleLry);
 	pMap->AddLayer(pLightLry);
 	pMap->AddLayer(pIndicatorLry);
 	pMap->AddLayer(pLaneMarkingLry);
@@ -247,7 +253,7 @@ void dpxMapManager::Export_Recursion(ccHObject* pObj)
 		{
 			ExportLine(pLine,eType);
 		}
-		else if(eType==eObj_TrafficLight_pole) //圆柱特征
+		else if(eType==eObj_Pole) //圆柱特征
 		{
 			ExportOfficeLightPole(pLine,eType);
 		}

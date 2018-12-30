@@ -440,6 +440,8 @@ private slots:
 	//by duans  visibleSetting
 	void doActionVisibleSettingDialog();
 
+	void doActionAutoCreatMap();
+
 	//数据预处理
 	void doActionDataPretreat();
 
