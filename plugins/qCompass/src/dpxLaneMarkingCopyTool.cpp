@@ -2,62 +2,52 @@
 #include <QMainWindow>
 #include <QMessageBox>
 
-#include "dpxRoadLineTool.h"
+#include "dpxLaneMarkingCopyTool.h"
 #include "dpxGeoEngine.h"
 #include "dpxMapDefine.h"
 #include "../../qCC/dpxFramework/dpxSelectionManager.h"
-dpxRoadLineTool::dpxRoadLineTool()
+dpxLaneMarkingCopyTool::dpxLaneMarkingCopyTool()
 {
-    m_bSetRefLine = false;
+    m_bSetTargetLine = false;
 }
 
-dpxRoadLineTool::~dpxRoadLineTool()
+dpxLaneMarkingCopyTool::~dpxLaneMarkingCopyTool()
 {
 }
 
-void dpxRoadLineTool::toolActivated()
+void dpxLaneMarkingCopyTool::toolActivated()
 {
     dpxTraceLineTool::toolActivated();
 
     CheckSelectRefLine();
 }
 
-void dpxRoadLineTool::CheckSelectRefLine()
+void dpxLaneMarkingCopyTool::CheckSelectRefLine()
 {
-	m_bSetRefLine = false;
+	m_bSetTargetLine = false;
 	m_pPickRoot = nullptr;
-    vector<ccHObject*> vecObjs = dpxSelectionManager::Instance()->getSelections();
     do
     {
-        if(vecObjs.size()<1)
-            break;
-        ccHObject* pHObj = vecObjs[0];
-        if(!pHObj->hasMetaData(DPX_OBJECT_TYPE_NAME))
-            break;
-
-        int index = pHObj->getMetaData(DPX_OBJECT_TYPE_NAME).toInt();
-        if(dpxObjectType(index) != eObj_RoadRefLine)
-            break;
-
-        //生成的RoadLine挂在RefLine节点下
-		ccPolyline* pLine = ccHObjectCaster::ToPolyline(pHObj);
-		if(pLine==nullptr)
+		dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+		if(pMap==nullptr)
+			break;
+		dpxLayer* pLayer = pMap->getLaneMarkingLyr();
+		if(pLayer==nullptr)
+			break;
+		ccHObject* pObjRoot =  pLayer->getRootData();
+		if(pObjRoot==nullptr)
 			break;
 
-        ccHObject* pSection = dpxMapCommonFunc::getRelatedSection(pLine);
-        if(pSection==nullptr)
-			break;
-
-		m_pPickRoot = pSection;
-		m_bSetRefLine= true;
+		m_pPickRoot =  pObjRoot;
+		m_bSetTargetLine= true;
 
     }while(0);
 
-    if(!m_bSetRefLine)
+    if(!m_bSetTargetLine)
         QMessageBox::warning(nullptr,"waring","please Select one RefLine");
 }
 
-void dpxRoadLineTool::slotDeleteObj()
+void dpxLaneMarkingCopyTool::slotDeleteObj()
 {
     //删除后的响应
 	m_VNodeInfo.clear();
@@ -67,15 +57,15 @@ void dpxRoadLineTool::slotDeleteObj()
 		ccLog::Warning(" m_VNodeInfo success clear");
 	}
 	CheckSelectRefLine();
-	ccLog::Warning("dpxRoadLineTool delete Obj");
+	ccLog::Warning("dpxLaneMarkingCopyTool delete Obj");
 }
 
-void dpxRoadLineTool::onKeyPress(int sKey)
+void dpxLaneMarkingCopyTool::onKeyPress(int sKey)
 {
     //ccLog::Warning("dpxRoadLineTool! oh yare!!!" + QString::number(sKey));
 }
 
-void dpxRoadLineTool::onMouseRightClick(int x,int y)
+void dpxLaneMarkingCopyTool::onMouseRightClick(int x,int y)
 {
 	if(m_nToolState==1)//编辑状体
 	{
@@ -98,18 +88,6 @@ void dpxRoadLineTool::onMouseRightClick(int x,int y)
 		}
 		else
 		{
-			vector<ccPolyline*> vecrRoadLine;
-			ccPolyline* pCopyLine = dpxMapCommonFunc::CopyNewLine(m_poly3D);
-			vecrRoadLine.push_back(pCopyLine);
-			ccHObject* pRoadLineSet = dpxMapCommonFunc::CreateRoadLine(vecrRoadLine,false);
-			if(pRoadLineSet!=nullptr)
-			{
-				pRoadLineSet->setDisplay(m_window);
-				m_pPickRoot->addChild(pRoadLineSet);
-			}
-			//移除
-			m_pPickRoot->removeChild(m_poly3D);
-
 			m_poly3D = 0;
 			m_poly3DVertices = 0;
 			m_nToolState = 1;//右键停止采集，转为编辑状态
@@ -127,7 +105,7 @@ void dpxRoadLineTool::onMouseRightClick(int x,int y)
 }
 
 //鼠标左键事件
-void dpxRoadLineTool::onMouseLeftClick(int x,int y)
+void dpxLaneMarkingCopyTool::onMouseLeftClick(int x,int y)
 {
     //拷贝线时需要先点击refLine的一个节点，需要判断是否点击到了refLie节点;m_nToolState=2
     //若第一次点击已经了refLine节点，还需要采集一个点 作为刚刚refLie的节点平移的位置，在此过程再此点击鼠标，不需要进行判断状态
@@ -150,7 +128,7 @@ void dpxRoadLineTool::onMouseLeftClick(int x,int y)
         return;
 
     dpxObjectType eType = dpxObjectType(pLine->getMetaData(DPX_OBJECT_TYPE_NAME).toInt());
-    if(eType != eObj_RoadRefLine && eType != eObj_RoadLine)
+    if(eType != eObj_LaneMarking)
         return;
     /*
     在基类里补充拷贝状态
@@ -159,14 +137,6 @@ void dpxRoadLineTool::onMouseLeftClick(int x,int y)
     1：若鼠标点击了选择集中roadLine的节点，则可以拖拽roadLine
     2：若鼠标点击了refLine的节点，则再点击一下点云就能把点击的refLine拷贝成新的RoadLine
     */
-
-    ccHObject* pSelectRef = nullptr;
-    if(m_bSetRefLine)
-    {
-        vector<ccHObject*> vecObjs = dpxSelectionManager::Instance()->getSelections();
-        if(vecObjs.size()==1)
-            pSelectRef = vecObjs[0];
-    }
     //结点判断
     double dDistance = nearestInfo.m_dDistance;
     int nSegNum = nearestInfo.m_nSegNum;
@@ -174,24 +144,19 @@ void dpxRoadLineTool::onMouseLeftClick(int x,int y)
     {
         m_VNodeInfo.m_pLine = pLine;
         m_VNodeInfo.m_nNodeIndex = nSegNum;
-        if(eType==eObj_RoadLine)
-            m_nToolState = 1;//若点击的时节点，则为编辑状态
-        else if(pLine == pSelectRef)
-        {
-            m_nToolState = 2;//点击的是refLine的节点，拷贝状态
-            ccLog::Warning("start copy refLine");
-        }
 
+		m_nToolState = 2;//点击的是refLine的节点，拷贝状态
+		ccLog::Warning("start copy LaneMarking");
     }
 }
 
 
-void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
+void dpxLaneMarkingCopyTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPointCloud* cloud, const CCVector3& P,int x/*=0*/,int y/*=0*/)
 {
     if(m_nToolState==1)//编辑状态不需要左键点击加点
         return;
 
-	if(!m_bSetRefLine) //若没有选中refLine则无法操作
+	if(!m_bSetTargetLine) //若没有选中refLine则无法操作
 		return ;
 
     //if the 3D polyline doesn't exist yet, we create it
@@ -225,7 +190,6 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
         int nsize = pLine->size();
         int nNode = m_VNodeInfo.m_nNodeIndex;
         //try to add one more point
-
         CCVector3 ptNode = *(pLine->getPoint(nNode));
 
         double dX_Offset = P.x - ptNode.x;
@@ -236,48 +200,40 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
         CCVector3 vecTrans(dX_Offset,dY_Offset,dZ_Offset);
         transM.setTranslation(vecTrans);
 
-        //拷贝要拷贝整个线的集体
-        ccHObject* pRefLineSet = dpxMapCommonFunc::getRelatedLineSet(pLine);
-        vector<ccPolyline*> vecRefLines = dpxMapCommonFunc::getLinesFromLineSet(pRefLineSet);
-        if(pRefLineSet==nullptr || vecRefLines.size()<1)
-			return;
+        //拷贝要拷贝整个线的 平移操作
+		ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
+		poly3DVertices->setEnabled(false);
 
-		vector<ccPolyline*> vecResultLines;
-		for(int n = 0;n < vecRefLines.size();n++)
+		ccPolyline* poly3D = new ccPolyline(poly3DVertices);
+		poly3D->set2DMode(false);
+		poly3D->setDisplay(m_window);
+		poly3D->addChild(poly3DVertices);
+
+		for(int i = 0;i < pLine->size();i++)
 		{
-			ccPointCloud* poly3DVertices = new ccPointCloud("Vertices");
-			poly3DVertices->setEnabled(false);
+			CCVector3 pPoint = *(pLine->getPoint(i));
+			CCVector3 newPt =  transM*pPoint;
 
-			ccPolyline* poly3D = new ccPolyline(poly3DVertices);
-			poly3D->set2DMode(false);
-			poly3D->setDisplay(m_window);
-			poly3D->addChild(poly3DVertices);
-
-			for(int i = 0;i < vecRefLines[n]->size();i++)
-			{
-				CCVector3 pPoint = *(vecRefLines[n]->getPoint(i));
-				CCVector3 newPt =  transM*pPoint;
-
-				if ( !poly3DVertices->reserve(poly3DVertices->size() + 1)
+			if ( !poly3DVertices->reserve(poly3DVertices->size() + 1)
 					|| !poly3D->reserve(poly3DVertices->size() + 1))
-				{
-					ccLog::Error("Not enough memory");
-					return;
-				}
-				poly3DVertices->addPoint(newPt);
-				poly3D->addPointIndex(poly3DVertices->size() - 1);
+			{
+				ccLog::Error("Not enough memory");
+				return;
 			}
-			poly3D->setDisplay(m_window);
-			vecResultLines.push_back(poly3D);
+			poly3DVertices->addPoint(newPt);
+			poly3D->addPointIndex(poly3DVertices->size() - 1);
 		}
+		poly3D->setDisplay(m_window);
+		if(poly3D->size()>2)
+			poly3D->setClosed(true);
 
-		ccHObject* pRoadLineSet = dpxMapCommonFunc::CreateRoadLine(vecResultLines,false);
-		if(pRoadLineSet!=nullptr)
-		{
-			pRoadLineSet->setDisplay(m_window);
-			m_pPickRoot->addChild(pRoadLineSet);
-		}
+		//设置拷贝的属性
+		ccColor::Rgb refLineColor REF_LINE_COLOR; //宏定义颜色
+		poly3D->setTempColor(refLineColor);
+		poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_LaneMarking); //记录要素类型为refLine
+		poly3D->setName("LaneMarking");
 
+		m_pPickRoot->addChild(poly3D);
 		//移除
 		m_pPickRoot->removeChild(m_poly3D);
 
@@ -316,7 +272,7 @@ void dpxRoadLineTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
     m_window->redraw(false, false);
 }
 
-void dpxRoadLineTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
+void dpxLaneMarkingCopyTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 {
 	if (!m_window)
 	{
@@ -372,7 +328,7 @@ void dpxRoadLineTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
 	}
 }
 
-void dpxRoadLineTool::onMouseReleaseEvent(int x,int y)
+void dpxLaneMarkingCopyTool::onMouseReleaseEvent(int x,int y)
 {
 	if(m_window==nullptr)
 		return;

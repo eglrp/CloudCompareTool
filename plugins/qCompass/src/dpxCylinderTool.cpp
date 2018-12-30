@@ -68,9 +68,9 @@ void dpxCylinderTool::toolActivated()
 		dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
 		if(pMap!=nullptr)
 		{
-			dpxLayer* pLightLyr = pMap->getTrafficLightLyr();
-			if(pLightLyr!=nullptr && pLightLyr->getRootData()!=nullptr)
-				m_pPickRoot = pLightLyr->getRootData();
+			dpxLayer* pPoleLyr = pMap->getPoleLyr();
+			if(pPoleLyr!=nullptr && pPoleLyr->getRootData()!=nullptr)
+				m_pPickRoot = pPoleLyr->getRootData();
 		}
 	}
 
@@ -171,7 +171,7 @@ void dpxCylinderTool::pointPicked(ccHObject* insertPoint, unsigned itemIdx, ccPo
 		m_poly3D->setName("CylinderLine_"+sCurrentTime);
 		m_poly3D->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID
 		m_poly3D->setMetaData(DPX_RADIUS,QString::number(dRadius));
-		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_TrafficLight_pole); //地物类型
+		m_poly3D->setMetaData(DPX_OBJECT_TYPE_NAME,eObj_Pole); //地物类型
 
 		ccCylinder* pCylinder = new ccCylinder(dRadius,dHeight,&transM,"Cylinder"+sCurrentTime,24);
 		pCylinder->setMetaData(DPX_CYLINEDER_RELATED_UID,strRelateID);//关联的ID

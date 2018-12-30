@@ -178,6 +178,7 @@ void dpxCrossWalkTool::onKeyPress(int sKey)
 				vecLines[i]->setName("CrossWalkPon");//设置名称
 				m_pBorderLine->addChild(vecLines[i]);// 临时加入
 			}
+			m_pBorderPlane->setVisible(false);
 		}
 
 		m_pBorderLine = 0;

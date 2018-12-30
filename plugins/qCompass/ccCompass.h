@@ -52,6 +52,7 @@ class dpxLaneMarkingToolV2;
 class dpxParkingSpaceTool;
 class dpxJunctionTool;
 class dpxLineBreakTool;
+class dpxLaneMarkingCopyTool;
 
 
 class ccCompass : public QObject, public ccStdPluginInterface, public ccPickingListener
@@ -124,6 +125,7 @@ protected slots:
 	void setParkingSpaceTool();
 	void setJunctionTool();
 	void setLineBreakTool();
+	void setLaneMarkingCopyTool();
 
 	//drawing options
 	void hideAllPointClouds(ccHObject* o); //hides all point clouds and adds them to the m_hiddenObjects list
@@ -186,6 +188,7 @@ protected:
 	dpxParkingSpaceTool* m_dpxParkingSpaceTool;
 	dpxJunctionTool* m_dpxJunctionTool;
 	dpxLineBreakTool* m_dpxLineBreakTool;
+	dpxLaneMarkingCopyTool* m_dpxLaneMarkingCopyTool;
 
 
 	//currently selected/active geoObject

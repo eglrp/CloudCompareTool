@@ -68,6 +68,7 @@ void dpxPickAndEditTool::slotDeleteObj()
 {
     //删除后的响应
 	m_VNodeInfo.clear();
+	ccLog::Warning("delete obj");
 }
 
 void dpxPickAndEditTool::onMouseMove(int x, int y, Qt::MouseButtons buttons)
@@ -144,6 +145,7 @@ void dpxPickAndEditTool::onMouseLeftClick(int x,int y)
 		m_VNodeInfo.m_pLine = pLine;
 		m_VNodeInfo.m_nNodeIndex = nSegNum;
 		m_nToolState = 1;//若点击的时节点，则为编辑状态
+		ccLog::Warning("select node Point");
 	}
 }
 

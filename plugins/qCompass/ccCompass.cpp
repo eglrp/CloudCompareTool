@@ -50,8 +50,9 @@
 #include "dpxParkingSpaceTool.h"
 #include "dpxJunctionTool.h"
 #include "dpxLineBreakTool.h"
+#include "dpxLaneMarkingCopyTool.h"
 //int ccCompass::mapTo = ccGeoObject::LOWER_BOUNDARY;
-const int nMsecod = 30*1000; //60 seconds per output
+const int nMsecod = 60*1000; //60 seconds per output
 
 ccCompass::ccCompass(QObject* parent) :
 	QObject( parent )
@@ -82,6 +83,7 @@ ccCompass::ccCompass(QObject* parent) :
 	m_dpxParkingSpaceTool = new dpxParkingSpaceTool();
 	m_dpxJunctionTool = new dpxJunctionTool();
 	m_dpxLineBreakTool = new dpxLineBreakTool();
+	m_dpxLaneMarkingCopyTool = new dpxLaneMarkingCopyTool();
 
 	m_pTimer = new QTimer(this);
 	connect(m_pTimer, SIGNAL(timeout()), this, SLOT(slotOnTimeOutPut()));
@@ -111,6 +113,7 @@ ccCompass::~ccCompass()
 	delete m_dpxParkingSpaceTool;
 	delete m_dpxJunctionTool;
 	delete m_dpxLineBreakTool;
+	delete m_dpxLaneMarkingCopyTool;
 
 	if (m_dlg)
 		delete m_dlg;
@@ -194,6 +197,7 @@ void ccCompass::doAction()
 	m_dpxParkingSpaceTool->initializeTool(m_app);
 	m_dpxJunctionTool->initializeTool(m_app);
 	m_dpxLineBreakTool->initializeTool(m_app);
+	m_dpxLaneMarkingCopyTool->initializeTool(m_app);
 
 	//check valid window
 	if (!m_app->getActiveGLWindow())
@@ -239,6 +243,8 @@ void ccCompass::doAction()
 		ccCompassDlg::connect(m_dlg->ParkingSpaceButton, SIGNAL(clicked()), this, SLOT(setParkingSpaceTool()));
 		ccCompassDlg::connect(m_dlg->JunctionButton, SIGNAL(clicked()), this, SLOT(setJunctionTool()));
 		ccCompassDlg::connect(m_dlg->LineBreakButton, SIGNAL(clicked()), this, SLOT(setLineBreakTool()));
+		ccCompassDlg::connect(m_dlg->LaneMarkingCopy, SIGNAL(clicked()), this, SLOT(setLaneMarkingCopyTool()));
+
 
 
 		//传出 by duans
@@ -703,6 +709,11 @@ void ccCompass::setLineBreakTool()
 {
 	setActiveTool(m_dpxLineBreakTool);
 }
+
+void ccCompass::setLaneMarkingCopyTool()
+{
+	setActiveTool(m_dpxLaneMarkingCopyTool);
+}
 //recurse and hide visisble point clouds
 void ccCompass::hideAllPointClouds(ccHObject* o)
 {
@@ -773,7 +784,7 @@ void outMapFunc()
     pManager->AutoOutPutMap2Protobuf(pCurrentMap,strFile);
 
     nNumber++;
-    if(nNumber>9)
+    if(nNumber>19)
 		nNumber = 0;
 }
 

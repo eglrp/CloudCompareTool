@@ -68,9 +68,27 @@ bool dpxLaneMarkingToolV2::CheckSelectRefLine()
 
     }while(0);
 
-    if(!m_bSetRefLine)
-        QMessageBox::warning(nullptr,"waring","please Select one RefLine");
-	return m_bSetRefLine;
+	if(!m_bSetRefLine)
+	{
+		//若添加了地图，采集到地图中去
+		dpxMap* pMap = dpxGeoEngine::Instance()->GetMap();
+		if(pMap!=nullptr)
+		{
+			dpxLayer* pTargetLyr = pMap->getLyrFormType(eOT_LaneMarking);
+			if(pTargetLyr!=nullptr && pTargetLyr->getRootData()!=nullptr)
+			{
+				m_pPickRoot = pTargetLyr->getRootData();
+				m_bSetRefLine = true;
+			}
+
+		}
+	}
+
+	if(!m_bSetRefLine)
+	{
+		QMessageBox::warning(nullptr,"waring","Has no  Root Hobj");
+	}
+	return true;
 }
 
 void dpxLaneMarkingToolV2::toolActivated()

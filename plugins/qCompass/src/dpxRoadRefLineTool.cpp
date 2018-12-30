@@ -57,6 +57,9 @@ void dpxRoadRefLineTool::onMouseRightClick(int x,int y)
 
 			int nID = dpxMapCommonFunc::getMaxSectionID();
 			pSection->setMetaData(DPX_UID,nID+1); //标ID
+				//设置名称
+			QString strName = "Section_" + QString::number(nID+1);
+			pSection->setName(strName);
 			pSection->setDisplay(m_window); //just in case
 
 			//RefLines
