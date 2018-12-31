@@ -66,9 +66,11 @@ void dpxDataPretreatDlg::onApplyAll()
 {
 	pdxPretreatParams  param = getParam();
 
+	#ifdef CC_LAS_SUPPORT
 	dpxDataPretreat* pDataPretreat = new dpxDataPretreat();
 	pDataPretreat->setPretreatParam(param);
 	pDataPretreat->PretreatFiles();
+	#endif // CC_LAS_SUPPORT
 }
 
 void dpxDataPretreatDlg::onInPathBrowse()

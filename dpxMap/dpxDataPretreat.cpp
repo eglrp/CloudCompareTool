@@ -1,4 +1,4 @@
-
+#ifdef CC_LAS_SUPPORT
 #include "dpxDataPretreat.h"
 dpxDataPretreat::dpxDataPretreat()
 {
@@ -351,3 +351,4 @@ bool dpxDataPretreat::loadFileV2(const QString& filename)
 	writer.waitForFinished();
 	return false;
 }
+#endif

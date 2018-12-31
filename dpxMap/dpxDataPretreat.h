@@ -7,6 +7,30 @@
 #include "dpxMap_IO.h"
 #include <ccHObject.h>
 
+
+struct DPX_MAP_API pdxPretreatParams
+{
+	unsigned int vertDim ;
+	unsigned int w;
+	unsigned int h;
+    QString strInputPath;
+    QString strOutputPath;
+    int nDownSamplingRatio; //降采样比率  降低为整数倍
+	pdxPretreatParams()
+	{
+		vertDim = 2;
+		w = 2;
+		h = 2;
+		strInputPath = "";
+		strOutputPath = "";
+		nDownSamplingRatio = 1;
+	}
+};
+
+
+
+#ifdef CC_LAS_SUPPORT
+
 //qCC_db
 #include <ccLog.h>
 #include <ccPointCloud.h>
@@ -44,25 +68,6 @@ Q_DECLARE_METATYPE(pdal::SpatialReference)
 
 using namespace pdal::Dimension;
 using namespace pdal;
-
-struct DPX_MAP_API pdxPretreatParams
-{
-	unsigned int vertDim ;
-	unsigned int w;
-	unsigned int h;
-    QString strInputPath;
-    QString strOutputPath;
-    int nDownSamplingRatio; //降采样比率  降低为整数倍
-	pdxPretreatParams()
-	{
-		vertDim = 2;
-		w = 2;
-		h = 2;
-		strInputPath = "";
-		strOutputPath = "";
-		nDownSamplingRatio = 1;
-	}
-};
 
 
 //! Class describing the current tiling process
@@ -206,5 +211,7 @@ public:
 protected:
 	pdxPretreatParams m_param;
 };
+
+#endif //CC_LAS_SUPPORT
 
 #endif

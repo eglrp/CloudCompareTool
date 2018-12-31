@@ -15,7 +15,7 @@
 //#                                                                        #
 //##########################################################################
 
-//#ifdef CC_LAS_SUPPORT
+#ifdef CC_LAS_SUPPORT
 
 #include "LASFilter.h"
 
@@ -1434,4 +1434,4 @@ CC_FILE_ERROR LASFilter::loadFile(const QString& filename, ccHObject& container,
 	return CC_FERR_NO_ERROR;
 }
 
-//#endif
+#endif
